@@ -777,4 +777,5 @@ return $return;
 }
 add_action('permalink_structure_changed' ,'wpsc_update_permalinks');
 add_action('get_sample_permalink_html' ,'wpsc_update_permalinks');
+add_action('wp_ajax_category_sort_order', 'wpsc_ajax_set_category_order');
 ?>

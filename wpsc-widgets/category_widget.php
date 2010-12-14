@@ -49,9 +49,16 @@ class WP_Widget_Product_Categories extends WP_Widget {
 		if ( isset( $instance['height'] ) )
 			$height = $instance['height'];
 
-		if ( !isset( $instance['categories'] ) )
-			$instance['categories'] = array();
+		if ( !isset( $instance['categories'] ) ){
+			$instance_categories = get_terms( 'wpsc_product_category', 'hide_empty=0&parent=0');
+			if(!empty($instance_categories)){
+				foreach($instance_categories as $categories){
 
+					$instance['categories'][$categories->term_id] = 'on';
+				}
+			}
+		
+		}
 		foreach ( array_keys( (array)$instance['categories'] ) as $category_id ) {
 
 			if (!get_term($category_id, "wpsc_product_category")) 
@@ -120,8 +127,9 @@ class WP_Widget_Product_Categories extends WP_Widget {
 		</p>
 
 		<p>
-			Show Categories:<br />
+			<?php _e('Show Categories','wpsc'); ?>:<br />
 			<?php wpsc_list_categories('wpsc_category_widget_admin_category_list', array("id"=>$this->get_field_id('categories'),"name"=>$this->get_field_name('categories'),"instance"=>$instance), 0); ?>
+			<?php _e('(leave all unchecked if you want to display all)','wpsc'); ?>
 		</p>
 
 		<p>

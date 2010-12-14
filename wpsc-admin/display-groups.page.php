@@ -8,6 +8,19 @@
  * @since 3.7
  */
 
+function wpsc_ajax_set_category_order(){
+  global $wpdb;
+  $sort_order = $_POST['sort_order'];
+  $parent_id  = $_POST['parent_id'];
+  
+  $result = true;
+  foreach($sort_order as $key=>$value){
+    if(!wpsc_update_meta($value, 'sort_order', $key, 'wpsc_category')){
+      $result = false; 
+    }
+  }
+}
+
 
 /**
  * wpsc_display_categories_page, assembles the category page
@@ -33,6 +46,21 @@ function wpsc_display_categories_page() {
 				return false;
 			}
 		}
+		   function categorySort(order, parent){
+			var data = {
+				action: 'category_sort_order',
+				sort_order: order,
+				parent_id: parent
+			};
+
+			var id = '#debugData_';
+			// Send an Ajax Request to get the WinRetail SQL Dump good for Debugging
+			jQuery.post(ajaxurl, data, function(response) {
+				jQuery(id).append(response);
+			});
+			return false;
+		   }
+
 	</script>
 	<noscript></noscript>
 	
@@ -117,83 +145,129 @@ function wpsc_display_categories_page() {
  * @return nothing
  */
 
-
 function wpsc_admin_category_group_list() {
-  global $wpdb;
-	?>
-		<table class="widefat page" id='wpsc_category_list' cellspacing="0">
-			<thead>
-				<tr>
-					<?php print_column_headers('display-categories-list'); ?>
-				</tr>
-			</thead>
-		
-			<tfoot>
-				<tr>
-					<?php print_column_headers('display-categories-list', false); ?>
-				</tr>
-			</tfoot>
-		
-			<tbody>
-				<?php
-					wpsc_list_categories('wpsc_admin_display_category_row', null, 0);
-				?>			
-			</tbody>
-		</table>
-	<?php
+   global $wpdb;
+  $category_list = wpsc_admin_get_category_array();
+  
+  ?>
+  <script type="text/javascript">
+    jQuery(document).ready(function(){
+      jQuery('#category_list_li').sortable({
+        axis: 'y',
+        containment: 'parent',
+        handle: '.handle',
+        tolerance: 'pointer',
+        update: function(event, ui){
+          categorySort(jQuery('#category_list_li').sortable('toArray'), 0);
+        }
+      });
+    });
+  </script>
+  <div id='poststuff' class='postbox'>
+    <h3 class='hndle'><?php _e('Product Categories', 'wpsc'); ?></h3>
+    <div class="inside">
+      <ul id='category_list_li' class='ui-sortable'>
+        <?php 
+
+        print wpsc_admin_list_category_array($category_list); ?>
+      </ul>
+    </div>
+  </div>
+  <?php
 }
 
 /**
- * wpsc_admin_display_category_row, recursively displays category rows according to their parent categories 
- * @param object - category data
- * @param integer - execution depth, default = 0
- * @return nothing
+ *  Create the actual drag and drop list used for the admin category view
+ * 
+ * @param array $categories
+ * @param int $level
+ * @return string $output
  */
+function wpsc_admin_list_category_array($categories, $level = 0){
+  $output = '';
+  foreach($categories as $cat){
+	
+    $output .= "<li id='".$cat['id']."'>";
+    $output .= "<div id='category-".$cat['id']."-container'>";
 
-function wpsc_admin_display_category_row($category,$subcategory_level = 0) {
-	$category_image = wpsc_get_categorymeta($category->term_id, 'image');
-	?>
-	<tr>
-		<td colspan='3' class='colspan'>
-			<table  class="category-edit" id="category-<?php echo $category->term_id; ?>">
-				<tr>
-					<td class='manage-column column-img'>
-						<?php if($subcategory_level > 0) { ?>
-							<div class='category-image-container' style='margin-left: <?php echo (1*$subcategory_level) -1; ?>em;'>
-								<img class='category_indenter' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/indenter.gif' alt='' title='' />
-							<?php } ?>
-							
-							<?php if($category_image !=null) { ?>
-								<img src='<?php echo WPSC_CATEGORY_URL.$category_image; ?>' title='<?php echo $category->name; ?>' alt='<?php echo $category->name; ?>' width='30' height='30' />
-							<?php } else { ?>
-								<img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/no-image-uploaded.gif' title='<?php echo $category->name; ?>' alt='<?php echo $category->name; ?>' width='30' height='30'	/>
-							<?php } ?>
-						<?php if($subcategory_level > 0) { ?>
-							</div>
-						<?php } ?>
-					</td>
-					
-					<td class='manage-column column-title'>
-						<a class="row-title" href='<?php echo add_query_arg('category_id', $category->term_id); ?>'> <?php echo (stripslashes($category->name)); ?></a>
-						<div class="row-actions">
-							<span class="edit">
-											<a class='edit-product' style="cursor:pointer;" title="Edit this Category" href='<?php echo add_query_arg('category_id', $category->term_id); ?>'><?php _e('Edit', 'wpsc'); ?></a>
-											</span> | 
-										<span class="edit">
-										<?php
-						$nonced_url = wp_nonce_url("admin.php?wpsc_admin_action=wpsc-delete-category&amp;deleteid={$category->term_id}", 'delete-category');
-					?>
-					<a class='delete_button' style="text-decoration:none;" href='<?php echo $nonced_url; ?>' onclick="return conf();" ><?php _e('Delete', 'wpsc'); ?></a>	
-								</span>
-							</div>
-						</td>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<?php
+    $output .= "<div class='category_admin_list_img' id='category-".$cat['id']."-imgs'>";
+    $output .= "<span title='click and drag to move' class='handle'>↕</span>";
+    if($level > 0){
+      $output .= "<img class='category_indenter' src='".WPSC_CORE_IMAGES_URL."/indenter.gif' alt='' title='' />";
+    }
+    $output .= "<a class='row-title' href='".add_query_arg('category_id', $cat['id'])."'>";
+    if(isset($cat['image'])){
+      $output .= "<img src=\"".WPSC_CATEGORY_URL.stripslashes($cat['image'])."\" title='".$cat['name']."' alt='".$cat['name']."' width='30' height='30' />";
+    }else{
+      $output .= "<img src='".WPSC_CORE_IMAGES_URL."/no-image-uploaded.gif' title='".$cat['name']."' alt='".$cat['name']."' width='30' height='30' />";
+    }
+    $output .= stripslashes($cat['name'])."</a>";
+
+    $output .= "<div class='row-actions'><span class='edit'><a class='edit-product' style='cursor:pointer;' title='Edit This Category' href='".add_query_arg('category_id', $cat['id'])."'>". __('Edit', 'wpsc')."</a>";
+    $output .= "</span> | <span class='edit'>";
+    $nonced_url = wp_nonce_url("admin.php?wpsc_admin_action=wpsc-delete-category&amp;deleteid={$cat['id']}", 'delete-category');
+    $output .=  "<a class='delete_button' style='text-decoration:none;' href='".$nonced_url."' onclick=\"return conf();\" >". __('Delete', 'wpsc')."</a>"; 
+    $output .=  "</span></div>";
+    $output .= "</div>";    
+    if(is_array($cat['children'])){
+      $newhandle = "category-".$cat['id']."-children";
+      $output .= <<<EOT
+  <script type="text/javascript">
+    jQuery(document).ready(function(){
+      jQuery('#{$newhandle}').sortable({
+        axis: 'y',
+        containment: 'parent',
+        handle: '.handle',
+        tolerance: 'pointer',
+        update: function(event, ui){
+          categorySort(jQuery('#{$newhandle}').sortable('toArray'), 0);
+        }
+      });
+    });
+  </script>
+EOT;
+      $output .= "<ul id='{$newhandle}' class='ui-sortable'>";
+      $output .= wpsc_admin_list_category_array($cat['children'], ($level + 1));
+      $output .= "</ul>";
+    }
+    $output .= "</div></li>";
+
+  }
+  return $output;
 }
+
+/**
+ * wpsc_admin_get_category_array
+ * Recursively step through the categories and return it in a clean multi demensional array
+ * for use in other list functions
+ * @param int $parent_id
+ */
+function wpsc_admin_get_category_array($parent_id = null){
+  global $wpdb;
+ 
+  $orderedList = array();
+  if(!isset($parent_id)) $parent_id = 0;
+  $category_list = get_terms('wpsc_product_category','hide_empty=0&parent='.$parent_id);
+  if(!is_array($category_list)){
+    return false;
+  }
+  foreach($category_list as $category){
+    $category_order = wpsc_get_categorymeta($category->term_id, 'order');
+    $category_image = wpsc_get_categorymeta($category->term_id, 'image');
+    if(!isset($category_order) || $category_order == 0) $category_order = (count($orderedList) +1);
+    print "<!-- setting category Order number to ".$category_order."-->";
+    $orderedList[$category_order]['id'] = $category->term_id;
+    $orderedList[$category_order]['name'] = $category->name;
+    $orderedList[$category_order]['image'] = $category_image;
+    $orderedList[$category_order]['parent_id'] = $parent_id;
+    $orderedList[$category_order]['children'] = wpsc_admin_get_category_array($category->term_id);
+  }
+
+  ksort($orderedList);
+  return($orderedList);
+}
+ 
+
 
 /*
  * wpsc_admin_category_group_list, prints the left hand side of the edit categories page
