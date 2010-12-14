@@ -387,6 +387,7 @@ function wpsc_single_template( $content ) {
 
 	global $wpdb, $post, $wp_query, $wpsc_query;
 	$single_theme_path = wpsc_get_template_file_path( 'wpsc-single_product.php' );	
+	if((!isset($wp_query->is_product)))return $content;
 	if ( 'wpsc-product' == $wp_query->post->post_type && !is_archive() && $wp_query->post_count <= 1) {
 		remove_filter( "the_content", "wpsc_single_template" );
 		$wpsc_temp_query = new WP_Query( array( 'post__in' => array( $post->ID ), 'post_type' => 'wpsc-product','posts_per_page'=>1 ) );
@@ -396,7 +397,7 @@ function wpsc_single_template( $content ) {
 		$content = ob_get_contents();
 		ob_end_clean();
 		list( $wp_query, $wpsc_temp_query ) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query objects back
-	}elseif(is_archive() && wpsc_is_viewable_taxonomy() || ($wp_query->post_count > 1 && 1 == $wp_query->is_product)){
+	}elseif(  is_archive() && wpsc_is_viewable_taxonomy() || ($wp_query->post_count > 1 && 1 == $wp_query->is_product)){
 		remove_filter( "the_content", "wpsc_single_template" );		
 		list( $wp_query, $wpsc_query ) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
 		if(isset($wp_query->query['pagename']))

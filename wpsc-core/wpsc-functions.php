@@ -589,7 +589,7 @@ function wpsc_generate_product_query( $query ) {
 		$query->query_vars['taxonomy'] = 'product_tag';
 		$query->is_tax      = true;
 	}
-	if(get_option('wpsc_products_per_page')){
+	if(1 == get_option('use_pagination')){
 		$query->query_vars['posts_per_page'] = get_option('wpsc_products_per_page');
 		if( isset( $_GET['items_per_page'] ) )
 			$query->query_vars['posts_per_page'] = (int)$_GET['items_per_page'];

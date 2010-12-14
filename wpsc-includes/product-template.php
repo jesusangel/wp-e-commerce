@@ -309,9 +309,10 @@ function wpsc_the_product_price( $no_decimals = false ) {
 function wpsc_calculate_price( $product_id, $variations = null, $special = true ) {
 	global $wpdb;
 	$p_id = $product_id;
-	if ( count( $variations ) > 0 )
+	if ( count( $variations ) > 0 ){
+		if(!isset($variations) || is_array($variations) && in_array(0,$variations,true)) return;
 		$product_id = wpsc_get_child_object_in_terms( $product_id, $variations, 'wpsc-variation' );
-	else if ( !$product_id )
+	}else if ( !$product_id )
 		$product_id = get_the_ID();
 
 	if( !$product_id && count( $variations ) > 0){
