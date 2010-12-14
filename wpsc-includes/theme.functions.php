@@ -386,7 +386,8 @@ function wpsc_get_the_category_display($slug){
 function wpsc_single_template( $content ) {
 
 	global $wpdb, $post, $wp_query, $wpsc_query;
-	$single_theme_path = wpsc_get_template_file_path( 'wpsc-single_product.php' );	
+	$single_theme_path = wpsc_get_template_file_path( 'wpsc-single_product.php' );
+	
 	if((!isset($wp_query->is_product)))return $content;
 	if ( 'wpsc-product' == $wp_query->post->post_type && !is_archive() && $wp_query->post_count <= 1) {
 		remove_filter( "the_content", "wpsc_single_template" );

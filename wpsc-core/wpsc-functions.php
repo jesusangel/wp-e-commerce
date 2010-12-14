@@ -979,45 +979,6 @@ if ( is_ssl() ) {
 	add_filter( 'option_user_account_url',  'wpsc_add_https_to_page_url_options' );
 }
 
-/**
- * wpsc_get_terms_category_sort_filter
- *
- * This sorts the categories when a call to get_terms is made
- * @param object array $terms
- * @param array $taxonomies
- * @param array $args
- * @return object array $terms
- */
-function wpsc_get_terms_category_sort_filter($terms){
-  $new_terms = array();
-  $i = 0;
 
-  foreach($terms as $term){
-    if(!is_object($term)) return $terms;
-    $term_order = wpsc_get_meta($term->term_id,'sort_order', 'wpsc_category');
-   
-    if(isset($term_order) && is_numeric($term_order) && !isset($new_terms[$term_order])){
-      $term->sort_order = $term_order;
-      $new_terms[$term_order] = $term;
-    }elseif(isset($new_terms[$term_order])){
-      //this must have been recently moved or something, palce it at the end
-      $newID = count($terms);
-      while(isset($new_terms[$newID])){
-        $newID++;
-      }
-      $term->sort_order = $newID;
-      $new_terms[$newID] = $term;
-    }elseif(is_object($term)){
-      //Term has no order make one up, also helps if it's not one of our terms
-      $term->sort_order = $i;
-      $new_terms[$i] = $term;
-      $i++;     
-    }
-   
-  }
-  ksort($new_terms);
-  return $new_terms;
-}
-add_filter('get_terms','wpsc_get_terms_category_sort_filter');
 
 ?>
