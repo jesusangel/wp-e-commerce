@@ -194,7 +194,10 @@ function wpsc_bulk_modify_products() {
 	global $wpdb;
 	$doaction = $_POST['bulkAction'];
 	$sendback = wp_get_referer();
-	$product_ids = $_POST['post'];
+	if(!empty($_POST['post']))
+		$product_ids = $_POST['post'];
+	else
+		return;	
 	switch ( $doaction ) {
 
 		case 'addgroup':
