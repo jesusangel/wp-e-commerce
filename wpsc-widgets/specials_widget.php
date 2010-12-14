@@ -145,16 +145,16 @@ function wpsc_specials( $args = null, $instance ) {
 	$show_description  = isset($instance['show_description']) ? (bool)$instance['show_description'] : FALSE;
 	
 	$excludes = wpsc_specials_excludes();
-		
-	$special_products = query_posts( array(
+	$args = array(
 		'post_type'   		=> 'wpsc-product',
 		'caller_get_posts' 	=> 1,
 		'post_status' 		=> 'publish',
 		'post_parent'		=> 0,
 		'post__not_in' 		=> $excludes,
 		'posts_per_page' 	=> $number
-	) );
-	
+	) ;	
+	$special_products = query_posts( $args );
+//	exit('<pre>'.print_r($args,1).'</pre>');
 	$output = '';
 	$product_ids[] = array();
 	if ( count( $special_products ) > 0 ) {
@@ -207,12 +207,8 @@ function wpsc_specials( $args = null, $instance ) {
 }
 function wpsc_specials_excludes(){
 	global $wpdb;
+	$exclude_products = $wpdb->get_col("SELECT ID FROM ".$wpdb->posts." JOIN ".$wpdb->postmeta." ON (".$wpdb->posts.".ID = ".$wpdb->postmeta.".post_id) WHERE ".$wpdb->posts.".post_type = 'wpsc-product' AND ".$wpdb->posts.".post_status = 'publish' AND ".$wpdb->postmeta.".meta_key = '_wpsc_special_price' AND ".$wpdb->postmeta.".meta_value = 0 GROUP BY ".$wpdb->posts.".ID ORDER BY ".$wpdb->posts.".post_date DESC");
 
-	$exclude_products = $wpdb->get_results("SELECT ID FROM ".$wpdb->prefix."posts JOIN ".$wpdb->prefix."postmeta ON (".$wpdb->prefix."posts.ID = ".$wpdb->prefix."postmeta.post_id) WHERE 1=1  AND ".$wpdb->prefix."posts.post_type = 'wpsc-product' AND ".$wpdb->prefix."posts.post_status = 'publish' AND ".$wpdb->prefix."postmeta.meta_key = '_wpsc_special_price' AND ".$wpdb->prefix."postmeta.meta_value = 0 GROUP BY ".$wpdb->prefix."posts.ID ORDER BY ".$wpdb->prefix."posts.post_date DESC LIMIT 0, 10");
-	
-	foreach($exclude_products as $exclude_product)
-		$excludes[] = $exclude_product->ID;
-
-	return $excludes;
+	return $exclude_products;
 }
 ?>
