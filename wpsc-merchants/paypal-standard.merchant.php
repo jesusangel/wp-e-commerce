@@ -182,7 +182,8 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 			} else {
 				// Stick the cart item values together here
 				$i = 1;
-				if( !$this->cart_data['has_discounts']){
+
+				if( $this->cart_data['has_discounts']){
 					foreach($this->cart_items as $cart_row) {
 						$paypal_vars += array(
 							"item_name_$i" => $cart_row['name'],
