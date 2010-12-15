@@ -303,7 +303,6 @@ add_action( 'shutdown', 'wpsc_serialize_shopping_cart' );
  */
 function wpsc_start_the_query() {
 	global $wp_query, $wpsc_query, $wpsc_query_vars;
-	
 	if ( null == $wpsc_query ) {
 
 		if ( count( $wpsc_query_vars ) <= 1 ) {
@@ -459,6 +458,7 @@ function wpsc_split_the_query( $query ) {
 	$checkout_page = $wpsc_page_titles['checkout'];
 	$userlog_page = $wpsc_page_titles['userlog'];
 	$transaction_results_page = $wpsc_page_titles['transaction_results'];
+
 	// otherwise, check if we are looking at a product, if so, duplicate the query and swap the old one out for a products page request
 	// JS - 6.4.1020 - Added is_admin condition, as the products condition broke categories in backend
 	if ( !empty($query->query_vars['pagename']) && ($query->query_vars['pagename'] == $products_page) || isset( $query->query_vars['products'] ) && !is_admin() ) {
@@ -908,10 +908,10 @@ function wpsc_checkout_template_fallback() {
  */
 function wpsc_get_page_post_names() {
 	global $wpdb;
-	$wpsc_page['products']            = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[productspage]%'  AND `post_type` NOT IN('revision') LIMIT 1" );
-	$wpsc_page['checkout']            = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[shoppingcart]%'  AND `post_type` NOT IN('revision') LIMIT 1" );
-	$wpsc_page['transaction_results'] = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[transactionresults]%'  AND `post_type` NOT IN('revision') LIMIT 1" );
-	$wpsc_page['userlog']             = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[userlog]%'  AND `post_type` NOT IN('revision') LIMIT 1" );
+	$wpsc_page['products']            = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[productspage]%'  AND `post_type` = 'page' LIMIT 1" );
+	$wpsc_page['checkout']            = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[shoppingcart]%'  AND `post_type` = 'page' LIMIT 1" );
+	$wpsc_page['transaction_results'] = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[transactionresults]%'  AND `post_type` = 'page' LIMIT 1" );
+	$wpsc_page['userlog']             = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[userlog]%'  AND `post_type` = 'page' LIMIT 1" );
 	return $wpsc_page;
 }
 
