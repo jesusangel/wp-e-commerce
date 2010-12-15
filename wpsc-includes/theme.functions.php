@@ -1002,10 +1002,12 @@ function wpsc_products_page( $content = '' ) {
 }
 function wpsc_all_products_on_page(){
 	global $wp_query,$wpsc_query;
+	do_action('wpsc_swap_the_template');
 	if($wp_query->query_vars['post_type'] == 'wpsc-product'){
-		if (isset($wp_query->query_vars['post_count']) && 1 == $wp_query->query_vars['post_count'] && file_exists(TEMPLATEPATH.'/single-wpsc-product.php'))
+		if (isset($wp_query->post_count) && 1 == $wp_query->post_count && file_exists(TEMPLATEPATH.'/single-wpsc-product.php')){
 			include(TEMPLATEPATH. '/single-wpsc-product.php');
-		elseif(file_exists(TEMPLATEPATH.'/page.php')){
+			exit();
+		}elseif(file_exists(TEMPLATEPATH.'/page.php')){
 			include(TEMPLATEPATH. '/page.php');
 			exit();
 		}
