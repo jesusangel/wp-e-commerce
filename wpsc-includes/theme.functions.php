@@ -1010,6 +1010,9 @@ function wpsc_all_products_on_page(){
 		}elseif(file_exists(TEMPLATEPATH.'/page.php')){
 			include(TEMPLATEPATH. '/page.php');
 			exit();
+		}elseif(file_exists(TEMPLATEPATH.'/single.php')){
+			include(TEMPLATEPATH. '/single.php');
+			exit();
 		}
 	}
 	return;
