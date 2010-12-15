@@ -49,12 +49,12 @@ function wpsc_transaction_theme() {
 		break;
 	}
 	
-	if ( $sessionid != '' )
+	if ( $sessionid != '' ){
+		$cart_log_id = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `sessionid`= " . $sessionid . " LIMIT 1" );
 		return transaction_results( $sessionid, true );
-	else
+	}else
 		_e( 'Sorry your transaction was not accepted.<br /><a href=' . get_option( "shopping_cart_url" ) . '>Click here to go back to checkout page.</a>' );
 	
-	$cart_log_id = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `sessionid`= " . $sessionid . " LIMIT 1" );
 	
 }
 
