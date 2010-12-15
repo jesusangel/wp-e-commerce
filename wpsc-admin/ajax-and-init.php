@@ -194,10 +194,11 @@ function wpsc_bulk_modify_products() {
 	global $wpdb;
 	$doaction = $_POST['bulkAction'];
 	$sendback = wp_get_referer();
+	//exit('<pre>'.print_r($_POST,1).'</pre>');
 	if(!empty($_POST['post']))
 		$product_ids = $_POST['post'];
 	else
-		return;	
+		$product_ids = array();
 	switch ( $doaction ) {
 
 		case 'addgroup':
@@ -206,8 +207,8 @@ function wpsc_bulk_modify_products() {
 				$product_id = absint( $product_id );
 				$current_product_categories = get_the_product_category($product_id);
 				$new_product_category = array();
-				if(isset($_POST['category']) && is_numeric($_POST['category'])){
-					 array_push($new_product_category,$_POST['category']);
+				if(isset($_POST['bulk_category']) && is_numeric($_POST['bulk_category'])){
+					 array_push($new_product_category,$_POST['bulk_category']);
 				}else{
 					//No Valid Group was selected for bulk assignment :(
 					$sendback = add_query_arg( 'addedgroup', 'quack', $sendback );

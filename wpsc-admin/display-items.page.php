@@ -429,7 +429,7 @@ function wpsc_display_edit_products_page() {
 				<?php 
 					$options = "<option selected='selected' value=''>" . __( 'Select a Category', 'wpsc' ) . "</option>\r\n";
 					$options .= wpsc_list_categories( 'wpsc_admin_category_options_byid' );
-					echo  "<select name='category' id='category_select'>" . $options . "</select>\r\n";
+					echo  "<select name='bulk_category' id='category_select'>" . $options . "</select>\r\n";
 				?>
 
 				<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
