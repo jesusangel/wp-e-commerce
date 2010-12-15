@@ -14,18 +14,11 @@ class ups {
             $this->requires_curl=true;
             $this->requires_weight=true;
             $this->needs_zipcode=true;
-            $this->_includeUPSData();
-            $this->_setServiceURL();
+
+            //$this->_includeUPSData();
+            //$this->_setServiceURL();
+
             return true;
-    }
-
-    function getId() {
-//         return $this->usps_id;
-    }
-
-    function setId($id) {
-//         $usps_id = $id;
-//         return true;
     }
 
     private function _setServiceURL(){
@@ -33,7 +26,7 @@ class ups {
         $wpsc_ups_settings = get_option("wpsc_ups_settings");
         $wpsc_ups_environment = '';
         if(!empty($wpsc_ups_settings))
-        $wpsc_ups_environment = (array_key_exists("upsenvironment",$wpsc_ups_settings)) ? $wpsc_ups_settings["upsenvironment"] : "1";
+			$wpsc_ups_environment = (array_key_exists("upsenvironment",$wpsc_ups_settings)) ? $wpsc_ups_settings["upsenvironment"] : "1";
         if ($wpsc_ups_environment == "1"){
             $this->service_url = "https://wwwcie.ups.com/ups.app/xml/Rate";
         }else{
@@ -88,8 +81,12 @@ class ups {
     }
 
     function getForm(){
+
             if (!isset($this->Services)){
                 $this->_includeUPSData();
+            }
+            if (!isset($this->service_url)){
+                $this->_setServiceURL();
             }
 
             //__('Your Packaging', 'wpsc');  <-- use to translate
@@ -460,6 +457,11 @@ class ups {
     }
 
     private function _makeRateRequest($message){
+
+		if (!isset($this->service_url)) {
+			$this->_setServiceURL;
+		}
+
         // Make the XML request to the server and retrieve the response
         $ch = curl_init();
 
@@ -498,6 +500,10 @@ class ups {
 
     private function _parseQuote($raw){
         global $wpdb;
+
+		if (!isset($this->Services)){
+			$this->_includeUPSData();
+        }
 
         $config = get_option('wpsc_ups_settings');
         $debug  = (array_key_exists('upsenvironment', $config)) ? $config['upsenvironment'] : "";
