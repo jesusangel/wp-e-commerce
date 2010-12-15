@@ -1321,14 +1321,14 @@ function wpsc_display_featured_products_page() {
 
 				<div class="wpsc_container wpsc_featured">
 					<div class="featured_product_display">
-						<div class="featured_product_display_item product_view_<?php the_ID(); ?>">
+						<div class="featured_product_display_item product_view_<?php $product->ID; ?>">
 							<div class="item_text">
 								<h3>
 									<a href='<?php echo get_permalink( $product->ID ); ?>'><?php echo get_the_title( $product->ID ); ?></a>
 								</h3>
 								<div class="pricedisplay"><?php echo wpsc_the_product_price(); ?></div>
 								<div class='wpsc_description'>
-<?php the_excerpt(); ?>
+<?php wpsc_the_product_description(); ?>
 									<a href='<?php echo get_permalink( $product->ID ); ?>'>
 											  More Information&hellip;
 									</a>
