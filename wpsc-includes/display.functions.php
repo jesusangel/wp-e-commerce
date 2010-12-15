@@ -321,13 +321,13 @@ function wpsc_obtain_the_title() {
 	if( !isset( $wp_query->query_vars['wpsc_product_category']) &&  !isset( $wp_query->query_vars['wpsc-product']))
 		return;
 		
-	if ( !isset( $wp_query->query_vars['wpsc_product_category'] ) )
+	if ( !isset( $wp_query->query_vars['wpsc_product_category'] ) && isset($wp_query->query_vars['wpsc-product']) )
 		$wp_query->query_vars['wpsc_product_category'] = 0;
 
 
-	if ( isset( $wp_query->query_vars['taxonomy'] ) && 'wpsc_product_category' ==  $wp_query->query_vars['taxonomy']) {
+	if ( isset( $wp_query->query_vars['taxonomy'] ) && 'wpsc_product_category' ==  $wp_query->query_vars['taxonomy']) 
 		$category_id = wpsc_get_the_category_id($wp_query->query_vars['term'],'slug');
-	}
+
 	if ( $category_id > 0 ) {
 
 		if ( isset( $wpsc_title_data['category'][$category_id] ) ) {
@@ -341,6 +341,7 @@ function wpsc_obtain_the_title() {
 
 	if ( !isset( $_GET['wpsc-product'] ) )
 		$_GET['wpsc-product'] = 0;
+
 	if ( !isset( $wp_query->query_vars['wpsc-product'] ) )
 		$wp_query->query_vars['wpsc-product'] = '';
 
@@ -359,6 +360,7 @@ function wpsc_obtain_the_title() {
 			$full_product_name = $wpdb->get_var( "SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`='{$product_id}' LIMIT 1" );
 			$wpsc_title_data['product'][$product_name] = $full_product_name;
 		}
+		$output = $full_product_name;
 	}
 
 	if ( isset( $full_product_name ) && ($full_product_name != null) )

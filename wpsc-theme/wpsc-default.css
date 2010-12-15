@@ -70,45 +70,19 @@ Author URI: http://instinct.co.nz
 	color:#000;
 }
 
+
 #default_products_page_container .wpsc_page_numbers_top a:link, #default_products_page_container .wpsc_page_numbers_top a:visited, #default_products_page_container .wpsc_page_numbers_bottom a:link, #default_products_page_container .wpsc_page_numbers_bottom a:visited {
-	padding:5px 8px;
-	background-color:#006699;
-	background:-webkit-gradient(
-    linear,
-    left bottom,
-    left top,
-    color-stop(0.76, rgb(73,166,192)),
-    color-stop(1, rgb(125,195,215))
-	);
-	background:-moz-linear-gradient(
-    center bottom,
-    rgb(73,166,192) 76%,
-    rgb(125,195,215) 100%
-	);
-	margin-right:5px;
-	color:#ffffff;
-	font-size:12px;
-	border-radius:3px;
-	-moz-border-radius:3px;
-	-webkit-border-radius:3px;
-	text-decoration:none;
-	*display:inline-block;
+	padding:5px 4px;
+
 }
 
+
 #default_products_page_container .wpsc_page_numbers_top a:hover, #default_products_page_container .wpsc_page_numbers_top a:active, #default_products_page_container .wpsc_page_numbers_bottom a:hover, #default_products_page_container .wpsc_page_numbers_bottom a:active {
-	background:#49a6c0;
+
 }
 
 #default_products_page_container .wpsc_page_numbers_top span.current, #default_products_page_container .wpsc_page_numbers_top span.current, #default_products_page_container .wpsc_page_numbers_bottom span.current, #default_products_page_container .wpsc_page_numbers_bottom span.current {
-	padding:5px 8px;
-	background-color:#999;
-	color:#ffffff;
-	font-size:12px;
-	border-radius:3px;
-	-moz-border-radius:3px;
-	-webkit-border-radius:3px;
-	*display:inline-block;	
-	margin-right:5px;	
+	padding:5px 4px;
 }
 
 .default_product_display {

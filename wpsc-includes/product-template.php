@@ -102,8 +102,8 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 		$page_link = wpsc_a_page_url();
 		
 	if(!get_option('permalink_structure')) {
-		$category = '';
-		if(isset($wpsc_query->query_vars['taxonomy']))
+		$category = '?';
+		if(isset($wpsc_query->query_vars['wpsc_product_category']))
 			$category = '?wpsc_product_category='.$wp_query->query_vars['wpsc_product_category'];
 		if(isset($wpsc_query->query_vars['wpsc_product_category']) && is_string($wpsc_query->query_vars['wpsc_product_category'])){
 

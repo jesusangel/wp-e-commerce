@@ -330,6 +330,8 @@ function wpsc_start_the_query() {
 					$wpsc_query_vars['nopaging'] = false;
 					$wpsc_query_vars['posts_per_page'] = get_option('wpsc_products_per_page');
 					$wpsc_query_vars['paged'] = get_query_var('paged');
+					if(empty($wpsc_query_vars['paged']))
+						$wpsc_query_vars['paged'] = get_query_var('page');						
 					$wpsc_query_vars['pagename'] = 'products-page';
 				}
 			}
