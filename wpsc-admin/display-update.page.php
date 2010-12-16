@@ -8,8 +8,10 @@
  * @since 3.8
  */
 
-global $show_update_page, $wpdb;
-
+global $show_update_page, $wpdb,$wp_version;
+if((float)$wp_version < 3.0){
+	 wp_die( __('Looks like your running an older version of WordPress, you need to be running atleast WordPress 3.0 to use WP e-Commerce 3.8'));
+}
 $show_update_page = 1;
 
 // if there's nothing in the children variation cache, refresh it, just to make sure.
