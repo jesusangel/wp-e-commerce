@@ -251,14 +251,12 @@ if ( isset( $_REQUEST['wpsc_notices'] ) && $_REQUEST['wpsc_notices'] == 'theme_i
  * @return PATH to the file
  */
 function wpsc_get_template_file_url( $file = '' ) {
-
 	// If we're not looking for a file, do not proceed
 	if ( empty( $file ) )
 		return;
 
 	// No cache, so find one and set it
 	if ( false === ( $file_url = get_transient( WPEC_TRANSIENT_THEME_URL_PREFIX . $file ) ) ) {
-
 		// Look for file in stylesheet
 		if ( file_exists( get_stylesheet_directory() . '/' . $file ) ) {
 			$file_url = get_stylesheet_directory_uri() . '/' . $file;
@@ -284,11 +282,11 @@ function wpsc_get_template_file_url( $file = '' ) {
 		// Save the transient and update it every 12 hours
 		if ( !empty( $file_url ) )
 			set_transient( WPEC_TRANSIENT_THEME_URL_PREFIX . $file, $file_url, 60 * 60 * 12 );
-	}elseif(!file_exists(get_stylesheet_directory() . '/' . $file)){
+	}else{
 		delete_transient(WPEC_TRANSIENT_THEME_URL_PREFIX . $file);
 		wpsc_get_template_file_url($file);
 	}
-
+	
 	// Return filtered result
 	return apply_filters( WPEC_TRANSIENT_THEME_URL_PREFIX . $file, $file_url );
 }
@@ -591,7 +589,6 @@ function wpsc_enqueue_user_script_and_css() {
 			wp_enqueue_script( 'wpsc_colorbox',				WPSC_CORE_JS_URL . '/wpsc_colorbox.js',					array( 'jquery', 'colorbox-min' ), 'Instinct_e-commerce' );
 			wp_enqueue_style( 'wpsc-colorbox-css',				WPSC_CORE_JS_URL . '/wpsc_colorbox.css',			false, $version_identifier, 'all' );
 		}
-		
 		wp_enqueue_style( 'wpsc-theme-css',               wpsc_get_template_file_url( 'wpsc-' . get_option( 'wpsc_selected_theme' ) . '.css' ), false, $version_identifier, 'all' );
 		wp_enqueue_style( 'wpsc-theme-css-compatibility', WPSC_CORE_THEME_URL . 'compatibility.css',                                    false, $version_identifier, 'all' );
 		wp_enqueue_style( 'wpsc-product-rater',           WPSC_CORE_JS_URL 	. '/product_rater.css',                                       false, $version_identifier, 'all' );
