@@ -10,7 +10,7 @@
 
 global $show_update_page, $wpdb,$wp_version;
 if((float)$wp_version < 3.0){
-	 wp_die( __('Looks like your running an older version of WordPress, you need to be running atleast WordPress 3.0 to use WP e-Commerce 3.8'));
+	 wp_die( __('Looks like your running an older version of WordPress, you need to be running at least WordPress 3.0 to use WP e-Commerce 3.8', 'wpsc'));
 }
 $show_update_page = 1;
 

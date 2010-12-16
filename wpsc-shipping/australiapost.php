@@ -160,7 +160,9 @@ class australiapost {
 		//Calculate the total cart dimensions by adding the volume of each product then calculating the cubed root
 		$volume = 0;
 		foreach((array)$wpsc_cart->cart_items as $cart_item) {
-			$meta = get_product_meta($cart_item->product_id,'dimensions');
+			$meta = get_product_meta($cart_item->product_id,'product_metadata',true);
+			$meta = $meta['dimensions'];
+
 			if ($meta && is_array($meta)) {
 				$productVolume = 1;
 				foreach (array('width','height','length') as $dimension) {

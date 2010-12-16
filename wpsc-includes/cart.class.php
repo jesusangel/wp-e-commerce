@@ -132,7 +132,7 @@ function nzshpcrt_overall_total_price() {
 function wpsc_cart_weight_total() {
    global $wpsc_cart;
    if(is_object($wpsc_cart)) {
-      return $wpsc_cart->calculate_total_weight();
+      return $wpsc_cart->calculate_total_weight(true);
    } else {
       return 0;
    }
