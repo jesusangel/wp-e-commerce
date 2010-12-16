@@ -1,5 +1,5 @@
 <?php
-/*  Copyright 2009 OM4 (email: info@om4.com.au    web: http://om4.com.au/)
+/*  Copyright 2009-2010 OM4 (email: info@om4.com.au    web: http://om4.com.au/)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -55,7 +55,6 @@ class australiapost {
 		$this->services['EXPRESS'] = __('Express Post', 'wpsc');
 		$this->services['AIR'] = __('Air Mail', 'wpsc');
 		$this->services['SEA'] = __('Sea Mail', 'wpsc');
-		$this->services['ECONOMY'] = __('Economy Air Parcel Post', 'wpsc');
 		$this->services['EPI'] = __('Express Post International', 'wpsc');
 		
 		// Attempt to load the existing settings
@@ -140,9 +139,6 @@ class australiapost {
 		if ($this->base_country != 'AU' || strlen($this->base_zipcode) != 4 || !count($wpsc_cart->cart_items)) return;
 		
 		$dest = $_SESSION['wpsc_delivery_country'];
-		
-		// Weight is in pounds but needs to be in grams
-		$weight = floatval(wpsc_cart_weight_total() * 453.59237);
 
 		$destzipcode = '';
 		if(isset($_POST['zipcode'])) {
@@ -156,10 +152,62 @@ class australiapost {
 		    // Invalid Australian Post Code entered, so just return an empty set of quotes instead of wasting time contactin the Aus Post API
 		    return array();
 		}
+
+		/*
+		3 possible scenarios:
+
+		1.
+		Cart consists of only item(s) that have "disregard shipping" ticked.
+
+		In this case, WPEC doesn't mention shipping at all during checkout, and this shipping module probably won't be executed at all.
+
+		Just in case it does get queried, we should still query the Australia Post API for valid shipping estimates,
+		and then override the quoted price(s) to $0.00 so the customer is able to get free shipping.
+
+
+		2.
+		Cart consists of only item(s) where "disregard shipping" isn't ticked (ie. all item(s) attract shipping charges).
+
+		In this case, we should query the Australia Post API as per normal.
+
+
+		3.
+		Cart consists of one or more "disregard shipping" product(s), and one or more other products that attract shipping charges.
+
+		In this case, we should query the Aus Post API, only taking into account the product(s) that attract shipping charges.
+		Products with "disregard shipping" ticked shouldn't have their weight or dimensions included in the quote.
+		*/
+		
+
+		// Obtain the total combined weight for all items(s) in the cart (excluding items that have the "Disregard Shipping for this product" option ticked)
+		// Weight is in pounds but needs to be in grams
+		$weight = floatval($wpsc_cart->calculate_total_weight(true) * 453.59237);
  
-		//Calculate the total cart dimensions by adding the volume of each product then calculating the cubed root
+		// Calculate the total cart dimensions by adding the volume of each product then calculating the cubed root
 		$volume = 0;
-		foreach((array)$wpsc_cart->cart_items as $cart_item) {
+
+		// Total number of item(s) in the cart
+		$numItems = count($wpsc_cart->cart_items);
+
+		if ($numItems == 0) {
+		    // The customer's cart is empty. This probably shouldn't occur, but just in case!
+		    return array();
+		}
+
+		// Total number of item(s) that don't attract shipping charges.
+		$numItemsWithDisregardShippingTicked = 0;
+
+		foreach($wpsc_cart->cart_items as $cart_item) {
+			
+			if ( !$cart_item->uses_shipping ) {
+			    // The "Disregard Shipping for this product" option is ticked for this item.
+			    // Don't include it in the shipping quote.
+			    $numItemsWithDisregardShippingTicked++;
+			    continue;
+			}
+
+			// If we are here then this item attracts shipping charges.
+			
 			$meta = get_product_meta($cart_item->product_id,'dimensions');
 			if ($meta && is_array($meta)) {
 				$productVolume = 1;
@@ -185,6 +233,7 @@ class australiapost {
 				$volume += floatval($productVolume);
 			}
 		}
+		
 		// Calculate the cubic root of the total volume, rounding up
 		$cuberoot = ceil(pow($volume, 1 / 3));
 		
@@ -194,53 +243,104 @@ class australiapost {
 		$length=100;
 		
 		if ($cuberoot > 0) {
-			$height = $width = $length = $cuberoot;
+		    $height = $width = $length = $cuberoot;
 		}
 
 		// As per http://auspost.com.au/personal/parcel-dimensions.html: if the parcel is box-shaped, both its length and width must be at least 15cm.
 		if ($length < 150) $length = 150;
 		if ($width < 150) $width = 150;
+
+		// By default we should use Australia Post's quoted rate(s)
+		$shippingPriceNeedsToBeZero = false;
+		
+		if ($numItemsWithDisregardShippingTicked == $numItems) {
+		    // The cart consists of entirely "disregard shipping" products, so the shipping quote(s) should be $0.00
+		    // Set the weight to 1 gram so that we can obtain valid Australia Post quotes (which we will then ignore the quoted price of)
+		    $weight = 1;
+		    $shippingPriceNeedsToBeZero = true;
+		}
 		
 		// API Documentation: http://drc.edeliver.com.au/
-		$url = "http://drc.edeliver.com.au/ratecalc.asp?Pickup_Postcode={$this->base_zipcode}&Destination_Postcode={$destzipcode}&Quantity=1&Weight={$weight}&Height={$height}&Width={$width}&Length={$length}&Country={$dest}";
+		$url = "http://drc.edeliver.com.au/ratecalc.asp";
+
+		$params = array(
+		    'Pickup_Postcode' => $this->base_zipcode
+		    , 'Destination_Postcode' => $destzipcode
+		    , 'Quantity' => 1
+		    , 'Weight' => $weight
+		    , 'Height' => $height
+		    , 'Width' => $width
+		    , 'Length' => $length
+		    , 'Country' => $dest
+		);
+
+		// URL encode the parameters to prevent issues where postcodes contain spaces (eg London postcodes)
+		$params = array_map('urlencode', $params);
+
+		$url = add_query_arg($params, $url);
 
 		$log = '';
 		$methods = array();
 		foreach ($this->services as $code => $service) {
 			if (!$this->settings['services'][$code]) continue;
 			
-			$fullURL = "$url&Service_Type=$code";
-			
-			$response = wp_remote_get($fullURL);
-			
-			// Silently ignore any API server errors
-			if ( is_wp_error($response) || $response['response']['code'] != '200' || empty($response['body']) ) continue;
+			$fullURL = add_query_arg('Service_Type', $code, $url);
 
-			if ($this->debug) {
-			    $log .="  {$fullURL}\n    " . $response['body'] . "\n";
+			// This cache key should be unique for a cart with these contents and destination
+			$cacheKey = 'wpec_auspost_quote_' . md5($fullURL);
+
+			// See if this Australia Post quote is cached
+			$cachedResult = get_transient($cacheKey);
+
+			if ( false === $cachedResult ) {
+			    
+			    // Quote isn't cached -> query the Australia Post API and then cache the result for 10 minutes
+			    
+			    $response = wp_remote_get($fullURL);
+
+			    // Silently ignore any API server errors
+			    if ( is_wp_error($response) || $response['response']['code'] != '200' || empty($response['body']) ) continue;
+
+			    if ($this->debug) {
+				$log .="  {$fullURL}\n    " . $response['body'] . "\n";
+			    }
+
+			    $lines = explode("\n", $response['body']);
+
+			    foreach($lines as $line) {
+				    list($key, $value) = explode('=', $line);
+				    $key = trim($key);
+				    $value = trim($value);
+				    switch ($key) {
+					    case 'charge':
+						    if ($shippingPriceNeedsToBeZero) {
+							// All shipping prices quoted should be zero
+							$methods[$code]['charge'] = 0.00;
+							$log .="  NB: the price for the above quote has been overridden to $0.00\n\n";
+						    } else {
+							// Use the Australia Post quoted price
+							$methods[$code]['charge'] = floatval($value);
+						    }
+						    break;
+					    case 'days':
+						    $methods[$code]['days'] = floatval($value);
+						    break;
+					    case 'err_msg':
+						    $methods[$code]['err_msg'] = trim($value);
+						    break;
+				    }
+			    }
+			    $methods[$code]['name'] = $this->services[$code];
+
+			    // Cache this quote for 10 minutes
+			    set_transient($cacheKey, $methods[$code], 600);
+
+			} else {
+			    // This quote is cached so use that result instead
+			    $methods[$code] = $cachedResult;
 			}
-			
-			$lines = explode("\n", $response['body']);
-			
-			foreach($lines as $line) {
-				list($key, $value) = explode('=', $line);
-				$key = trim($key);
-				$value = trim($value);
-				switch ($key) {
-					case 'charge':
-						$methods[$code]['charge'] = floatval($value);
-						break;
-					case 'days':
-						$methods[$code]['days'] = floatval($value);
-						break;
-					case 'err_msg':
-						$methods[$code]['err_msg'] = trim($value);
-						break;
-				}
-			}
-			$methods[$code]['name'] = $this->services[$code];
 		}
-		if ($this->debug)
+		if ( $this->debug && strlen($log) )
 		    error_log( 'WP e-Commerce Australia Post shipping quotes for ' . site_url() . ":\n----------\n$log----------" );
 		
 		// Allow another WordPress plugin to override the quoted method(s)/amount(s)
