@@ -5,6 +5,7 @@
 	$link           = home_url( $link );
 	$category_image = wpsc_get_categorymeta( $curr_cat['term_id'], 'image' );
 	$category_image = WPSC_CATEGORY_URL . $category_image;
+	
 
 	if ( $grid ) : ?>
 
@@ -23,11 +24,14 @@
 		<?php wpsc_end_category_query(); ?>
 
 <?php else : ?>
-
 		<div class="wpsc_categorisation_group" id="categorisation_group_<?php echo $category_id; ?>">
 			<ul class="wpsc_categories wpsc_top_level_categories <?php echo implode( ' ', (array)$provided_classes ); ?>">
-				<li class="wpsc_category_<?php echo $curr_cat['term_id']; ?>">
-					<a href="<?php echo $link; ?>" class="wpsc_category_image_link"><?php wpsc_parent_category_image( $show_thumbnails, $category_image , $width, $height ); ?></a>
+				<li class="wpsc_category_<?php echo $curr_cat['term_id']; wpsc_print_category_classes($curr_cat);  ?>">
+					<?php if(wpsc_parent_category_image( $show_thumbnails, $category_image , $width, $height )){ ?>
+						<a href="<?php echo $link; ?>" class="wpsc_category_image_link"><?php 
+						wpsc_parent_category_image( $show_thumbnails, $category_image , $width, $height ); ?></a>
+					<?php } ?>
+					
 					<a href="<?php echo $link; ?>"><?php echo $curr_cat['name']; ?></a>
 
 					<ul class="wpsc_categories wpsc_second_level_categories <?php echo implode( ' ', (array)$provided_classes ); ?>">
