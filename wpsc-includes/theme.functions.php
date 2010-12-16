@@ -453,7 +453,7 @@ function wpsc_is_viewable_taxonomy(){
  * @param $id (int) The Page ID
  * @return $title (string) the new title
  */
-function wpsc_the_category_title($title, $id){
+function wpsc_the_category_title($title='', $id=''){
 	global $wp_query;
 	$post = get_post($id);
 	if(isset($wp_query->query_vars['post_type']) && 'wpsc-product' == $wp_query->query_vars['post_type'] && isset($wp_query->query_vars['paged']) && $wp_query->current_post == 0 &&  $wp_query->posts[0]->post_title == $post->post_title && count($wp_query->posts) >1 ){
