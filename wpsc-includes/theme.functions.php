@@ -1393,10 +1393,9 @@ class WPSC_Hide_subcatsprods_in_cat {
 
 	function get_posts( &$q ) {
 		$this->q =& $q;
-		
-		if ( !isset($q->query_vars['taxonomy']) || ( "wpsc_product_category" != $q->query_vars['taxonomy'] ) )
+		if ( ( !isset($q->query_vars['taxonomy']) || ( "wpsc_product_category" != $q->query_vars['taxonomy'] )) )
 			return false;
-		
+	
 		add_action( 'posts_where', array( &$this, 'where' ) );
 		add_action( 'posts_join', array( &$this, 'join' ) );
 	}
@@ -1430,6 +1429,7 @@ class WPSC_Hide_subcatsprods_in_cat {
 	function join($join){
 		global $wpdb;
 		remove_action( 'posts_where', array( &$this, 'where' ) );
+		remove_action( 'posts_join', array( &$this, 'join' ) );
 		if(strpos($join, "JOIN $wpdb->term_relationships ON $wpdb->posts.id =  $wpdb->term_relationships.object_id"))
 			return $join;
 		$join .= " JOIN $wpdb->term_relationships ON $wpdb->posts.id =  $wpdb->term_relationships.object_id ";
