@@ -406,7 +406,7 @@ function wpsc_the_shipping_method() {
 */
 function wpsc_shipping_method_name() {
    global $wpsc_cart, $wpsc_shipping_modules;
-   return $wpsc_shipping_modules[$wpsc_cart->shipping_method]->name;
+   return apply_filters( 'wpsc_shipping_method_name', $wpsc_shipping_modules[$wpsc_cart->shipping_method]->name );
 }
 
 
@@ -444,7 +444,7 @@ function wpsc_the_shipping_quote() {
 */
 function wpsc_shipping_quote_name() {
    global $wpsc_cart;
-   return $wpsc_cart->shipping_quote['name'];
+   return apply_filters( 'wpsc_shipping_quote_name', $wpsc_cart->shipping_quote['name'] );
 }
 
 /**
