@@ -117,4 +117,24 @@ function wpsc_include_language_constants(){
 	include_once(WPSC_FILE_PATH.'/wpsc-languages/EN_en.php');
 }
 add_action('init','wpsc_include_language_constants');
+
+if(!function_exists('wpsc_has_noca_message')){
+	function wpsc_has_noca_message(){
+		if(isset($_SESSION['nocamsg']) && isset($_GET['noca']) && $_GET['noca'] == 'confirm')
+			return true;
+		else
+			return false;
+	}
+}
+
+if(!function_exists('wpsc_is_noca_gateway')){
+	function wpsc_is_noca_gateway(){
+		if(count($wpsc_gateway->wpsc_gateways) == 1 && $wpsc_gateway->wpsc_gateways[0]['name'] == 'Noca')
+			return true;
+		else
+			return false;
+	}
+}
+
+
 ?>
