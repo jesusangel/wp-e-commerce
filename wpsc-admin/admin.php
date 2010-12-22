@@ -69,7 +69,8 @@ function wpsc_admin_pages() {
 		// Add to Dashboard
 		$page_hooks[] = $purchase_log_page = add_submenu_page( 'index.php', __( 'Store Sales', 'wpsc' ), __( 'Store Sales', 'wpsc' ), 'administrator', 'wpsc-sales-logs', 'wpsc_display_sales_logs' );
 
-		if ( !isset( $show_update_page ) )
+//		This doesnt work,, need a better trigger
+//		if ( !isset( $show_update_page ) )
 			$show_update_page = 1;
 
 		if ( 1 === (int)$show_update_page )
