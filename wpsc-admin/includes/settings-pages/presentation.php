@@ -143,6 +143,7 @@ function options_categorylist() {
 		$selected = '';
 
 	$categorylist .= "<option value='list' " . $selected . " >" . __( 'Show list of product categories', 'wpsc' ) . "</option>";
+/*
 
 	if ( get_option( 'wpsc_default_category' ) == 'all+list' )
 		$selected = "selected='selected'";
@@ -150,6 +151,7 @@ function options_categorylist() {
 		$selected = '';
 
 	$categorylist .= "<option value='all+list' " . $selected . " >" . __( 'Show all products + list', 'wpsc' ) . "</option>";
+*/
 	$categorylist .= "<optgroup label='Product Categories'>";
 	foreach ( $group_data as $group ) {
 		$selected = "";
@@ -511,9 +513,24 @@ function wpsc_options_presentation() {
 							</td>
 						</tr>
 					<?php
-						//  }
+						if(get_option('wpsc_display_categories')){
+							$selected1 = 'checked="checked"';
+							$selected2 = '';
+						}else{
+							$selected1 = '';
+							$selected2 = 'checked="checked"';						
+						}
+							
 					?>
-
+				<tr>
+					<th scope="row"><?php _e('Show list of categories','wpsc'); ?></th>
+					<td>
+						<input type='radio' value='1' name='wpsc_options[wpsc_display_categories]' id='display_categories2' <?php echo $selected1; ?> />						<label for='display_addtocart'><?php _e( 'Yes', 'wpsc' ); ?></label>
+						<input type='radio' value='0' name='wpsc_options[wpsc_display_categories]' id='display_categories1' <?php echo $selected2; ?> />
+						<label for='display_addtocart'><?php _e( 'No', 'wpsc' ); ?></label><br />
+					</td>
+				</tr>
+				
 				<tr>
 					<th scope="row"><?php _e( 'Select what product category you want to display on the products page', 'wpsc' ); ?>:</th>
 					<td>

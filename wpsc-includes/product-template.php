@@ -364,7 +364,8 @@ function wpsc_display_categories() {
 
 	if ( isset( $category_id ) && $category_id > 0 )
 		$output = false;
-
+	if ( get_option( 'wpsc_display_categories' ))
+		$output = true;
 	return $output;
 }
 
