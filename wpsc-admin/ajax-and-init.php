@@ -1254,6 +1254,9 @@ function wpsc_purchlog_edit_status( $purchlog_id='', $purchlog_status='' ) {
 		wpsc_member_activate_subscriptions( $_POST['id'] );
 	}
 
+	//in the future when everyone is using the 2.0 merchant api, we should use the merchant class to update the staus,
+	// then you can get rid of this hook and have each person overwrite the method that updates the status.
+	do_action('wpsc_edit_order_status', array('purchlog_id'=>$purchlog_id, 'purchlog_data'=>$log_data, 'new_status'=>$purchlog_status));
 	// if the order is marked as failed, remove the claim on the stock
 	if ( $purchlog_status == 5 )
 		$wpdb->query( "DELETE FROM `" . WPSC_TABLE_CLAIMED_STOCK . "` WHERE `cart_id` = '{$purchlog_id}' AND `cart_submitted` = '1'" );
