@@ -475,7 +475,11 @@ function wpsc_display_purchlog_buyers_address(){
 	if(wpsc_has_regions($country) ){
 		$country[1] = $purchlogitem->shippingstate($country[1]).', ';
 	}
-	$address = $purchlogitem->userinfo['billingaddress']['value'].', '.$country[1].$country[0];			
+	$address = $purchlogitem->userinfo['billingaddress']['value'];
+	if ( !empty( $purchlogitem->userinfo['billingpostcode']['value'] ) ) {
+		$address .= ', ' . $purchlogitem->userinfo['billingpostcode']['value'];
+	}
+	$address .= ', ' . $country[1] . $country[0];
 	return htmlentities(stripslashes( $address ), ENT_QUOTES,'UTF-8');
 
 }
