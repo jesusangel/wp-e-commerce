@@ -341,6 +341,8 @@ class wpsc_coupons {
 				default:
 				return false;
 			}
+		} else {
+			return apply_filters( 'wpsc_coupon_compare_logic', false, $c, $product_obj );
 		}
 	}
 	
