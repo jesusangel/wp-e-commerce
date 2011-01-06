@@ -1510,7 +1510,7 @@ function wpsc_product_external_link_forms( $product_data = '' ) {
 	$output .= __( 'Off Site Product Link', 'wpsc' );
 	$output .= '</h3>
        <div class="inside">
-			<p>' . __( 'If this product is for sale on another website enter the link here. For instance if your product is an MP3 file for sale on itunes you could put the link here. This option overrides the buy now and add to cart links and takes you to the site linked here. You can also customise the Buy Now text and choose to open the link in a new window.', 'wpsc' ) . '</p>
+			<p>' . __( 'If this product is for sale on another website enter the link here. For instance if your product is an MP3 file for sale on iTunes you could put the link here. This option overrides the buy now and add to cart links and takes you to the site linked here. You can also customise the Buy Now text and choose to open the link in a new window.', 'wpsc' ) . '</p>
        <table class="form-table" style="width: 100%;" cellspacing="2" cellpadding="5">
 	<tbody><tr class="form-field">
 		<th valign="top" scope="row"><label for="external_link">' . __( 'External Link', 'wpsc' ) . '</label></th>
