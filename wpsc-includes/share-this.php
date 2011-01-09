@@ -1,22 +1,18 @@
 <?php
 global $social_sites;
-/*
-Modified to integrate with wp shopping cart
-*/
-
-@define('wpsc_akst_ADDTOCONTENT', true);
+@define('wpsc_akst_AKST_ADDTOCONTENT', true);
 // set this to false if you do not want to automatically add the Share This link to your content
 
 
-@define('wpsc_akst_ADDTOFOOTER', true);
+@define('wpsc_akst_AKST_ADDTOFOOTER', true);
 // set this to false if you do not want to automatically add the Share This form to the page in your footer
 
 
-@define('wpsc_akst_ADDTOFEED', true);
+@define('wpsc_akst_AKST_ADDTOFEED', true);
 // set this to false if you do not want to automatically add the Share This link to items in your feed
 
 
-@define('wpsc_akst_SHOWICON', true);
+@define('wpsc_akst_AKST_SHOWICON', true);
 // set this to false if you do not want to show the Share This icon next to the Share This link
 
 
@@ -24,82 +20,77 @@ Modified to integrate with wp shopping cart
 // http://3spots.blogspot.com/2006/02/30-social-bookmarks-add-to-footer.html
 
 $social_sites = array(
-  'delicious' => array(
-    'name' => 'del.icio.us'
-    , 'url' => 'http://del.icio.us/post?url={url}&title={title}'
-  )
-  , 'digg' => array(
-    'name' => 'Digg'
-    , 'url' => 'http://digg.com/submit?phase=2&url={url}&title={title}'
-  )
-  , 'furl' => array(
-    'name' => 'Furl'
-    , 'url' => 'http://furl.net/storeIt.jsp?u={url}&t={title}'
-  )
-  , 'netscape' => array(
-    'name' => 'Netscape'
-    , 'url' => ' http://www.netscape.com/submit/?U={url}&T={title}'
-  )
-  , 'yahoo_myweb' => array(
-    'name' => 'Yahoo! My Web'
-    , 'url' => 'http://myweb2.search.yahoo.com/myresults/bookmarklet?u={url}&t={title}'
-  )
-  , 'stumbleupon' => array(
-    'name' => 'StumbleUpon'
-    , 'url' => 'http://www.stumbleupon.com/submit?url={url}&title={title}'
-  )
-  , 'google_bmarks' => array(
-    'name' => 'Google Bookmarks'
-    , 'url' => '  http://www.google.com/bookmarks/mark?op=edit&bkmk={url}&title={title}'
-  )
-  , 'technorati' => array(
-    'name' => 'Technorati'
-    , 'url' => 'http://www.technorati.com/faves?add={url}'
-  )
-  , 'blinklist' => array(
-    'name' => 'BlinkList'
-    , 'url' => 'http://blinklist.com/index.php?Action=Blink/addblink.php&Url={url}&Title={title}'
-  )
-  , 'newsvine' => array(
-    'name' => 'Newsvine'
-    , 'url' => 'http://www.newsvine.com/_wine/save?u={url}&h={title}'
-  )
-  , 'facebook' => array( 
-    'name' => 'Facebook' 
-    , 'url' => 'http://www.facebook.com/share.php?u={url}' 
-  ) 
- 
-  , 'magnolia' => array(
-    'name' => 'ma.gnolia'
-    , 'url' => 'http://ma.gnolia.com/bookmarklet/add?url={url}&title={title}'
-  )
-  , 'reddit' => array(
-    'name' => 'reddit'
-    , 'url' => 'http://reddit.com/submit?url={url}&title={title}'
-  )
-  , 'windows_live' => array(
-    'name' => 'Windows Live'
-    , 'url' => 'https://favorites.live.com/quickadd.aspx?marklet=1&mkt=en-us&url={url}&title={title}&top=1'
-  )
-  , 'tailrank' => array(
-    'name' => 'Tailrank'
-    , 'url' => 'http://tailrank.com/share/?link_href={url}&title={title}'
-  )
+	'delicious' => array(
+		'name' => 'del.icio.us'
+		, 'url' => 'http://del.icio.us/post?url={url}&title={title}'
+	)
+	, 'digg' => array(
+		'name' => 'Digg'
+		, 'url' => 'http://digg.com/submit?phase=2&url={url}&title={title}'
+	)
+	, 'furl' => array(
+		'name' => 'Furl'
+		, 'url' => 'http://furl.net/storeIt.jsp?u={url}&t={title}'
+	)
+	, 'netscape' => array(
+		'name' => 'Netscape'
+		, 'url' => ' http://www.netscape.com/submit/?U={url}&T={title}'
+	)
+	, 'yahoo_myweb' => array(
+		'name' => 'Yahoo! My Web'
+		, 'url' => 'http://myweb2.search.yahoo.com/myresults/bookmarklet?u={url}&t={title}'
+	)
+	, 'stumbleupon' => array(
+		'name' => 'StumbleUpon'
+		, 'url' => 'http://www.stumbleupon.com/submit?url={url}&title={title}'
+	)
+	, 'google_bmarks' => array(
+		'name' => 'Google Bookmarks'
+		, 'url' => '  http://www.google.com/bookmarks/mark?op=edit&bkmk={url}&title={title}'
+	)
+	, 'technorati' => array(
+		'name' => 'Technorati'
+		, 'url' => 'http://www.technorati.com/faves?add={url}'
+	)
+	, 'blinklist' => array(
+		'name' => 'BlinkList'
+		, 'url' => 'http://blinklist.com/index.php?Action=Blink/addblink.php&Url={url}&Title={title}'
+	)
+	, 'newsvine' => array(
+		'name' => 'Newsvine'
+		, 'url' => 'http://www.newsvine.com/_wine/save?u={url}&h={title}'
+	)
+	, 'magnolia' => array(
+		'name' => 'ma.gnolia'
+		, 'url' => 'http://ma.gnolia.com/bookmarklet/add?url={url}&title={title}'
+	)
+	, 'reddit' => array(
+		'name' => 'reddit'
+		, 'url' => 'http://reddit.com/submit?url={url}&title={title}'
+	)
+	, 'windows_live' => array(
+		'name' => 'Windows Live'
+		, 'url' => 'https://favorites.live.com/quickadd.aspx?marklet=1&mkt=en-us&url={url}&title={title}&top=1'
+	)
+	, 'tailrank' => array(
+		'name' => 'Tailrank'
+		, 'url' => 'http://tailrank.com/share/?link_href={url}&title={title}'
+	)
 );
 
 /*
 
 // Additional sites
 
-  , 'blogmarks' => array(
-    'name' => 'Blogmarks'
-    , 'url' => 'http://blogmarks.net/my/new.php?mini=1&url={url}&title={title}'
-  )
+	, 'blogmarks' => array(
+		'name' => 'Blogmarks'
+		, 'url' => 'http://blogmarks.net/my/new.php?mini=1&url={url}&title={title}'
+	)
 
-  , 'favoriting' => array(
-    'name' => 'Favoriting'
-    , 'url' => 'http://www.favoriting.com/nuevoFavorito.asp?qs_origen=3&qs_url={url}&qs_title={title}'
-  )
+	, 'favoriting' => array(
+		'name' => 'Favoriting'
+		, 'url' => 'http://www.favoriting.com/nuevoFavorito.asp?qs_origen=3&qs_url={url}&qs_title={title}'
+	)
 
 */
 
@@ -110,314 +101,101 @@ $social_sites = array(
 @define('AK_WPROOT', '../../../');
 @define('wpsc_akst_FILEPATH', WPSC_URL.'/wpsc-includes/share-this.php');
 
-$wpsc_akst_action = '';
+
+$akst_action = '';
 
 if (!function_exists('ak_check_email_address')) {
-  function ak_check_email_address($email) {
-  return true;
+	function ak_check_email_address($email) {
 // From: http://www.ilovejackdaniels.com/php/email-address-validation/
 // First, we check that there's one @ symbol, and that the lengths are right
-    if (!preg_match("/^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9-.]+\.[a-zA-Z]{2,5}$/", $email)) {
-      // Email invalid because wrong number of characters in one section, or wrong number of @ symbols.
-      return false;
-    }
+		if (!ereg("^[^@]{1,64}@[^@]{1,255}$", $email)) {
+			// Email invalid because wrong number of characters in one section, or wrong number of @ symbols.
+			return false;
+		}
 // Split it into sections to make life easier
-    $email_array = explode("@", $email);
-    $local_array = explode(".", $email_array[0]);
-    for ($i = 0; $i < sizeof($local_array); $i++) {
-       if (!preg_match("/^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9-.]+\.[a-zA-Z]{2,5}$/", $local_array[$i])) {
-        return false;
-      }
-    } 
-    if (!ereg("^\[?[0-9\.]+\]?$", $email_array[1])) { // Check if domain is IP. If not, it should be valid domain name
-      $domain_array = explode(".", $email_array[1]);
-      if (sizeof($domain_array) < 2) {
-          return false; // Not enough parts to domain
-      }
-      for ($i = 0; $i < sizeof($domain_array); $i++) {
-        if (!ereg("^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]+))$", $domain_array[$i])) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
+		$email_array = explode("@", $email);
+		$local_array = explode(".", $email_array[0]);
+		for ($i = 0; $i < sizeof($local_array); $i++) {
+			 if (!ereg("^(([A-Za-z0-9!#$%&'*+/=?^_`{|}~-][A-Za-z0-9!#$%&'*+/=?^_`{|}~\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$", $local_array[$i])) {
+				return false;
+			}
+		}	
+		if (!ereg("^\[?[0-9\.]+\]?$", $email_array[1])) { // Check if domain is IP. If not, it should be valid domain name
+			$domain_array = explode(".", $email_array[1]);
+			if (sizeof($domain_array) < 2) {
+					return false; // Not enough parts to domain
+			}
+			for ($i = 0; $i < sizeof($domain_array); $i++) {
+				if (!ereg("^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]+))$", $domain_array[$i])) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }
 
 if (!function_exists('ak_decode_entities')) {
-  function ak_decode_entities($text, $quote_style = ENT_COMPAT) {
+	function ak_decode_entities($text, $quote_style = ENT_COMPAT) {
 // From: http://us2.php.net/manual/en/function.html-entity-decode.php#68536
-    if (function_exists('html_entity_decode')) {
-      $text = html_entity_decode($text, $quote_style, 'ISO-8859-1'); // NOTE: UTF-8 does not work!
-    }
-    else { 
-      $trans_tbl = get_html_translation_table(HTML_ENTITIES, $quote_style);
-      $trans_tbl = array_flip($trans_tbl);
-      $text = strtr($text, $trans_tbl);
-    }
-    $text = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $text); 
-    $text = preg_replace('~&#([0-9]+);~e', 'chr("\\1")', $text);
-    return $text;
-  }
-}
-
-if (!function_exists('ak_prototype')) {
-  function ak_prototype() {
-    if (!function_exists('wp_enqueue_script')) {
-      global $ak_prototype;
-      if (!isset($ak_prototype) || !$ak_prototype) {
-        print('
-    <script type="text/javascript" src="'.get_bloginfo('wpurl').'/wp-includes/js/prototype.js"></script>
-        ');
-      }
-      $ak_prototype = true;
-    }
-  }
-}
-
-if (!empty($_REQUEST['wpsc_akst_action'])) {
-  switch ($_REQUEST['wpsc_akst_action']) {
-    case 'js':
-      header("Content-type: text/javascript");
-?>
-function wpsc_akst_share(id, url, title) {
-  if ((jQuery('#wpsc_akst_form').css("display") == 'block') && (jQuery('#wpsc_akst_post_id').attr("value") == id)) {  
-    jQuery('#wpsc_akst_form').css("display", "none");
-    return;
-    }
-  
-  var link = jQuery('#wpsc_akst_link_' + id);
-  var options = {
-    margin: 1 ,
-    border: 1 ,
-    padding: 1 ,
-    scroll: 1 
-  };
-  
-  var offset = {};
-  new_container_offset = jQuery('#wpsc_akst_link_' + id).offset(options, offset);
-  
-  if(offset['left'] == null) {
-		offset['left'] = new_container_offset.left;
-		offset['top'] = new_container_offset.top;
+		if (function_exists('html_entity_decode')) {
+			$text = html_entity_decode($text, $quote_style, 'ISO-8859-1'); // NOTE: UTF-8 does not work!
+		}
+		else { 
+			$trans_tbl = get_html_translation_table(HTML_ENTITIES, $quote_style);
+			$trans_tbl = array_flip($trans_tbl);
+			$text = strtr($text, $trans_tbl);
+		}
+		$text = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $text); 
+		$text = preg_replace('~&#([0-9]+);~e', 'chr("\\1")', $text);
+		return $text;
 	}
-
-<?php
-  foreach ($social_sites as $key => $data) {
-    print(' jQuery("#wpsc_akst_'.$key.'").attr("href", wpsc_akst_share_url("'.$data['url'].'", url, title));');
-  }
-?>
-
-  jQuery('#wpsc_akst_post_id').value = id;
-  jQuery('#wpsc_akst_form').css("left", offset['left'] + 'px');
-  jQuery('#wpsc_akst_form').css("top", (offset['top']+ 14 + 3) + 'px');
-  jQuery('#wpsc_akst_form').css("display", 'block');
 }
 
-function wpsc_akst_share_url(base, url, title) {
-  base = base.replace('{url}', url);
-  return base.replace('{title}', title);
-}
-
-function wpsc_akst_share_tab(tab) {
-  var tab1 = document.getElementById('wpsc_akst_tab1');
-  var tab2 = document.getElementById('wpsc_akst_tab2');
-  var body1 = document.getElementById('wpsc_akst_social');
-  var body2 = document.getElementById('wpsc_akst_email');
-  
-  switch (tab) {
-    case '1':
-      tab2.className = '';
-      tab1.className = 'selected';
-      body2.style.display = 'none';
-      body1.style.display = 'block';
-      break;
-    case '2':
-      tab1.className = '';
-      tab2.className = 'selected';
-      body1.style.display = 'none';
-      body2.style.display = 'block';
-      break;
-  }
-}
-
-function wpsc_akst_xy(id) {
-  var element = jQuery(id);
-  var x = 0;
-  var y = 0;
-}
-<?php
-      die();
-      break;
-    case 'css':
-      header("Content-type: text/css");
-?>
-#wpsc_akst_form {
-  background: #999;
-  border: 1px solid #ddd;
-  display: none;
-  position: absolute;
-  width: 350px;
-  z-index: 999;
-}
-#wpsc_akst_form a.wpsc_akst_close {
-  color: #fff;
-  float: right;
-  margin: 5px;
-}
-#wpsc_akst_form ul.tabs {
-  border: 1px solid #999;
-  list-style: none;
-  margin: 10px 10px 0 10px;
-  padding: 0;
-}
-#wpsc_akst_form ul.tabs li {
-  background: #ccc;
-  border-bottom: 1px solid #999;
-  cursor: pointer;
-  float: left;
-  margin: 0 3px 0 0;
-  padding: 3px 5px 2px 5px;
-}
-#wpsc_akst_form ul.tabs li.selected {
-  background: #fff;
-  border-bottom: 1px solid #fff;
-  cursor: default;
-  padding: 4px 5px 1px 5px;
-}
-#wpsc_akst_form div.clear {
-  clear: both;
-  float: none;
-}
-#wpsc_akst_social, #wpsc_akst_email {
-  background: #fff;
-  border: 1px solid #fff;
-  padding: 10px;
-}
-#wpsc_akst_social ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-#wpsc_akst_social ul li {
-  float: left;
-  margin: 0;
-  padding: 0;
-  width: 45%;
-}
-#wpsc_akst_social ul li a {
-  background-position: 0px 2px;
-  background-repeat: no-repeat;
-  display: block;
-  float: left;
-  height: 24px;
-  padding: 4px 0 0 22px;
-  vertical-align: middle;
-}
-.Centered
-{
-  width:100%;
-  position:fixed;
-  top:60%;
-  left:35%;
-}
-<?php
-foreach ($social_sites as $key => $data) {
-if($key != 'facebook'){
-
-  print(
-'#wpsc_akst_'.$key.' {
-  background-image: url(../wpsc-core/images/social_networking/'.$key.'.gif);
-}
-');
-}else{
-  print(
-'#wpsc_akst_'.$key.' {
-  background-image: url(../wpsc-core/images/social_networking/'.$key.'.png);
-}
-');
-
-
-}
-}
-?>
-#wpsc_akst_email {
-  display: none;
-  text-align: left;
-}
-#wpsc_akst_email form, #wpsc_akst_email fieldset {
-  border: 0;
-  margin: 0;
-  padding: 0;
-}
-#wpsc_akst_email fieldset legend {
-  display: none;
-}
-#wpsc_akst_email ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-#wpsc_akst_email ul li {
-  margin: 0 0 7px 0;
-  padding: 0;
-}
-#wpsc_akst_email ul li label {
-  color: #555;
-  display: block;
-  margin-bottom: 3px;
-}
-#wpsc_akst_email ul li input {
-  padding: 3px 10px;
-}
-#wpsc_akst_email ul li input.wpsc_akst_text {
-  padding: 3px;
-  width: 280px;
-}
-<?php
-if (wpsc_akst_SHOWICON) {
-?>
-.wpsc_akst_share_link {
- display: block;
- margin: 0px 0px 6px 0px;
- width: 119px;
-}
-<?php
-}
-      die();
-      break;
-  }
+if (!function_exists('ak_jquery')) {
+	function ak_jquery() {
+		if (!function_exists('wp_enqueue_script')) {
+			global $ak_jquery;
+			if (!isset($ak_jquery) || !$ak_jquery) {
+				print('
+		<script type="text/javascript" src="'.get_bloginfo('wpurl').'/wp-includes/js/jquery.js"></script>
+				');
+			}
+			$ak_jquery = true;
+		}
+	}
 }
 
 function wpsc_akst_request_handler() {
-  if (!empty($_REQUEST['wpsc_akst_action'])) {
-    switch ($_REQUEST['wpsc_akst_action']) {
-      case 'share-this':
-        wpsc_akst_page();
-        break;
-      case 'send_mail':
-        wpsc_akst_send_mail();     
-        break;
-    }
-  }
+	if (!empty($_REQUEST['akst_action'])) {
+		switch ($_REQUEST['akst_action']) {
+			case 'share-this':
+				akst_page();
+				break;
+			case 'send_mail':
+				akst_send_mail();			
+				break;
+		}
+	}
 }
-add_action('init', 'wpsc_akst_request_handler', 9999);     
+
+add_action('init', 'wpsc_akst_request_handler', 9999);			
 
 function wpsc_akst_init() {
-  if (function_exists('wp_enqueue_script')) {
-    wp_enqueue_script('prototype');
-  }
+	if (function_exists('wp_enqueue_script')) {
+		wp_enqueue_script('jquery');
+	}
 }
-add_action('init', 'wpsc_akst_init');      
+add_action('init', 'akst_init');			
 
 function wpsc_akst_head() {
-  $wp = get_bloginfo('wpurl');
-  $url = wpsc_akst_FILEPATH;
-  ak_prototype();
-  print('
-  <script type="text/javascript" src="'.$url.'?wpsc_akst_action=js"></script>
-  <link rel="stylesheet" type="text/css" href="'.$url.'?wpsc_akst_action=css" />
-  ');
+	$wp = get_bloginfo('wpurl');
+	$url = wpsc_akst_FILEPATH;
+	ak_jquery();
+	print('
+	<script type="text/javascript" src="'.$url.'?wpsc_akst_action=js"></script>
+	<link rel="stylesheet" type="text/css" href="'.$url.'?wpsc_akst_action=css" />
+	');
 }
 add_action('wp_head', 'wpsc_akst_head');
 
@@ -436,13 +214,15 @@ function wpsc_akst_share_link($action = 'print') {
 			$product_link = get_permalink(absint($product_id));
 		} else if (isset($_REQUEST['product_id'])) {
 			$product_link = get_permalink(absint($_REQUEST['product_id']));
+		}else{
+			$product_link = $permalink;
 		}
 	$onclick = 'onclick="wpsc_akst_share(\''.$post->ID.'\', \''.urlencode($product_link).'\', \''.urlencode(get_the_title()).'\'); return false;"';
 	}
   global $post;
   ob_start();
 ?>
-<a href="#" <?php print($onclick); ?> title="<?php _e('E-mail this, post to del.icio.us, etc.', 'wpsc'); ?>" id="wpsc_akst_link_<?php print($post->ID); ?>" class="wpsc_akst_share_link" rel="nofollow"><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/social_networking/share-this-product.gif' title='Share This' alt='Share This' /></a>
+<a href="#" <?php print($onclick); ?> title="<?php _e('E-mail this, post to del.icio.us, etc.', 'wpsc'); ?>" id="wpsc_akst_link_<?php print($post->ID); ?>" class="wpsc_akst_share_link" rel="nofollow"><img src="<?php echo WPSC_CORE_IMAGES_URL; ?>/social_networking/share-this-product.gif" title="Share This" alt="Share This" /></a>
 <?php
   $link = ob_get_contents();
   ob_end_clean();
@@ -555,7 +335,6 @@ function wpsc_akst_share_form() {
 if (wpsc_akst_ADDTOFOOTER) {
   add_action('wp_footer', 'wpsc_akst_share_form');
 }
-
 function wpsc_akst_send_mail() {
   global $wpdb, $wp_query;
   $post_id = '';
