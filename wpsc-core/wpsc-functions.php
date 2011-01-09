@@ -817,7 +817,8 @@ function wpsc_product_link( $permalink, $post, $leavename ) {
 			if ( (isset( $wp_query->query_vars['products'] ) && $wp_query->query_vars['products'] != null) && in_array( $wp_query->query_vars['products'], $product_category_slugs ) ) {
 				$product_category = $wp_query->query_vars['products'];
 			} else {
-				$product_category = $wp_query->query_vars['wpsc_product_category'];
+				$link = isset($wp_query->query_vars['wpsc_product_category']) ? $wp_query->query_vars['wpsc_product_category'] : '';
+				$product_category = $link;
 			}
 			$category_slug = $product_category;
 			$term_url = get_term_link( $category_slug, 'wpsc_product_category' );
@@ -842,6 +843,8 @@ function wpsc_product_link( $permalink, $post, $leavename ) {
 		$post_name = $post->post_name;
 		if ( in_array( $post_name, $product_category_slugs ) )
 			$post_name = "product/{$post_name}";
+
+		if(isset($category_slug) && empty($category_slug)) $category_slug = 'product';
 
 		$rewritereplace = array(
 			$category_slug,
