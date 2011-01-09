@@ -305,6 +305,28 @@ class wpsc_merchant {
 	}
 
 	/**
+	 * set_authcode, generaly speaking a payment gateway gives you an authcode to be able to refer back to the transaction
+	 * if an authcode already exsits, you can either append another (2931932839|29391839482) or replace depending on the $append flag
+	 * @param string $authcode
+	 * @param bool   $append
+	 * @return bool  result
+	 */
+	function set_authcode($authcode, $append = false){
+		global $wpdb;
+
+		$wpdb->show_errors();
+		if($append === false){
+			return $wpdb->update(WPSC_TABLE_PURCHASE_LOGS,array('authcode'=>$authcode), array('id'=>absint($this->purchase_id)),array('%s'), array('%d'));
+		}else{
+			$current_authcode = $wpdb->get_var( "SELECT authcode FROM `" . WPSC_TABLE_CART_CONTENTS . "` WHERE `sessionid` = " . absint( $this->session_id ) . " LIMIT 1" );
+			//this is overwrite
+			$new_authcode = isset($current_authcode) ? $current_authcode.'|' :'';
+			$new_authcode .= $authcode;
+			return $wpdb->update(WPSC_TABLE_PURCHASE_LOGS,array('authcode'=>$new_authcode), array('id'=>absint($this->purchase_id)),array('%s'), array('%d'));
+		}
+	}
+		
+	/**
 	 * construct_value_array gateway specific data array, extended in merchant files
 	 * @abstract
 	 * @todo When we drop support for PHP 4, make this a proper abstract method
