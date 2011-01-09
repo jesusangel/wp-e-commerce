@@ -9,7 +9,7 @@
  * @package WPSC
  * @since WPSC 3.8
  */
-global $files, $separator, $purchase_log, $col_count, $siteurl, $products, $links; ?>
+global $files, $separator, $purchase_log, $col_count, $products, $links; ?>
 
 <div class="wrap">
 	<div class="user-profile-links">
@@ -141,7 +141,7 @@ global $files, $separator, $purchase_log, $col_count, $siteurl, $products, $link
 
 			<?php _e( 'You must be logged in to use this page. Please use the form below to login to your account.', 'wpsc' ); ?>
 
-			<form name="loginform" id="loginform" action="<?php echo $siteurl; ?>/wp-login.php" method="post">
+			<form name="loginform" id="loginform" action="<?php bloginfo('url'); ?>/wp-login.php" method="post">
 				<p>
 					<label><?php _e( 'Username:', 'wpsc' ); ?><br /><input type="text" name="log" id="log" value="" size="20" tabindex="1" /></label>
 				</p>
