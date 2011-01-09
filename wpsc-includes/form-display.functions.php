@@ -3,6 +3,7 @@
 function nzshpcrt_country_list( $selected_country = null ) {
 	global $wpdb;
 
+	$output = '';
 
 	if ( $selected_country == null )
 		$output = "<option value=''>" . __( 'Please select', 'wpsc' ) . "</option>";
@@ -38,10 +39,10 @@ function nzshpcrt_region_list( $selected_country = null, $selected_region = null
 				$selected = "";
 			}
 
-			$output .= "<option value='" . $region['id'] . "' $selected>" . $region['name'] . "</option>\n\r";
+			$output .= "<option value='" . $region['id'] . "' $selected>" . $region['name'] . "</option>\r\n";
 		}
 	} else {
-		$output .= "<select name='base_region' disabled='true'><option value=''>None</option></select>\n\r";
+		$output .= "<option value=''>None</option>\r\n";
 	}
 
 	return $output;
@@ -49,8 +50,7 @@ function nzshpcrt_region_list( $selected_country = null, $selected_region = null
 
 function nzshpcrt_form_field_list( $selected_field = null ) {
 	global $wpdb;
-	$output = "";
-	$output .= "<option value=''>Please choose</option>";
+	$output = "<option value=''>Please choose</option>";
 	$form_sql = "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1';";
 	$form_data = $wpdb->get_results( $form_sql, ARRAY_A );
 
@@ -192,9 +192,9 @@ function wpsc_select_product_file( $product_id = null ) {
 
 	$output .= "</div>";
 	$output .= "<div class='" . ((is_numeric( $product_id )) ? "edit_" : "") . "select_product_handle'><div></div></div>";
-	$output .= "<script type='text/javascript'>\n\r";
-	$output .= "var select_min_height = " . (25 * 3) . ";\n\r";
-	$output .= "var select_max_height = " . (25 * ($num + 1)) . ";\n\r";
+	$output .= "<script type='text/javascript'>\r\n";
+	$output .= "var select_min_height = " . (25 * 3) . ";\r\n";
+	$output .= "var select_max_height = " . (25 * ($num + 1)) . ";\r\n";
 	$output .= "</script>";
 
 	return $output;
@@ -205,26 +205,26 @@ function wpsc_select_variation_file( $file_id, $variation_ids, $variation_combin
 	$file_list = wpsc_uploaded_files();
 	$unique_id_component = ((int)$variation_combination_id) . "_" . str_replace( ",", "_", $variation_ids );
 
-	$output = "<div class='variation_settings_contents'>\n\r";
-	$output .= "<span class='admin_product_notes select_product_note '>" . __( 'Choose a downloadable file for this variation', 'wpsc' ) . "</span>\n\r";
-	$output .= "<div class='select_variation_file'>\n\r";
+	$output = "<div class='variation_settings_contents'>\r\n";
+	$output .= "<span class='admin_product_notes select_product_note '>" . __( 'Choose a downloadable file for this variation', 'wpsc' ) . "</span>\r\n";
+	$output .= "<div class='select_variation_file'>\r\n";
 
 	$num = 0;
-	$output .= "  <p>\n\r";
-	$output .= "    <input type='radio' name='variation_priceandstock[{$variation_ids}][file]' value='0' id='select_variation_file{$unique_id_component}_{$num}' " . ((!is_numeric( $file_id ) || ($file_id < 1)) ? "checked='checked'" : "") . " />\n\r";
-	$output .= "    <label for='select_variation_file{$unique_id_component}_{$num}'>" . __( 'No Product', 'wpsc' ) . "</label>\n\r";
-	$output .= "  </p>\n\r";
+	$output .= "  <p>\r\n";
+	$output .= "    <input type='radio' name='variation_priceandstock[{$variation_ids}][file]' value='0' id='select_variation_file{$unique_id_component}_{$num}' " . ((!is_numeric( $file_id ) || ($file_id < 1)) ? "checked='checked'" : "") . " />\r\n";
+	$output .= "    <label for='select_variation_file{$unique_id_component}_{$num}'>" . __( 'No Product', 'wpsc' ) . "</label>\r\n";
+	$output .= "  </p>\r\n";
 
 	foreach ( (array)$file_list as $file ) {
 		$num++;
-		$output .= "  <p>\n\r";
-		$output .= "    <input type='radio' name='variation_priceandstock[{$variation_ids}][file]' value='" . $file['file_id'] . "' id='select_variation_file{$unique_id_component}_{$num}' " . ((is_numeric( $file_id ) && ($file_id == $file['file_id'])) ? "checked='checked'" : "") . " />\n\r";
-		$output .= "    <label for='select_variation_file{$unique_id_component}_{$num}'>" . $file['display_filename'] . "</label>\n\r";
-		$output .= "  </p>\n\r";
+		$output .= "  <p>\r\n";
+		$output .= "    <input type='radio' name='variation_priceandstock[{$variation_ids}][file]' value='" . $file['file_id'] . "' id='select_variation_file{$unique_id_component}_{$num}' " . ((is_numeric( $file_id ) && ($file_id == $file['file_id'])) ? "checked='checked'" : "") . " />\r\n";
+		$output .= "    <label for='select_variation_file{$unique_id_component}_{$num}'>" . $file['display_filename'] . "</label>\r\n";
+		$output .= "  </p>\r\n";
 	}
 
-	$output .= "</div>\n\r";
-	$output .= "</div>\n\r";
+	$output .= "</div>\r\n";
+	$output .= "</div>\r\n";
 
 	return $output;
 }
@@ -243,7 +243,7 @@ function wpsc_list_product_themes( $theme_name = null ) {
 		}
 	}
 
-	$output .= "<select name='wpsc_options[wpsc_selected_theme]'>\n\r";
+	$output .= "<select name='wpsc_options[wpsc_selected_theme]'>\r\n";
 
 	foreach ( (array)$theme as $theme_file => $theme_data ) {
 		if ( stristr( $theme_file, $selected_theme ) ) {
@@ -251,10 +251,10 @@ function wpsc_list_product_themes( $theme_name = null ) {
 		} else {
 			$selected = "";
 		}
-		$output .= "<option value='$theme_file' $selected>" . $theme_data['Name'] . "</option>\n\r";
+		$output .= "<option value='$theme_file' $selected>" . $theme_data['Name'] . "</option>\r\n";
 	}
 
-	$output .= "</select>\n\r";
+	$output .= "</select>\r\n";
 
 	return $output;
 }
