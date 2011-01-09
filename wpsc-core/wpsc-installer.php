@@ -292,7 +292,7 @@ Copyright (C) 2008 Viper007Bond
 function wpsc_regenerate_thumbnails() {
 global $wpdb;
 
-set_time_limit( 250);
+if( !ini_get('safe_mode') ) set_time_limit(250);
 
 if ( !function_exists( 'wp_generate_attachment_metadata' ) ) {
 	require_once ( ABSPATH . 'wp-admin/includes/image.php' );
