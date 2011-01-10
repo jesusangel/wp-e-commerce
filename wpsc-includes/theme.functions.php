@@ -858,6 +858,14 @@ if (isset($product_image_size_list)) {
 if ( isset( $_GET['wpsc_user_dynamic_css'] ) && ($_GET['wpsc_user_dynamic_css'] == 'true') )
 	add_action( "init", 'wpsc_user_dynamic_css' );
 
+
+
+function wpsc_get_the_new_id($prod_id){
+	global $wpdb;
+	$post_id = (int)$wpdb->get_var($wpdb->prepare( "SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = %s AND `meta_value` = %d LIMIT 1", '_wpsc_original_id', $prod_id ));
+	return $post_id;
+	
+}
 // Template tags
 /**
  * wpsc display products function
@@ -879,6 +887,10 @@ function wpsc_display_products_page( $query ) {
 			$args['post__in'] = $query['product_id'];
 		}elseif(is_string($query['product_id'])){
 			$args['post__in'] = (array)$query['product_id'];
+		}
+		if(!empty($query['old_product_id'])){
+			$post_id = wpsc_get_the_new_id($query['old_product_id']);
+			$args['post__in'] = (array)$post_id;
 		}
 		if(!empty($query['price']) && 'sale' != $query['price']){
 			$args['meta_key'] = '_wpsc_price';
