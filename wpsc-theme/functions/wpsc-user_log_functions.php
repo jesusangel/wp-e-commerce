@@ -263,30 +263,33 @@ function wpsc_display_form_fields() {
 function wpsc_has_downloads() {
 	global $wpdb, $user_ID, $files, $links, $products;
 
-	$purchases = $wpdb->get_col( "SELECT `id` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE user_ID = " . (int)$user_ID . "" );
+	$purchases = $wpdb->get_results( "SELECT `id`, `processed` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE user_ID = " . (int)$user_ID . "" );
 	$rowcount = count( $purchases );
 
 	if ( $rowcount >= 1 ) {
 		$perchidstr = "(";
-		$perchidstr .= implode( ',', $purchases );
+		$perchids = array();
+		foreach( (array)$purchases as $purchase ) {
+			$is_transaction = wpsc_check_purchase_processed( $purchase->processed );
+			if( $is_transaction ) {
+				$perchids[] = $purchase->id;
+			}
+		}
+		$perchidstr .= implode( ',', $perchids );
 		$perchidstr .= ")";
 		$sql = "SELECT * FROM `" . WPSC_TABLE_DOWNLOAD_STATUS . "` WHERE `purchid` IN " . $perchidstr . " AND `active` IN ('1') ORDER BY `datetime` DESC";
 		$products = $wpdb->get_results( $sql, ARRAY_A );
 	}
 
 	foreach ( (array)$products as $key => $product ) {
-		$sql = "SELECT `processed` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `id`=" . $product['purchid'];
-		$isOrderAccepted = $wpdb->get_var( $sql );
-		if ( $isOrderAccepted > 1 ) {
-			if ( $product['uniqueid'] == null ) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
-				$links[] = site_url() . "/?downloadid=" . $product['id'];
-			} else {
-				$links[] = site_url() . "/?downloadid=" . $product['uniqueid'];
-			}
-			$sql = "SELECT * FROM $wpdb->posts WHERE id = " . (int)$product['fileid'] . "";
-			$file = $wpdb->get_results( $sql, ARRAY_A );
-			$files[] = $file[0];
-		}
+	if( !empty( $product['uniqueid'] ) ) { // if the uniqueid is not equal to null, its "valid", regardless of what it is
+			$links[] = site_url() . "/?downloadid=" . $product['id'];
+		} else {
+			$links[] = site_url() . "/?downloadid=" . $product['uniqueid'];
+ 		}
+		$sql = "SELECT * FROM $wpdb->posts WHERE id = " . (int)$product['fileid'] . "";
+		$file = $wpdb->get_results( $sql, ARRAY_A );
+		$files[] = $file[0];
 	}
 	if ( count( $files ) > 0 ) {
 		return true;
@@ -523,7 +526,7 @@ function wpsc_user_details() {
 
 				echo " <td>";
 				$price = $cart_row['price'] * $cart_row['quantity'];
-				echo wpsc_currency_display( $price, array('display_as_html' => false) );
+				echo wpsc_currency_display( $price );
 				echo " </td>";
 
 				echo " <td>";
