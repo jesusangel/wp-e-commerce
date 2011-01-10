@@ -1436,7 +1436,7 @@ function wpsc_submit_options( $selected='' ) {
 
 	}
 	if (empty($_POST['countrylist2']) && !empty($_POST['wpsc_options']['currency_sign_location']))
-		$selected = 'all';
+		$selected = 'none';
 		
 	if ( !isset( $_POST['countrylist2'] ) )
 		$_POST['countrylist2'] = '';
