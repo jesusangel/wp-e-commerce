@@ -82,7 +82,7 @@ class ups {
 
     function getForm(){
 
-            if (!isset($this->Services)){
+            if (!isset($this->Services) || !isset($this->drop_types)){
                 $this->_includeUPSData();
             }
             if (!isset($this->service_url)){
