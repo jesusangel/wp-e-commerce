@@ -504,10 +504,10 @@ function wpsc_dashboard_widget_setup() {
 		wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
 		wp_enqueue_script( 'datepicker-ui', WPSC_URL . "/wpsc-core/js/ui.datepicker.js", array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $version_identifier );
 		// Add the dashboard widgets
-		wp_add_dashboard_widget( 'wpsc_dashboard_news', __( 'Getshopped News' ), 'wpsc_dashboard_news' );
-		wp_add_dashboard_widget( 'wpsc_dashboard_widget', __( 'Sales Summary' ), 'wpsc_dashboard_widget' );
-		wp_add_dashboard_widget( 'wpsc_quarterly_dashboard_widget', __( 'Sales by Quarter' ), 'wpsc_quarterly_dashboard_widget' );
-		wp_add_dashboard_widget( 'wpsc_dashboard_4months_widget', __( 'Sales by Month' ), 'wpsc_dashboard_4months_widget' );
+		wp_add_dashboard_widget( 'wpsc_dashboard_news', __( 'Getshopped News' , 'wpsc' ), 'wpsc_dashboard_news' );
+		wp_add_dashboard_widget( 'wpsc_dashboard_widget', __( 'Sales Summary', 'wpsc' ), 'wpsc_dashboard_widget' );
+		wp_add_dashboard_widget( 'wpsc_quarterly_dashboard_widget', __( 'Sales by Quarter', 'wpsc' ), 'wpsc_quarterly_dashboard_widget' );
+		wp_add_dashboard_widget( 'wpsc_dashboard_4months_widget', __( 'Sales by Month', 'wpsc' ), 'wpsc_dashboard_4months_widget' );
 	
 		// Sort the Dashboard widgets so ours it at the top
 		global $wp_meta_boxes;
