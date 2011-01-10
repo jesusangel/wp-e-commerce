@@ -47,16 +47,16 @@ function wpsc_currency_display( $price_in, $args = null ) {
 		$wpsc_currency_data = $wpdb->get_row( "SELECT `symbol`, `symbol_html`, `code` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `id` = '" . $currency_type . "' LIMIT 1", ARRAY_A );
 
 	// Figure out the currency code
-	if ( true == $query['display_currency_code'] )
+	if ( $query['display_currency_code'] )
 		$currency_code = $wpsc_currency_data['code'];
 
 	// Figure out the currency sign
-	if ( true == $query['display_currency_symbol'] ) {
+	if ( $query['display_currency_symbol'] ) {
 		if ( !empty( $wpsc_currency_data['symbol'] ) ) {
-			if ( false == $query['display_as_html'] ) {
-					$currency_sign = $wpsc_currency_data['symbol_html'];
-			} else {
+			if ( $query['display_as_html'] ) {
 				$currency_sign = html_entity_decode($wpsc_currency_data['symbol']);
+			} else {
+				$currency_sign = $wpsc_currency_data['symbol'];
 			}
 		} else {
 			$currency_sign = $wpsc_currency_data['code'];

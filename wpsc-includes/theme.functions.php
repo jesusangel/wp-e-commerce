@@ -398,12 +398,39 @@ function wpsc_get_the_category_display($slug){
 function wpsc_single_template( $content ) {
 
 	global $wpdb, $post, $wp_query, $wpsc_query;
-	$single_theme_path = wpsc_get_template_file_path( 'wpsc-single_product.php' );
 
+
+	$single_theme_path = wpsc_get_template_file_path( 'wpsc-single_product.php' );
 	if((!isset($wp_query->is_product)) && !isset($wp_query->query_vars['wpsc_product_category']))return $content;
-	if ( 'wpsc-product' == $wp_query->post->post_type && !is_archive() && $wp_query->post_count <= 1) {
+	if(isset($wpsc_query->query['paged'])){ 
+		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
+		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
+
+		// get the display type for the productspage		
+		$display_type = get_option('product_view');
+		if ( isset( $_SESSION['wpsc_display_type'] ) ) {
+			$display_type = $_SESSION['wpsc_display_type'];
+			unset($_SESSION['wpsc_display_type']);
+		}
+		
+		ob_start();
+		wpsc_include_products_page_template($display_type);
+		$is_single = false;
+		$output .= ob_get_contents();
+		ob_end_clean();
+		
+		
+		$product_id = $wp_query->post->ID;
+		$product_meta = get_post_meta( $product_id, '_wpsc_product_metadata', true );
+		
+		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query objects back
+		if ( ($is_single == false) || ($product_meta['enable_comments'] == '0') )
+			$GLOBALS['post'] = $wp_query->post;
+		return $output;
+	}
+	if ( 'wpsc-product' == $wp_query->post->post_type && !is_archive() && $wp_query->post_count <= 1 ) {
 		remove_filter( "the_content", "wpsc_single_template" );
-		$wpsc_temp_query = new WP_Query( array( 'post__in' => array( $post->ID ), 'post_type' => 'wpsc-product','posts_per_page'=>1 ) );
+		$wpsc_temp_query = new WP_Query( array( 'post__in' => array( $wpsc_query->post->ID ), 'post_type' => 'wpsc-product','posts_per_page'=>1 ) );
 		list( $wp_query, $wpsc_temp_query ) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query object
 		ob_start();
 		include( $single_theme_path );
@@ -977,9 +1004,9 @@ function wpsc_include_products_page_template($display_type = 'default'){
 function wpsc_products_page( $content = '' ) {
 	global $wpdb, $wp_query, $wpsc_query, $wpsc_query_vars;
 	$output = '';
-
 	if ( preg_match( "/\[productspage\]/", $content ) ) {
 		remove_filter( 'the_content', 'wpautop' );
+
 		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 
