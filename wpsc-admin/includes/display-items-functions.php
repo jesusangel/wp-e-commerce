@@ -694,7 +694,8 @@ function wpsc_price_control_forms($product_data){
 		$i = 0;
 		foreach ($product_alt_currency as $iso => $alt_price ) {
 			$i++; ?>
-			<br /><label for='newCurrency[]'><?php _e( 'Currency type', 'wpsc' ); ?>:</label><br />
+			<div class='wpsc_additional_currency'>
+			<label for='newCurrency[]'><?php _e( 'Currency type', 'wpsc' ); ?>:</label><br />
 			<select name='newCurrency[]' class='newCurrency' style='width:42%'> <?php
 				foreach ( $currency_data as $currency ) {
 					if ( $iso == $currency['isocode'] )
@@ -707,9 +708,9 @@ function wpsc_price_control_forms($product_data){
 				} ?>
 			</select>
 			<?php _e( 'Price', 'wpsc' ); ?>:  <input type='text' class='text' size='8' name='newCurrPrice[]' value='<?php echo $alt_price; ?>' style=' display:inline' />
-			<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $iso; ?>'><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/cross.png' /></a><br />
+			<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $iso; ?>'><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/cross.png' /></a></div>
 <?php	}
-
+		
 		endif;
 
 		echo "<br style='clear:both' />

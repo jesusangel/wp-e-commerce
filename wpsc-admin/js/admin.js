@@ -217,7 +217,7 @@ jQuery(document).ready( function () {
 			var currencySymbol = jQuery(this).attr('rel');
 			jQuery(this).prev('input').val('');
 			jQuery(this).prev('select').val('');
-			jQuery(this).parent().parent('tr').hide();
+			jQuery(this).parent('.wpsc_additional_currency').hide();
 
 			post_values = "currSymbol="+currencySymbol;
 			jQuery.post('index.php?wpsc_admin_action=delete_currency_layer',post_values, function(returned_data){});
