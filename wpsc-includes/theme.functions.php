@@ -402,7 +402,7 @@ function wpsc_single_template( $content ) {
 
 	$single_theme_path = wpsc_get_template_file_path( 'wpsc-single_product.php' );
 	if((!isset($wp_query->is_product)) && !isset($wp_query->query_vars['wpsc_product_category']))return $content;
-	if(isset($wpsc_query->query['paged'])){ 
+	if(isset($wpsc_query->query['paged']) && $wpsc_query->post_count <= 1){ 
 		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 
