@@ -109,9 +109,9 @@ jQuery(document).ready(function () {
 				jQuery("span.shipping_country_name").html(country).removeClass('intra-field-label');
 				jQuery("select#current_country").val(countryID).removeClass('intra-field-label');
 
-				jQuery("select[title='shippingcountry']").val(countryID).removeClass('intra-field-label');
-				var html_form_id = jQuery("select[title='shippingcountry']").attr('id');
-				var form_id =  jQuery("select[title='shippingcountry']").attr('name');
+				jQuery("input[title='shippingcountry']").val(countryID).removeClass('intra-field-label');
+				var html_form_id = jQuery("input[title='shippingcountry']").attr('id');
+				var form_id =  jQuery("input[title='shippingcountry']").attr('name');
 				form_id = form_id.replace("collected_data[", "");
 				form_id = form_id.replace("]", "");
 				form_id = form_id.replace("[0]", "");

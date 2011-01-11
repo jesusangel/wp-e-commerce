@@ -94,21 +94,30 @@ class wpec_taxes_controller {
 
 
    function wpec_taxes_retrieve_selected_country(){
-	    global $wpsc_cart;
-	    switch ( $this->wpec_taxes->wpec_taxes_get_logic() ) {
-	         case 'billing_shipping':
-	            return $wpsc_cart->selected_country;
-	            break;
-	         case 'billing':
-	            return $wpsc_cart->selected_country;
-	            break;
-	         case 'shipping':
-				return $wpsc_cart->delivery_country;
-			    break;
-	         default:
-	            $returnable = false;
-	      }// switch
-   }
+		global $wpsc_cart;
+
+		switch ( $this->wpec_taxes->wpec_taxes_get_logic() ) {
+			case 'billing_shipping':
+				if('shipping_address' == $this->wpec_taxes->wpec_taxes_get_billing_shipping_preference())
+				{
+					$returnable = $wpsc_cart->selected_country;
+				}
+				else
+				{
+					$returnable = $wpsc_cart->delivery_country;
+				}// if
+				break;
+			case 'billing':
+				$returnable = $wpsc_cart->selected_country;
+				break;
+			case 'shipping':
+				$returnable = $wpsc_cart->delivery_country;
+				break;
+			default:
+				$returnable = false;
+		}// switch
+		return $returnable;
+	}
    /**
     * @description: wpec_taxes_run_logic - runs the tax logic as defined in the taxes settings page.
     *               returns true or false depending on whether taxes can be calculated.
@@ -119,7 +128,17 @@ class wpec_taxes_controller {
    function wpec_taxes_run_logic() {
       //initalize variables
       global $wpsc_cart;
-	  return true;
+      switch($this->wpec_taxes->wpec_taxes_get_logic())
+      {
+         case 'billing_shipping':
+            //only apply taxes when billing and shipping country are equal
+            $returnable = ($wpsc_cart->selected_country == $wpsc_cart->delivery_country) ? true : false;
+         break;
+         default:
+            $returnable = true;
+      }// switch
+      
+      return $returnable;
 
    } // wpec_taxes_run_logic
 
@@ -340,7 +359,7 @@ class wpec_taxes_controller {
          'label' => ''
       );
       $settings = wp_parse_args( $input_settings, $defaults );
-      extract( $settings, EXTR_SKIP );
+      //extract( $settings, EXTR_SKIP );
 
       //begin the input html
       $returnable = '<input ';
@@ -490,7 +509,7 @@ class wpec_taxes_controller {
          if ( isset( $tax_rate['region_code'] ) ) {
             //set the region up
             $region_select_settings = array(
-               'id' => "region-{$key}",
+               'id' => "{$type}-region-{$key}",
                'name' => "wpsc_options[wpec_taxes_{$type}][{$key}][region_code]",
                'class' => 'region'
             );
@@ -521,7 +540,11 @@ class wpec_taxes_controller {
             'country' => $this->wpec_taxes->wpec_taxes_get_country_information( 'country', array( 'isocode' => $country_code ) )
          );
       } else {
-         $selected_country = '';
+         //select All Markets by default
+         $selected_country = array(
+            'isocode' => 'all-markets',
+            'country' => 'All Markets'
+         );
       }// if
       //get countries
       $countries = $this->wpec_taxes->wpec_taxes_get_countries();

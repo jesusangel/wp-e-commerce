@@ -39,7 +39,7 @@ function wpec_taxes_ajax_controller() {
 			$regions = $wpec_taxes_controller->wpec_taxes->wpec_taxes_get_regions( $_REQUEST['country_code'] );
 			$key = $_REQUEST['current_key'];
 			$type = $_REQUEST['taxes_type'];
-			$default_option = array( 'region_code' => '', 'name' => '' );
+			$default_option = array( 'region_code' => 'all-markets', 'name' => 'All Markets' );
 			$select_settings = array(
 				'id' => "{$type}-region-{$key}",
 				'name' => "wpsc_options[wpec_taxes_{$type}][{$key}][region_code]",

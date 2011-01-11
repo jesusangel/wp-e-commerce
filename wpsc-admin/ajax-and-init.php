@@ -956,6 +956,7 @@ function wpsc_purchlog_resend_email() {
 	$shipping=0;
 	$siteurl = get_option( 'siteurl' );
 	$log_id = $_GET['email_buyer_id'];
+	$wpec_taxes_controller = new wpec_taxes_controller();
 	if ( is_numeric( $log_id ) ) {
 
 		$selectsql = "SELECT * FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `id`= " . $log_id . " LIMIT 1";
@@ -1078,6 +1079,13 @@ function wpsc_purchlog_resend_email() {
 					if ( $shipping > 0 )
 						$product_list_html .= " - " . __( 'Shipping', 'wpsc' ) . ":" . $shipping_price . "\n\r";
 				}
+				//add tax if included
+				if($wpec_taxes_controller->wpec_taxes_isenabled() && $wpec_taxes_controller->wpec_taxes_isincluded())
+				{
+					$taxes_text = ' - - '.__('Tax Included', 'wpsc').': '.wpsc_currency_display( $row['tax_charged'], array( 'display_as_html' => false ) )."\n\r";
+					$product_list .= $taxes_text;
+					$product_list_html .= $taxes_text;
+				}// if
 
 				$report.= " - " . $product_data[0]['post_title'] . $variation_list . "  " . $message_price . "\n";
 			}
@@ -1102,6 +1110,13 @@ function wpsc_purchlog_resend_email() {
 			if ( $purchase_log['discount_value'] > 0 ) {
 				$discount_html.= __( 'Discount', 'wpsc' ) . ": " . wpsc_currency_display( $purchase_log['discount_value'],array( 'display_as_html' => false ) ) . "\n\r";
 			}
+			$total_tax_html = '';
+			//only show total tax if tax is not included
+			if($wpec_taxes_controller->wpec_taxes_isenabled() && !$wpec_taxes_controller->wpec_taxes_isincluded())
+			{
+				$total_tax_html .= __('Total Tax', 'wpsc').': '. wpsc_currency_display($purchase_log['wpec_taxes_total'], array('display_as_html' => false))."\n\r";
+			}// if
+
 			$total_shipping_html.= __( 'Total Shipping', 'wpsc' ) . ": " . wpsc_currency_display( $total_shipping,array( 'display_as_html' => false ) ) . "\n\r";
 			$total_price_html.= __( 'Total', 'wpsc' ) . ": " . wpsc_currency_display( $total,array( 'display_as_html' => false ) ) . "\n\r";
 			if ( isset( $_GET['ti'] ) ) {
@@ -1115,16 +1130,19 @@ function wpsc_purchlog_resend_email() {
 
 
 			$message = str_replace( '%product_list%', $product_list, $message );
+			$message = str_replace( '%total_tax%', $total_tax_html, $message );
 			$message = str_replace( '%total_shipping%', $total_shipping_email, $message );
 			$message = str_replace( '%total_price%', $total_price_email, $message );
 			$message = str_replace( '%shop_name%', get_option( 'blogname' ), $message );
 
 			$report = str_replace( '%product_list%', $report_product_list, $report );
+			$message = str_replace( '%total_tax%', $total_tax_html, $report );
 			$report = str_replace( '%total_shipping%', $total_shipping_email, $report );
 			$report = str_replace( '%total_price%', $total_price_email, $report );
 			$report = str_replace( '%shop_name%', get_option( 'blogname' ), $report );
 
 			$message_html = str_replace( '%product_list%', $product_list_html, $message_html );
+			$message = str_replace( '%total_tax%', $total_tax_html, $message_html );
 			$message_html = str_replace( '%total_shipping%', $total_shipping_html, $message_html );
 			$message_html = str_replace( '%total_price%', $total_price_email, $message_html );
 			$message_html = str_replace( '%shop_name%', get_option( 'blogname' ), $message_html );

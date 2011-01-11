@@ -110,7 +110,7 @@ global $wpdb;
 			<h3 class="form_group"><?php _e('Custom Messages', 'wpsc');?>:</h3>
 			<table class='wpsc_options form-table'>
 				<tr>
-					<th colspan="2"><?php _e('Tags can be used', 'wpsc');?>: %shop_name%,<!-- %order_status%,--> %product_list%, %total_price%, %total_shipping%, %find_us%</th>
+					<th colspan="2"><?php _e('Tags can be used', 'wpsc');?>: %shop_name%,<!-- %order_status%,--> %product_list%, %total_price%, %total_shipping%, %find_us%, %total_tax%</th>
 				</tr>
 				<tr>
 					<td class='wpsc_td_note' colspan='2'>

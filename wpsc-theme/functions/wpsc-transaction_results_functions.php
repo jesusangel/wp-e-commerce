@@ -73,6 +73,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 	global $wpdb, $wpsc_cart, $echo_to_screen, $purchase_log, $order_url; 
 	global $message_html, $cart, $errorcode,$wpsc_purchlog_statuses, $wpsc_gateways;
 	
+	$wpec_taxes_controller = new wpec_taxes_controller();
 	$is_transaction = false;
 	$errorcode = 0;
 	$purchase_log = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `sessionid`= " . $sessionid . " LIMIT 1", ARRAY_A );
@@ -90,8 +91,8 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 		$is_transaction = wpsc_check_purchase_processed($purchase_log['processed']);
 
 		if ( (( "wpsc_merchant_testmode" == $purchase_log['gateway'] ) && (!$is_transaction) ) || !$is_transaction) {
-			$message = stripslashes( __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_shipping%%total_price%', 'wpsc') );
-			$message_html = __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_shipping%%total_price%', 'wpsc');
+			$message = stripslashes( __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_tax%%total_shipping%%total_price%', 'wpsc') );
+			$message_html = __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_tax%%total_shipping%%total_price%', 'wpsc');
 		} else {
 			if( $is_transaction )
 				_e('The Transaction was successful', 'wpsc')."<br />";
@@ -210,6 +211,15 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 					if ( $shipping > 0 )
 						$product_list_html .= " &nbsp; " . __( 'Shipping', 'wpsc' ) . ":" . $shipping_price . "\n\r";
 				}
+
+				//add tax if included
+				if($wpec_taxes_controller->wpec_taxes_isenabled() && $wpec_taxes_controller->wpec_taxes_isincluded())
+				{
+					$taxes_text = ' - - '.__('Tax Included', 'wpsc').': '.wpsc_currency_display( $row['tax_charged'], array( 'display_as_html' => false ) )."\n\r";
+					$product_list .= $taxes_text;
+					$product_list_html .= $taxes_text;
+				}// if
+
 				$report = get_option( 'wpsc_email_admin' );
 				$report_product_list.= " - " . $row['name'] . "  " . $message_price . "\n\r";
 			} // closes foreach cart as row
@@ -236,6 +246,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			}
 			$total_price_email = '';
 			$total_price_html = '';
+			$total_tax_html = '';
 			$total_shipping_html = '';
 			$total_shipping_email = '';
 			$total_shipping_email.= __( 'Total Shipping', 'wpsc' ) . ": " . wpsc_currency_display( $total_shipping, array( 'display_as_html' => false ) ) . "\n\r";
@@ -246,6 +257,11 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 				$total_shipping_html.= __( 'Discount', 'wpsc' ) . ": " . wpsc_currency_display( $purchase_log['discount_value'], array( 'display_as_html' => false ) ) . "\n\r";
 			}
 
+			//only show total tax if tax is not included
+			if($wpec_taxes_controller->wpec_taxes_isenabled() && !$wpec_taxes_controller->wpec_taxes_isincluded())
+			{
+				$total_tax_html .= __('Total Tax', 'wpsc').': '. wpsc_currency_display($purchase_log['wpec_taxes_total'], array('display_as_html' => false))."\n\r";
+			}// if
 			$total_shipping_html.= __( 'Total Shipping', 'wpsc' ) . ": " . wpsc_currency_display( $total_shipping, array( 'display_as_html' => false ) ) . "\n\r";
 			$total_price_html.= __( 'Total', 'wpsc' ) . ": " . wpsc_currency_display( $total,array( 'display_as_html' => false ) ) . "\n\r";
 
@@ -258,18 +274,21 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			}
 
 			$message = str_replace( '%product_list%', $product_list, $message );
+			$message = str_replace( '%total_tax%', $total_tax_html, $message );
 			$message = str_replace( '%total_shipping%', $total_shipping_email, $message );
 			$message = str_replace( '%total_price%', $total_price_email, $message );
 			$message = str_replace( '%shop_name%', get_option( 'blogname' ), $message );
 			$message = str_replace( '%find_us%', $purchase_log['find_us'], $message );
 
 			$report = str_replace( '%product_list%', $report_product_list, $report );
+			$report = str_replace( '%total_tax%', $total_tax_html, $report );
 			$report = str_replace( '%total_shipping%', $total_shipping_email, $report );
 			$report = str_replace( '%total_price%', $total_price_email, $report );
 			$report = str_replace( '%shop_name%', get_option( 'blogname' ), $report );
 			$report = str_replace( '%find_us%', $purchase_log['find_us'], $report );
 
 			$message_html = str_replace( '%product_list%', $product_list_html, $message_html );
+			$message_html = str_replace( '%total_tax%', $total_tax_html, $message_html );
 			$message_html = str_replace( '%total_shipping%', $total_shipping_html, $message_html );
 			$message_html = str_replace( '%total_price%', $total_price_email, $message_html );
 			$message_html = str_replace( '%shop_name%', get_option( 'blogname' ), $message_html );
@@ -288,6 +307,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 					wp_mail( $email, __( 'Purchase Receipt', 'wpsc' ), $message );
 				}
 			}
+
 			remove_filter( 'wp_mail_from_name', 'wpsc_replace_reply_name' );
 			remove_filter( 'wp_mail_from', 'wpsc_replace_reply_address' );
 
