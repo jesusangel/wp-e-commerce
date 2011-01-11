@@ -129,7 +129,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 
 		$email = wpsc_get_buyers_email($purchase_log['id']);
 		$previous_download_ids = array( 0 );
-		$product_list = $product_list_html = '';
+		$product_list = $product_list_html = $report_product_list = '';
 	
 		$cart = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CART_CONTENTS . "` WHERE `purchaseid`='{$purchase_log['id']}'", ARRAY_A );
 
@@ -211,7 +211,6 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 						$product_list_html .= " &nbsp; " . __( 'Shipping', 'wpsc' ) . ":" . $shipping_price . "\n\r";
 				}
 				$report = get_option( 'wpsc_email_admin' );
-				$report_product_list = '';
 				$report_product_list.= " - " . $row['name'] . "  " . $message_price . "\n\r";
 			} // closes foreach cart as row
 
