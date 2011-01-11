@@ -48,6 +48,17 @@ function wpsc_theme_presentation_page_metabox(){
 			<h3 class="hndle"><span><?php _e( "Theme Settings", 'wpsc' ); ?></span></h3>
 				<div class="inside">
 				<?php
+				
+				if( isset( $_SESSION['wpsc_theme_empty'] ) && ($_SESSION['wpsc_theme_empty'] == true)  ) {
+					?>
+						
+						<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
+							<p><?php _e('You did not specify any template files to be moved.','wpsc'); ?></p>
+						</div>
+					<?php
+					$_SESSION['wpsc_themes_copied'] = false;
+					$themes_copied = false;
+				}
 				if ( isset( $_SESSION['wpsc_themes_copied'] ) && ($_SESSION['wpsc_themes_copied'] == true) ) {
 					?>
 						<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
@@ -67,16 +78,14 @@ function wpsc_theme_presentation_page_metabox(){
 					}
 				?>
 				<p>
-				<?php if(false !== $themes_location){
+				<?php if(false !== $themes_location)
 						//Some themes have been moved to the themes folder
 					_e('Some Theme files have been moved to your WordPress Theme Folder.','wpsc');
-				?>
-
-				<?php }else{
-						//No themes have been moved to the theme folder
-					_e('No Theme files have been moved to your WordPress Theme Folder.','wpsc');
-					}?>
-
+				else
+				    _e('No Theme files have been moved to your WordPress Theme Folder.','wpsc');
+			
+				 ?>
+				
 				</p>
 				<p>
 					<?php _e('These are the template files, used for WP e-Commerce. If you anticipate changing the look of your site, select the files you would like to edit from the list bellow, and we will move them to your active WordPress Theme.','wpsc'); ?>

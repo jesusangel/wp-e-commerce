@@ -76,6 +76,14 @@ class wpsc_theming {
 	 * @return true if no templates need to be moved or false if some templates do need to be moved
 	 */
 	function files_exist() {
+		
+		if( empty( $this->templates_to_move ) ) {
+			$_SESSION['wpsc_theme_empty'] = true;
+			wp_redirect( admin_url('options-general.php?page=wpsc-settings&tab=presentation') );
+					
+		}
+		
+		
 		$results = array_diff( $this->templates_to_move, $this->list_of_templates );
 		$this->templates_to_move = $results;
 		// If theme already exists, we're set, do nothing
