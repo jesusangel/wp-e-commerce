@@ -18,6 +18,7 @@
 function wpsc_products_shorttag($atts) {
 	$query = shortcode_atts(array(
 		'product_id' => 0,
+		'old_product_id' => 0,
 		'product_url_name' => null, 
 		'product_name' => null,
 		'category_id' => 0,
