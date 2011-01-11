@@ -205,53 +205,7 @@ function wpsc_showing_products_page() {
 	
 }
 
-/**
- * wpsc pagination
- * Page numbers as links - limit by passing the $show parameter.
- * @param $show (int) Number of pages to show, -1 shows all. Zero will be used to show default setting in a future release.
- * @return (string) Linked page numbers.
- */
-function wpsc_pagination( $show = -1 ) {
-	
-	global $wpsc_query;
-	
-	$output = '';
-	$start = 1;
-	$end   = $wpsc_query->page_count;
-	$show  = intval( $show );
-	
-	$current_page = wpsc_current_page();
-	
-	if ( $show > 0 ) {
-		$start = $current_page - ( floor( $show / 2 ) );
-		if ( $start < 1 ) {
-			$start = 1;
-		}
-		$end = $start + $show - 1;
-		if ( $end > $wpsc_query->page_count ) {
-			$end = $wpsc_query->page_count;
-			if ( $end - $show + 1 > 0 ) {
-				$start = $end - $show + 1;
-			}
-		}
-	}
-	while ( wpsc_have_pages() ) : wpsc_the_page();
-		if ( wpsc_page_number() >= $start && wpsc_page_number() <= $end ) {
-			$page_url = wpsc_page_url();
-			$page_url = wpsc_product_search_url( $page_url );
-			if ( wpsc_page_is_selected() ) :
-				$output .= '<a href="' . $page_url . '" class="selected">' . wpsc_page_number() . '</a> ';
-			else :
-				$output .= '<a href="' . $page_url . '">' . wpsc_page_number() . '</a> ';
-			endif;
-		}
-	endwhile;
-	
-	$wpsc_query->rewind_pages();
-	
-	return $output;
-	
-}
+
 
 /**
  * wpsc product search url
