@@ -82,14 +82,13 @@ function wpsc_currency_display( $price_in, $args = null ) {
 		
 		case 3:
 		default:
-			$format_string = '%1$s %2$s%3$s';
+			$format_string = '%1$s %2$s %3$s';
 			break;
 	}
-
 	// Compile the output
 	$output = sprintf( $format_string, $currency_code, $currency_sign, $price_out );
 
-	if ( false == $query['display_as_html'] ) {
+	if ( !$query['display_as_html'] ) {
 		$output = "".$output."";
 	} else {
 		$output = "<span class='pricedisplay'>".$output."</span>";
