@@ -170,7 +170,9 @@ function wpsc_display_form_fields() {
 			
 			if( $form_field['unique_name'] == 'shippingstate'){
 				$delivery_country_id = wpsc_get_country_form_id_by_type('delivery_country');
-				if(is_array($meta_data[$delivery_country_id]) && isset($meta_data[$delivery_country_id][1])){
+
+				if((is_array($meta_data[$delivery_country_id]) && (isset($meta_data[$delivery_country_id][1]) ))|| is_numeric($meta_data[$form_field['id']])){
+					$shipping_form_field = $form_field; 
 					$continue = false;
 				}else{
 					$continue = true;
@@ -204,7 +206,10 @@ function wpsc_display_form_fields() {
 					if($continue){
 					echo "<input type='text' value='" . $meta_data[$form_field['id']] . "' name='collected_data[" . $form_field['id'] . "]' />";
 					
+					}elseif('shippingstate' == $form_field['unique_name'] && is_numeric( $meta_data[$form_field['id']] )){
+					
 					}
+					
 					break;
 
 				case "region":
@@ -231,10 +236,12 @@ function wpsc_display_form_fields() {
 					else	
 						$country_code = ($meta_data[$form_field['id']]);	
 					echo "<select name='collected_data[" . $form_field['id'] . "][0]' >" . nzshpcrt_country_list( $country_code ) . "</select>";
-					if( isset($meta_data[$form_field['id']][1]) )
+					if( is_array($meta_data[$form_field['id']]))
 						echo "<br /><select name='collected_data[" . $form_field['id'] . "][1]'>" . nzshpcrt_region_list( $country_code, $meta_data[$form_field['id']][1] ) . "</select>";
-
+					elseif( isset($shipping_form_field) )
+						echo "<br /><select name='collected_data[" . $shipping_form_field['id'] . "][1]'>" . nzshpcrt_region_list( $country_code, $meta_data[$shipping_form_field['id']] ) . "</select>";
 					break;
+					echo '<pre>'.print_r($shipping_form_field,1).'</pre>';
 						
 				case "email":
 					echo "<input type='text' value='" . $meta_data[$form_field['id']] . "' name='collected_data[" . $form_field['id'] . "]' />";
