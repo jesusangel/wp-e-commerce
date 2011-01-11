@@ -45,7 +45,7 @@ function wpsc_theme_presentation_page_metabox(){
 ?>
 	<div id="poststuff" class="metabox-holder">
 		<div id="themes_and_appearance" class='postbox'>
-			<h3 class="hndle"><span><?php _e( "Theme Settings", 'wpsc' ); ?></span></h3>
+			<h3 class="hndle"><span><?php _e( "Advanced Theme Settings", 'wpsc' ); ?></span></h3>
 				<div class="inside">
 				<?php
 				
@@ -56,7 +56,7 @@ function wpsc_theme_presentation_page_metabox(){
 							<p><?php _e('You did not specify any template files to be moved.','wpsc'); ?></p>
 						</div>
 					<?php
-					$_SESSION['wpsc_themes_copied'] = false;
+					$_SESSION['wpsc_theme_empty'] = false;
 					$themes_copied = false;
 				}
 				if ( isset( $_SESSION['wpsc_themes_copied'] ) && ($_SESSION['wpsc_themes_copied'] == true) ) {
@@ -88,7 +88,9 @@ function wpsc_theme_presentation_page_metabox(){
 				
 				</p>
 				<p>
-					<?php _e('These are the template files, used for WP e-Commerce. If you anticipate changing the look of your site, select the files you would like to edit from the list bellow, and we will move them to your active WordPress Theme.','wpsc'); ?>
+					<?php _e('WP e-Commerce provides you the ability to move your theme files to a safe place for theming control.
+					
+If you want to change the look of your site, select the files you want to edit from the list and click the move button. This will copy the template files to your active WordPress theme. ','wpsc'); ?>
 				</p>
 				<ul>
 				<?php
@@ -104,18 +106,23 @@ function wpsc_theme_presentation_page_metabox(){
 				 </ul>
 				 <p>
 				 <?php if(false !== $themes_location){
-				 _e('To change the look of certain aspects of your shop, you can edit the moved files found here:','wpsc');
+				 _e('To change the look of certain aspects of your shop, you can edit the moved files that are found here:','wpsc');
 				 ?>
 				 </p>
-				 <p class="howto"><?php echo  get_stylesheet_directory(); ?></p>
+				 <p class="howto">	<?php echo  get_stylesheet_directory(); ?></p>
 				<?php } ?>
 				<p><?php
 					wp_nonce_field('wpsc_copy_themes');
 					?>
 					<input type='submit' value='Move Template Files' class="button" name='wpsc_move_themes' />
-					<?php printf( __( '<a href="%s" class="button preview">Backup Your Theme</a>', 'wpsc' ), wp_nonce_url( 'admin.php?wpsc_admin_action=backup_themes', 'backup_themes' ) ); ?>
-					<?php printf( __( '<a href="%s" class="button preview">Flush Theme Cache</a>', 'wpsc' ), wp_nonce_url( 'admin.php?wpsc_flush_theme_transients=true', 'wpsc_flush_theme_transients' ) ); ?>
+					
+					<?php 
+					printf( __( '<a href="%s" class="button preview">Backup Your WordPress Theme</a>', 'wpsc' ), wp_nonce_url( 'admin.php?wpsc_admin_action=backup_themes', 'backup_themes' ) ); ?>				<br style="clear:both" />
+					
 				</p>
+				<br style="clear:both" />
+				 <p><?php _e('If you have moved your files in some other way i.e FTP, you may need to click the Flush Theme Cache. This will refresh the locations WordPress looks for your templates.' ,'wpsc'); ?></p>
+				<p><?php printf( __( '<a href="%s" class="button preview">Flush Theme Cache</a>', 'wpsc' ), wp_nonce_url( 'admin.php?wpsc_flush_theme_transients=true', 'wpsc_flush_theme_transients' ) ); ?></p>
 				<br style="clear:both" />
 				<br style="clear:both" />
 				</div>
@@ -948,14 +955,15 @@ function wpsc_options_presentation() {
 
 
 			<h3 class="form_group"><a name='thumb_settings'><?php _e( 'Thumbnail Settings', 'wpsc' ); ?></a></h3>
-			<p><em>Note: Anytime you update any of the thumbnail settings, WPeC will automatically resize all of your thumbnails for you.  Depending on how many images you have, this could take awhile.</em></p>
+			<p><em><?php _e('Note: Anytime you update any of the thumbnail settings, WPeC will automatically resize all of your thumbnails for you.  Depending on how many images you have, this could take awhile.','wpsc'); ?></em></p>
 			<table class='wpsc_options form-table'>
 				<?php if ( function_exists( "getimagesize" ) ) { ?>
 					<tr>
 						<th scope="row"><?php _e( 'Default Product Thumbnail Size', 'wpsc' ); ?>:</th>
 						<td>
-							<?php _e( 'Height', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[product_image_height]' class='wpsc_prod_thumb_option' value='<?php echo get_option( 'product_image_height' ); ?>' />
 							<?php _e( 'Width', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[product_image_width]' class='wpsc_prod_thumb_option' value='<?php echo get_option( 'product_image_width' ); ?>' />
+							<?php _e( 'Height', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[product_image_height]' class='wpsc_prod_thumb_option' value='<?php echo get_option( 'product_image_height' ); ?>' />
+
 						</td>
 					</tr>
 					<tr>
@@ -963,7 +971,8 @@ function wpsc_options_presentation() {
 							<?php _e( 'Default Product Group Thumbnail Size', 'wpsc' ); ?>:
 						</th>
 						<td>
-							<?php _e( 'Height', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[category_image_height]' value='<?php echo get_option( 'category_image_height' ); ?>' /> <?php _e( 'Width', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[category_image_width]' value='<?php echo get_option( 'category_image_width' ); ?>' />
+							 <?php _e( 'Width', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[category_image_width]' value='<?php echo get_option( 'category_image_width' ); ?>' />
+							<?php _e( 'Height', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[category_image_height]' value='<?php echo get_option( 'category_image_height' ); ?>' />
 						</td>
 					</tr>
 					<tr>
@@ -971,7 +980,8 @@ function wpsc_options_presentation() {
 					<?php _e( 'Single Product Image Size', 'wpsc' ); ?>:
 						</th>
 						<td>
-					<?php _e( 'Height', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[single_view_image_height]' value='<?php echo get_option( 'single_view_image_height' ); ?>' /> <?php _e( 'Width', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[single_view_image_width]' value='<?php echo get_option( 'single_view_image_width' ); ?>' />
+						<?php _e( 'Width', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[single_view_image_width]' value='<?php echo get_option( 'single_view_image_width' ); ?>' />
+						<?php _e( 'Height', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[single_view_image_height]' value='<?php echo get_option( 'single_view_image_height' ); ?>' /> 
 						</td>
 					</tr>
 					<tr>
