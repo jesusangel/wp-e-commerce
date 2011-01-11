@@ -122,7 +122,10 @@ class WP_eCommerce {
 
 		// Load the purchase log statuses
 		wpsc_core_load_purchase_log_statuses();
-
+		
+		// Load unique names and checout form types
+		wpsc_core_load_checkout_data();
+		
 		// Load the gateways
 		wpsc_core_load_gateways();
 

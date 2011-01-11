@@ -1,40 +1,22 @@
 <?php
 function wpsc_options_checkout(){
-global $wpdb;
-$form_types = Array("Text" => "text",
-	"Email Address" => "email",
-	"Street Address" => "address",
-	"City" => "city",
-	"Country" => "country",
-	"Delivery Address" => "delivery_address",
-	"Delivery City" => "delivery_city",
-	"Delivery Country" => "delivery_country",
-	"Text Area" => "textarea",
-	"Heading" => "heading",
-	"Select" => "select",
-	"Radio Button" => "radio",
-	"Checkbox" => "checkbox"
-);
+	global $wpdb;
+	$form_types = get_option('wpsc_checkout_form_fields');
+	$unique_names = get_option('wpsc_checkout_unique_names');
 
-$unique_names = Array('billingfirstname','billinglastname','billingaddress','billingcity','billingstate','billingcountry','billingemail','billingphone','billingpostcode','delivertoafriend','shippingfirstname','shippinglastname','shippingaddress','shippingcity','shippingstate','shippingcountry','shippingpostcode');
+	do_action('wpsc_checkout_form_fields_page');
+	$columns = array(
+		'drag' => 'Drag',
+		'name' => 'Name',
+		'type' => 'Type',
+		'unique_names' => 'Unique Names',
+		'mandatory' => 'Mandatory',
+		'trash' => 'Trash',
+	);
+	register_column_headers('display-checkout-list', $columns);	
 
-update_option('wpsc_checkout_form_fields', $form_types);
-if(get_option('wpsc_checkout_form_fields') == ''){
-	update_option('wpsc_checkout_form_fields', $form_types);
-}
-do_action('wpsc_checkout_form_fields_page');
-$columns = array(
-	'drag' => 'Drag',
-	'name' => 'Name',
-	'type' => 'Type',
-	'unique_names' => 'Unique Names',
-	'mandatory' => 'Mandatory',
-	'trash' => 'Trash',
-);
-register_column_headers('display-checkout-list', $columns);	
-$form_types = get_option('wpsc_checkout_form_fields');
-
-?>
+	
+	?>
 
 <form name='cart_options' id='cart_options' method='post' action=''>
 	<div class="wrap">

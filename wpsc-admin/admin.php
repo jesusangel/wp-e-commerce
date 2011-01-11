@@ -30,11 +30,6 @@ if ( (isset( $_SESSION['wpsc_activate_debug_page'] ) && ($_SESSION['wpsc_activat
 //settings pages include
 require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/settings-pages/general.php' );
 
-if ( !get_option( 'wpsc_checkout_form_fields' ) ) {
-	$form_types = array( "text", "email", "address", "city", "country", "delivery_address", "delivery_city", "delivery_country", "textarea", "heading", "select", "radio", "checkbox" );
-	update_option( 'wpsc_checkout_form_fields', $form_types );
-}
-
 if ( !get_option( 'wpsc_checkout_form_sets' ) ) {
 	$form_sets = array( 'Default Checkout Forms' );
 	update_option( 'wpsc_checkout_form_sets', $form_sets );
@@ -314,10 +309,8 @@ function wpsc_admin_dynamic_js() {
 	$hidden_boxes = get_option( 'wpsc_hidden_box' );
 
 	$form_types1 = get_option( 'wpsc_checkout_form_fields' );
-	$unique_names1 = Array( 'billingfirstname', 'billinglastname', 'billingaddress', 'billingcity', 'billingstate',
-		'billingcountry', 'billingemail', 'billingphone', 'billingpostcode',
-		'delivertoafriend', 'shippingfirstname', 'shippinglastname', 'shippingaddress',
-		'shippingcity', 'shippingstate', 'shippingcountry', 'shippingpostcode' );
+	$unique_names1 = get_option( 'wpsc_checkout_unique_names' ); 
+	
 	$form_types = '';
 	foreach ( $form_types1 as $form_type ) {
 		$form_types .= "<option value='" . $form_type . "'>" . __( $form_type, 'wpsc' ) . "</option>";

@@ -34,7 +34,56 @@ function wpsc_core_load_thumbnail_sizes() {
 	add_image_size( 'small-product-thumbnail', get_option( 'product_image_width' ), get_option( 'product_image_height' ), get_option( 'wpsc_crop_thumbnails', false ) );
 	add_image_size( 'medium-single-product', get_option( 'single_view_image_width' ), get_option( 'single_view_image_height' ), get_option( 'wpsc_crop_thumbnails', false) );
 }
+/**
+ * wpsc_core_load_checkout_data()
+ *
+ * 
+ */
 
+function wpsc_core_load_checkout_data() {
+	$form_types = Array(
+		"Text" => "text",
+		"Email Address" => "email",
+		"Street Address" => "address",
+		"City" => "city",
+		"Country" => "country",
+		"Delivery Address" => "delivery_address",
+		"Delivery City" => "delivery_city",
+		"Delivery Country" => "delivery_country",
+		"Text Area" => "textarea",
+		"Heading" => "heading",
+		"Select" => "select",
+		"Radio Button" => "radio",
+		"Checkbox" => "checkbox"
+	);
+
+	$form_types = apply_filters('wpsc_add_form_types' , $form_types);
+	update_option('wpsc_checkout_form_fields', $form_types);
+
+	$unique_names = Array(
+		'billingfirstname',
+		'billinglastname', 
+		'billingaddress', 
+		'billingcity', 
+		'billingstate',
+		'billingcountry', 
+		'billingemail', 
+		'billingphone', 
+		'billingpostcode', 
+		'delivertoafriend' , 
+		'shippingfirstname' , 
+		'shippinglastname' , 
+		'shippingaddress' , 
+		'shippingcity' , 
+		'shippingstate' , 
+		'shippingcountry' , 
+		'shippingpostcode'
+	);
+
+	$unique_names = apply_filters('wpsc_add_unique_names' , $unique_names);
+	update_option('wpsc_checkout_unique_names', $unique_names);
+
+}
 /**
  * wpsc_core_load_purchase_log_statuses()
  *
