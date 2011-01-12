@@ -725,7 +725,7 @@ function wpsc_add_checkout_fields() {
 		$wpdb->query( $sql );
 		update_option( 'country_form_field', $country_form_id[0]['id'] );
 		update_option( 'email_form_field', $email_form_id[0]['id'] );
-		$wpdb->query( "INSERT INTO `" . WPSC_TABLE_CHECKOUT_FORMS . "` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`, `unique_name` ) VALUES ( '" . __( 'Phone', 'wpsc' ) . "', 'text', '1', '0', '', '1', '8','billingphone');" );
+		$wpdb->query( "INSERT INTO `" . WPSC_TABLE_CHECKOUT_FORMS . "` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `checkout_order`, `unique_name` ) VALUES ( '" . __( 'Phone', 'wpsc' ) . "', 'text', '1', '0', '', '1', '8','billingphone');" );
 	}
 }
 function wpsc_rename_checkout_column(){
