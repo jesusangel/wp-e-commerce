@@ -613,17 +613,23 @@ function wpsc_user_details() {
 				echo "  <tr><td>" . __( 'Email', 'wpsc' ) . ":</td><td>" . $purchase['email'] . "</td></tr>";
 			}
 
-			$gateway_name = '';
-			foreach ( (array)$nzshpcrt_gateways as $gateway ) {
-				if ( $purchase_log[0]['gateway'] != 'testmode' ) {
-					if ( $gateway['internalname'] == $purchase_log[0]['gateway'] ) {
-						$gateway_name = $gateway['name'];
+			$payment_gateway_names = '';
+			$payment_gateway_names = get_option('payment_gateway_names');
+
+			foreach ( (array)$payment_gateway_names as $gatewayname ) {
+				//if the gateway has a custom name
+				if (!empty ($gatewayname) )
+					$display_name = $payment_gateway_names[$purchase_log[0]['gateway']];
+				else{
+				//if not fall back on default name  
+					foreach ( (array)$nzshpcrt_gateways as $gateway ){
+						if ( $gateway['internalname'] == $purchase['gateway'])
+							$display_name = $gateway['name'];
 					}
-				} else {
-					$gateway_name = "Manual Payment";
 				}
 			}
-			echo "  <tr><td>" . __( 'Payment Method', 'wpsc' ) . ":</td><td>" . $gateway_name . "</td></tr>";
+
+			echo "  <tr><td>" . __( 'Payment Method', 'wpsc' ) . ":</td><td>" . $display_name . "</td></tr>";
 			echo "  <tr><td>" . __( 'Purchase #', 'wpsc' ) . ":</td><td>" . $purchase['id'] . "</td></tr>";
 			if ( $purchase['transactid'] != '' ) {
 				echo "  <tr><td>" . __( 'Transaction Id', 'wpsc' ) . ":</td><td>" . $purchase['transactid'] . "</td></tr>";
