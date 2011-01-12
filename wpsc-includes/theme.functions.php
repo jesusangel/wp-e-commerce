@@ -430,7 +430,7 @@ function wpsc_single_template( $content ) {
 	}
 	if ( 'wpsc-product' == $wp_query->post->post_type && !is_archive() && $wp_query->post_count <= 1 ) {
 		remove_filter( "the_content", "wpsc_single_template" );
-		$wpsc_temp_query = new WP_Query( array( 'post__in' => array( $wpsc_query->post->ID ), 'post_type' => 'wpsc-product','posts_per_page'=>1 ) );
+		$wpsc_temp_query = new WP_Query( array( 'post__in' => array( $wp_query->post->ID ), 'post_type' => 'wpsc-product','posts_per_page'=>1 ) );
 		list( $wp_query, $wpsc_temp_query ) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query object
 		ob_start();
 		include( $single_theme_path );

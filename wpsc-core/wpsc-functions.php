@@ -866,7 +866,11 @@ function wpsc_product_link( $permalink, $post, $leavename ) {
 			if ( (isset( $wp_query->query_vars['products'] ) && $wp_query->query_vars['products'] != null) && in_array( $wp_query->query_vars['products'], $product_category_slugs ) ) {
 				$product_category = $wp_query->query_vars['products'];
 			} else {
-				$link = isset($wp_query->query_vars['wpsc_product_category']) ? $wp_query->query_vars['wpsc_product_category'] : '';
+				if(isset($wp_query->query_vars['wpsc_product_category']))
+					$link = $wp_query->query_vars['wpsc_product_category'];
+				else
+					$link = $product_categories[0]->slug;
+
 				$product_category = $link;
 			}
 			$category_slug = $product_category;
