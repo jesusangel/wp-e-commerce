@@ -46,7 +46,7 @@ function wpsc_purchlog_email_trackid() {
 	$message = str_replace( '%trackid%', $trackingid, $message );
 	$message = str_replace( '%shop_name%', get_option( 'blogname' ), $message );
 
-	$email_form_field = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1" );
+	$email_form_field = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `checkout_order` ASC LIMIT 1" );
 	$email = $wpdb->get_var( "SELECT `value` FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id`=" . $id . " AND `form_id` = '$email_form_field' LIMIT 1" );
 
 
@@ -991,7 +991,7 @@ function wpsc_purchlog_resend_email() {
 			$shipping_country = $country[0]['value'];
 		}
 
-		$email_form_field = $wpdb->get_results( "SELECT `id`,`type` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1", ARRAY_A );
+		$email_form_field = $wpdb->get_results( "SELECT `id`,`type` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `checkout_order` ASC LIMIT 1", ARRAY_A );
 		$email_address = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id`=" . $purchase_log['id'] . " AND `form_id` = '" . $email_form_field[0]['id'] . "' LIMIT 1", ARRAY_A );
 		$email = $email_address[0]['value'];
 
@@ -1194,7 +1194,7 @@ function wpsc_purchlog_clear_download_items() {
 		$wpdb->query( $clear_locks_sql );
 		$cleared = true;
 
-		$email_form_field = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1" );
+		$email_form_field = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `checkout_order` ASC LIMIT 1" );
 		$email_address = $wpdb->get_var( "SELECT `value` FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id`='{$purchase_id}' AND `form_id` = '{$email_form_field}' LIMIT 1" );
 
 		foreach ( (array)$downloadable_items as $downloadable_item ) {
@@ -1328,7 +1328,7 @@ function wpsc_save_checkout_order() {
 	$order = 1;
 	foreach ( $checkoutfields as $checkoutfield ) {
 		$checkoutfield = absint( $checkoutfield );
-		$wpdb->query( "UPDATE `" . WPSC_TABLE_CHECKOUT_FORMS . "` SET `order` = '" . $order . "' WHERE `id`=" . $checkoutfield );
+		$wpdb->query( "UPDATE `" . WPSC_TABLE_CHECKOUT_FORMS . "` SET `checkout_order` = '" . $order . "' WHERE `id`=" . $checkoutfield );
 
 		$order++;
 	}
@@ -1989,15 +1989,15 @@ function wpsc_checkout_settings() {
 				$form_unique_name = $_POST['new_form_unique_name'][$form_id];
 			}
 
-			$max_order_sql = "SELECT MAX(`order`) AS `order` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1';";
+			$max_order_sql = "SELECT MAX(`checkout_order`) AS `checkout_order` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1';";
 
 			if ( isset( $_POST['new_form_order'][$form_id] ) && $_POST['new_form_order'][$form_id] != '' ) {
 				$order_number = $_POST['new_form_order'][$form_id];
 			} else {
 				$max_order_sql = $wpdb->get_results( $max_order_sql, ARRAY_A );
-				$order_number = $max_order_sql[0]['order'] + 1;
+				$order_number = $max_order_sql[0]['checkout_order'] + 1;
 			}
-			$wpdb->query( "INSERT INTO `" . WPSC_TABLE_CHECKOUT_FORMS . "` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` , `unique_name`, `checkout_set`) VALUES ( '$form_name', '$form_type', '$form_mandatory', '$form_display_log', '', '1','" . $order_number . "','" . $form_unique_name . "','" . $filter . "');" );
+			$wpdb->query( "INSERT INTO `" . WPSC_TABLE_CHECKOUT_FORMS . "` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `checkout_order` , `unique_name`, `checkout_set`) VALUES ( '$form_name', '$form_type', '$form_mandatory', '$form_display_log', '', '1','" . $order_number . "','" . $form_unique_name . "','" . $filter . "');" );
 			$added++;
 		}
 	}

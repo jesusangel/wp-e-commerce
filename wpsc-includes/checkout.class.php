@@ -92,7 +92,7 @@ function wpsc_check_purchase_processed($processed){
  */
 function wpsc_get_buyers_email($purchase_id){
 	global $wpdb;
-	$email_form_field = $wpdb->get_results( "SELECT `id`,`type` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1", ARRAY_A );
+	$email_form_field = $wpdb->get_results( "SELECT `id`,`type` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `checkout_order` ASC LIMIT 1", ARRAY_A );
 	$email = $wpdb->get_var( "SELECT `value` FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id`=" . $purchase_id . " AND `form_id` = '" . $email_form_field[0]['id'] . "' LIMIT 1" );
 	return $email;
 
@@ -549,7 +549,7 @@ class wpsc_checkout {
 	 */
 	function wpsc_checkout( $checkout_set = 0 ) {
 		global $wpdb;
-		$this->checkout_items = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1'  AND `checkout_set`='" . $checkout_set . "' ORDER BY `order`;" );
+		$this->checkout_items = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1'  AND `checkout_set`='" . $checkout_set . "' ORDER BY `checkout_order`;" );
 
 		$category_list = wpsc_cart_item_categories( true );
 		$additional_form_list = array( );
@@ -561,11 +561,11 @@ class wpsc_checkout {
 			unset( $additional_form_list[$checkout_form_fields_id] );
 		}
 		if ( count( $additional_form_list ) > 0 ) {
-			$this->category_checkout_items = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1'  AND `checkout_set` IN ('" . implode( "','", $additional_form_list ) . "') ORDER BY `checkout_set`, `order`;" );
+			$this->category_checkout_items = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1'  AND `checkout_set` IN ('" . implode( "','", $additional_form_list ) . "') ORDER BY `checkout_set`, `checkout_order`;" );
 			$this->checkout_items = array_merge( (array)$this->checkout_items, (array)$this->category_checkout_items );
 		}
 		if ( function_exists( 'wpsc_get_ticket_checkout_set' ) ) {
-			$sql = "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1'  AND `checkout_set`='" . wpsc_get_ticket_checkout_set() . "' ORDER BY `order`;";
+			$sql = "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1'  AND `checkout_set`='" . wpsc_get_ticket_checkout_set() . "' ORDER BY `checkout_order`;";
 			$this->additional_fields = $wpdb->get_results( $sql );
 			$count = wpsc_ticket_checkoutfields();
 			$j = 1;

@@ -136,7 +136,7 @@ function wpsc_display_form_fields() {
 	$saved_data = $wpdb->get_row( $saved_data_sql, ARRAY_A );
 	$meta_data = get_user_meta( $user_ID, 'wpshpcrt_usr_profile',1);
 
-	$form_sql = "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1' ORDER BY `order`;";
+	$form_sql = "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1' ORDER BY `checkout_order`;";
 	$form_data = $wpdb->get_results( $form_sql, ARRAY_A );
 	foreach ( $form_data as $form_field ) {
 		if ( !empty( $form_field['unique_name'] ) ) {

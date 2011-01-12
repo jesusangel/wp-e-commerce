@@ -136,12 +136,12 @@ function wpsc_options_checkout(){
 				
 				<?php
 				if(!isset($_GET['checkout-set']) || ($_GET['checkout-set'] == 0)) {
-					$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set` IN ('0', '') ORDER BY `order`;";
+					$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set` IN ('0', '') ORDER BY `checkout_order`;";
 				} else {
 					$filter = $wpdb->escape($_GET['checkout-set']);
-					$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set` IN ('".$filter."') ORDER BY `order`;";
+					$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set` IN ('".$filter."') ORDER BY `checkout_order`;";
 				}
-				$email_form_field = $wpdb->get_row("SELECT `id` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
+				$email_form_field = $wpdb->get_row("SELECT `id` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `checkout_order` ASC LIMIT 1",ARRAY_A);
 			  
   		 		
 			  $form_data = $wpdb->get_results($form_sql,ARRAY_A);

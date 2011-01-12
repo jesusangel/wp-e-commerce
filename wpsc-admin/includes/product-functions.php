@@ -608,47 +608,6 @@ function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
 	}
 
 }
-/**
- * wpsc_update_categories function 
- *
- * @param integer product ID
- * @param array submitted categories
- */
-function wpsc_update_category_associations($product_id, $categories = array()) {
-  global $wpdb;
-  
-  $associated_categories = $wpdb->get_col($wpdb->prepare("SELECT `category_id` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` IN('%s')", $product_id));
-  
-  $categories_to_add = array_diff((array)$categories, (array)$associated_categories);
-  $categories_to_delete = array_diff((array)$associated_categories, (array)$categories);
-  $insert_sections = array();
-  foreach($categories_to_delete as $key => $category_to_delete) {
-		$categories_to_delete[$key] = absint($category_to_delete);
-  }
-
-
-  foreach($categories_to_add as $category_id) {
-    $insert_sections[] = $wpdb->prepare("( %d, %d)", $product_id, $category_id);
-  }
-  if(count($insert_sections)) {
-    $wpdb->query("INSERT INTO `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` (`product_id`, `category_id`) VALUES ".implode(", ",$insert_sections)."");
-  }
-  
-  foreach($categories_to_add as $category_id) {
-		$check_existing = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category_id') AND `order` IN('0') LIMIT 1;",ARRAY_A);
-		if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category_id') AND `product_id` IN('$product_id') LIMIT 1")) {
-			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '0' WHERE `category_id` IN('$category_id') AND `product_id` IN('$product_id') LIMIT 1;");
-		} else {				  
-			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_ORDER."` (`category_id`, `product_id`, `order`) VALUES ('$category_id', '$product_id', 0)");
-		}
-		if($check_existing != null) {
-			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = (`order` + 1) WHERE `category_id` IN('$category_id') AND `product_id` NOT IN('$product_id') AND `order` < '0'");
-		}
-  }
-  if(count($categories_to_delete) > 0) {
-    $wpdb->query("DELETE FROM`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` = {$product_id} AND `category_id` IN(".implode(",",$categories_to_delete).") LIMIT ".count($categories_to_delete)."");
-  }
-}
   
   /**
  * wpsc_update_product_tags function 

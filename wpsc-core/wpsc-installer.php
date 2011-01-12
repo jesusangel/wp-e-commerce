@@ -727,6 +727,8 @@ function wpsc_add_checkout_fields() {
 		update_option( 'email_form_field', $email_form_id[0]['id'] );
 		$wpdb->query( "INSERT INTO `" . WPSC_TABLE_CHECKOUT_FORMS . "` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`, `unique_name` ) VALUES ( '" . __( 'Phone', 'wpsc' ) . "', 'text', '1', '0', '', '1', '8','billingphone');" );
 	}
+	$sql = "ALTER TABLE  `" . WPSC_TABLE_CHECKOUT_FORMS . "` CHANGE  `order`  `checkout_order` INT( 10 ) UNSIGNED NOT NULL DEFAULT  '0'";
+	$wpdb->query($sql);
 }
 
 ?>
