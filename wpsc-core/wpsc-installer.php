@@ -704,7 +704,7 @@ function wpsc_add_checkout_fields() {
 
 	if ( $data_forms[0]['count'] == 0 ) {
 
-		$sql = " INSERT INTO `" . WPSC_TABLE_CHECKOUT_FORMS . "` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`, `unique_name`) VALUES ( '" . __( 'Your billing/contact details', 'wpsc' ) . "', 'heading', '0', '0', '', '1', 1,''),
+		$sql = " INSERT INTO `" . WPSC_TABLE_CHECKOUT_FORMS . "` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `checkout_order`, `unique_name`) VALUES ( '" . __( 'Your billing/contact details', 'wpsc' ) . "', 'heading', '0', '0', '', '1', 1,''),
 	( '" . __( 'First Name', 'wpsc' ) . "', 'text', '1', '1', '', '1', 2,'billingfirstname'),
 	( '" . __( 'Last Name', 'wpsc' ) . "', 'text', '1', '1', '', '1', 3,'billinglastname'),
 	( '" . __( 'Address', 'wpsc' ) . "', 'address', '1', '0', '', '1', 4,'billingaddress'),
@@ -727,8 +727,11 @@ function wpsc_add_checkout_fields() {
 		update_option( 'email_form_field', $email_form_id[0]['id'] );
 		$wpdb->query( "INSERT INTO `" . WPSC_TABLE_CHECKOUT_FORMS . "` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`, `unique_name` ) VALUES ( '" . __( 'Phone', 'wpsc' ) . "', 'text', '1', '0', '', '1', '8','billingphone');" );
 	}
+}
+function wpsc_rename_checkout_column(){
+	global $wpdb;
 	$sql = "ALTER TABLE  `" . WPSC_TABLE_CHECKOUT_FORMS . "` CHANGE  `order`  `checkout_order` INT( 10 ) UNSIGNED NOT NULL DEFAULT  '0'";
 	$wpdb->query($sql);
-}
 
+}
 ?>
