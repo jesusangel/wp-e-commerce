@@ -49,7 +49,7 @@ function wpsc_transaction_theme() {
 		break;
 	}
 	
-	if ( $sessionid != '' ){
+	if ( !empty($sessionid) ){
 		$cart_log_id = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `sessionid`= " . $sessionid . " LIMIT 1" );
 		return transaction_results( $sessionid, true );
 	}else
@@ -91,8 +91,8 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 		$is_transaction = wpsc_check_purchase_processed($purchase_log['processed']);
 
 		if ( (( "wpsc_merchant_testmode" == $purchase_log['gateway'] ) && (!$is_transaction) ) || !$is_transaction) {
-			$message = stripslashes( __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_tax%%total_shipping%%total_price%', 'wpsc') );
-			$message_html = __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_tax%%total_shipping%%total_price%', 'wpsc');
+			$message = stripslashes( __('All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_tax%%total_shipping%%total_price%', 'wpsc') );
+			$message_html = __('All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_tax%%total_shipping%%total_price%', 'wpsc');
 		} else {
 			if( $is_transaction )
 				_e('The Transaction was successful', 'wpsc')."<br />";
@@ -300,8 +300,13 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 				add_filter( 'wp_mail_from_name', 'wpsc_replace_reply_name', 0 );
 
 				if ( !$is_transaction ) {
+	
 					$payment_instructions = strip_tags( stripslashes( get_option( 'payment_instructions' ) ) );
-					$message = __( 'Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc' ) . "\n\r" . $payment_instructions . "\n\r" . $message;
+					if(!empty($payment_instructions))
+						$payment_instructions .= "\n\r";					
+					$message = __( 'Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc' ) . "\n\r" . $payment_instructions . $message;
+					$message_html = __( 'Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc' ) . "\n\r" . $payment_instructions . $message_html;
+					
 					wp_mail( $email, __( 'Order Pending: Payment Required', 'wpsc' ), $message );
 				} else {
 					wp_mail( $email, __( 'Purchase Receipt', 'wpsc' ), $message );
