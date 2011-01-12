@@ -412,7 +412,7 @@ function wpsc_single_template( $content ) {
 			$display_type = $_SESSION['wpsc_display_type'];
 			unset($_SESSION['wpsc_display_type']);
 		}
-		
+		$output = '';
 		ob_start();
 		wpsc_include_products_page_template($display_type);
 		$is_single = false;

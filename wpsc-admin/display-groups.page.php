@@ -95,7 +95,7 @@ function wpsc_display_categories_page() {
 						remove_query_arg('message');
 					}
 					
-					$sendback = remove_query_arg( array('deleted', 'message'), $sendback );
+					$sendback = remove_query_arg( array('deleted', 'message') );
 					?>
 				</p>
 			</div>

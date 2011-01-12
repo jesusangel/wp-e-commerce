@@ -2,8 +2,9 @@
 
 function wpsc_options_shipping() {
 	global $wpdb, $wpsc_shipping_modules, $external_shipping_modules, $internal_shipping_modules;
-// sort into external and internal arrays.
+	// sort into external and internal arrays.
 	foreach ( $GLOBALS['wpsc_shipping_modules'] as $key => $module ) {
+		if(empty($module))continue;
 		if ( isset( $module->is_external ) && ($module->is_external == true) ) {
 			$external_shipping_modules[$key] = $module;
 		} else {
@@ -16,7 +17,7 @@ function wpsc_options_shipping() {
 	} else {
 		$currency_sign = $currency_data['code'];
 	}
-//get shipping options that are selected
+	//get shipping options that are selected
 	$selected_shippings = get_option( 'custom_shipping_options' );
 ?>
 	<form name='cart_options' id='cart_options' method='post' action=''>
@@ -204,7 +205,7 @@ function wpsc_options_shipping() {
 										// print the internal shipping methods
 										foreach ( $external_shipping_modules as $shipping ) {
 											$disabled = '';
-											if ( ($shipping->requires_curl == true) && !function_exists( 'curl_init' ) ) {
+											if ( isset($shipping->requires_curl) && ($shipping->requires_curl == true) && !function_exists( 'curl_init' ) ) {
 												$disabled = "disabled='disabled'";
 											}
 											$shipping->checked = '';
@@ -244,9 +245,10 @@ function wpsc_options_shipping() {
 													<?php echo $shipping_data['form_fields']; ?>
 												</table>
 <?php
-										if ( $shipping_data['has_submit_button'] == 0 ) {
+										if ( $shipping_data['has_submit_button'] == 0 )
 											$update_button_css = 'style= "display: none;"';
-										}
+										else
+											$update_button_css = '';
 ?>
 											<div class='submit' <?php echo $update_button_css; ?>>
 												<input type='submit' value='<?php _e( 'Update &raquo;', 'wpsc' ); ?>' name='updateoption' />

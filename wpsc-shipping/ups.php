@@ -193,9 +193,10 @@ class ups {
             $output .= "</tr>\n\r";
 
             $selected_env = $wpsc_ups_settings['upsenvironment'];
-            if ($selected_env == "1"){
+            if ($selected_env == "1")
                 $env_test = "checked=\"checked\"";
-            }
+            else
+            	$env_test = "";
             $output .= ("
                         <tr>
                             <td><label for=\"ups_env_test\" >".__('Use Testing Environment', 'wpsc')."</label></td>

@@ -282,10 +282,12 @@ function wpsc_has_downloads() {
 				$perchids[] = $purchase->id;
 			}
 		}
-		$perchidstr .= implode( ',', $perchids );
-		$perchidstr .= ")";
-		$sql = "SELECT * FROM `" . WPSC_TABLE_DOWNLOAD_STATUS . "` WHERE `purchid` IN " . $perchidstr . " AND `active` IN ('1') ORDER BY `datetime` DESC";
-		$products = $wpdb->get_results( $sql, ARRAY_A );
+		if(!empty($perchids)){
+			$perchidstr .= implode( ',', $perchids );
+			$perchidstr .= ")";
+			$sql = "SELECT * FROM `" . WPSC_TABLE_DOWNLOAD_STATUS . "` WHERE `purchid` IN " . $perchidstr . " AND `active` IN ('1') ORDER BY `datetime` DESC";
+			$products = $wpdb->get_results( $sql, ARRAY_A );
+		}
 	}
 
 	foreach ( (array)$products as $key => $product ) {
