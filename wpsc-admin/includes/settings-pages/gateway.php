@@ -125,6 +125,7 @@ function wpsc_options_gateway() {
 							<td class='gateway_settings' rowspan='2'>
 								<div class='postbox'>
 							<?php
+							
 								if ( !isset( $_SESSION['previous_payment_name'] ) )
 									$_SESSION['previous_payment_name'] = "";
 								if ( !isset( $selected_gateway_data ) )
@@ -133,15 +134,14 @@ function wpsc_options_gateway() {
 							?>
 								<h3 class='hndle'><?php echo $payment_data['name']; ?></h3>
 								<div class='inside'>
-									<table class='form-table'>
-<?php echo $payment_data['form_fields']; ?>
+								<table class='form-table'>
+									<?php echo $payment_data['form_fields']; ?>
 								</table>
 								<?php
-								if ( $payment_data['has_submit_button'] == 0 ) {
+								if ( $payment_data['has_submit_button'] == 0 ) 
 									$update_button_css = 'style= "display: none;"';
-								} else {
+								else
 									$update_button_css = '';
-								}
 								?>
 								<div class='submit' <?php echo $update_button_css; ?>>
 <?php wp_nonce_field( 'update-options', 'wpsc-update-options' ); ?>
