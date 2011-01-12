@@ -11,15 +11,14 @@
 function wpsc_ajax_add_tracking() {
 	global $wpdb;
 	foreach ( $_POST as $key => $value ) {
-		if ( $value != '' ) {
-			$parts = preg_split( '/^wpsc_trackingid/', $key );
-			if ( count( $parts ) > '1' ) {
-				$id = $parts[1];
-				$trackingid = $value;
-				$sql = "UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET `track_id`='" . $trackingid . "' WHERE `id`=" . $id;
-				$wpdb->query( $sql );
-			}
+		$parts = preg_split( '/^wpsc_trackingid/', $key );
+		if ( count( $parts ) > '1' ) {
+			$id = $parts[1];
+			$trackingid = $value;
+			$sql = "UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET `track_id`='" . $trackingid . "' WHERE `id`=" . $id;
+			$wpdb->query( $sql );
 		}
+		
 	}
 }
 
@@ -53,7 +52,15 @@ function wpsc_purchlog_email_trackid() {
 
 	$subject = get_option( 'wpsc_trackingid_subject' );
 	$subject = str_replace( '%shop_name%', get_option( 'blogname' ), $subject );
-	wp_mail( $email, $subject, $message, "From: " . get_option( 'return_email' ) . " <" . get_option( 'return_email' ) . ">" );
+
+	add_filter( 'wp_mail_from', 'wpsc_replace_reply_address', 0 );
+	add_filter( 'wp_mail_from_name', 'wpsc_replace_reply_name', 0 );
+
+	wp_mail( $email, $subject, $message);
+
+	remove_filter( 'wp_mail_from_name', 'wpsc_replace_reply_name' );
+	remove_filter( 'wp_mail_from', 'wpsc_replace_reply_address' );
+
 	exit( true );
 }
 
