@@ -1,8 +1,7 @@
 <?php
 	$curr_cat       = get_term( $category_id, 'wpsc_product_category', ARRAY_A );
 	$category_list  = get_terms( 'wpsc_product_category', 'hide_empty=0&parent=' . $category_id );
-	$link           = '?wpsc_product_category=' . $curr_cat['slug'];
-	$link           = home_url( $link );
+	$link = get_term_link((int)$category_id , 'wpsc_product_category');
 	$category_image = wpsc_get_categorymeta( $curr_cat['term_id'], 'image' );
 	$category_image = WPSC_CATEGORY_URL . $category_image;
 	
