@@ -1114,7 +1114,7 @@ function wpsc_product_comment_link() {
 			$entities = array( "%26", "%27", "%3A", "%2F", "%40", "%3F", "%3D" );
 
 			$output = "<div class=\"clear comments\">
-						<script src='http://www.intensedebate.com/js/getCommentLink.php?acct=" . get_option( "wpsc_intense_debate_account_id" ) . "&postid=product_" . $wpsc_query->product['id'] . "&posttitle=" . urlencode( get_the_title() ) . "&posturl=" . str_replace( $original, $entities, wpsc_product_url( get_the_ID(), null, false ) ) . "&posttime=" . urlencode( date( 'Y-m-d h:i:s', time() ) ) . "&postauthor=author_" . get_the_ID() . "' type='text/javascript' defer='defer'></script>
+						<script src='https://www.intensedebate.com/js/getCommentLink.php?acct=" . get_option( "wpsc_intense_debate_account_id" ) . "&postid=product_" . $wpsc_query->product['id'] . "&posttitle=" . urlencode( get_the_title() ) . "&posturl=" . str_replace( $original, $entities, wpsc_product_url( get_the_ID(), null, false ) ) . "&posttime=" . urlencode( date( 'Y-m-d h:i:s', time() ) ) . "&postauthor=author_" . get_the_ID() . "' type='text/javascript' defer='defer'></script>
 					</div>";
 		}
 	}
@@ -1139,7 +1139,7 @@ function wpsc_product_comments() {
 				var idcomments_post_url = encodeURIComponent('" . wpsc_product_url( $wpsc_query->product['id'], null, false ) . "');
 				</script>
 				<span id=\"IDCommentsPostTitle\" style=\"display:none\"></span>
-				<script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+				<script type='text/javascript' src='https://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
 				";
 		}
 	}
