@@ -1399,3 +1399,37 @@ background-color: #f5f5f5;
  margin: 0px 0px 6px 0px;
  width: 119px;
 }
+
+/*-----Featured Image-----*/
+.item_text {
+	float:left;
+	width:33%;
+}
+
+.item_text h2 a{
+    color: #000000;
+    font-family: Arial,sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.featured_item_image a img {
+	float:right;
+	width:80%;
+}
+
+.wpsc_container.wpsc_featured{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+
+.featured_product_price{
+    font-style: oblique;
+    margin-bottom: 10px;
+}
+
+.wpsc_description a{
+	text-decoration: none;
+	font-size: 14px;
+}

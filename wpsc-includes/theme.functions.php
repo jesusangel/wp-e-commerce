@@ -52,6 +52,7 @@ function wpsc_register_core_theme_files() {
 	wpsc_register_theme_file( 'wpsc-transaction_results.php' );
 	wpsc_register_theme_file( 'wpsc-user_log.php' );
 	wpsc_register_theme_file( 'wpsc-cart_widget.php' );
+	wpsc_register_theme_file( 'wpsc-featured_product.php' );
 
 	// Let other plugins register their theme files
 	do_action( 'wpsc_register_core_theme_files' );
@@ -1377,48 +1378,15 @@ function wpsc_display_featured_products_page() {
 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 			$image_width = get_option( 'product_image_width' );
 			$image_height = get_option( 'product_image_height' );
-
+			$featured_product_theme_path = wpsc_get_template_file_path( 'wpsc-featured_product.php' );
+	ob_start();
+		include_once($featured_product_theme_path);
+		$is_single = false;
+		$output .= ob_get_contents();
+		ob_end_clean();
+		
 			//Begin outputting featured product.  We can worry about templating later, or folks can just CSS it up.
-			foreach ( $query as $product ) :
-				setup_postdata( $product );
-
-?>
-
-				<div class="wpsc_container wpsc_featured">
-					<div class="featured_product_display">
-						<div class="featured_product_display_item product_view_<?php $product->ID; ?>">
-							<div class="item_text">
-								<h3>
-									<a href='<?php echo get_permalink( $product->ID ); ?>'><?php echo get_the_title( $product->ID ); ?></a>
-								</h3>
-								<div class="pricedisplay"><?php echo wpsc_the_product_price(); ?></div>
-								<div class='wpsc_description'>
-<?php wpsc_the_product_description(); ?>
-									<a href='<?php echo get_permalink( $product->ID ); ?>'>
-											  More Information&hellip;
-									</a>
-								</div>
-							</div>
-
-<?php if ( wpsc_the_product_thumbnail ( ) ) : ?>
-								<div class="featured_item_image">
-									<a href="<?php echo get_permalink( $product->ID ); ?>" title="<?php echo get_the_title( $product->ID ); ?>">
-<?php echo wpsc_the_sticky_image( wpsc_the_product_id() ); ?>
-									</a>
-								</div>
-					<?php else: ?>
-				<div class="item_no_image">
-					<a href="<?php echo get_the_title( $product->ID ); ?>">
-					<span>No Image Available</span>
-				</a>
-			</div>
-<?php endif; ?>
-			<div class="wpsc_clear"></div>
-		</div>
-	</div>
-</div>
-<?php
-			endforeach;
+			echo $output;
 			//End output
 		}
 	}

@@ -30,7 +30,7 @@ function wpsc_core_load_thumbnail_sizes() {
 	add_image_size( 'product-thumbnails', get_option( 'product_image_width' ), get_option( 'product_image_height' ), get_option( 'wpsc_crop_thumbnails', false )  );
 	add_image_size( 'gold-thumbnails', get_option( 'wpsc_gallery_image_height' ), get_option( 'wpsc_gallery_image_width' ), get_option( 'wpsc_crop_thumbnails', false ) );
 	add_image_size( 'admin-product-thumbnails', 38, 38, get_option( 'wpsc_crop_thumbnails', true )  );
-	add_image_size( 'featured-product-thumbnails', 540, 260, get_option( 'wpsc_crop_thumbnails', true )  );
+	add_image_size( 'featured-product-thumbnails', 425, 215, get_option( 'wpsc_crop_thumbnails', true )  );
 	add_image_size( 'small-product-thumbnail', get_option( 'product_image_width' ), get_option( 'product_image_height' ), get_option( 'wpsc_crop_thumbnails', false ) );
 	add_image_size( 'medium-single-product', get_option( 'single_view_image_width' ), get_option( 'single_view_image_height' ), get_option( 'wpsc_crop_thumbnails', false) );
 }
