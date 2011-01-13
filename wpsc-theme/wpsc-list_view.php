@@ -66,7 +66,14 @@ global $wp_query, $wpdb;
 				?>
 				<tr class="product_view_<?php echo wpsc_the_product_id(); ?> <?php echo $alt_class;?>">
 					<td width="40%">
-						<h2 class="prodtitle"><a class="wpsc_product_title" href="<?php echo wpsc_the_product_permalink(); ?>"><?php echo wpsc_the_product_title(); ?></a></h2>
+						<h2 class="prodtitle">
+							<?php if(get_option('hide_name_link') == 1) : ?>
+								<?php echo wpsc_the_product_title(); ?>
+							<?php else: ?> 
+								<a class="wpsc_product_title" href="<?php echo wpsc_the_product_permalink(); ?>"><?php echo wpsc_the_product_title(); ?></a>
+							<?php endif; ?>
+							<?php echo wpsc_edit_the_product_link(); ?>
+						</h2>
 					</td>
 					<?php if(wpsc_show_stock_availability()): ?>	
 						<td class="stock">
