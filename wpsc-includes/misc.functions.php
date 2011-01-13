@@ -132,29 +132,21 @@ add_filter( 'single_post_title', 'wpsc_post_title_seo' );
  * @param int product id
  * @return bool true or false
  */
-function wpsc_change_canonical_url( $url ) {
-	global $wpdb, $wpsc_query;
-	if ( $wpsc_query->is_single == true ) {
-		if ( !is_numeric( $_GET['product_id'] ) ) {
-			$product_id = $wpdb->get_var( "SELECT `product_id` FROM `" . WPSC_TABLE_PRODUCTMETA . "` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '" . $wpsc_query->query_vars['product_url_name'] . "' ) ORDER BY `product_id` DESC LIMIT 1" );
-		} else {
-			$product_id = absint( $_GET['product_id'] );
-		}
+function wpsc_change_canonical_url( $url = '' ) {
+	global $wpdb, $wp_query, $wpsc_page_titles;
 
-		$url = wpsc_product_url( $product_id );
-	} else {
-		if ( isset( $wpsc_query->query_vars['category_id'] ) && ($wpsc_query->query_vars['category_id'] > 0) ) {
-			$url = wpsc_category_url( $wpsc_query->query_vars['category_id'] );
-
-			if ( $wpsc_query->query_vars['page'] > 1 ) {
-				if ( get_option( 'permalink_structure' ) ) {
-					$url .= "page/{$wpsc_query->query_vars['page']}/";
-				} else {
-					$url .= "&amp;page_number={$wpsc_query->query_vars['page']}";
-					$url = html_entity_decode( $url );
+	if ( $wp_query->is_single == true && 'wpsc-product' == $wp_query->query_vars['post_type']) {
+		$categories = wp_get_object_terms( $wp_query->post->ID , 'wpsc_product_category' );
+		if(count($categories) > 1){
+			foreach($categories as $category){
+				if(isset($wp_query->query_vars['wpsc_product_category']) && $category->slug == $wp_query->query_vars['wpsc_product_category'])continue;
+				if(isset($wp_query->query_vars['wpsc_product_category']) && $category->slug != $wp_query->query_vars['wpsc_product_category']){
+					return home_url($wpsc_page_titles['products'].'/'.$category->slug.'/'.$wp_query->query_vars['wpsc-product']);
 				}
+				
 			}
 		}
+	
 	}
 	return $url;
 }
@@ -173,7 +165,7 @@ function wpsc_canonical_url() {
 		add_action( 'wp_head', 'wpsc_insert_canonical_url' );
 	}
 }
-
+add_action( 'template_redirect', 'wpsc_canonical_url' );
 // check for all in one SEO pack and the is_static_front_page function
 if ( is_callable( array( "All_in_One_SEO_Pack", 'is_static_front_page' ) ) ) {
 
