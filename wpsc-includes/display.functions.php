@@ -355,10 +355,17 @@ function wpsc_obtain_the_title() {
 			$full_product_name = $wpdb->get_var( "SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`='{$product_id}' LIMIT 1" );
 			$wpsc_title_data['product'][$product_name] = $full_product_name;
 		} else {
-			$product_id = absint( $_GET['product_id'] );
-			$product_name = $wpdb->get_var( "SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`='{$product_id}' LIMIT 1" );
-			$full_product_name = $wpdb->get_var( "SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`='{$product_id}' LIMIT 1" );
-			$wpsc_title_data['product'][$product_name] = $full_product_name;
+			if(isset($_REQUEST['product_id'])){
+				$product_id = absint( $_REQUEST['product_id'] );
+				$product_name = $wpdb->get_var( "SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`='{$product_id}' LIMIT 1" );
+				$full_product_name = $wpdb->get_var( "SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`='{$product_id}' LIMIT 1" );
+				$wpsc_title_data['product'][$product_name] = $full_product_name;
+			}else{
+				//This has to exist, otherwise we would have bailed earlier.
+				$category = $wp_query->query_vars['wpsc_product_category'];
+				$display_name = $wpdb->get_var( "SELECT `name` FROM `$wpdb->terms` WHERE `slug`='{$category}' LIMIT 1" );
+				$full_product_name = $display_name;
+			}
 		}
 		$output = $full_product_name;
 	}
