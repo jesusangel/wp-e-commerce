@@ -363,8 +363,8 @@ function wpsc_obtain_the_title() {
 			}else{
 				//This has to exist, otherwise we would have bailed earlier.
 				$category = $wp_query->query_vars['wpsc_product_category'];
-				$display_name = $wpdb->get_var( "SELECT `name` FROM `$wpdb->terms` WHERE `slug`='{$category}' LIMIT 1" );
-				$full_product_name = $display_name;
+				$cat_term = get_term_by('slug',$wp_query->query_vars['wpsc_product_category'], 'wpsc_product_category');
+				$full_product_name = $cat_term->name;		
 			}
 		}
 		$output = $full_product_name;

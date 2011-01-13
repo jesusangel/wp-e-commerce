@@ -1391,7 +1391,9 @@ function wpsc_display_featured_products_page() {
 		}
 	}
 }
-add_action( 'wpsc_top_of_products_page', 'wpsc_display_featured_products_page', 12 );
+if(get_option( 'wpsc_hide_featured_products' ) == 1){
+	add_action( 'wpsc_top_of_products_page', 'wpsc_display_featured_products_page', 12 );
+}
 
 
 /**

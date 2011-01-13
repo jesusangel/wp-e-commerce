@@ -741,6 +741,28 @@ function wpsc_options_presentation() {
 						<input type='radio' value='0' name='wpsc_options[wpsc_replace_page_title]' id='wpsc_replace_page_title2' <?php echo $wpsc_replace_page_title2; ?> /> <label for='wpsc_replace_page_title2'><?php _e( 'No', 'wpsc' ); ?></label>
 					</td>
 				</tr>
+					<tr>
+					<th scope="row"><?php _e( 'Display Featured Product above Product Pages', 'wpsc' ); ?>:</th>
+					<td>
+					<?php
+						$wpsc_hide_featured_products = get_option( 'wpsc_hide_featured_products' );
+						$wpsc_hide_featured_products1 = "";
+						$wpsc_hide_featured_products2 = "";
+						switch ( $wpsc_hide_featured_products ) {
+							case 0:
+								$wpsc_hide_featured_products2 = "checked ='checked'";
+								break;
+
+							case 1:
+							default:
+								$wpsc_hide_featured_products1 = "checked ='checked'";
+								break;
+						}
+					?>
+						<input type='radio' value='1' name='wpsc_options[wpsc_hide_featured_products]' id='wpsc_hide_featured_products1' <?php echo $wpsc_hide_featured_products1; ?> /> <label for='wpsc_hide_featured_products1'><?php _e( 'Yes', 'wpsc' ); ?></label> &nbsp;
+						<input type='radio' value='0' name='wpsc_options[wpsc_hide_featured_products]' id='wpsc_hide_featured_products2' <?php echo $wpsc_hide_featured_products2; ?> /> <label for='wpsc_hide_featured_products2'><?php _e( 'No', 'wpsc' ); ?></label>
+					</td>
+				</tr>
 			</table>
 
 			<h3 class="form_group"><?php _e( 'Shopping Cart Settings', 'wpsc' ); ?></h3>
