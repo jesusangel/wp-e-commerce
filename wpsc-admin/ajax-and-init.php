@@ -1938,7 +1938,7 @@ function wpsc_checkout_settings() {
 	  // Save checkout options
 	 */
 	$options = array( );
-	if ( is_array( $_POST['wpsc_checkout_option_label'] ) ) {
+	if ( isset($_POST['wpsc_checkout_option_label']) && is_array( $_POST['wpsc_checkout_option_label'] ) ) {
 		foreach ( $_POST['wpsc_checkout_option_label'] as $form_id => $values ) {
 			$options = array( );
 			foreach ( (array)$values as $key => $form_option ) {

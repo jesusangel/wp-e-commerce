@@ -205,20 +205,31 @@ endif;
       </table>
    <?php endif; ?>
    <?php do_action('wpsc_before_form_of_shopping_cart'); ?>
+                 
+	<?php if(!empty($_SESSION['wpsc_checkout_user_error_messages'])): ?>
+		<p class="validation-error">
+		<?php
+		foreach($_SESSION['wpsc_checkout_user_error_messages'] as $user_error )
+		echo $user_error."<br />\n";
+		
+		$_SESSION['wpsc_checkout_user_error_messages'] = array();
+		?>
+	<?php endif; ?>
 
 	<?php if ( wpsc_show_user_login_form() && !is_user_logged_in() ): ?>
-	<h2><?php _e( 'Already Registered?' ); ?></h2>
-	<p><?php _e( 'Enter your login details below.' );?></p>
-	<fieldset class='wpsc_registration_form'>
-		<?php
-		$args = array( 'remember' => false );
-		wp_login_form( $args );
-		?>
-	</fieldset>
-	<?php endif; ?>
-         
-   <form class='wpsc_checkout_forms' action='' method='post' enctype="multipart/form-data">
-
+			<p><?php _e('In order to buy from us, you\'ll need an account. Joining is free and easy. All you need is a username, password and valid email address.');?></p>
+			<div class="wpsc_registration_form">
+				<h2><?php _e( 'Sign in' ); ?></h2>
+				<fieldset class='wpsc_registration_form'>
+					<?php
+					$args = array( 'remember' => false );
+					wp_login_form( $args );
+					?>
+				</fieldset>
+			</div>
+	<?php endif; ?>	
+	<form class='wpsc_checkout_forms' action='' method='post' enctype="multipart/form-data">
+				
       <?php
       /**
        * Both the registration forms and the checkout details forms must be in the same form element as they are submitted together, you cannot have two form elements submit together without the use of JavaScript.
@@ -228,49 +239,23 @@ endif;
     <?php if(wpsc_show_user_login_form()):
           global $current_user;
           get_currentuserinfo();   ?>
-         <h2><?php _e('Not yet a member?');?></h2>
-         <p><?php _e('In order to buy from us, you\'ll need an account. Joining is free and easy. All you need is a username, password and valid email address.');?></p>
 
-         <?php if(!empty($_SESSION['wpsc_checkout_user_error_messages'])): ?>
-            <p class="validation-error">
-               <?php
-               foreach($_SESSION['wpsc_checkout_user_error_messages'] as $user_error )
-                 echo $user_error."<br />\n";
-
-               $_SESSION['wpsc_checkout_user_error_messages'] = array();
-               ?>
-             </div>
-         <?php endif; ?>
-
-         <fieldset class='wpsc_registration_form'>
-            <table>
-               <tr>
-                  <td>
-                     <label><?php _e('Username'); ?>:</label>
-                  </td>
-                  <td>
-                     <input type="text" name="log" id="log" value="" size="20"/>
-                  </td>
-               </tr>
-               <tr>
-                  <td>
-                     <label><?php _e('Password'); ?>:</label>
-                  </td>
-                  <td>
-                     <input type="password" name="pwd" id="pwd" value="" size="20" />
-                  </td>
-               </tr>
-               <tr>
-                  <td>
-                     <label><?php _e('E-mail'); ?>:</label>
-                  </td>
-                  <td>
-                     <input type="text" name="user_email" id="user_email" value="<?php echo attribute_escape(stripslashes($user_email)); ?>" size="20" />
-                  </td>
-               </tr>
-            </table>
-         </fieldset>
-        
+		<div class="wpsc_registration_form">
+			<h2><?php _e('Join up now');?></h2>
+	        <fieldset class='wpsc_registration_form wpsc_right_registration'>
+	            
+				<label><?php _e('Username'); ?>:</label>
+				<input type="text" name="log" id="log" value="" size="20"/><br/>
+				
+				<label><?php _e('Password'); ?>:</label>
+				<input type="password" name="pwd" id="pwd" value="" size="20" /><br />
+				
+				<label><?php _e('E-mail'); ?>:</label>
+	            <input type="text" name="user_email" id="user_email" value="<?php echo attribute_escape(stripslashes($user_email)); ?>" size="20" /><br />
+	            
+	        </fieldset>
+        </div>
+        <div class="clear"></div>
    <?php endif; // closes user login form
 
       if(!empty($_SESSION['wpsc_checkout_misc_error_messages'])): ?>
@@ -279,6 +264,7 @@ endif;
                <p class='validation-error'><?php echo $user_error; ?></p>
                <?php } ?>
          </div>
+
       <?php
       endif;
        $_SESSION['wpsc_checkout_misc_error_messages'] = array(); ?>
