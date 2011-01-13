@@ -331,13 +331,31 @@ function wpsc_packing_slip($purchase_id) {
 						case 'delivery_country':
 						echo "	<tr><td>".$form_field['name'].":</td><td>".wpsc_get_country($purch_data['shipping_country'])."</td></tr>\n\r";
 						break;
-								
+
 						case 'heading':
-						echo "	<tr class='heading'><td colspan='2'><strong>".wp_kses($form_field['name'], array()).":</strong></td></tr>\n\r";
+                                                    if($form_field['name'] == "Hidden Fields")
+                                                        continue;
+                                                    else
+                                                        echo "	<tr class='heading'><td colspan='2'><strong>".wp_kses($form_field['name'], array()).":</strong></td></tr>\n\r";
 						break;
-						
+
 						default:
-						echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
+                                                    if( $form_field['name'] == "Cupcakes") {
+                                                    parse_str($rekeyed_input[$form_field['id']]['value'], $cupcakes );
+                                                    foreach( $cupcakes as $product_id => $quantity ) {
+                                                    $product = get_post($product_id);
+
+                                                    $string .= "(".$quantity.") ".$product->post_title.", ";
+
+                                                    }
+                                                    $string = rtrim($string, ", ");
+                                                    echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($string), ENT_QUOTES)."</td></tr>\n\r";
+
+                                                    } else {
+                                                        echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
+
+                                                    }
+
 						break;
 					}
 				}

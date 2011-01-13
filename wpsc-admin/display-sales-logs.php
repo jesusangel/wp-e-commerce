@@ -628,13 +628,13 @@ function wpsc_custom_checkout_fields(){
                $value['value'] = maybe_unserialize($value['value']);
                if(is_array($value['value'])){
                   ?>
-                  <p><strong><?php echo $key; ?> :</strong> <?php echo implode($value['value'], ','); ?></p>
+                  <p><strong><?php echo $key; ?> :</strong> <?php echo implode(stripslashse($value['value']), ','); ?></p>
                   <?php
 
 
                }else{
                   ?>
-                  <p><strong><?php echo $key; ?> :</strong> <?php echo $value['value']; ?></p>
+                  <p><strong><?php echo $key; ?> :</strong> <?php echo stripslashes($value['value']); ?></p>
                   <?php
                }
             }

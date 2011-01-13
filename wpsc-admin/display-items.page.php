@@ -7,225 +7,300 @@
  * @package wp-e-commerce
  * @since 3.7
  */
+
+
+/**
+ * wpsc_is_admin function.
+ *
+ * @access public
+ * @return void
+ * General use function for checking if user is on WPSC admin pages
+ */
+
 require_once(WPSC_FILE_PATH . '/wpsc-admin/includes/products.php');
 
-function wpsc_display_edit_products_page() {
-	global $wpdb, $wp_query, $wpsc_products;
+function wpsc_is_admin() {
+    global $pagenow, $current_screen;
 
-	$category_id = 0;
-	if ( isset( $_GET['category_id'] ) )
-		$category_id = absint( $_GET['category_id'] );
+        if( 'post.php' == $pagenow && 'wpsc-product' == $current_screen->post_type ) return true;
 
-	$columns = array(
-		'cb' => '<input type="checkbox" />',
-		'image' => '',
-		'title' => __('Name'),
-		'weight' => __('Weight'),
-		'stock' => __('Stock'),
-		'price' => __('Price'),
-		'sale_price' => __('Sale Price'),
-		'SKU' => __('SKU'),
-		'categories' => __('Categories'),
-		'featured' => __('Featured'),
-	);
-	if ( isset( $_GET["product"] ) && $_GET["product"] != '' ) {
-		unset( $columns["categories"] );
-	}
-	$columns = apply_filters( 'manage_display-product-list_columns', $columns );
+    return false;
+    
+}
 
-	register_column_headers( 'display-product-list', $columns );
+/**
+ * wpsc_additional_column_names function.
+ *
+ * @access public
+ * @param (array) $columns
+ * @return (array) $columns
+ *
+ */
+function wpsc_additional_column_names( $columns ){
+    unset( $columns['title'] );
+    unset( $columns['date'] );
 
-	$baseurl = includes_url( 'js/tinymce' );
-?>
-	<div class="wrap">
-		<div id="icon_card"><br /></div>
-		<h2>
-			<a href="admin.php?page=wpsc-edit-products" class="nav-tab nav-tab-active" id="manage"><?php echo esc_html( __( 'Manage Products', 'wpsc' ) ); ?></a>
-			<a href="<?php echo wp_nonce_url( "admin.php?page=wpsc-edit-products&amp;action=wpsc_add_edit", "_add_product" ); ?>" class="nav-tab" id="add"><?php  _e( 'Add New', 'wpsc' ); ?></a>
-	</h2>
-<?php if ( isset( $_GET['ErrMessage'] ) && isset( $_SESSION['product_error_messages'] ) && is_array( $_SESSION['product_error_messages'] ) ) { ?>
-		<div id="message" class="error fade">
-			<p>
-<?php
-		foreach ( $_SESSION['product_error_messages'] as $error ) {
-			echo $error;
-		}
-?>
-		</p>
-	</div>
-			<?php unset( $_GET['ErrMessage'] ); ?>
-			<?php $_SESSION['product_error_messages'] = ''; ?>
-<?php } ?>
+    $columns['image'] = __('');
+    $columns['title'] = __('Name');
+    $columns['weight'] = __('Weight');
+    $columns['stock'] = __('Stock');
+    $columns['price'] = __('Price');
+    $columns['sale_price'] = __('Sale Price');
+    $columns['SKU'] = __('SKU');
+    $columns['cats'] = __('Categories');
+    $columns['featured'] = __('Featured');
+    $columns['hidden_alerts'] = __('');
+    $columns['date'] = __('Date');
 
-	<?php if ( isset( $_GET['addedgroup'] ) || isset( $_GET['published'] ) || isset( $_GET['skipped'] ) || isset( $_GET['updated'] ) || isset( $_GET['deleted'] ) || isset( $_GET['message'] ) || isset( $_GET['duplicated'] ) ) {
- ?>
-			<div id="message" class="updated fade">
-				<p>
-	<?php
-			if ( isset( $_GET['updated'] ) ) {
-				printf( _n( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
-				unset( $_GET['updated'] );
-			}
+    return $columns;
+}
+function wpsc_additional_sortable_column_names( $columns ){
 
-			if ( isset( $_GET['addedgroup'] ) ) {
-				if(is_numeric($_GET['addedgroup']) && $_GET['addedgroup'] > 0){
-					printf( _n( '%s product updated.', '%s products updated.', $_GET['addedgroup'] ), number_format_i18n( $_GET['addedgroup'] ) );
-				}else{
-					printf( __( 'Invalid Category Selected.', 'wpsc') );
-				}
-				unset( $_GET['addedgroup'] );
-			}
+    $columns['stock'] = __('Stock');
+    $columns['price'] = __('Price');
+    $columns['sale_price'] = __('Sale Price');
+    $columns['SKU'] = __('SKU');
 
-			if ( isset( $_GET['published'] ) ) {
-				printf( _n( '%s product updated.', '%s products updated.', $_GET['published'] ), number_format_i18n( $_GET['published'] ) );
-				unset( $_GET['published'] );
-			}
+    return $columns;
+}
+function wpsc_additional_column_name_variations( $columns ){
+    global $post;
+    if( $post->post_parent != '0' )
+       remove_meta_box( 'wpsc_product_variation_forms', 'wpsc-product', 'normal' );
 
+    $columns['image'] = __('');
+    $columns['title'] = __('Name');
+    $columns['weight'] = __('Weight');
+    $columns['stock'] = __('Stock');
+    $columns['price'] = __('Price');
+    $columns['sale_price'] = __('Sale Price');
+    $columns['SKU'] = __('SKU');
+    $columns['hidden_alerts'] = __('');
 
-			if ( isset( $_GET['skipped'] ) ) {
-				unset( $_GET['skipped'] );
-			}
+    //For BC for 3.0 (hoping to remove for WPEC 3.9)
+    register_column_headers( 'wpsc-product_variants', $columns );
 
-			if ( isset( $_GET['deleted'] ) ) {
-				printf( _n( 'Product deleted.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
-				unset( $_GET['deleted'] );
-			}
-			if ( isset( $_GET['trashed'] ) && isset( $_GET['deleted'] ) ) {
-				printf( _n( 'Product trashed.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
-				unset( $_GET['trashed'] );
-			}
+    return apply_filters( 'wpsc_variation_column_headers', $columns);
+}
+/**
+ * wpsc_additional_column_data.
+ *
+ * @access public
+ * @param (array) $column
+ * @return void
+ * @todo Need to check titles / alt tags ( I don't think thumbnails have any in this code )
+ * @desc Switch function to generate columns the right way...no more UI hacking!
+ * 
+ */
+function wpsc_additional_column_data( $column ) {
+    global $post, $wpdb;
 
-			if ( isset( $_GET['duplicated'] ) ) {
-				printf( _n( 'Product duplicated.', '%s products duplicated.', $_GET['duplicated'] ), number_format_i18n( $_GET['duplicated'] ) );
-				unset( $_GET['duplicated'] );
-			}
+    $is_parent = ( bool )wpsc_product_has_children($post->ID);
+        switch ( $column ) :
 
-			if ( isset( $_GET['message'] ) ) {
-				$message = absint( $_GET['message'] );
-				$messages[1] = __( 'Product updated.' );
-				echo $messages[$message];
-				unset( $_GET['message'] );
-			}
+            case 'image' :
 
-			$_SERVER['REQUEST_URI'] = remove_query_arg( array( 'locked', 'skipped', 'updated', 'deleted', 'message', 'duplicated', 'trashed' ), $_SERVER['REQUEST_URI'] );
-	?>
-		</p>
-	</div>
-			<?php } ?>
+                  $attached_images = get_posts( array(
+                      'post_type' => 'attachment',
+                      'numberposts' => 1,
+                      'post_parent' => $post->ID,
+                      'orderby' => 'menu_order',
+                      'order' => 'ASC'
+		    ) );
 
-<?php
-		$unwriteable_directories = Array( );
+                if( isset( $post->ID ) && has_post_thumbnail( $post->ID ) )
+                    echo get_the_post_thumbnail( $post->ID, 'admin-product-thumbnails' );
+                else if( !empty( $attached_images  ) ) {
+                    $attached_image = $attached_images[0];
+                    $src = wp_get_attachment_url( $attached_image->ID );
+                 ?>
+                    <div style='width:38px; height:38px; overflow:hidden;'>
+                        <img title='<?php _e( 'Drag to a new position' ); ?>' src='<?php echo $src; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
+                    </div>
+                <?php
+		     } else {
+		      	$image_url = WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif";
+                ?>
+                      <img title='<?php _e( 'Drag to a new position' ); ?>' src='<?php echo $image_url; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
+                <?php
+                     }
+                break;
+            case 'weight' :
 
-		if ( !is_writable( WPSC_FILE_DIR ) ) {
-			$unwriteable_directories[] = WPSC_FILE_DIR;
-		}
+                if( $is_parent ) :
+                    _e( 'N/A', 'wpsc' );
+		else :
+                    $product_data['meta'] = array();
+                    $product_data['meta'] = get_post_meta( $post->ID, '' );
+                    foreach( $product_data['meta'] as $meta_name => $meta_value )
+                        $product_data['meta'][$meta_name] = maybe_unserialize( array_pop( $meta_value ) );
 
-		if ( !is_writable( WPSC_PREVIEW_DIR ) ) {
-			$unwriteable_directories[] = WPSC_PREVIEW_DIR;
-		}
+                    $product_data['transformed'] = array();
+                    if( !isset( $product_data['meta']['_wpsc_product_metadata']['weight'] ) )
+                        $product_data['meta']['_wpsc_product_metadata']['weight'] = "";
+                    if( !isset( $product_data['meta']['_wpsc_product_metadata']['weight_unit'] ) )
+                        $product_data['meta']['_wpsc_product_metadata']['weight_unit'] = "";
 
-		if ( !is_writable( WPSC_IMAGE_DIR ) ) {
-			$unwriteable_directories[] = WPSC_IMAGE_DIR;
-		}
+                    $product_data['transformed']['weight'] = wpsc_convert_weight( $product_data['meta']['_wpsc_product_metadata']['weight'], "gram", $product_data['meta']['_wpsc_product_metadata']['weight_unit'] );
 
-		if ( !is_writable( WPSC_THUMBNAIL_DIR ) ) {
-			$unwriteable_directories[] = WPSC_THUMBNAIL_DIR;
-		}
-
-		if ( !is_writable( WPSC_CATEGORY_DIR ) ) {
-			$unwriteable_directories[] = WPSC_CATEGORY_DIR;
-		}
-
-		if ( !is_writable( WPSC_UPGRADES_DIR ) ) {
-			$unwriteable_directories[] = WPSC_UPGRADES_DIR;
-		}
-
-		if ( count( $unwriteable_directories ) > 0 ) { 
-			// remember the user that the uploads directory needs to be writable
-			echo "<div class='error fade'>".WPSC_UPLOAD_ERR."<br/>";
+                    $weight = $product_data['transformed']['weight'];
+                    if( $weight == '' )
+                        $weight = '0';
 			
-			echo str_replace( ":directory:", "<ul><li>" . implode( $unwriteable_directories, "</li><li>" ) . "</li></ul>", __( 'The following directories are not writable: :directory: You won&#39;t be able to upload any images or files here. You will need to change the permissions on these directories to make them writable.', 'wpsc' ) ) . "</div>";
-		}
-		// class='stuffbox'
-		// Justin Sainton - 5.7.2010 - Re-ordered columns, applying jQuery to toggle divs on click.
-?>	
-		<script type="text/javascript">
-			/* <![CDATA[ */
-			(function($){
-				$(document).ready(function(){
+			$unit = $product_data['meta']['_wpsc_product_metadata']['weight_unit'];
 
-					$('#doaction, #doaction2').click(function(){
-						if ( $('select[name^="action"]').val() == 'delete' ) {
-							var m = '<?php echo esc_js( __( "You are about to delete the selected products.\n  'Cancel' to stop, 'OK' to delete." ) ); ?>';
-							return showNotice.warn(m);
-						}
-					});
-					$('form#filt_cat').insertAfter('input#doaction').css("display", "inline");
-                                     
-				});
-			})(jQuery);
-			/* ]]> */
-		</script>
-<?php
-		if ( !isset( $_GET["action"] ) )
-			$_GET["action"] = '';
-		if ( ($_GET["action"] != "wpsc_add_edit" ) ) {
-?>
-			<div id="wpsc-col-left">
-				<div class="col-wrap">
-<?php
-			wpsc_admin_products_list( $category_id );
-?>
-		</div>
-	</div>
-<?php } else { ?>
-	<script type="text/javascript">
-		/* <![CDATA[ */
-		(function($){
-			$(document).ready(function(){
-		
-				jQuery('#wpsc-col-left').hide();
-				<?php
-				if(isset($_GET['product']) && $_GET['product'] <= 0){?>
-				jQuery('a#add').addClass('nav-tab-active');
-				jQuery('a#manage').removeClass('nav-tab-active');
-				<?php 
-				} ?>
-			});
-		})(jQuery);
-		/* ]]> */
-	</script>
-	<div id="wpsc-col-right">
-<?php
-			global $screen_layout_columns;
-			wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
-			wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
-?>
-			<div id="poststuff" class="metabox-holder<?php echo 2 == $screen_layout_columns ? ' has-right-sidebar' : ''; ?>">
-				<form id="modify-products" method="post" action="" enctype="multipart/form-data" >
-<?php
-			$product_id = 0;
-			if ( isset( $_GET['product'] ) )
-				$product_id = absint( $_GET['product'] );
-			wpsc_display_product_form( $product_id );
-?>
-			</form>
-		</div>
-	</div>
-<?php } ?>
-</div>
+			switch( $unit ) {
+				case "pound":
+					$unit = " lbs.";
+					break;
+				case "ounce":
+					$unit = " oz.";
+					break;
+				case "gram":
+					$unit = " g";
+					break;
+				case "kilograms":
+				case "kilogram":
+					$unit = " kgs.";
+					break;
+			}
+                        echo $weight.$unit;
+                  endif;
+                break;
+            case 'stock' :
+                $stock = get_post_meta( $post->ID, '_wpsc_stock', true );
+                    if( $stock == '' )
+                        $stock = 'N/A';
+                    if( !$is_parent )
+                        echo $stock;
+                    else
+                        echo '~'.wpsc_variations_stock_remaining( $post->ID );
+                 break;
+            case 'price' :
+                $price = get_post_meta( $post->ID, '_wpsc_price', true );
+                if( !$is_parent )
+                    echo wpsc_currency_display( $price );
+                else
+                    echo wpsc_product_variation_price_available( $post->ID ).'+';
+                break;
+            case 'sale_price' :
+                $price = get_post_meta( $post->ID, '_wpsc_special_price', true );
+                if( !$is_parent )
+                    echo wpsc_currency_display( $price );
+                else
+                    echo wpsc_product_variation_price_available( $post->ID ).'+';
+                break;
+            case 'SKU' :
+                $sku = get_post_meta( $post->ID, '_wpsc_sku', true );
+                    if( $sku == '' )
+                        $sku = 'N/A';
 
-<?php
-	}
+                    if( $is_parent )
+                        echo $sku;
+               break;
+            case 'cats' :
+                $categories = get_the_product_category( $post->ID );
+                    if ( !empty( $categories ) ) {
+                        $out = array();
+                        foreach ( $categories as $c )
+                            $out[] = "<a href='admin.php?page=wpsc-edit-products&amp;category={$c->slug}'> " . esc_html( sanitize_term_field( 'name', $c->name, $c->term_id, 'category', 'display' ) ) . "</a>";
+                            echo join( ', ', $out );
+			} else {
+                            _e('Uncategorized');
+			}
+                break;
+            case 'featured' :
+                $featured_product_url = wp_nonce_url( "index.php?wpsc_admin_action=update_featured_product&amp;product_id=$post->ID", 'feature_product_' . $post->ID);
+?>
+	<a class="wpsc_featured_product_toggle featured_toggle_<?php echo $post->ID; ?>" href='<?php echo $featured_product_url; ?>' >
+            <?php if ( in_array( $post->ID, (array)get_option( 'sticky_products' ) ) ) : ?>
+                <img class='gold-star' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/gold-star.gif' alt='<?php _e( 'Unmark as Featured', 'wpsc' ); ?>' title='<?php _e( 'Unmark as Featured', 'wpsc' ); ?>' />
+            <?php else: ?>
+                <img class='grey-star' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/grey-star.gif' alt='<?php _e( 'Mark as Featured', 'wpsc' ); ?>' title='<?php _e( 'Mark as Featured', 'wpsc' ); ?>' />
+            <?php endif; ?>
+	</a>
+        <?php
+                break;
+            case 'hidden_alerts' :
+                $product_alert = apply_filters( 'wpsc_product_alert', array( false, '' ), $product );
+                    if( !empty( $product_alert['messages'] ) )
+                        $product_alert['messages'] = implode( "\n",( array )$product_alert['messages'] );
 
-	/*
-	 * wpsc_edit_variations_request_sql function, modifies the wp-query SQL statement for displaying variations
-	 * @todo will need refinement later to work with pagionation
-	 * @param $sql
-	 * @returns string - SQL statement
-	 */
+                    if( $product_alert['state'] === true ) {
+                        ?>
+                            <img alt='<?php echo $product_alert['messages'];?>' title='<?php echo $product_alert['messages'];?>' class='product-alert-image' src='<?php echo  WPSC_CORE_IMAGES_URL;?>/product-alert.jpg' alt='' />
+                        <?php
+                    }
 
-	function wpsc_edit_variations_request_sql( $sql ) {
+                    // If a product alert has stuff to display, show it.
+                    // Can be used to add extra icons etc
+                    if ( !empty( $product_alert['display'] ) )
+                        echo $product_alert['display'];
+                break;
+        endswitch;
+
+}
+function wpsc_column_sql_orderby( $orderby, $wp_query ) {
+	global $wpdb;
+
+	$wp_query->query = wp_parse_args( $wp_query->query );
+
+          switch ( $wp_query->query['orderby'] ) :
+            case 'stock' :
+                $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_stock') " . $wp_query->get('order');
+                break;
+            case 'price' :
+                $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_price') " . $wp_query->get('order');
+                break;
+            case 'sale_price' :
+                $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_special_price') " . $wp_query->get('order');
+                break;
+            case 'SKU' :
+                $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_sku') " . $wp_query->get('order');
+                break;
+        endswitch;
+        
+	return $orderby;
+}
+function wpsc_cats_restrict_manage_posts() {
+    global $typenow;
+
+    if ( $typenow == 'wpsc-product' ) {
+
+        $filters = array( 'wpsc_product_category' );
+        
+        foreach ( $filters as $tax_slug ) {
+            // retrieve the taxonomy object
+            $tax_obj = get_taxonomy( $tax_slug );
+            $tax_name = $tax_obj->labels->name;
+            // retrieve array of term objects per taxonomy
+            $terms = get_terms( $tax_slug );
+
+            // output html for taxonomy dropdown filter
+            echo "<select name='$tax_slug' id='$tax_slug' class='postform'>";
+            echo "<option value=''>Show All $tax_name</option>";
+            foreach ( $terms as $term ) 
+                echo '<option value='. $term->slug, $_GET[$tax_slug] == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
+            echo "</select>";
+        }
+    }
+}
+
+add_action( 'admin_head', 'wpsc_additional_column_name_variations' );
+add_action( 'restrict_manage_posts', 'wpsc_cats_restrict_manage_posts' );
+add_action( 'manage_pages_custom_column', 'wpsc_additional_column_data', 10, 2 );
+add_filter( 'manage_edit-wpsc-product_sortable_columns', 'wpsc_additional_sortable_column_names' );
+add_filter( 'manage_edit-wpsc-product_columns', 'wpsc_additional_column_names' );
+add_filter( 'posts_orderby', 'wpsc_column_sql_orderby', 10, 2 );
+
+
+/*
+* wpsc_edit_variations_request_sql function, modifies the wp-query SQL statement for displaying variations
+* @param $sql
+* @returns string - SQL statement
+*/
+
+function wpsc_edit_variations_request_sql( $sql ) {
 		global $wpdb;
 
 		if ( is_numeric( $_GET['product'] ) ) {
@@ -268,287 +343,11 @@ function wpsc_display_edit_products_page() {
 		return $sql;
 	}
 
-	function wpsc_admin_products_list( $category_id = 0 ) {
-		global $wp_query, $wpdb, $_wp_column_headers;
-		// set is_sortable to false to start with
-		$is_sortable = false;
-		$search_sql = '';
-		$page = null;
-		// Justin Sainton - 5.11.2010 - Re-included these variables from 3.7.6.1, as they appear to have been removed.  Necessary for pagination.  Also re-wrote query for new table structure.
-		$itempp = 20;
-		if ( isset( $_REQUEST['product'] ) && (is_numeric( $_REQUEST['product'] )) ) 
-			$parent_product = absint( $_REQUEST['product'] );
-		
-		$search_input = '';
-		if ( isset( $_REQUEST['search'] ) ) {
-			$search_input = stripslashes( $_REQUEST['search'] );
-
-			$search_string = "%" . $wpdb->escape( $search_input ) . "%";
-
-			$search_sql = "AND (`products`.`name` LIKE '" . $search_string . "' OR `products`.`description` LIKE '" . $search_string . "')";
-		} else {
-			$search_sql = '';
-		}
-
-		$search_sql = apply_filters( 'wpsc_admin_products_list_search_sql', $search_sql );
-
-		if ( isset( $_REQUEST['pageno'] ) && ($_REQUEST['pageno'] > 0) ) {
-			$page = absint( $_REQUEST['pageno'] );
-		} else {
-			$page = 1;
-		}
-		$start = (int)($page * $itempp) - $itempp;
-		$all_products = '';
-		$trash_products = '';
-		$draft_products = '';
-		if(!isset($_REQUEST['post_status']))
-			$post_status = '';
-		else
-			$post_status = $_REQUEST['post_status'];
-		if('trash' == $post_status){
-			$post_status = 'trash';
-			$trash_products = 'class="current"';
-		}elseif('draft' == $post_status){
-			$post_status = 'draft';
-			$draft_products = 'class="current"';
-		
-		}else{
-			$all_products = 'class="current"';			
-			$post_status = 'published inherit';
-		}
-		
-		$query = array(
-			'post_type' => 'wpsc-product',
-			'orderby' => 'menu_order post_title',
-			'order' => "ASC",
-			'post_status' => $post_status,
-			'posts_per_page' => $itempp,
-			'offset' => $start
-		);
-
-                if( function_exists('wpec_post_parent_in') ) {
-                    $query["post_parent"] = '';
-                    add_filter( 'posts_where', 'wpec_post_parent_in' );
-                }
-                else {
-                    $query["post_parent"] = 0;
-                }
-		if ( isset( $_REQUEST['category'] ) ) {
-			$category_id = $_REQUEST['category'];
-			$query['wpsc_product_category'] = $category_id;
-		}
-
-
-		if ( isset( $_REQUEST['search'] ) && (strlen( $_REQUEST['search'] ) > 0 ) ) {
-			$search = $_REQUEST['search'];
-			$query['s'] = $search;
-		}
-		$wp_query = new WP_Query( $query );
-
-		if ( isset( $itempp ) )
-			$num_pages = ceil( $wp_query->found_posts / $itempp );
-
-		remove_filter( 'posts_request', 'wpsc_edit_variations_request_sql' );
-
-		if ( $page !== null ) {
-			$page_query['base'] =add_query_arg( 'pageno', '%#%' );
-			$page_query['format'] = '';
-			$page_query['prev_text'] = __( '&laquo;' );
-			$page_query['next_text'] = __( '&raquo;' );
-			$page_query['total'] = $num_pages;
-			$page_query['current'] = $page;
-			
-			$page_links = paginate_links( $page_query );
-		}
-
-
-		$is_trash = isset( $_POST['post_status'] ) && $_POST['post_status'] == 'trash';
-
-		// Justin Sainton - 5.7.2010 - Added conditional code below as blank space would show up if $page_links was NULL.  Now the area only shows up if page links exist.
-?>	
-
-<?php if ( $page_links && get_option( 'wpsc_sort_by' ) != 'dragndrop' ) {
- ?>
-			<div class="tablenav">
-				<div class="tablenav-pages">
-<?php
-			echo $page_links;
-?>	
-				</div>
-			</div>
-<?php } ?>	
-		<form action="admin.php?page=wpsc-edit-products" method="post" id="filt_cat">
-		<?php if(isset($search)){
-			echo "<input type='hidden' name='search' value='{$search}' />";
-		}
-		if(isset($category_id)){
-			echo "<input type='hidden' name='category' value='{$category_id}' />";
-			echo "<input type='hidden' name='category_id' value='{$category_id}' />";
-		}
-		if(isset($page)){
-			echo "<input type='hidden' name='page' value='{$page}' />";
-		}
-		echo wpsc_admin_category_dropdown();
-		?>
-</form>
-<form id="search-products" action="admin.php?page=wpsc-edit-products" method="post">
-	<div class="alignright search-box">
-			<input type='hidden' name='page' value='wpsc-edit-products'  />
-			<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $search_input; ?>" />
-			<input type="submit" name='wpsc_search' value="<?php _e( 'Search Products' ); ?>" class="button" />
-		</div>
-		</form>
-<form id="posts-filter" action="admin.php?page=wpsc-edit-products" method="post">
-	<ul class='subsubsub'>
-		<li><a <?php echo $all_products; ?> href='<?php echo add_query_arg('post_status','all'); ?>' title='View All Products'><?php _e('All','wpsc'); ?></a></li>
-		<li> | </li>
-		<li><a <?php echo $draft_products; ?> href='<?php echo add_query_arg('post_status','draft'); ?>' title='View Draft Products'><?php _e('Draft','wpsc'); ?></a></li>
-		<li> | </li>
-		<li><a <?php echo $trash_products; ?> href='<?php echo add_query_arg('post_status','trash'); ?>' title='View Trashed Products'><?php _e('Trash','wpsc'); ?></a></li>
-	</ul>
-	<br />
-	<br />
-	<div class="productnav">
-		<div class="alignleft actions">
-
-			<select id="bulkaction" name="bulkAction">
-				<option value="-1" selected="selected"><?php _e( 'Bulk Actions' ); ?></option>
-					<option value="addgroup"><?php _e( 'Add To Group' ); ?></option>
-					<option value="publish"><?php _e( 'Publish', 'wpsc' ); ?></option>
-					<option value="unpublish"><?php _e( 'Unpublish', 'wpsc' ); ?></option>
-<?php if ( $is_trash ) { ?>
-						<option value="untrash"><?php _e( 'Restore' ); ?></option>
-<?php } ?>
-						<option value="delete"><?php _e( 'Delete Permanently' ); ?></option>
-
-						<option value="trash"><?php _e( 'Move to Trash' ); ?></option>
-
-
-
-				</select>
-				<?php 
-					$options = "<option selected='selected' value=''>" . __( 'Select a Category', 'wpsc' ) . "</option>\r\n";
-					$options .= wpsc_list_categories( 'wpsc_admin_category_options_byid' );
-					echo  "<select name='bulk_category' id='category_select'>" . $options . "</select>\r\n";
-				?>
-
-				<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
-				<?php if(isset($search)){
-					echo "<input type='hidden' name='search' value='{$search}' />";
-				}
-				if(isset($category_id)){
-					echo "<input type='hidden' name='category' value='{$category_id}' />";
-					echo "<input type='hidden' name='category_id' value='{$category_id}' />";
-				}
-				if(isset($page)){
-					echo "<input type='hidden' name='page' value='{$page}' />";
-				}
-				?>
-
-				<input type="submit" value="<?php _e( 'Apply' ); ?>" name="doaction" id="doaction" class="button-secondary action" />
-<?php wp_nonce_field( 'bulk-products', 'wpsc-bulk-products' ); ?>
-		</div>
-
-	
-	</div>
-
-	<input type='hidden' id='products_page_category_id'  name='category_id' value='<?php echo $category_id; ?>' />
-	<table class="widefat page" id='wpsc_product_list' cellspacing="0">
-		<thead>
-			<tr>
-<?php print_column_headers( 'display-product-list' ); ?>
-			</tr>
-		</thead>
-
-		<tfoot>
-			<tr>
-<?php print_column_headers( 'display-product-list', false ); ?>
-			</tr>
-		</tfoot>
-
-		<tbody>
-<?php
-		if ( !isset( $parent_product_data ) )
-			$parent_product_data = null;
-
-		wpsc_admin_product_listing( $parent_product_data );
-		if ( count( $wp_query->posts ) < 1 ) {
-?>
-			<tr>
-				<td colspan='5'>
-			<?php _e( "You have no products added." ); ?>
-				</td>
-			</tr>
-			<?php
-		}
-			?>			
-		</tbody>
-	</table>
-</form>
-<?php
-}
-
-function wpsc_admin_category_dropdown() {
-	global $wpdb, $category_data;
-	$siteurl = get_option( 'siteurl' );
-	$category_slug = '';
-	$concat = '';
-	if ( isset( $_POST['category'] ) )
-		$category_slug = $_POST['category'];
-
-	$selected ='';
-	if(empty($category_slug))
-		$selected = 'selected="selected"';
-	$url = urlencode( remove_query_arg( array( 'product_id', 'category_id' ) ) );
-
-	$options = "<option {$selected} value=''>" . __( 'View All Categories', 'wpsc' ) . "</option>\r\n";
-
-	$options .= wpsc_list_categories( 'wpsc_admin_category_options', $category_slug );
-	if(isset($_POST['page']))
-		$concat .= "<input type='hidden' name='page' value='{$_POST['page']}' />\r\n";
-	$concat .= "<select name='category' id='category_select'>" . $options . "</select>\r\n";
-	$concat .= "<input type='submit' value='Filter' class='button-secondary action' id='post-query-submit' />\r\n";
-	return $concat;
-}
-
-/*
- * Displays the category forms for adding and editing products
- * Recurses to generate the branched view for subcategories
- */
-
-function wpsc_admin_category_options( $category, $subcategory_level = 0, $category_slug = null ) {
-
-	if ( $category_slug == $category->slug ) {
-
-		$selected = "selected='selected'";
-
-	} else {
-
-		$selected = '';
-
-	}
-
-	$output = "<option $selected value='{$category->slug}'>" . str_repeat( "-", $subcategory_level ) . stripslashes( $category->name ) . "</option>\n";
-
-	return $output;
-}
-/*
- * Displays the category forms for adding and editing products
- * Recurses to generate the branched view for subcategories
- */
-
-function wpsc_admin_category_options_byid( $category, $subcategory_level = 0 ) {
-
-
-        $output = "<option value='{$category->term_id}'>" . str_repeat( "-", $subcategory_level ) . stripslashes( $category->name ) . "</option>\n";
-
-        return $output;
-}
-
 /**
  * wpsc_update_featured_products function.
  *
  * @access public
+ * @todo Should be refactored to e
  * @return void
  */
 function wpsc_update_featured_products() {
@@ -571,9 +370,9 @@ function wpsc_update_featured_products() {
 
 	if ( $is_ajax == true ) {
 		if ( $new_status == true ) : ?>
-				jQuery('.featured_toggle_<?php echo $product_id; ?>').html("<img class='gold-star' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/gold-star.gif' alt='<?php _e( 'Unmark as Featured', 'wpsc' ); ?>' title='<?php _e( 'Unmark as Featured', 'wpsc' ); ?>' />");
-<?php else: ?>
-					jQuery('.featured_toggle_<?php echo $product_id; ?>').html("<img class='grey-star' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/grey-star.gif' alt='<?php _e( 'Mark as Featured', 'wpsc' ); ?>' title='<?php _e( 'Mark as Featured', 'wpsc' ); ?>' />");
+                    jQuery('.featured_toggle_<?php echo $product_id; ?>').html("<img class='gold-star' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/gold-star.gif' alt='<?php _e( 'Unmark as Featured', 'wpsc' ); ?>' title='<?php _e( 'Unmark as Featured', 'wpsc' ); ?>' />");
+            <?php else: ?>
+                    jQuery('.featured_toggle_<?php echo $product_id; ?>').html("<img class='grey-star' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/grey-star.gif' alt='<?php _e( 'Mark as Featured', 'wpsc' ); ?>' title='<?php _e( 'Mark as Featured', 'wpsc' ); ?>' />");
 <?php
 		endif;
 		exit();
@@ -585,26 +384,3 @@ function wpsc_update_featured_products() {
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'update_featured_product') ) {
 	add_action( 'admin_init', 'wpsc_update_featured_products' );
 }
-
-/**
- * wpsc_featured_products_toggle function.
- *
- * @access public
- * @param mixed $product_id
- * @return void
- */
-function wpsc_featured_products_toggle( $product_id ) {
-	global $wpdb;
-	$featured_product_url = wp_nonce_url( "index.php?wpsc_admin_action=update_featured_product&amp;product_id=$product_id", 'feature_product_' . $product_id );
-?>
-	<a class="wpsc_featured_product_toggle featured_toggle_<?php echo $product_id; ?>" href='<?php echo $featured_product_url; ?>' >
-<?php if ( in_array( $product_id, (array)get_option( 'sticky_products' ) ) ) : ?>
-		<img class='gold-star' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/gold-star.gif' alt='<?php _e( 'Unmark as Featured', 'wpsc' ); ?>' title='<?php _e( 'Unmark as Featured', 'wpsc' ); ?>' />
-<?php else: ?>
-		<img class='grey-star' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/grey-star.gif' alt='<?php _e( 'Mark as Featured', 'wpsc' ); ?>' title='<?php _e( 'Mark as Featured', 'wpsc' ); ?>' />
-<?php endif; ?>
-	</a>
-<?php
-}
-add_action( 'manage_posts_featured_column', 'wpsc_featured_products_toggle', 10, 1 );
-?>

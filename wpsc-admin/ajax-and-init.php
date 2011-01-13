@@ -97,17 +97,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 	add_action( 'admin_init', 'wpsc_ajax_sales_quarterly' );
 }
 
-function wpsc_ajax_load_product() {
-	global $wpdb;
-	$product_id = absint( $_REQUEST['product'] );
-	check_admin_referer( 'edit-product_' . $product_id );
-	wpsc_display_product_form( $product_id );
-	exit();
-}
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'load_product') ) {
-	add_action( 'admin_init', 'wpsc_ajax_load_product' );
-}
 
 function wpsc_delete_file() {
 	global $wpdb;
@@ -138,189 +127,6 @@ function wpsc_delete_file() {
 
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'delete_file') ) {
 	add_action( 'admin_init', 'wpsc_delete_file' );
-}
-function wpsc_untrash_product(){
-	$product_id = $_GET['product'];
-
-	if ( !current_user_can( 'delete_post', $product_id ) )
-		wp_die( __( 'You are not allowed to restore this product from the trash.', 'wpsc' ) );
-
-	if ( !wp_untrash_post( $product_id ) )
-		wp_die( __( 'Error in restoring from trash...' ) );
-
-	$untrashed++;
-	$sendback = wp_get_referer();
-	$sendback = remove_query_arg( 'wpsc_admin_action', $sendback );
-	$sendback = add_query_arg( 'untrashed', $untrashed, $sendback );
-
-	wp_redirect($sendback);
-}
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'untrash') ) {
-	add_action( 'admin_init', 'wpsc_untrash_product' );
-}
-
-
-/**
- * Delete a product from the DB , either moves it to trash or deletes it permanently
- * @access public
- *
- * @since 3.8
- * @return redirects to edit products page
- */
-function wpsc_delete_product(){
-	global $wpdb;
-	$force_trash = false;
-	if ( 'delete' == $_REQUEST['wpsc_admin_action'])
-		$force_trash = true;	
-	$delete = 0;
-	$sendback = wp_get_referer();
-	$product_id = $_GET['product'];
-	if ( !current_user_can( 'delete_post', $product_id ) )
-		wp_die( __( 'You are not allowed to delete this post.' ) );
-
-	if($force_trash){
-		if ( !wp_delete_post( $product_id , $force_trash) )
-			wp_die( __( 'Error in deleting...' ) );
-	}else{
-		do_action( 'wpsc_delete_product', $product_id );
-		if ( !wp_trash_post( $product_id ) )
-			wp_die( __( 'Error placing product in trash...' ) );
-	}
-	$sendback = remove_query_arg( 'wpsc_admin_action', $sendback );
-	$sendback = add_query_arg( 'deleted', $deleted, $sendback );
-	wp_redirect( $sendback );
-	exit();
-
-}
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && (('delete' == $_REQUEST['wpsc_admin_action']) || ( 'trash' ==$_REQUEST['wpsc_admin_action']))) {
-	add_action( 'admin_init', 'wpsc_delete_product' );
-}
-
-function wpsc_bulk_modify_products() {
-	global $wpdb;
-	$doaction = $_POST['bulkAction'];
-	$sendback = wp_get_referer();
-	//exit('<pre>'.print_r($_POST,1).'</pre>');
-	if(!empty($_POST['post']))
-		$product_ids = $_POST['post'];
-	else
-		$product_ids = array();
-	switch ( $doaction ) {
-
-		case 'addgroup':
-
-			foreach ( (array)$product_ids as $product_id ) {
-				$product_id = absint( $product_id );
-				$current_product_categories = get_the_product_category($product_id);
-				$new_product_category = array();
-				if(isset($_POST['bulk_category']) && is_numeric($_POST['bulk_category'])){
-					 array_push($new_product_category,$_POST['bulk_category']);
-				}else{
-					//No Valid Group was selected for bulk assignment :(
-					$sendback = add_query_arg( 'addedgroup', 'quack', $sendback );
-					break;
-				}
-				if(isset($current_product_categories)){
-					foreach($current_product_categories as $category){
-						array_push($new_product_category,$category->term_id);
-					}
-				}
-				
-				wp_set_product_categories($product_id,$new_product_category);
-				$added++;
-			}
-			$sendback = add_query_arg( 'addedgroup', $added, $sendback );
-			break;
-
-		case 'publish':
-			foreach ( (array)$product_ids as $product_id ) {
-				$product_id = absint( $product_id );
-				wp_publish_post( $product_id );
-				$published++;
-			}
-			$sendback = add_query_arg( 'published', $published, $sendback );
-			break;
-
-		case 'unpublish':
-			foreach ( (array)$product_ids as $product_id ) {
-				$product_id = absint( $product_id );
-				wp_update_post( array( 'ID' => $product_id, 'post_status' => 'draft' ) );
-				$published++;
-			}
-			$sendback = add_query_arg( 'published', $published, $sendback );
-			break;
-
-
-		case 'trash':
-			$trashed = 0;
-			foreach ( (array)$product_ids as $product_id ) {
-				if ( !current_user_can( 'delete_post', $product_id ) ) {
-					wp_die( __( 'You are not allowed to move this product to the trash.', 'wpsc' ) );
-				}
-				if ( !wp_trash_post( $product_id ) ) {
-					wp_die( __( 'Error in moving to trash...' ) );
-				}
-				$trashed++;
-			}
-			$sendback = add_query_arg( array( 'trashed' => $trashed, 'ids' => join( ',', $product_ids ) ), $sendback );
-			break;
-
-		case 'untrash':
-			$untrashed = 0;
-			foreach ( (array)$product_ids as $product_id ) {
-				if ( !current_user_can( 'delete_post', $product_id ) ) {
-					wp_die( __( 'You are not allowed to restore this product from the trash.', 'wpsc' ) );
-				}
-				if ( !wp_untrash_post( $product_id ) ) {
-					wp_die( __( 'Error in restoring from trash...' ) );
-				}
-				$untrashed++;
-			}
-			$sendback = add_query_arg( 'untrashed', $untrashed, $sendback );
-			break;
-
-		case 'delete':
-			$deleted = 0;
-			foreach ( (array)$product_ids as $product_id ) {
-				$product_del = & get_post( $product_id );
-
-				if ( !current_user_can( 'delete_post', $product_id ) ) {
-					wp_die( __( 'You are not allowed to delete this post.' ) );
-				}
-
-				if ( $product_del->post_type == 'attachment' ) {
-					if ( !wp_delete_attachment( $product_id ) ) {
-						wp_die( __( 'Error in deleting...' ) );
-					}
-				} else {
-					if ( !wp_delete_post( $product_id ) ) {
-						wp_die( __( 'Error in deleting...' ) );
-					}
-				}
-				$deleted++;
-			}
-			$sendback = add_query_arg( 'deleted', $deleted, $sendback );
-			break;
-
-
-		default:
-			if ( isset( $_POST['search'] ) && !empty( $_POST['search'] ) ) {
-				// urlencode the search query to allow for spaces, etc
-				$sendback = add_query_arg( 'search', urlencode( stripslashes( $_POST['search'] ) ), $sendback );
-			}elseif( !empty( $_POST['category'] )){	
-				$sendback = add_query_arg( 'category_id', (int)$_POST['category'], $sendback);
-		
-			}
-			break;
-	}
-
-	wp_redirect( $sendback );
-	exit();
-}
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'bulk_modify') ) {
-	add_action( 'admin_init', 'wpsc_bulk_modify_products' );
 }
 
 function wpsc_modify_product_price() {
@@ -738,47 +544,6 @@ function wpsc_admin_ajax() {
 		exit( print_r( $order, 1 ) );
 	}
 
-	function wpec_hide_box( &$value, $key, $p ) {
-
-		foreach ( $p as $pkey => $val ) {
-			if ( $key == $pkey ) {
-				$value = $val;
-			}
-		}
-	}
-
-	if ( $_POST['action'] == 'postbox-hide' ) {
-		$current_order = get_option( 'wpsc_product_page_order' );
-
-		$hidden_key = $_POST["hidden_val"];
-		$hidden_val = $_POST["hidden"];
-
-		$hidden = array( $hidden_key => $hidden_val );
-
-		array_walk( $current_order["hiddenboxes"], "wpec_hide_box", $hidden );
-
-		update_option( 'wpsc_product_page_order', $current_order );
-		return print_r( $current_order );
-	}
-
-	function wpec_close_box( &$value, $key, $p ) {
-		if ( in_array( $key, $p ) ) {
-			$value = 0;
-		} else {
-			$value = 1;
-		}
-	}
-
-	if ( $_POST['action'] == 'closed-postboxes' ) {
-		$current_order = get_option( 'wpsc_product_page_order' );
-
-		$closed = $_POST["closed"];
-		$closed = array_unique( explode( ',', $closed ) );
-
-		array_walk( $current_order["closedboxes"], "wpec_close_box", $closed );
-
-		update_option( 'wpsc_product_page_order', $current_order );
-	}
 
 	if ( ($_POST['save_image_upload_state'] == "true") && is_numeric( $_POST['image_upload_state'] ) ) {
 		$upload_state = (int)(bool)$_POST['image_upload_state'];
@@ -2263,9 +2028,6 @@ function wpsc_delete_category() {
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc_add_image' == $_REQUEST['wpsc_admin_action'] ) )
 	add_action( 'admin_init', 'wpsc_swfupload_images' );
 
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'edit_product' == $_REQUEST['wpsc_admin_action'] ) )
-	add_action( 'admin_init', 'wpsc_admin_submit_product' );
-
 if ( isset( $_GET['action'] ) && ( 'purchase_log' == $_GET['action'] ) )
 	add_action( 'admin_init', 'wpsc_admin_sale_rss' );
 
@@ -2495,7 +2257,5 @@ function save_term_prices( $term_id ) {
 }
 add_action( 'edited_wpsc-variation', 'save_term_prices' );
 add_action( 'created_wpsc-variation', 'save_term_prices' );
-
-
 
 ?>

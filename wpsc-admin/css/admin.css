@@ -199,66 +199,76 @@ div.search-box input#page-search-input {
 }
 
 
-#wpsc_product_list {
+#wpsc_product_list,
+table.widefat {
 	width:100%;
 }
 
-#wpsc_product_list tbody {
+table.widefat .column-hidden_alerts {
+    display:none;
+}
+
+table.widefat .column-featured {
+    width:80px;
+}
+
+table.widefat .column-weight {
+    width:75px;
+}
+
+table.widefat .column-stock {
+    width:65px;
+}
+
+#wpsc_product_list tbody,
+table.widefat tbody {
 	width: 400px;
 	border-collapse:collapse;
 }
 
 
-#wpsc_product_list .column-title{
+#wpsc_product_list .column-title,
+table.widefat .column-title {
 	/*   width:100%; */
 }
-#wpsc_product_list  .column-cb{
+#wpsc_product_list .column-cb,
+table.widefat .column-cb {
 	/* 	width:24px; */
 	vertical-align: middle;
 }
-#wpsc_product_list  .column-cb input{
-	/*   width:20px; */
-	/*   float:right; */
-
-}
-#wpsc_product_list .column-image, #wpsc_product_list .product-image{
+#wpsc_product_list .column-image, #wpsc_product_list .product-image,
+table.widefat .column-image, table.widefat .product-image {
 	padding-right: 0px;
 	/* 	width: 42px; */
 }
 
-#wpsc_product_list .column-price{
+#wpsc_product_list .column-price,
+table.widefat .column-price{
 	width:65px;
 }
 
-#wpsc_product_list .column-sale_price{
+#wpsc_product_list .column-sale_price,
+table.widefat .column-sale_price {
 	width:65px;
 }
 
-#wpsc_product_list .column-categories{
+#wpsc_product_list .column-categories,
+table.widefat .column-categories{
 	/* 	width: 70px; */
 	padding-right:18px;
 }
 
-#wpsc_product_list tbody tr td.column-title {
+#wpsc_product_list tbody tr td.column-title,
+table.widefat tbody tr td.column-title {
 	border-right:none;
 }
 
-#wpsc_product_list tbody tr td.product-image img {
+#wpsc_product_list tbody tr td.product-image img,
+table.widefat tbody tr td.product-image img {
 	margin-top: 4px;
 	cursor:move;
 }
 
-
-#wpsc_product_list tbody tr td .wpsc-row-actions {
-	font-size: 10px;
-	visibility: hidden;
-}
-
-
-#wpsc_product_list tbody tr:hover td .wpsc-row-actions {
-	font-size: 10px;
-	visibility: visible;
-}
 .newCurrency{
 	width:150px;
 }
@@ -278,33 +288,26 @@ table.product_editform {
 }
 
 
-#wpsc_product_list .ui-sortable-helper{
+#wpsc_product_list .ui-sortable-helper,
+table.widefat .ui-sortable-helper {
 	width: 410px;
 	margin-left: -1px;
 	background-color: #FEFEFE;
 }
 
-#wpsc_product_list .ui-sortable-helper td, #wpsc_product_list .ui-sortable-helper th{
+#wpsc_product_list .ui-sortable-helper td, #wpsc_product_list .ui-sortable-helper th,
+table.widefat .ui-sortable-helper td, table.widefat .ui-sortable-helper th{
 	border-top: 1px solid #DFDFDF;
 	opacity: .4;
 }
-#wpsc_product_list tbody tr.ui-sortable-helper td.product-title {
+#wpsc_product_list tbody tr.ui-sortable-helper td.product-title,
+table.widefat tbody tr.ui-sortable-helper td.product-title {
 	width: 169px;
 }
-#wpsc_product_list tbody tr.ui-sortable-helper td.product-price {
+#wpsc_product_list tbody tr.ui-sortable-helper td.product-price,
+table.widefat tbody tr.ui-sortable-helper td.product-price {
 	width: 40px;
 }
-
-
-div.price-editing-fields input.the-product-price,
-div.sales-price-fields input.the-sale-price,
-div.sku-editing-fields input.the-sku-fields  {
-	width: 51px;
-}
-
-div.price-editing-fields,div.sales-price-fields,div.sku-editing-fields, div.weight-editing-fields, div.stock-editing-fields  {
-	display: none;
-} 
 
 div.product-placeholder {
 	border-width: 1px;
@@ -335,14 +338,11 @@ tr.product-placeholder {
 	width: 100%;
 }
 th#image,th#SKU{
-	width:50px;
+	width:65px;
 }
 th#sale_price
 {
 	width:100px
-}
-th#title{
-	width:450px;
 }
 #wpsc-col-right .postbox .inside {
 	padding-left: 10px;
@@ -1111,10 +1111,6 @@ td.product_groups_page td.category_presentation_settings {
 	padding-bottom: 1ex;
 }
 
-td.column-price .pricedisplay, td.sale_price .salespricedisplay, td.SKU .skudisplay, td.stock .stockdisplay, td.weight .weightdisplay{
-	border-bottom: 1px dotted #333;
-}
-
 div.editing_this_group {
 	font-size:8pt;
 }
@@ -1796,8 +1792,17 @@ ul#category_list_li ul {
 margin-left:15px;
 }
 
-.row-title img{
+.row-title img {
 width:30px;
 float:left;
 padding-right:10px;
+}
+.row-title {
+    margin-right:5px;
+}
+form#posts-filter {
+    min-width:830px;
+}
+div#wpsc-variationdiv {
+    display:none;
 }

@@ -47,7 +47,7 @@ if ( !get_option( 'wpsc_checkout_form_sets' ) ) {
  * or bypass the normal download system.
  */
 function wpsc_admin_pages() {
-	global $userdata, $show_update_page; // set in /wpsc-admin/display-update.page.php
+	global $userdata, $show_update_page, $post_type, $typenow, $current_screen; // set in /wpsc-admin/display-update.page.php
 
 	// Code to enable or disable the debug page
 	if ( isset( $_GET['wpsc_activate_debug_page'] ) ) {
@@ -76,36 +76,7 @@ function wpsc_admin_pages() {
 		// Set the base page for Products
 		$products_page = 'wpsc-edit-products';
 
-		// Add 'Products' top level menu
-		if ( $userdata->user_level <= 2 ) {
-			if ( function_exists( 'add_object_page' ) ) {
-				$edit_products_page = add_object_page( __( 'Products', 'wpsc' ), __( 'Products', 'wpsc' ), 'author', $products_page, array(), WPSC_CORE_IMAGES_URL . "/credit_cards.png" );
-			} else {
-				$edit_products_page = add_menu_page( __( 'Products', 'wpsc' ), __( 'Products', 'wpsc' ), 'author', $products_page );
-			}
-		} else {
-			if ( function_exists( 'add_object_page' ) ) {
-				$edit_products_page = add_object_page( __( 'Products', 'wpsc' ), __( 'Products', 'wpsc' ), 'administrator', $products_page, array(), WPSC_CORE_IMAGES_URL . "/credit_cards.png" );
-			} else {
-				$edit_products_page = add_menu_page( __( 'Products', 'wpsc' ), __( 'Products', 'wpsc' ), 'administrator', $products_page );
-			}
-		}
-
-		// Add products sub pages
-		$page_hooks[] = $edit_products_page = add_submenu_page( $products_page, __( 'Products', 'wpsc' ),   __( 'Products', 'wpsc' ), 'administrator', 'wpsc-edit-products', 'wpsc_display_edit_products_page' );
-		$page_hooks[] = add_submenu_page( $products_page, __( 'Categories', 'wpsc' ), __( 'Categories', 'wpsc' ), 'administrator', 'wpsc-edit-groups',   'wpsc_display_categories_page' );
-		$page_hooks[] = add_submenu_page( $products_page, __( 'Variations', 'wpsc' ), __( 'Variations', 'wpsc' ), 'administrator', 'edit-tags.php?taxonomy=wpsc-variation' );
-
-		// Add coupons page
-		$page_hooks[] = $edit_coupons_page = add_submenu_page( $products_page, __( 'Coupons', 'wpsc' ), __( 'Coupons', 'wpsc' ), 'administrator', 'wpsc-edit-coupons', 'wpsc_display_coupons_page' );
-
-		// Box order
-		$box_order = get_option( 'wpsc_product_page_order' );
-		if ( isset( $box_order['side'] ) && is_array( $box_order['side'] ) && is_array( $box_order['advanced'] ) )
-			$box_order = array_merge( $box_order['side'], $box_order['advanced'] );
-
-		foreach ( (array)$box_order as $box )
-			$boxes[$box] = ucwords( str_replace( "_", " ", $box ) );
+		$page_hooks[] = $edit_coupons_page = add_submenu_page( 'edit.php?post_type=wpsc-product' , __( 'Coupons', 'wpsc' ), __( 'Coupons', 'wpsc' ), 'administrator', 'wpsc-edit-coupons', 'wpsc_display_coupons_page' );
 
 		// Add Settings pages
 		$page_hooks[] = $edit_options_page = add_options_page( __( 'Store Settings', 'wpsc' ), __( 'Store', 'wpsc' ), 'administrator', 'wpsc-settings', 'wpsc_display_settings_page' );
@@ -124,30 +95,21 @@ function wpsc_admin_pages() {
 			add_contextual_help( 'products_page_wpsc-edit-groups',       $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/categories/'>About the Categories Page</a>" );
 			add_contextual_help( 'products_page_edit-tags',              $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/variations/'>About the Variations Page</a>" );
 			add_contextual_help( 'settings_page_wpsc-settings',          $header . "<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/general/'>General Settings</a><br />
-																					<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/presentation/'>Presentation Options</a> <br />
-																					<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/admin/'>Admin Options</a> <br />
-																					<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/shipping'>Shipping Options</a> <br />
-																					<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/payment-options/'>Payment Options</a> <br />
-																					<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/marketing'>Marketing Options</a> <br />
-																					<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/import/'>Import Options</a> <br />
-																					<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/checkout/'>Checkout Options</a> <br />" );
-		add_contextual_help( 'products_page_wpsc-edit-coupons',          $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/marketing'>Marketing Options</a><br />");	
+																						<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/checkout/'>Checkout Options</a> <br />" );
+                        add_contextual_help( 'products_page_wpsc-edit-coupons',          $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/marketing'>Marketing Options</a><br />");
 		}
-
+ 
 		$page_hooks = apply_filters( 'wpsc_additional_pages', $page_hooks, $products_page );
 
 		do_action( 'wpsc_add_submenu' );
-	}
+	};
 
-	// Include the javascript and CSS for this page
+        // Include the javascript and CSS for this page
 	// This is so important that I can't even express it in one line
 	foreach ( $page_hooks as $page_hook ) {
-		add_action( 'load-' . $page_hook, 'wpsc_admin_include_css_and_js' );
-		
-		switch ( $page_hook ) {
-			case $edit_products_page :
-				add_action( 'load-' . $page_hook, 'wpsc_admin_edit_products_page_js' );
-				break;
+		add_action( 'load-' . $page_hook, 'wpsc_admin_include_css_and_js_refac' );
+
+                switch ( $page_hook ) {
 
 			case $edit_options_page :
 				add_action( 'load-' . $page_hook, 'wpsc_admin_include_optionspage_css_and_js' );
@@ -160,8 +122,6 @@ function wpsc_admin_pages() {
 			case $edit_coupons_page :
 				add_action( 'load-' . $page_hook, 'wpsc_admin_include_coupon_js' );
 				break;
-				
-				
 		}
 	}
 
@@ -173,11 +133,9 @@ function wpsc_admin_pages() {
 
 	return;
 }
-
 function wpsc_product_log_rss_feed() {
 	echo "<link type='application/rss+xml' href='" . get_option( 'siteurl' ) . "/wp-admin/index.php?rss=true&amp;rss_key=key&amp;action=purchase_log&amp;type=rss' title='WP e-Commerce Purchase Log RSS' rel='alternate'/>";
 }
-
 function wpsc_admin_include_coupon_js() {
 
 	// Variables
@@ -199,7 +157,7 @@ function wpsc_admin_include_coupon_js() {
  * wpsc_admin_css_and_js function, includes the wpsc_admin CSS and JS
  * No parameters, returns nothing
  */
-function wpsc_admin_include_css_and_js() {
+function wpsc_admin_include_css_and_js(  ) {
 	$siteurl = get_option( 'siteurl' );
 	if ( is_ssl ( ) )
 		$siteurl = str_replace( "http://", "https://", $siteurl );
@@ -214,56 +172,14 @@ function wpsc_admin_include_css_and_js() {
 	wp_enqueue_script( 'wp-e-commerce-legacy-ajax',      WPSC_URL . '/wpsc-admin/js/ajax.js',                         false,             $version_identifier ); // needs removing
 	wp_enqueue_script( 'wp-e-commerce-variations',       WPSC_URL . '/wpsc-admin/js/variations.js',                   array( 'jquery' ), $version_identifier );
 
-	// TODO - This should DEFINITELY come out when we convert to custom post types in the backend
-	wp_deregister_script( 'postbox' );
-
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
 	wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl . "/wp-admin/admin.php?wpsc_admin_dynamic_css=true", false, $version_identifier, 'all' );
-	wp_localize_script( 'wp-e-commerce-tags', 'postL10n', array(
-		'tagsUsed' => __( 'Tags used on this post:' ),
-		'add' => esc_attr( __( 'Add' ) ),
-		'addTag' => esc_attr( __( 'Add new tag' ) ),
-		'separate' => __( 'Separate tags with commas' ),
-	) );
-	// Prototype breaks dragging and dropping, I need it gone
+
+        // Prototype breaks dragging and dropping, I need it gone
 	wp_deregister_script( 'prototype' );
-	// remove the old javascript and CSS, we want it no more, it smells bad
+
+        // remove the old javascript and CSS, we want it no more, it smells bad
 	remove_action( 'admin_head', 'wpsc_admin_css' );
-}
-
-function wpsc_admin_edit_products_page_js() {
-
-	$version_identifier = WPSC_VERSION . '.' . WPSC_MINOR_VERSION;
-	wp_enqueue_script( 'wp-e-commerce-tags', WPSC_URL . '/wpsc-admin/js/product_tagcloud.js', array( 'livequery' ), $version_identifier );
-
-	if ( user_can_richedit ( ) )
-		wp_enqueue_script( 'editor' );
-
-	// Queue up the thickbox style
-	wp_enqueue_style( 'thickbox' );
-
-	// Queue up the required WP core JS
-	wp_enqueue_script( 'media-upload' );
-	wp_enqueue_script( 'post' );
-	wp_enqueue_script( 'autosave' );
-	wp_enqueue_script( 'swfupload' );
-	wp_enqueue_script( 'swfupload-swfobject' );
-	wp_enqueue_script( 'swfupload-queue' );
-
-	// Switch upload handlers
-	wp_deregister_script( 'swfupload-handlers' );
-	wp_enqueue_script( 'wpsc-swfupload-handlers', WPSC_URL . '/wpsc-admin/js/wpsc-swfupload-handlers.js', false, $version_identifier );
-
-	add_action( 'admin_head', 'wp_tiny_mce' );
-
-	// remove cforms timymce code from running on the products page, because it breaks tinymce for us
-	remove_filter( 'mce_external_plugins', 'cforms_plugin' );
-	remove_filter( 'mce_buttons', 'cforms_button' );
-
-	//add_action( 'admin_print_footer_scripts', 'wp_tiny_mce', 25 );
-	wp_enqueue_script( 'quicktags' );
-	
-	do_action( 'wpsc_admin_edit_products_js' );
 }
 
 /**
@@ -280,24 +196,56 @@ function wpsc_admin_include_optionspage_css_and_js() {
 }
 
 function wpsc_meta_boxes() {
-	//$pagename = 'products_page_wpsc-edit-products';
-	//$pagename = 'store_page_wpsc-edit-products';
-	
-	$pagename = 'toplevel_page_wpsc-edit-products';
-	add_meta_box('wpsc_price_control_forms','Price Control','wpsc_price_control_forms',$pagename,'normal','high');
-	add_meta_box('wpsc_stock_control_forms','Stock Control','wpsc_stock_control_forms',$pagename,'normal','high');
-	add_meta_box('wpsc_product_taxes_forms','Taxes','wpsc_product_taxes_forms',$pagename,'normal','high');
-	add_meta_box( 'wpsc_product_category_and_tag_forms', 'Category and Tags', 'wpsc_product_category_and_tag_forms', $pagename, 'normal', 'high' );
-	add_meta_box( 'wpsc_product_tag_forms', 'Product Tags', 'wpsc_product_tag_forms', $pagename, 'normal', 'high' );
+
+	$pagename = 'wpsc-product';
+        remove_meta_box( 'wpsc-variationdiv', 'wpsc-product', 'core' );
+	add_meta_box( 'wpsc_price_control_forms','Price Control','wpsc_price_control_forms',$pagename,'normal','high' );
+	add_meta_box( 'wpsc_stock_control_forms','Stock Control','wpsc_stock_control_forms',$pagename,'normal','high' );
+	add_meta_box( 'wpsc_product_taxes_forms','Taxes','wpsc_product_taxes_forms',$pagename,'normal','high' );
+	add_meta_box( 'wpsc_product_variation_forms', 'Variations', 'wpsc_product_variation_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_download_forms', 'Product Download', 'wpsc_product_download_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_image_forms', 'Product Images', 'wpsc_product_image_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_shipping_forms', 'Shipping', 'wpsc_product_shipping_forms', $pagename, 'normal', 'high' );
-	add_meta_box( 'wpsc_product_variation_forms', 'Variation Control', 'wpsc_product_variation_forms', $pagename, 'normal', 'high' );
+	add_meta_box( 'wpsc_additional_desc', 'Additional Description', 'wpsc_additional_desc', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_advanced_forms', 'Advanced Settings', 'wpsc_product_advanced_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_external_link_forms', 'Off Site Product link', 'wpsc_product_external_link_forms', $pagename, 'normal', 'high' );
 }
 
-add_action( 'admin_menu', 'wpsc_meta_boxes' );
+add_action( 'admin_footer', 'wpsc_meta_boxes' );
+
+add_action( 'admin_head', 'wpsc_admin_include_css_and_js' );
+add_action( 'admin_head', 'wpsc_admin_include_css_and_js_refac' );
+add_action( 'admin_enqueue_scripts', 'wpsc_admin_include_css_and_js_refac' );
+function wpsc_admin_include_css_and_js_refac( $pagehook )  {
+
+      global $post_type, $current_screen;
+      
+	$siteurl = get_option( 'siteurl' );
+	if ( is_ssl ( ) )
+		$siteurl = str_replace( "http://", "https://", $siteurl );
+
+	wp_admin_css( 'dashboard' );
+	//wp_admin_css( 'media' );
+
+	$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
+        $pages = array( 'index.php', 'options-general.php', 'edit.php', 'post.php', 'post-new.php' );
+
+          if ( ( in_array( $pagehook, $pages ) && $post_type == 'wpsc-product' )  || $current_screen->id == 'dashboard_page_wpsc-sales-logs' || $current_screen->id == 'settings_page_wpsc-settings') {
+            wp_enqueue_script( 'livequery',                      WPSC_URL . '/wpsc-admin/js/jquery.livequery.js',             array( 'jquery' ), '1.0.3' );
+            wp_enqueue_script( 'wp-e-commerce-admin-parameters', $siteurl . '/wp-admin/admin.php?wpsc_admin_dynamic_js=true', false,             $version_identifier );
+            wp_enqueue_script( 'wp-e-commerce-admin',            WPSC_URL . '/wpsc-admin/js/admin.js',                        array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $version_identifier, false );
+            wp_enqueue_script( 'wp-e-commerce-legacy-ajax',      WPSC_URL . '/wpsc-admin/js/ajax.js',                         false,             $version_identifier ); // needs removing
+            wp_enqueue_script( 'wp-e-commerce-variations',       WPSC_URL . '/wpsc-admin/js/variations.js',                   array( 'jquery' ), $version_identifier );
+            wp_enqueue_script('inline-edit-post');
+            wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
+            wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl . "/wp-admin/admin.php?wpsc_admin_dynamic_css=true", false, $version_identifier, 'all' );
+        }
+        // Prototype breaks dragging and dropping, I need it gone
+	wp_deregister_script( 'prototype' );
+
+        // remove the old javascript and CSS, we want it no more, it smells bad
+	remove_action( 'admin_head', 'wpsc_admin_css' );
+}
 
 function wpsc_admin_dynamic_js() {
 	header( 'Content-Type: text/javascript' );

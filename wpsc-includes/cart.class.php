@@ -344,7 +344,12 @@ function wpsc_cart_item_url() {
 */
 function wpsc_cart_item_image() {
    global $wpsc_cart;
-   return wpsc_the_product_thumbnail( 31, 31,$wpsc_cart->cart_item->product_id, "shopping_cart");
+
+   $cart_image = wpsc_the_product_thumbnail( 31, 31,$wpsc_cart->cart_item->product_id, "shopping_cart");
+    
+    if( is_ssl() && !strstr( $cart_image, 'https' ) ) str_replace( 'http', 'https', $cart_image );
+
+   return $cart_image;
 }
 
 /**

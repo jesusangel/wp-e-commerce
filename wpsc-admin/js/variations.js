@@ -16,10 +16,16 @@
 .variation_checkbox input
 
 */
-
 //Delete checkout options on settings>checkout page
 
+
 jQuery('.variation_checkboxes').livequery(function(){
+
+        jQuery('label input:checkbox', this).click(function(){
+
+                jQuery('a.update_variations_action').show();
+        });
+
 	jQuery("div.variation_set>label input:checkbox", this).click(function(event){
 		is_checked = jQuery(this).attr('checked');
 		

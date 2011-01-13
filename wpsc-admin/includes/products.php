@@ -6,12 +6,12 @@
  *
  * @package wp-e-commerce
  * @since 3.8
+ *
  */
-
 
 /**
  * wpsc_product_rows function, copies the functionality of the wordpress code for displaying posts and pages, but is for products
- * 
+ *
  */
 function wpsc_admin_product_listing($parent_product = null) {
 	global $wp_query, $wpsc_products, $mode;
@@ -21,14 +21,12 @@ function wpsc_admin_product_listing($parent_product = null) {
 	// Create array of post IDs.
 	$product_ids = array();
 
-	if ( empty($wpsc_products) ) {
-		$wpsc_products = &$wp_query->posts;
-	}
-	
-	foreach ( (array)$wpsc_products as $product ) {
-		$product_ids[] = $product->ID;
-	}
-	
+	if ( empty($wpsc_products) )
+            $wpsc_products = &$wp_query->posts;
+
+	foreach ( (array)$wpsc_products as $product )
+            $product_ids[] = $product->ID;
+
 	foreach ( (array)$wpsc_products as $product ) {
 		wpsc_product_row($product, $parent_product);
 	}
@@ -39,11 +37,10 @@ function wpsc_admin_product_listing($parent_product = null) {
  *
  * @since 3.8
  * @param $post_status (array) of current posts statuses
- * @return $post_status (array) 
+ * @return $post_status (array)
  */
 function wpsc_trashed_post_status($post_status){
 	$post = get_post(get_the_ID());
-	if(empty($post)) return $post_status;
 	if('wpsc-product' == $post->post_type && 'trash' == $post->post_status && !in_array('trash', $post_status))
 		$post_status[] = 'Trash';
 
@@ -56,55 +53,38 @@ add_filter('display_post_states','wpsc_trashed_post_status');
  * @access public
  *
  * @since 3.8
- * @param $product (Object), $parent_product (Int) Note: I believe parent_product is unused 
+ * @param $product (Object), $parent_product (Int) Note: I believe parent_product is unused
  */
 function wpsc_product_row(&$product, $parent_product = null) {
 	global $wp_query, $wpsc_products, $mode, $current_user;
 	static $rowclass;
-	$is_parent = false;
+	//echo "<pre>".print_r($product, true)."</pre>";
 	$global_product = $product;
 	setup_postdata($product);
 
 	$rowclass = 'alternate' == $rowclass ? '' : 'alternate';
 	$post_owner = ( $current_user->ID == $product->post_author ? 'self' : 'other' );
 	$edit_link = get_edit_post_link( $product->ID );
-	$is_parent = wpsc_product_has_children($product->ID);
-	if( !empty($children) ) $is_parent = true;
-	$title = get_the_title( $product->ID);
-	if ( empty($title) ) {
+
+        $title = get_the_title( $product->ID );
+
+	if ( empty( $title ) )
 		$title = __('(no title)');
-	}
-	
+
 	?>
-	
+
 	<tr id='post-<?php echo $product->ID; ?>' class='<?php echo trim( $rowclass . ' author-' . $post_owner . ' status-' . $product->post_status ); ?> iedit <?php if ( get_option ( 'wpsc_sort_by' ) == 'dragndrop') { echo 'product-edit'; } ?>' valign="top">
 	<?php
-	$posts_columns = get_column_headers('display-product-list');
-	$posts_columns = apply_filters( 'manage_display-product-list_columns', $posts_columns );
-	$hidden = get_hidden_columns('display-product-list');
+	$posts_columns = get_column_headers( 'wpsc-product_variants' );
 
 	foreach ( $posts_columns as $column_name=>$column_display_name ) {
 		$class = "class=\"$column_name column-$column_name\"";
-
-		$style = '';
-		if ( in_array($column_name, $hidden) )
-			$style = ' style="display:none;"';
 
 		$attributes = "$class$style";
 
 		switch ($column_name) {
 
-		case 'cb':
-		?>
-		<th scope="row" class="check-column"><?php if ( current_user_can( 'edit_post', $product->ID ) ) { ?>
-		<input type="checkbox" name="post[]" value="<?php the_ID(); ?>" />										
-		<?php do_action('wpsc_admin_product_checkbox', $product->ID); ?>
-		
-<?php } ?></th>
-		<?php
-		break;
-
-		case 'date':
+                    case 'date': /* !date case */
 			if ( '0000-00-00 00:00:00' == $product->post_date && 'date' == $column_name ) {
 				$t_time = $h_time = __('Unpublished');
 				$time_diff = 0;
@@ -140,18 +120,10 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			echo '</td>';
 		break;
 
-
-
-		case 'title':
+		case 'title': /* !title case */
 			$attributes = 'class="post-title column-title"' . $style;
-			$_GET["product_parent"]  = '';
-			if( isset($_GET["product"]) && ($_GET["product_parent"] == '' )){
-				$edit_link = add_query_arg(array('page' => 'wpsc-edit-products', 'action' => 'wpsc_add_edit' ,'product' => $product->ID, 'product_parent' => $_GET["product"]));
-			} else {
-				$edit_link = add_query_arg(array('page' => 'wpsc-edit-products', 'action' => 'wpsc_add_edit' ,'product' => $product->ID));
-				$edit_link = remove_query_arg( 'product_parent' );
-			}
-			$edit_link = wp_nonce_url($edit_link, 'edit-product_'.$product->ID);
+			
+			$edit_link = wp_nonce_url( $edit_link, 'edit-product_'.$product->ID );
 		?>
 		<td <?php echo $attributes ?>>
 			<strong>
@@ -160,49 +132,34 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			<?php } else {
 				echo $title;
 			};
-			
+
 			 _post_states($product);
 			$product_alert = apply_filters('wpsc_product_alert', array(false, ''), $product);
 			if(!empty($product_alert['messages']))
 				$product_alert['messages'] = implode("\n",(array)$product_alert['messages']);
-			
+
 			if($product_alert['state'] === true) {
 				?>
 				<img alt='<?php echo $product_alert['messages'];?>' title='<?php echo $product_alert['messages'];?>' class='product-alert-image' src='<?php echo  WPSC_CORE_IMAGES_URL;?>/product-alert.jpg' alt='' />
 				<?php
 			}
-			
+
 			// If a product alert has stuff to display, show it.
 			// Can be used to add extra icons etc
 			if ( !empty( $product_alert['display'] ) ) {
 				echo $product_alert['display'];
 			}
-			
+
 			 ?>
 			</strong>
 			<?php
 
 			$actions = array();
 			if ( current_user_can('edit_post', $product->ID) && 'trash' != $product->post_status ) {
-				$actions['edit'] = '<a class="edit-product" href="'.$edit_link.'" title="' . esc_attr(__('Edit this product', 'wpsc')) . '">'. __('Edit', 'wpsc') . '</a>';	
-				if(!$is_parent)			
-					$actions['quick_edit'] = "<a class='wpsc-quickedit' title='".esc_attr(__('Quick Edit', 'wpsc'))."' href='#'>".__('Quick Edit')."</a>";
-				else
-					$actions['quick_edit'] = __('Quick Edit');
+				$actions['edit'] = '<a class="edit-product" href="'.$edit_link.'" title="' . esc_attr(__('Edit this product', 'wpsc')) . '">'. __('Edit', 'wpsc') . '</a>';
+				$actions['quick_edit'] = "<a class='wpsc-quickedit' title='".esc_attr(__('Quick Edit', 'wpsc'))."' href='#'>".__('Quick Edit')."</a>";
 			}
 
-			if ( current_user_can('delete_post', $product->ID) ) {
-				if ( 'trash' == $product->post_status ) {
-					$actions['untrash'] = "<a title='" . esc_attr(__('Restore this product from the Trash', 'wpsc')) . "' href='" . wp_nonce_url("admin.php?page=wpsc-edit-products&amp;wpsc_admin_action=untrash&amp;product={$product->ID}", 'untrash-product_' . $product->ID) . "'>".__('Restore')."</a>";
-				} else if ( EMPTY_TRASH_DAYS ) {
-					$actions['trash'] = "<a class='submitdelete' title='".esc_attr(__('Move this product to the Trash', 'wpsc'))."' href='" .wp_nonce_url("admin.php?page=wpsc-edit-products&amp;wpsc_admin_action=trash&amp;product={$product->ID}", 'delete-product_'.$product->ID) . "'>".__('Trash')."</a>";
-				}
-				
-				if ( 'trash' == $product->post_status || !EMPTY_TRASH_DAYS ) {
-					$actions['delete'] = "<a class='submitdelete' title='".esc_attr(__('Delete this product permanently', 'wpsc'))."' href='" . wp_nonce_url("admin.php?page=wpsc-edit-products&amp;wpsc_admin_action=delete&amp;product={$product->ID}", 'delete-product_'.$product->ID)."'>".__('Delete Permanently')."</a>";
-				}
-			}
-			
 			if ( in_array($product->post_status, array('pending', 'draft')) ) {
 				if ( current_user_can('edit_product', $product->ID) ) {
 					$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('Preview &#8220;%s&#8221;'), $title)) . '" rel="permalink">'.__('Preview').'</a>';
@@ -210,21 +167,18 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			} else if ( 'trash' != $product->post_status ) {
 				$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('View &#8220;%s&#8221;'), $title)).'" rel="permalink">'.__('View').'</a>';
 			}
-			if(!isset($_GET["product"]) || $_GET["product"] == '' ) {
-			$actions['duplicate'] = "<a class='submitdelete' title='".esc_attr(__('Duplicate', 'wpsc'))."' href='" . wp_nonce_url("admin.php?page=wpsc-edit-products&amp;wpsc_admin_action=duplicate_product&amp;product={$product->ID}", 'duplicate-product_'.$product->ID)."'>".__('Duplicate')."</a>";
-}
-			
+
 			$actions = apply_filters('post_row_actions', $actions, $product);
 			$action_count = count($actions);
 			$i = 0;
 			echo '<div class="row-actions">';
-			
+
 			foreach ( $actions as $action => $link ) {
 				++$i;
 				( $i == $action_count ) ? $sep = '' : $sep = ' | ';
 				echo "<span class='$action'>$link$sep</span>";
 			}
-			
+
 			echo '</div>';
 			get_inline_data($product);
 		?>
@@ -234,88 +188,62 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 
 
-		case 'image':
+		case 'image':  /* !image case */
 			?>
 			<td class="product-image ">
 			<?php
-		   $attached_images = (array)get_posts(array( 
-	          'post_type' => 'attachment', 
-	          'numberposts' => 1, 
-	          'post_status' => null, 
-	          'post_parent' => $product->ID, 
-	          'orderby' => 'menu_order', 
-	          'order' => 'ASC' 
+		   $attached_images = (array)get_posts(array(
+	          'post_type' => 'attachment',
+	          'numberposts' => 1,
+	          'post_status' => null,
+	          'post_parent' => $product->ID,
+	          'orderby' => 'menu_order',
+	          'order' => 'ASC'
 		    ));
-		     
-			
+
+
 
 		 	 if(isset($product->ID) && has_post_thumbnail($product->ID)){
 				echo get_the_post_thumbnail($product->ID, 'admin-product-thumbnails');
 		     }elseif(!empty($attached_images)){
 			    $attached_image = $attached_images[0];
-				
+
 				$src =wp_get_attachment_url($attached_image->ID);
 		     ?>
 		     	<div style='width:38px;height:38px;overflow:hidden;'>
 					<img title='Drag to a new position' src='<?php echo $src; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
 				</div>
 				<?php
-			
-		     
+
+
 		     }else{
 		      	$image_url = WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif";
 				?>
 					<img title='Drag to a new position' src='<?php echo $image_url; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
 				<?php
 
-		      
+
 		      }
-		    
+
 		?>
 			</td>
 			<?php
 		break;
-		
-		
-		
-		case 'price':
-			if(!$is_parent){
+
+
+
+		case 'price':  /* !price case */
+
 			$price = get_post_meta($product->ID, '_wpsc_price', true);
 			?>
 				<td  <?php echo $attributes ?>>
 					<?php echo wpsc_currency_display( $price ); ?>
-					<div class='price-editing-fields' id='price-editing-fields-<?php echo $product->ID; ?>'>
-						<input type='text' class='the-product-price' name='product_price[<?php echo $product->ID; ?>][price]' value='<?php echo number_format($price,2,'.',''); ?>' />
-						<input type='hidden' name='product_price[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
-						<input type='hidden' name='product_price[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('edit-product_price-'.$product->ID); ?>' />
-
-
-					</div>
 				</td>
-			
 			<?php
-			
-			}else{
-				$price = wpsc_product_variation_price_available($product->ID);
-			?>
-					<td  >
-					<?php echo $price.'+' ; ?>
-					
-				</td>
-				<?php
-			}
 		break;
 
-	// 5.8.2010 - Justin Sainton - Addition of weight and stock cases to column header switch.
-	
 		case 'weight' :
-			if($is_parent){ ?>
-				<td>
-				<?php _e( 'N/A', 'wpsc'); ?>
-				</td>
-			<?php	
-				break;
-			}
+
 			$product_data['meta'] = array();
 			$product_data['meta'] = get_post_meta($product->ID, '');
 				foreach($product_data['meta'] as $meta_name => $meta_value) {
@@ -324,13 +252,13 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		$product_data['transformed'] = array();
 		if(!isset($product_data['meta']['_wpsc_product_metadata']['weight'])) $product_data['meta']['_wpsc_product_metadata']['weight'] = "";
 		if(!isset($product_data['meta']['_wpsc_product_metadata']['weight_unit'])) $product_data['meta']['_wpsc_product_metadata']['weight_unit'] = "";
-		
+
 		$product_data['transformed']['weight'] = wpsc_convert_weight($product_data['meta']['_wpsc_product_metadata']['weight'], "gram", $product_data['meta']['_wpsc_product_metadata']['weight_unit']);
 			$weight = $product_data['transformed']['weight'];
 			if($weight == ''){
 				$weight = '0';
 			}
-			
+
 			$unit = $product_data['meta']['_wpsc_product_metadata']['weight_unit'];
 			switch($unit) {
 				case "pound":
@@ -343,50 +271,32 @@ function wpsc_product_row(&$product, $parent_product = null) {
 					$unit = " g";
 					break;
 				case "kilograms":
-				case "kilogram":				
+				case "kilogram":
 					$unit = " kgs.";
 					break;
 			}
 			?>
 				<td  <?php echo $attributes ?>>
 					<span class="weightdisplay"><?php echo $weight; ?></span>
-					<div class='weight-editing-fields' id='weight-editing-fields-<?php echo $product->ID; ?>'>
-						<input type='text' class='the-weight-fields' name='weight_field[<?php echo $product->ID; ?>][weight]' value='<?php echo $weight; ?>' />
-						<input type='hidden' name='weight_field[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
-						<input type='hidden' name='weight_field[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('edit-weight-'.$product->ID); ?>' />
-					</div><?php echo $unit; ?>
 				</td>
 			<?php
 
 		break;
-		
+
 		case 'stock' :
 			$stock = get_post_meta($product->ID, '_wpsc_stock', true);
 			if($stock == ''){
 				$stock = 'N/A';
 			}
-			if(!$is_parent){
 			?>
 				<td  <?php echo $attributes ?>>
 					<span class="stockdisplay"><?php echo $stock; ?></span>
-					<div class='stock-editing-fields' id='stock-editing-fields-<?php echo $product->ID; ?>'>
-						<input type='text' class='the-stock-fields' name='stock_field[<?php echo $product->ID; ?>][stock]' value='<?php echo $stock; ?>' />
-						<input type='hidden' name='stock_field[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
-						<input type='hidden' name='stock_field[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('edit-stock-'.$product->ID); ?>' />
-
-
-					</div>
+					
 				</td>
-			<?php
-			}else{
-			?>	<td>
-			<?php echo '~'.wpsc_variations_stock_remaining($product->ID); ?>
-				</td>
-			<?php
-			}
+	<?php
 		break;
 
-		case 'categories':
+		case 'categories':  /* !categories case */
 		?>
 		<td <?php echo $attributes ?>><?php
 			$categories = get_the_product_category($product->ID);
@@ -404,7 +314,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 
 
-		case 'tags':
+		case 'tags':  /* !tags case */
 		?>
 		<td <?php echo $attributes ?>><?php
 			$tags = get_the_tags($product->ID);
@@ -424,50 +334,29 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			if($sku == ''){
 				$sku = 'N/A';
 			}
-			if($is_parent) {
-			?>
-			<td> <?php echo $sku; ?></td>
-			<?php
-			break;
-			}
-
+		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
 				<td  <?php echo $attributes ?>>
 					<span class="skudisplay"><?php echo $sku; ?></span>
-					<div class='sku-editing-fields' id='sku-editing-fields-<?php echo $product->ID; ?>'>
-						<input type='text' class='the-sku-fields' name='sku_field[<?php echo $product->ID; ?>][sku]' value='<?php echo $sku; ?>' />
-						<input type='hidden' name='sku_field[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
-						<input type='hidden' name='sku_field[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('edit-sku-'.$product->ID); ?>' />
-
-
-					</div>
+				
 				</td>
 			<?php
 		break;
 		case 'sale_price':
-			if( $is_parent ){ ?>
-				<td>
-					<?php _e('N/A' , 'wpsc'); ?>
-				</td>			
-			<?php	
-				break;
-			}
+
 			$price = get_post_meta($product->ID, '_wpsc_special_price', true);
+		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
 				<td  <?php echo $attributes ?>>
 					<?php echo wpsc_currency_display( $price ); ?>
-					<div class='sales-price-fields' id='sales-price-editing-fields-<?php echo $product->ID; ?>'>
-						<input type='text'  class='the-sale-price' name='sale_product_price[<?php echo $product->ID; ?>][price]' value='<?php echo number_format( (double)$price, 2, '.', ''); ?>' />
-						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
-						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('sale-edit-product_price-'.$product->ID); ?>' />
-					</div>
+					
 				</td>
 			<?php
 
 		break;
 
 
-		case 'comments':
+		case 'comments':  /* !comments case */
 		?>
 		<td <?php echo $attributes ?>><div class="post-com-count-wrapper">
 		<?php
@@ -484,14 +373,14 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 
 
-		case 'author':
+		case 'author':  /* !author case */
 		?>
 		<td <?php echo $attributes ?>><a href="edit.php?author=<?php the_author_meta('ID'); ?>"><?php the_author() ?></a></td>
 		<?php
 		break;
 
-		
-		case 'control_view':
+
+		case 'control_view':  /* !control view case */
 		?>
 		<td><a href="<?php the_permalink(); ?>" rel="permalink" class="view"><?php _e('View'); ?></a></td>
 		<?php
@@ -499,7 +388,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 
 
-		case 'control_edit':
+		case 'control_edit':  /* !control edit case */
 		?>
 		<td><?php if ( current_user_can('edit_post', $product->ID) ) { echo "<a href='$edit_link' class='edit'>" . __('Edit') . "</a>"; } ?></td>
 		<?php
@@ -507,18 +396,18 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 
 
-		case 'control_delete':
+		case 'control_delete':  /* !control delete case */
 		?>
 		<td><?php if ( current_user_can('delete_post', $product->ID) ) { echo "<a href='" . wp_nonce_url("post.php?action=delete&amp;post=$id", 'delete-post_' . $product->ID) . "' class='delete'>" . __('Delete') . "</a>"; } ?></td>
 		<?php
 		break;
 
-		case 'featured':
+		case 'featured': /* !control featured case */
 		?>
 			<td><?php do_action('manage_posts_featured_column', $product->ID); ?></td>
-		<?php		
+		<?php
 		break;
-		default:
+		default:   /* !default case */
 		?>
 		<td <?php echo $attributes ?>><?php do_action('manage_posts_custom_column', $column_name, $product->ID); ?></td>
 		<?php
@@ -531,4 +420,65 @@ function wpsc_product_row(&$product, $parent_product = null) {
 	$product = $global_product;
 }
 
+/**
+ * Pretty much copied straight from WP - Modified somewhat to just get it working.
+ * @access public
+ *
+ * @since 3.8
+ */
+
+function wpsc_admin_product_listing_nai() {
+global $post_type, $wp_query;
+include ( WPSC_FILE_PATH.'/wpsc-admin/includes/variations_table_class.php' );
+
+
+$wp_list_table = get_list_table('WPEC_Variations_List_Table');
+$wp_list_table->check_permissions();
+
+$doaction = $wp_list_table->current_action();
+
+if ( $doaction ) {
+
+	$sendback = remove_query_arg( array('trashed', 'untrashed', 'deleted', 'ids'), wp_get_referer() );
+	$sendback = add_query_arg( 'paged', $pagenum, $sendback );
+	if ( strpos($sendback, 'post.php') !== false )
+		$sendback = admin_url($post_new_file);
+
+        $post_ids = array_map('intval', (array) $_REQUEST['post']);
+
+	if ( !is_array( $post_ids ) ) {
+		wp_redirect( admin_url("edit.php?post_type=$post_type") );
+		exit;
+	}
+
+} elseif ( ! empty($_REQUEST['_wp_http_referer']) ) {
+	 wp_redirect( remove_query_arg( array('_wp_http_referer', '_wpnonce'), stripslashes($_SERVER['REQUEST_URI']) ) );
+	 exit;
+}
+
+	$parent_file = "edit.php?post_type=$post_type";
+	$submenu_file = "edit.php?post_type=$post_type";
+	$post_new_file = "post-new.php?post_type=$post_type";
+
+$title = $post_type_object->labels->name;
+?>
+
+<form id="posts-filter" action="" method="get">
+
+<input type="hidden" name="post_status" class="post_status_page" value="<?php echo !empty($_REQUEST['post_status']) ? esc_attr($_REQUEST['post_status']) : 'all'; ?>" />
+<input type="hidden" name="post_type" class="post_type_page" value="<?php echo $post_type; ?>" />
+
+<?php $wp_list_table->display(); ?>
+
+</form>
+
+<?php
+if ( $wp_list_table->has_items() )
+	$wp_list_table->inline_edit();
+?>
+
+<div id="ajax-response"></div>
+<br class="clear" />
+<?php
+}
 ?>

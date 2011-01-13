@@ -24,7 +24,6 @@ function wpec_taxes_settings_page() {
 // wpec_taxes_settings_page
 
 /**
- * @author: Jeremy Smith - www.dnawebagency.com
  * @description: wpec_taxes_ajax_controller - controller for any ajax
  *               functions needed for wpec_taxes
  * @param: void
@@ -66,7 +65,6 @@ function wpec_taxes_ajax_controller() {
 // wpec_taxes_ajax_controller
 
 /**
- * @author: Jeremy Smith - www.dnawebagency.com
  * @description: wpec_submit_taxes_options - filters the options submitted in $_POST. Uses
  *                                           wpsc_submit_options to submit filtered array.
  * @param: void

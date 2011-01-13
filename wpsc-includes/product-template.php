@@ -244,6 +244,7 @@ function wpsc_product_image( $attachment_id = 0, $width = null, $height = null )
 		$image_meta = get_post_meta( $attachment_id, '_wp_attached_file' );
 		$image_url = $uploads['baseurl'].'/'.$image_meta[0];
 	}
+        if( is_ssl() && !strstr(  $image_url, 'https' ) ) str_replace('http', 'https', $image_url);
 	// @todo - put fallback 'No image' catcher here
 	return apply_filters( 'wpsc_product_image', $image_url );
 }

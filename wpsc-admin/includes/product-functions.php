@@ -8,8 +8,8 @@
 
 function wpsc_get_max_upload_size(){
 // Get PHP Max Upload Size
-	if(ini_get('upload_max_filesize')) $upload_max = ini_get('upload_max_filesize');	
-	else $upload_max = __('N/A', 'wpsc');	
+	if( ini_get( 'upload_max_filesize' ) ) $upload_max = ini_get( 'upload_max_filesize' );
+	else $upload_max = __( 'N/A', 'wpsc' );
 	return $upload_max;
 }
 
@@ -68,25 +68,150 @@ function wpsc_product_has_children($id){
 		return true;
 }
 
-
 /**
 * wpsc_admin_submit_product function 
-*
+* @internal Was going to completely refactor sanitise forms and wpsc_insert_product, but they are also used by the import system
+ * which I'm not really familiar with...so I'm not touching them :)  Erring on the side of redundancy and caution I'll just 
+ * refactor this to do the job.
 * @return nothing
 */
-function wpsc_admin_submit_product() {
-	check_admin_referer('edit-product', 'wpsc-edit-product');
+function wpsc_admin_submit_product( $post_ID, $post ) {
+    global $current_screen, $wpdb;
+    if( $current_screen->id != 'wpsc-product' )
+       return;
+       //Type-casting ( not so much sanitization, which would be good to do )
+        $post_data = $_POST;
+        $product_id = $post_ID;
+
+	$post_data['additional_description'] = isset($post_data['additional_description']) ? $post_data['additional_description'] : '';
+        $post_meta['meta'] = (array)$_POST['meta'];
+	$post_data['meta']['_wpsc_price'] = (float)str_replace( ',','',$post_data['meta']['_wpsc_price'] );
+	$post_data['meta']['_wpsc_special_price'] = (float)str_replace( ',','',$post_data['meta']['_wpsc_special_price'] );
+	$post_data['meta']['_wpsc_sku'] = $post_data['meta']['_wpsc_sku'];
+	if (!isset($post_data['meta']['_wpsc_is_donation'])) $post_data['meta']['_wpsc_is_donation'] = '';
+	$post_data['meta']['_wpsc_is_donation'] = (int)(bool)$post_data['meta']['_wpsc_is_donation'];
+	$post_data['meta']['_wpsc_stock'] = (int)$post_data['meta']['_wpsc_stock'];
+	if (!isset($post_data['meta']['_wpsc_limited_stock'])) $post_data['meta']['_wpsc_limited_stock'] = '';
+	if((bool)$post_data['meta']['_wpsc_limited_stock'] != true) {
+	  $post_data['meta']['_wpsc_stock'] = false;
+	}
+	unset($post_data['meta']['_wpsc_limited_stock']);
+	if(!isset($post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'])) $post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'] = '';
+        if(!isset($post_data['quantity_limited'])) $post_data['quantity_limited'] = '';
+        if(!isset($post_data['special'])) $post_data['special'] = '';
+        if(!isset($post_data['meta']['_wpsc_product_metadata']['no_shipping'])) $post_data['meta']['_wpsc_product_metadata']['no_shipping'] = '';
 	
-	$sendback = wp_get_referer();
-	$post_data = wpsc_sanitise_product_forms();
-	if(isset($post_data['title']) && $post_data['title'] != '') {
-		$product_id = wpsc_insert_product($post_data, true);
-		if($product_id > 0) {
-			$sendback = add_query_arg('product', $product_id);
+	$post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'];
+	$post_data['meta']['_wpsc_product_metadata']['quantity_limited'] = (int)(bool)$post_data['quantity_limited'];
+	$post_data['meta']['_wpsc_product_metadata']['special'] = (int)(bool)$post_data['special'];
+	$post_data['meta']['_wpsc_product_metadata']['no_shipping'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['no_shipping'];
+	
+	// Product Weight
+	if(!isset($post_data['meta']['_wpsc_product_metadata']['display_weight_as'])) $post_data['meta']['_wpsc_product_metadata']['display_weight_as'] = '';
+        if(!isset($post_data['meta']['_wpsc_product_metadata']['display_weight_as'])) $post_data['meta']['_wpsc_product_metadata']['display_weight_as'] = '';
+	
+	$weight = wpsc_convert_weight($post_data['meta']['_wpsc_product_metadata']['weight'], $post_data['meta']['_wpsc_product_metadata']['weight_unit'], "gram");
+	$post_data['meta']['_wpsc_product_metadata']['weight'] = (float)$weight;
+        $post_data['meta']['_wpsc_product_metadata']['display_weight_as'] = $post_data['meta']['_wpsc_product_metadata']['weight_unit'];
+	
+	// table rate price
+	$post_data['meta']['_wpsc_product_metadata']['table_rate_price'] = $post_data['table_rate_price'];
+	// if table_rate_price is unticked, wipe the table rate prices
+	if(!isset($post_data['table_rate_price']['state'])) $post_data['table_rate_price']['state'] = '';
+	if($post_data['table_rate_price']['state'] != 1) {$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['quantity'] = null;
+		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_price'] = null;
+		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['quantity'] = null;
+		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_price'] = null;
+	}
+	foreach((array)$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_price'] as $key => $value){
+		if(empty($value)){
+			unset($post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_price'][$key]); 
+			unset($post_data['meta']['_wpsc_product_metadata']['table_rate_price']['quantity'][$key]); 
+		} 
+	}
+
+   
+	$post_data['meta']['_wpsc_product_metadata']['shipping']['local'] = (float)$post_data['meta']['_wpsc_product_metadata']['shipping']['local'];
+	$post_data['meta']['_wpsc_product_metadata']['shipping']['international'] = (float)$post_data['meta']['_wpsc_product_metadata']['shipping']['international'];
+	
+	
+	// Advanced Options
+	$post_data['meta']['_wpsc_product_metadata']['engraved'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['engraved'];	
+	$post_data['meta']['_wpsc_product_metadata']['can_have_uploaded_image'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['can_have_uploaded_image'];
+	if(!isset($post_data['meta']['_wpsc_product_metadata']['google_prohibited'])) $post_data['meta']['_wpsc_product_metadata']['google_prohibited'] = '';
+	$post_data['meta']['_wpsc_product_metadata']['google_prohibited'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['google_prohibited'];
+	$post_data['meta']['_wpsc_product_metadata']['external_link'] = (string)$post_data['meta']['_wpsc_product_metadata']['external_link'];
+	$post_data['meta']['_wpsc_product_metadata']['external_link_text'] = (string)$post_data['meta']['_wpsc_product_metadata']['external_link_text'];
+	$post_data['meta']['_wpsc_product_metadata']['external_link_target'] = (string)$post_data['meta']['_wpsc_product_metadata']['external_link_target'];
+	
+	$post_data['meta']['_wpsc_product_metadata']['enable_comments'] = $post_data['meta']['_wpsc_product_metadata']['enable_comments'];
+	$post_data['meta']['_wpsc_product_metadata']['merchant_notes'] = $post_data['meta']['_wpsc_product_metadata']['merchant_notes'];
+	
+	$post_data['files'] = $_FILES;
+
+	if(isset($post_data['post_title']) && $post_data['post_title'] != '') {
+
+	$product_columns = array(
+		'name' => '',
+		'description' => '',
+		'additional_description' => '',
+		'price' => null,
+		'weight' => null,
+		'weight_unit' => '',
+		'pnp' => null,
+		'international_pnp' => null,
+		'file' => null,
+		'image' => '0',
+		'quantity_limited' => '',
+		'quantity' => null,
+		'special' => null,
+		'special_price' => null,
+		'display_frontpage' => null,
+		'notax' => null,
+		'publish' => null,
+		'active' => null,
+		'donation' => null,
+		'no_shipping' => null,
+		'thumbnail_image' => null,
+		'thumbnail_state' => null
+	);
+
+	foreach($product_columns as $column => $default)
+	{
+		if (!isset($post_data[$column])) $post_data[$column] = '';
+
+		if($post_data[$column] !== null) {
+			$update_values[$column] = stripslashes($post_data[$column]);
+		} else if(($update != true) && ($default !== null)) {
+			$update_values[$column] = stripslashes($default);
 		}
-		
-		$sendback = add_query_arg('message', 1, $sendback);
-		wp_redirect($sendback);
+	}
+	// if we succeed, we can do further editing (todo - if_wp_error)
+
+	// and the meta
+        
+	wpsc_update_product_meta($product_id, $post_data['meta']);
+
+	// and the custom meta
+	wpsc_update_custom_meta($product_id, $post_data);
+
+	//and the alt currency
+	foreach((array)$post_data['newCurrency'] as $key =>$value){
+		wpsc_update_alt_product_currency($product_id, $value, $post_data['newCurrPrice'][$key]);
+	}
+
+	if($post_data['files']['file']['tmp_name'] != '') {
+		wpsc_item_process_file($product_id, $post_data['files']['file']);
+	} else {
+		if (!isset($post_data['select_product_file'])) $post_data['select_product_file'] = null;
+	  	wpsc_item_reassign_file($product_id, $post_data['select_product_file']);
+	}
+
+	if(isset($post_data['files']['preview_file']['tmp_name']) && ($post_data['files']['preview_file']['tmp_name'] != '')) {
+ 		wpsc_item_add_preview_file($product_id, $post_data['files']['preview_file']);
+	}
+	do_action('wpsc_edit_product', $product_id);
+	wpsc_ping();
 	} else {
 		$_SESSION['product_error_messages'] = array();	
 		if($post_data['title'] == ''){
@@ -95,20 +220,47 @@ function wpsc_admin_submit_product() {
 		if(!isset($post_data['category'])){
 			$_SESSION['product_error_messages'][] = __('<strong>ERROR</strong>: Please enter a Product Category.<br />');
 		}
-		
 		$_SESSION['wpsc_failed_product_post_data'] = $post_data;
-		$sendback = add_query_arg('ErrMessage', 1);
-		wp_redirect($sendback);
 	}
-	exit();
+	return $product_id;
+}
+function wpsc_pre_update( $data , $postarr ) {
+    if( wp_is_post_autosave( $postarr["ID"] ) || wp_is_post_revision( $postarr["ID"] ) )
+        return;
+
+    if( isset( $postarr["additional_description"] ) && !empty( $postarr["additional_description"] ) )
+        $data["post_excerpt"] = $postarr["additional_description"];
+
+
+    if ( $postarr['meta']['_wpsc_product_metadata']['enable_comments'] == 0 || empty( $postarr['meta']['_wpsc_product_metadata']['enable_comments'] ) )
+        $data["comment_status"] = "closed";
+    else
+        $data["comment_status"] = "open";
+
+    //Can anyone explain to me why this is here?
+    if ( isset( $sku ) && ( $sku != '' ) )
+        $data['guid'] = $sku;
+
+    return $data;
+}
+add_filter( 'wp_insert_post_data','wpsc_pre_update', 99, 2 );
+add_action( 'save_post', 'wpsc_admin_submit_product', 10, 2 );
+add_action( 'admin_notices', 'wpsc_admin_submit_notices' );
+function wpsc_admin_submit_notices() {
+    global $current_screen, $post;
+    
+    if( $current_screen->id != 'wpsc-product' || !isset( $_SESSION['product_error_messages'] ) )
+            return;
+    foreach ( $_SESSION['product_error_messages'] as $error )
+        echo "<div id=\"message\" class=\"updated below-h2\"><p>".$error."</p></div>";
+    unset( $_SESSION['product_error_messages'] );
 }
  
- 
-  /**
-	* wpsc_sanitise_product_forms function 
-	* 
-	* @return array - Sanitised product details
-	*/
+/**
+* wpsc_sanitise_product_forms function 
+* 
+* @return array - Sanitised product details
+*/
 function wpsc_sanitise_product_forms($post_data = null) {
 	if ( empty($post_data) ) {
 		$post_data = &$_POST;
@@ -205,8 +357,6 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	return $post_data;
 }
   
-   
-  
  /**
 	* wpsc_insert_product function 
 	*
@@ -272,7 +422,6 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		'post_type' => "wpsc-product",
 		'post_name' => sanitize_title($post_data['name'])
 	);
-
 	if ($post_data['meta']['_wpsc_product_metadata']['enable_comments'] == 0) {
 		$product_post_values["comment_status"] = "closed";
 	}else {
@@ -322,17 +471,6 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
   
 	// if we succeed, we can do further editing
 	
-	// update the categories
-	
-	if (!isset($post_data['category'])) $post_data['category'] = array();	
-	wp_set_product_categories($product_id, $post_data['category']);
-	
-
-	// and the tags
-	if (!isset($post_data['product_tags'])) $post_data['product_tags'] = '';
-	if (!isset($post_data['wpsc_existing_tags'])) $post_data['wpsc_existing_tags'] = '';
-	wpsc_update_product_tags($product_id, $post_data['product_tags'], $post_data['wpsc_existing_tags']);
-	
 	// and the meta
 	wpsc_update_product_meta($product_id, $post_data['meta']);
 	
@@ -354,13 +492,10 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	if(isset($post_data['files']['preview_file']['tmp_name']) && ($post_data['files']['preview_file']['tmp_name'] != '')) {
  		wpsc_item_add_preview_file($product_id, $post_data['files']['preview_file']);
 	}
-    
-    
 	do_action('wpsc_edit_product', $product_id);
 	wpsc_ping();
 	return $product_id;
 }
-
 
 /**
  * term_id_price function 
@@ -421,8 +556,6 @@ function term_id_price($term_id, $parent_price) {
 	return $price;
 }
 
-
-
 /**
  * wpsc_edit_product_variations function.
  * this is the function to make child products using variations 
@@ -445,7 +578,7 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 	
 	
 	// Generate the arrays for variation sets, values and combinations
-    $wpsc_combinator = new wpsc_variation_combinator($variations);
+        $wpsc_combinator = new wpsc_variation_combinator($variations);
 	// Retrieve the array containing the variation set IDs
 	$variation_sets = $wpsc_combinator->return_variation_sets();
 	
@@ -608,35 +741,7 @@ function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
 	}
 
 }
-  
-  /**
- * wpsc_update_product_tags function 
- *
- * @param integer product ID
- * @param string comma separated tags
- */
-function wpsc_update_product_tags($product_id, $product_tags, $existing_tags) {
-	if(isset($existing_tags)){
-		$tags = explode(',',$existing_tags);
-		if(is_array($tags)){
-			foreach((array)$tags as $tag){
-				$tt = wp_insert_term((string)$tag, 'product_tag');
-			}
-		}
-	}
-	wp_set_object_terms($product_id, $tags, 'product_tag');
-	if(isset($product_tags) && $product_tags != 'Add new tag') {
-		
-		$tags = explode(',',$product_tags);
-		if(is_array($tags)) {
-			foreach((array)$tags as $tag){
-				$tt = wp_insert_term((string)$tag, 'product_tag');
-			}
-		}
-		wp_set_object_terms($product_id, $tags, 'product_tag');
-	}
-}
-
+ 
  /**
  * wpsc_update_product_meta function
  *
@@ -655,57 +760,6 @@ function wpsc_update_product_meta($product_id, $product_meta) {
 	}
 }
 
-/*
-/* Code to support Publish/No Publish (1bigidea)
-*/
-/**
- * set status of publish conditions
- * @return 
- * @param string 	$product_id
- * @param bool			$status		Publish State 
- */
-function wpsc_set_publish_status($product_id, $state) {
-	global $wpdb;
-	switch($state) {
-		case 'draft':
-		case 0:
-		$status = 'draft';
-		break;
-		
-		default:
-		$status = 'publish';
-		break;
-	}
-	$result = $wpdb->query("UPDATE `".$wpdb->posts."` SET `post_status` = '{$status}' WHERE `ID` = '{$product_id}'");
-}
-
-/**
- * Toggle publish status and update product record
- * @return bool		Publish status
- * @param string	$product_id
- */
-function wpsc_toggle_publish_status($product_id) {
-	global $wpdb;
-	
-	if(wpsc_publish_status($product_id) == 'publish') {
-		$status = 'draft';
-	} else {
-		$status = 'publish';
-	}
-	
-	wpsc_set_publish_status($product_id, $status);
-	return $status;
-}
-/**
- * Returns publish status from product database
- * @return bool		publish status
- * @param string	$product_id
- */
-function wpsc_publish_status($product_id) {
-	global $wpdb;
-	$status = $wpdb->get_var("SELECT `post_status` FROM `".$wpdb->posts."` WHERE `ID` = '{$product_id}'");
-	return $status;
-}
 /**
  * Called from javascript within product page to toggle publish status - AJAX
  * @return bool	publish status
@@ -812,8 +866,7 @@ function wpsc_modify_preview_directory($input) {
 	
 	return $input;
 }
-    
-  
+     
  /**
  * wpsc_item_reassign_file function 
  *
@@ -890,8 +943,6 @@ function wpsc_item_reassign_file($product_id, $selected_files) {
 	return $fileid;
 }
 
-
-
  /**
  * wpsc_item_add_preview_file function 
  *
@@ -944,7 +995,6 @@ function wpsc_item_add_preview_file($product_id, $preview_file) {
   ///OLD CODE replaced 13/12/2010
 
 }
-
 
 /**
  * wpsc_variation_combinator class.

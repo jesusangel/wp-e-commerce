@@ -1,28 +1,30 @@
 // This is the wp-e-commerce front end javascript "library"
-var postboxes = function postboxes() {};
+
 jQuery(document).ready( function () {
+
+        jQuery('table.widefat tbody tr').each(function(){
+            id = jQuery(this).attr("id");
+            jQuery('#' + id + ' td.hidden_alerts img').appendTo('#' + id + ' td.column-title strong');
+        });
+        jQuery('label[for=wpsc-variationdiv-hide]').css('display', 'none');
 
 	jQuery('a.update_variations_action').click(function(){
 		jQuery("<img class='loading' src='images/loading.gif' height='15' width='15' />").insertAfter(this);
 		edit_var_val = jQuery('div.variation_checkboxes input:checked').serialize();
-		description = jQuery('iframe#content_ifr').text();
+		description = jQuery('#content_ifr').contents().find('body').html();
 		additional_description = jQuery('textarea#additional_description').text();
 		name = jQuery('input#title').val();
 		product_id = jQuery('input#product_id').val();
-		;
 		post_values = edit_var_val+'&description='+description+'&additional_description='+additional_description+'&name='+name+'&product_id='+product_id;
 
 		jQuery.post('index.php?wpsc_admin_action=wpsc_update_variations',post_values, function(returned_data){
 			var url = location.href;
-			jQuery('table#wpsc_product_list').fadeOut(500).load(url +' table#wpsc_product_list').fadeIn(500);
+			jQuery('div#wpsc_product_variation_forms table.widefat').fadeOut(500).load(url +' div#wpsc_product_variation_forms table.widefat').fadeIn(500);
 			jQuery('img.loading').hide();
 		});
 		return false;
 
 	});
-	//JS - 5.12.2010 - Instead of modding functions, using JQuery to remove pricedisplay class from span.
-	jQuery('td.sale_price span.pricedisplay').removeClass('pricedisplay').addClass('salespricedisplay');
-
 	/* 	Coupon edit functionality */
 	jQuery('.modify_coupon').hide();
 	jQuery('.wpsc_edit_coupon').click(function(){
@@ -273,10 +275,10 @@ jQuery(document).ready( function () {
 
 	});
 	// this makes the product list table sortable
-	jQuery('table#wpsc_product_list').sortable({
+	jQuery('table.widefat').sortable({
 		update: function(event, ui) {
 			category_id = jQuery('input#products_page_category_id').val();
-			product_order = jQuery('table#wpsc_product_list').sortable( 'serialize' );
+			product_order = jQuery('table.widefat').sortable( 'serialize' );
 			post_values = "category_id="+category_id+"&"+product_order;
 			jQuery.post( 'index.php?wpsc_admin_action=save_product_order', post_values, function(returned_data) { });
 		},
@@ -307,7 +309,6 @@ jQuery(document).ready( function () {
 
 	});
 
-
 	// this helps show the links in the product list table, it is partially done using CSS, but that breaks in IE6
 	jQuery("tr.product-edit").hover(
 		function() {
@@ -317,34 +318,9 @@ jQuery(document).ready( function () {
 			jQuery(".wpsc-row-actions", this).css("visibility", "hidden");
 		}
 		);
-	// Used on admin/display-items.page.php - toggles the publish status of a product (dims background for unpublished) - 1bigidea
-	// click logic from http://xplus3.net/2008/10/16/jquery-and-ajax-in-wordpress-plugins-administration-pages/
-	/*
-	jQuery(document).ready(function(){
-		jQuery("span.publish_toggle a").click(function() {
-			var that = this;
-			var theRow = jQuery(this).parents('tr:first');
-			jQuery.post(jQuery(this).attr("href"), {
-					'cookie': encodeURIComponent(document.cookie)
-				}
-				, function(newstatus){
-					if (newstatus == 'true') {
-						jQuery(that).text('Hide');
-						jQuery(theRow).removeClass('wpsc_not_published').addClass('wpsc_published')
-					} else {
-						jQuery(that).text('Show');
-						jQuery(theRow).removeClass('wpsc_published').addClass('wpsc_not_published');
-					}
-				}
-			);
-			return false; // The click never happened - defeat the a tag
-		});
-	});*/
-
-	//jQuery('.selector :selected').val();
+	
 
 	jQuery('tr.wpsc_trackingid_row').hide();
-	//jQuery('tr.wpsc_hastracking').show();
 
 	jQuery('.wpsc_show_trackingid').click(function(event){
 		purchlog_id = jQuery(this).attr('title');
@@ -377,321 +353,9 @@ jQuery(document).ready( function () {
 		event.preventDefault();
 	});
 
-	// 	jQuery("#submit_category_select").click(function() {
-	// 			new_url = jQuery("#category_select option:selected").val();
-	// 			//console.log(new_url);
-	// 			window.location = new_url;
-	// 			return false;
-	// 	});
-
-
-	// this loads the edit-products page using javascript
-	/*	 jQuery('.edit-product, .row-title').click(function(){
-	 		jQuery(this).next('.loadingImg').removeAttr('style');
-			product_id = jQuery(this).attr('href').match(/(?:;|&)product=(\d{1,})/);
-			wpnonce = jQuery(this).attr('href').match(/_wpnonce=(\w{1,})/);
-	 		post_values = "product="+product_id[1]+"&_wpnonce="+wpnonce[1];
-			jQuery.post( 'index.php?wpsc_admin_action=load_product', post_values, function(returned_data) {
-				if(typeof(tinyMCE) != "undefined") {
-					tinyMCE.execCommand("mceRemoveControl",false,"content");
-				}
-				jQuery('form#modify-products #content').remove();
-
-			  jQuery('form#modify-products').html(returned_data);
-			  	jQuery('.loadingImg').attr('style', 'display:none;');
-				if ( getUserSetting( 'editor' ) != 'html' ) {
-					jQuery("#quicktags").css('display', "none");
-					if(typeof(tinyMCE) != "undefined") {
-						tinyMCE.execCommand("mceAddControl", false, "content");
-					}
-				}
-			});
-
-	 		//
-
-	 });*/
-
 	jQuery("a.thickbox").livequery(function(){
 		tb_init(this);
 	});
-
-
-	// Code for using AJAX to change thr product price starts here
-	ajax_submit_price = function(event) {
-		target_element_id= event.data;
-		form_data = jQuery("#"+target_element_id+" input").serialize();
-		//console.log(form_data);
-		jQuery.ajax({
-			type: "POST",
-			url: "admin.php?wpsc_admin_action=modify_price",
-			data: form_data,
-			success: function(returned_data) {
-				eval(returned_data);
-				if(success == 1) {
-					parent_container = jQuery("#"+target_element_id+"").parent('.column-price');
-					jQuery(".pricedisplay", parent_container).html(new_price);
-				}
-				jQuery('span.pricedisplay').css('display', 'inline-block');
-				jQuery('div.price-editing-fields').css('display', 'none');
-				jQuery('form#posts-filter').unbind('submit.disable');
-			}
-		});
-		jQuery('form#posts-filter').unbind('submit.disable');
-		return false;
-	};
-
-	jQuery("table#wpsc_product_list tr").livequery(function(){
-		var open = true;
-		jQuery("a.wpsc-quickedit", this).click( function(event) {
-
-			if (open == true) {
-				jQuery(this).parents("tr.iedit").find("span.skudisplay,span.salespricedisplay, span.pricedisplay,span.stockdisplay").click();
-				jQuery(this).parents("tr.iedit").find("span.weightdisplay").click();
-				open = false;
-			} else {
-				jQuery(this).parents("tr.iedit").find("div.price-editing-fields, div.sales-price-fields, div.weight-editing-fields, div.sku-editing-fields, div.stock-editing-fields").css("display", "none");
-				jQuery(this).parents("tr.iedit").find("span.weightdisplay, span.skudisplay,span.salespricedisplay, span.pricedisplay,span.stockdisplay").css("display", "inline-block");
-				open = true;
-			}
-
-			return false;
-		});
-	});
-
-	jQuery("table#wpsc_product_list .column-price").livequery(function(){
-		jQuery("span.pricedisplay", this).click( function(event) {
-			jQuery('span.pricedisplay').css('display', 'inline-block');
-			jQuery('div.price-editing-fields').css('display', 'none');
-			jQuery(this).css('display', 'none');
-			jQuery('div.price-editing-fields', jQuery(this).parent('.column-price')).css('display', 'inline-block');
-
-			target_element_id = jQuery('div.price-editing-fields', jQuery(this).parent('.column-price')).attr('id');
-			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_price);
-
-			jQuery('div.price-editing-fields .the-product-price', jQuery(this).parent('.column-price')).focus();
-		});
-
-		jQuery('.the-product-price',this).keyup(function(event){
-			target_element_id = jQuery(jQuery(this).parent('.price-editing-fields')).attr('id');
-			if(event.keyCode == 13) {
-				jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_price);
-			}
-		});
-
-		target_element_id = jQuery('.price-editing-fields',this).attr('id');
-
-		jQuery('.the-product-price',this).bind('blur', target_element_id, ajax_submit_price);
-	});
-
-
-
-	// Code for using AJAX to change thr product price ends here
-
-	// Code for using AJAX to change the sales price starts here
-	ajax_submit_sales_price = function(event) {
-		target_element_id= event.data;
-		form_data = jQuery("#"+target_element_id+" input").serialize();
-		//		console.log(form_data);
-		jQuery.ajax({
-			type: "POST",
-			url: "admin.php?wpsc_admin_action=modify_sales_price",
-			data: form_data,
-			success: function(returned_data) {
-				eval(returned_data);
-				if(success == 1) {
-					parent_container = jQuery("#"+target_element_id+"").parent('.column-sale_price');
-					jQuery(".salespricedisplay", parent_container).html(new_price);
-				}
-				jQuery('span.salespricedisplay').css('display', 'inline-block');
-				jQuery('div.sales-price-fields').css('display', 'none');
-				jQuery('form#posts-filter').unbind('submit.disable');
-			}
-		});
-		jQuery('form#posts-filter').unbind('submit.disable');
-		return false;
-	};
-
-	jQuery("table#wpsc_product_list .column-sale_price").livequery(function(){
-		jQuery('span.salespricedisplay',this).click(function(){
-			jQuery('span.salespricedisplay').css('display', 'inline-block');
-			jQuery('div.sales-price-fields').css('display', 'none');
-			jQuery(this).css('display', 'none');
-			jQuery('div.sales-price-fields', jQuery(this).parent('.column-sale_price')).css('display', 'inline-block');
-			target_element_id = jQuery('div.sales-price-fields', jQuery(this).parent('.column-sale_price')).attr('id');
-			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_sales_price);
-			jQuery('div.sales-price-fields .the-sale-price', jQuery(this).parent('.column-sale_price')).focus();
-		});
-		jQuery('.the-sale-price',this).keyup(function(event){
-			target_element_id = jQuery(jQuery(this).parent('.sales-price-fields')).attr('id');
-			if(event.keyCode == 13) {
-				jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_sales_price);
-			}
-		});
-
-		target_element_id = jQuery('.sales-price-fields',this).attr('id');
-
-		jQuery('.the-sale-price',this).bind('blur', target_element_id, ajax_submit_sales_price);
-
-	});
-
-	// Code for using AJAX to change the sales price ends here
-
-	// Code for using AJAX to change the SKU starts here
-	ajax_submit_sku = function(event) {
-		target_element_id= event.data;
-		form_data = jQuery("#"+target_element_id+" input").serialize();
-		//		console.log(form_data);
-		jQuery.ajax({
-			type: "POST",
-			url: "admin.php?wpsc_admin_action=modify_sku",
-			data: form_data,
-			success: function(returned_data) {
-				eval(returned_data);
-				if(success == 1) {
-					parent_container = jQuery("#"+target_element_id+"").parent('.column-SKU');
-					jQuery(".skudisplay", parent_container).html(new_price);
-				}
-				jQuery('span.skudisplay').css('display', 'inline-block');
-				jQuery('div.sku-editing-fields').css('display', 'none');
-				jQuery('form#posts-filter').unbind('submit.disable');
-			}
-		});
-		jQuery('form#posts-filter').unbind('submit.disable');
-		return false;
-	};
-
-	jQuery("table#wpsc_product_list .column-SKU").livequery(function(){
-		jQuery('span.skudisplay',this).click(function(){
-			jQuery('span.skudisplay').css('display', 'inline-block');
-			jQuery('div.sku-editing-fields').css('display', 'none');
-			jQuery(this).css('display', 'none');
-			jQuery('div.sku-editing-fields', jQuery(this).parent('.column-SKU')).css('display', 'inline-block');
-			target_element_id = jQuery('div.sku-editing-fields', jQuery(this).parent('.column-SKU')).attr('id');
-			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_sku);
-			jQuery('div.sku-editing-fields .the-sku-fields', jQuery(this).parent('.column-SKU')).focus();
-		});
-		jQuery('.the-sku-fields',this).keyup(function(event){
-			target_element_id = jQuery(jQuery(this).parent('.sku-editing-fields')).attr('id');
-			if(event.keyCode == 13) {
-				jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_sku);
-			}
-		});
-
-		target_element_id = jQuery('.sku-editing-fields',this).attr('id');
-		jQuery('.the-sku-fields',this).bind('blur', target_element_id, ajax_submit_sku);
-
-	});
-
-	// Code for using AJAX to change the SKU ends here
-
-
-
-
-
-
-	// Code for using AJAX to change the Weight starts here
-	ajax_submit_weight= function(event) {
-		target_element_id= event.data;
-		form_data = jQuery("#"+target_element_id+" input").serialize();
-		//		console.log(form_data);
-		jQuery.ajax({
-			type: "POST",
-			url: "admin.php?wpsc_admin_action=modify_weight",
-			data: form_data,
-			success: function(returned_data) {
-				eval(returned_data);
-				if(success == 1) {
-					parent_container = jQuery("#"+target_element_id+"").parent('.column-weight');
-					jQuery(".weightdisplay", parent_container).html(new_price);
-				}
-				jQuery('span.weightdisplay').css('display', 'inline-block');
-				jQuery('div.weight-editing-fields').css('display', 'none');
-				jQuery('form#posts-filter').unbind('submit.disable');
-			}
-		});
-		jQuery('form#posts-filter').unbind('submit.disable');
-		return false;
-	};
-
-	jQuery("table#wpsc_product_list .column-weight").livequery(function(){
-		jQuery('span.weightdisplay',this).click(function(){
-			jQuery('span.weightdisplay').css('display', 'inline-block');
-			jQuery('div.weight-editing-fields').css('display', 'none');
-			jQuery(this).css('display', 'none');
-			jQuery('div.weight-editing-fields', jQuery(this).parent('.column-weight')).css('display', 'inline-block');
-			target_element_id = jQuery('div.weight-editing-fields', jQuery(this).parent('.column-weight')).attr('id');
-			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_weight);
-			jQuery('div.weight-editing-fields .the-weight-fields', jQuery(this).parent('.column-weight')).focus();
-		});
-		jQuery('.the-weight-fields',this).keyup(function(event){
-			target_element_id = jQuery(jQuery(this).parent('.weight-editing-fields')).attr('id');
-			if(event.keyCode == 13) {
-				jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_weight);
-			}
-		});
-
-		target_element_id = jQuery('.weight-editing-fields',this).attr('id');
-		jQuery('.the-weight-fields',this).bind('blur', target_element_id, ajax_submit_weight);
-
-	});
-
-	// Code for using AJAX to change the Weight ends here
-
-
-
-
-
-
-	// Code for using AJAX to change the Stock Levels starts here
-	ajax_submit_stock = function(event) {
-		target_element_id= event.data;
-		form_data = jQuery("#"+target_element_id+" input").serialize();
-		//		console.log(form_data);
-		jQuery.ajax({
-			type: "POST",
-			url: "admin.php?wpsc_admin_action=modify_stock",
-			data: form_data,
-			success: function(returned_data) {
-				eval(returned_data);
-				if(success == 1) {
-					parent_container = jQuery("#"+target_element_id+"").parent('.column-stock');
-					jQuery(".stockdisplay", parent_container).html(new_price);
-				}
-				jQuery('span.stockdisplay').css('display', 'inline-block');
-				jQuery('div.stock-editing-fields').css('display', 'none');
-				jQuery('form#posts-filter').unbind('submit.disable');
-			}
-		});
-		jQuery('form#posts-filter').unbind('submit.disable');
-		return false;
-	};
-
-	jQuery("table#wpsc_product_list .column-stock").livequery(function(){
-		jQuery('span.stockdisplay',this).click(function(){
-			jQuery('span.stockdisplay').css('display', 'inline-block');
-			jQuery('div.stock-editing-fields').css('display', 'none');
-			jQuery(this).css('display', 'none');
-			jQuery('div.stock-editing-fields', jQuery(this).parent('.column-stock')).css('display', 'inline-block');
-			target_element_id = jQuery('div.stock-editing-fields', jQuery(this).parent('.column-stock')).attr('id');
-			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_stock);
-			jQuery('div.stock-editing-fields .the-stock-fields', jQuery(this).parent('.column-stock')).focus();
-		});
-		jQuery('.the-stock-fields',this).keyup(function(event){
-			target_element_id = jQuery(jQuery(this).parent('.stock-editing-fields')).attr('id');
-			if(event.keyCode == 13) {
-				jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_stock);
-			}
-		});
-
-		target_element_id = jQuery('.stock-editing-fields',this).attr('id');
-		jQuery('.the-stock-fields',this).bind('blur', target_element_id, ajax_submit_stock);
-
-	});
-
-	// Code for using AJAX to change the Stock Levels ends here
-
-
-
 
 	jQuery("div.admin_product_name a.shorttag_toggle").livequery(function(){
 		jQuery(this).toggle(
@@ -754,79 +418,6 @@ jQuery(document).ready( function () {
 		swfu.selectFiles();
 	});
 
-	jQuery('.hide-postbox-tog').livequery(function(){
-		jQuery(this).click( function() {
-			var box = jQuery(this).val();
-			if ( jQuery(this).attr('checked') ) {
-				jQuery('#' + box).show();
-				if ( jQuery.isFunction( postboxes.pbshow ) ) {
-					postboxes.pbshow( box );
-				}
-			} else {
-				jQuery('#' + box).hide();
-				if ( jQuery.isFunction( postboxes.pbhide ) ) {
-					postboxes.pbhide( box );
-				}
-			}
-		//	postboxes.save_state('products_page_wpsc-edit-products');
-		});
-	});
-	//postbox hiding
-
-	jQuery('div.metabox-prefs label input').livequery(function(){
-		jQuery(this).click(function() {
-			var hidden_val = jQuery(this).val();
-			if ( jQuery(this).is(':checked') ) {
-				var hidden =  1;
-			}
-			else {
-				var hidden = 0;
-			}
-			jQuery.post('index.php?admin=true&ajax=true', {
-				action: 'postbox-hide',
-				hidden: hidden,
-				hidden_val:  hidden_val
-			});
-		});
-	});
-
-
-	// postbox sorting
-	jQuery('div#side-sortables, div#advanced-sortables').livequery(function(){
-		jQuery(this).sortable({
-			placeholder: 'sortable-placeholder',
-			connectWith: [ '.meta-box-sortables-wpec' ],
-			items: '> .postbox',
-			handle: '.hndle',
-			distance: 2,
-			tolerance: 'pointer',
-			sort: function(e,ui) {
-				if ( jQuery(document).width() - e.clientX < 300 ) {
-					if ( ! jQuery('#post-body').hasClass('has-sidebar') ) {
-						var pos = jQuery('#side-sortables').offset();
-
-						jQuery('#side-sortables').append(ui.item)
-						jQuery(ui.placeholder).css({
-							'top':pos.top,
-							'left':pos.left
-							}).width(jQuery(ui.item).width())
-						postboxes.expandSidebar(1);
-					}
-				}
-			},
-			stop: function() {
-				var postVars = {
-					action: 'product-page-order',
-					ajax: 'true'
-				}
-				postVars["order[advanced]"] = jQuery('div#advanced-sortables').sortable( 'toArray' ).join(',');
-				postVars["order[side]"] = jQuery('div#side-sortables').sortable( 'toArray' ).join(',');
-				jQuery.post( 'index.php?admin=true&ajax=true', postVars, function() {
-					postboxes.expandSidebar();
-				} );
-			}
-		});
-	});
 
 	jQuery('a.closeimagesettings').livequery(function(){
 		jQuery(this).click( function() {
@@ -1157,19 +748,6 @@ function hideOptionElement(id, option) {
 		jQuery('#'+id).css( 'display','block');
 	}
 	prevOption = option;
-}
-
-
-function wpsc_save_postboxes_state(page, container) {
-	var closed = jQuery(container+' .postbox').filter('.closed').map(function() {
-		return this.id;
-	}).get().join(',');
-	jQuery.post('index.php?admin=true&ajax=true', {
-		action: 'closed-postboxes',
-		closed: closed,
-		closedpostboxesnonce: jQuery('#closedpostboxesnonce').val(),
-		page: page
-	});
 }
 
 

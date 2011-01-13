@@ -21,9 +21,11 @@ function wpsc_core_load_textdomain() {
 add_action( 'init', 'wpsc_core_load_textdomain' );
 
 /**
+ * 
  * wpsc_core_load_thumbnail_sizes()
  *
  * Load up the WPEC core thumbnail sizes
+ * @todo Remove hardcoded sizes
  */
 function wpsc_core_load_thumbnail_sizes() {
 	// Add image sizes for products
@@ -235,18 +237,30 @@ add_action( 'rdf_item', 'wpsc_add_product_price_to_rss' );
  */
 function wpsc_register_post_types() {
 	global $wpsc_page_titles, $wp_rewrite;
-
+        $labels = array(
+            'name' => _x( 'Products', 'wpsc-product' ),
+            'singular_name' => _x( 'Product', 'wpsc-product' ),
+            'add_new' => _x( 'Add New', 'wpsc-product' ),
+            'add_new_item' => __('Add New Product', 'wpsc-product' ),
+            'edit_item' => __('Edit Product', 'wpsc-product' ),
+            'new_item' => __('New Product', 'wpsc-product' ),
+            'view_item' => __('View Product', 'wpsc-product' ),
+            'search_items' => __('Search Products', 'wpsc-product' ),
+            'not_found' =>  __('No products found', 'wpsc-product' ),
+            'not_found_in_trash' => __( 'No products found in Trash', 'wpsc-product' ),
+            'parent_item_colon' => '',
+            'menu_name' => __( 'Products', 'wpsc-product' )
+          );
 	// Products
 	register_post_type( 'wpsc-product', array(
-		'_edit_link' => 'admin.php?page=wpsc-edit-products&amp;action=wpsc_add_edit&amp;product=%d',
 		'capability_type' => 'post',
 		'hierarchical' => true,
 		'exclude_from_search' => false,
 		'public' => true,
-		'show_ui' => false,
+		'show_ui' => true,
 		'show_in_nav_menus' => true,
-		'label' => __( 'Products' ),
-		'singular_label' => __( 'Product' ),
+                'menu_icon' => WPSC_CORE_IMAGES_URL . "/credit_cards.png",
+		'labels' => $labels,
 		'query_var' => true,
 		'register_meta_box_cb' => 'wpsc_meta_boxes',
 		'rewrite' => array(
@@ -439,7 +453,6 @@ function wpsc_taxonomy_rewrite_rules( $rewrite_rules ) {
 	global $wpsc_page_titles;
 	$products_page = $wpsc_page_titles['products'];
 	$checkout_page = $wpsc_page_titles['checkout'];
-
 	$target_string = "index.php?product";
 	$replacement_string = "index.php?post_type=wpsc-product&product";
 	$target_rule_set_query_var = 'products';
@@ -910,13 +923,7 @@ function wpsc_product_link( $permalink, $post, $leavename ) {
 	}
 	return $permalink;
 }
-
-// for wordpress 3.0
-if ( IS_WP30 == true )
 	add_filter( 'post_type_link', 'wpsc_product_link', 10, 3 );
-// for wordpress 2.9
-else	
-	add_filter( 'post_link', 'wpsc_product_link', 10, 3 );
 
 /**
  * wpsc_get_product_template function.

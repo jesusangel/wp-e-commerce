@@ -292,16 +292,16 @@ function wpsc_check_stock($state, $product) {
 	$state['state'] = false;
 	$state['messages'] = array();
 	$out_of_stock = false;
-	$is_parent = wpsc_product_has_children($product->ID);
-	if(!$is_parent){
-		$stock_count = get_product_meta($product->ID, 'stock',true);
+	$is_parent = wpsc_product_has_children( $product->ID );
+	if( !$is_parent ){
+		$stock_count = get_product_meta( $product->ID, 'stock',true );
 		// only do anything if the quantity is limited.
-		if(($stock_count === '0')) // otherwise, use the stock from the products list table
+		if( $stock_count === '0' ) // otherwise, use the stock from the products list table
 			$out_of_stock = true;
 	
-		if($out_of_stock === true) {
+		if( $out_of_stock === true ) {
 			$state['state'] = true;
-			$state['messages'][] = __('This product has no available stock', 'wpsc');
+			$state['messages'][] = __( 'This product has no available stock', 'wpsc' );
 		}
 	}else{
 		$no_stock = $wpdb->get_col('
@@ -322,14 +322,14 @@ function wpsc_check_stock($state, $product) {
 			AND
 			`pm`.`meta_value` = "0"
 	');
-		if(!empty($no_stock)){
+		if( !empty( $no_stock ) ){
 			$state['state'] = true;
 			$state['messages'][] = __('One or more of this products variations are out of stock.', 'wpsc');
 		}
 			
 
 	}
-	return array('state' => $state['state'], 'messages' => $state['messages']);
+	return array( 'state' => $state['state'], 'messages' => $state['messages'] );
 }
 
 
@@ -339,29 +339,29 @@ function wpsc_check_stock($state, $product) {
  */
 function wpsc_check_weight($state, $product) {
 	global $wpdb;
-	$custom_shipping = (array)get_option('custom_shipping_options');
+	$custom_shipping = (array)get_option( 'custom_shipping_options' );
 	$has_no_weight = false;
 	$shipping_modules = array();
-	$product_meta = get_product_meta($product->ID, 'product_metadata',true);
+	$product_meta = get_product_meta( $product->ID, 'product_metadata',true );
 	// only do anything if UPS is on and shipping is used
-	if(array_search('ups', $custom_shipping) !== false)
+	if( array_search( 'ups', $custom_shipping ) !== false )
 		$shipping_modules[] = 'UPS';
-	if(array_search('weightrate', $custom_shipping) !== false)
+	if( array_search( 'weightrate', $custom_shipping ) !== false )
 		$shipping_modules[] = 'Weight Rate';
-	if(array_search('usps', $custom_shipping) !== false)
+	if( array_search( 'usps', $custom_shipping ) !== false )
 		$shipping_modules[] = 'Weight Rate';
 	
 	
-	if($product_meta['no_shipping'] != 1 && !empty($shipping_modules)) {
-		if($product_meta['weight'] == 0) // otherwise, use the weight from the products list table
+	if( $product_meta['no_shipping'] != 1 && !empty( $shipping_modules ) ) {
+		if( $product_meta['weight'] == 0 ) // otherwise, use the weight from the products list table
 			$has_no_weight = true;
 		
-		if($has_no_weight === true) {
+		if( $has_no_weight === true ) {
 			$state['state'] = true;
-			$state['messages'][] = implode(',',$shipping_modules). __(' does not support products without a weight set. Please either disable shipping for this product or give it a weight', 'wpsc');
+			$state['messages'][] = implode( ',',$shipping_modules ). __(' does not support products without a weight set. Please either disable shipping for this product or give it a weight', 'wpsc' );
 		}
 	}
-	return array('state' => $state['state'], 'messages' => $state['messages']);
+	return array( 'state' => $state['state'], 'messages' => $state['messages'] );
 }
 
 add_filter('wpsc_product_alert', 'wpsc_check_stock', 10, 2);

@@ -236,7 +236,7 @@ class wpec_taxes_controller {
          }// if
       } else {
          $returnable = '<p>';
-         $returnable .= ( $this->wpec_taxes->wpec_taxes_get_enabled()) ? __( 'Product prices are Tax Exclusive. See <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>Settings &gt; Taxes</a>' ) :
+         $returnable .= ( $this->wpec_taxes->wpec_taxes_get_enabled()) ? __( 'Product prices are Tax Exclusive. See <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>' ) :
                __( 'Taxes are not enabled. See <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>' );
          $returnable .= '</p>';
       }// if
