@@ -61,7 +61,7 @@ function wpsc_css_header() {
         global $post_type;
 	?>
 	<style>
-	<?php if (($_GET['post_type'] == 'wpsc-product') || ($post_type == 'gallery')) : ?>
+	<?php if (($_GET['post_type'] == 'wpsc-product') || ($post_type == 'wpsc-product')) : ?>
 	#icon-edit { background:transparent url('<?php echo WPSC_CORE_IMAGES_URL.'/icon32.png';?>') no-repeat; }
 	<?php endif; ?>
         </style>
@@ -841,7 +841,7 @@ if ( !isset( $_GET["product"] ) )
 
 $uploading_iframe_ID = $_GET["product"];
 
-//Justin Sainton - 5.19.2010 - Adding filters/actions for the media goodness :) Conditions important to not kill media functionality elsewhere
+//Adding filters/actions for the media goodness :) Conditions important to not kill media functionality elsewhere
 if ( isset( $_GET["page"] ) && ($_GET["page"] == "wpsc-edit-products" ) ) {
 	add_filter( 'media_buttons_context', 'change_context' );
 	add_filter( 'image_upload_iframe_src', "change_link" );
