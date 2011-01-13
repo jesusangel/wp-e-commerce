@@ -183,7 +183,7 @@ class wpsc_merchant {
 			'base_shipping'           => $purchase_logs['base_shipping'],
 			'total_price'             => $purchase_logs['totalprice'],
 			'session_id'              => $purchase_logs['sessionid'],
-			'transaction_id'          => $purchase_logs['transaction_id'], // Transaction ID might not  be set yet
+			'transaction_id'          => $purchase_logs['transactid'], // Transaction ID might not  be set yet
 			'email_address'           => $email_address,
 			'billing_address'         => $address_data['billing'],
 			'shipping_address'        => $address_data['shipping'],
