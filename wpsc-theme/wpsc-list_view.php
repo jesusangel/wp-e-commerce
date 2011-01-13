@@ -11,7 +11,7 @@ global $wp_query, $wpdb;
 	  <?php if(wpsc_category_grid_view()) :?>
 			<div class="wpsc_categories wpsc_category_grid group">
 				<?php wpsc_start_category_query(array('category_group'=> 1, 'show_thumbnails'=> 1)); ?>
-					<a href="<?php wpsc_print_category_url();?>" class="wpsc_category_grid_item" title="<?php wpsc_print_category_name();?>">
+					<a href="<?php wpsc_print_category_url();?>" class="wpsc_category_grid_item  <?php wpsc_print_category_classes_section(); ?>" title="<?php wpsc_print_category_name();?>">
 						<?php wpsc_print_category_image(get_option('category_image_width'), get_option('category_image_height')); ?>
 					</a>
 					<?php wpsc_print_subcategory("", ""); ?>
@@ -23,7 +23,7 @@ global $wp_query, $wpdb;
 						<li>
 							<?php wpsc_print_category_image(get_option('category_image_width'), get_option('category_image_height')); ?>
 							
-							<a href="<?php wpsc_print_category_url();?>" class="wpsc_category_link"><?php wpsc_print_category_name();?></a>
+							<a href="<?php wpsc_print_category_url();?>" class="wpsc_category_link  <?php wpsc_print_category_classes_section(); ?>"><?php wpsc_print_category_name();?></a>
 							<?php if(get_option('wpsc_category_description')) :?>
 								<?php wpsc_print_category_description("<div class='wpsc_subcategory'>", "</div>"); ?>				
 							<?php endif;?>

@@ -132,7 +132,9 @@ function wpsc_print_subcategory($start_element = '', $end_element = '') {
   $wpsc_category_query['subcategory_container'] = array('start_element' => $start_element, 'end_element' =>  $end_element);
   echo "[wpsc_subcategory]";
 }
-
+function wpsc_print_category_classes_section(){
+	echo "[wpsc_category_classes]";
+}
 
 /**
 * wpsc print category image function
@@ -215,8 +217,12 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		
 		// Creates the list of classes on the category item
 		$category_classes = 'wpsc-cat-item wpsc-cat-item-' . $category_row->term_id;
-		if ( isset($wpsc_query->query_vars['category_id']) && $wpsc_query->query_vars['category_id'] == $category_row->term_id) {
-			$category_classes .= ' wpsc-current-cat';
+		if(isset($wpsc_query->query_vars['wpsc_product_category'])){
+			$currcat = get_term_by('slug',$wpsc_query->query_vars['wpsc_product_category'], 'wpsc_product_category');
+			if ( $currcat->term_id == $category_row->term_id) {
+				$category_classes .= ' wpsc-current-cat';
+			}
+
 		}
 		
 		// Set the variables for this category
