@@ -295,10 +295,11 @@ function wpsc_cats_restrict_manage_posts() {
 function wpsc_no_minors_allowed( $vars ) {
     global $current_screen;
     
-    if( $current_screen->id != 'wpsc-product' )
+    if( $current_screen->post_type != 'wpsc-product' )
         return $vars;
-    $vars['post_parent'] = 0;
 
+    $vars['post_parent'] = 0;
+    
     return $vars;
 }
 
