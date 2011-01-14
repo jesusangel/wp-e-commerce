@@ -488,7 +488,7 @@ function wpsc_the_category_title($title='', $id=''){
 		$post = get_post($id);
 		return $post->post_title;
 	}
-	if( wpsc_is_viewable_taxonomy() && 'wpsc-product' == $post->post_type && $wp_query->posts[0]->post_title == $post->post_title ){
+	if( wpsc_is_viewable_taxonomy() && 'wpsc-product' == $post->post_type && $wp_query->posts[0]->post_title == $post->post_title && $wp_query->post_count != 1){
 		remove_filter('the_title','wpsc_the_category_title');
 		$category = get_term_by('slug',$wp_query->query_vars['term'],'wpsc_product_category');
 	}
