@@ -109,10 +109,10 @@ function wpsc_price_control_forms(){
         <?php /* Lots of tedious work is avoided with this little line. */ ?>
         <input type="hidden" id="product_id" name="product_id" value="<?php echo $post->ID; ?>" />
 
-    	<?php /* Check product if a product has variations */ ?>
+    	<?php /* Check product if a product has variations (Wording doesn't make sense.  If Variations box is closed, you don't go there, and it's not necessarily "below") */ ?>
     	<?php if( wpsc_product_has_children( $post->ID ) ) : ?>
     		<?php $price = wpsc_product_variation_price_available( $product_data['id'] ); ?>
-			<p><?php printf( __( 'This Product has variations, to edit the price please use the %1s Variation Controls %2s below.' , 'wpsc' ), '<a href="#variation_control">','</a>' ); ?></p>
+			<p><?php printf( __( 'This Product has variations, to edit the price please use the %1s Variation Controls%2s below.' , 'wpsc' ), '<a href="#variation_control">','</a>' ); ?></p>
 			<p><?php printf( __( 'Price: %s and above.' ,'wpsc' ) , $price ); ?></p>
 		<?php else: ?>
 		
