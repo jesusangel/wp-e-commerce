@@ -306,55 +306,6 @@ add_filter( 'manage_edit-wpsc-product_columns', 'wpsc_additional_column_names' )
 add_filter( 'posts_orderby', 'wpsc_column_sql_orderby', 10, 2 );
 
 
-/*
-* wpsc_edit_variations_request_sql function, modifies the wp-query SQL statement for displaying variations
-* @param $sql
-* @returns string - SQL statement
-*/
-
-function wpsc_edit_variations_request_sql( $sql ) {
-		global $wpdb;
-
-		if ( is_numeric( $_GET['product'] ) ) {
-			$parent_product = absint( $_GET['product'] );
-			$product_term_data = wp_get_object_terms( $parent_product, 'wpsc-variation' );
-
-			$parent_terms = array( );
-			$child_terms = array( );
-			foreach ( $product_term_data as $product_term_row ) {
-				if ( $product_term_row->parent == 0 ) {
-					$parent_terms[] = $product_term_row->term_id;
-				} else {
-					$child_terms[] = $product_term_row->term_id;
-				}
-			}
-
-			if ( count( $parent_terms ) > 0 ) {
-				$term_count = count( $parent_terms );
-				$child_terms = implode( ", ", $child_terms );
-
-				$parent_terms = implode( ", ", $parent_terms );
-				$new_sql = "SELECT posts.*, COUNT(tr.object_id) AS `count`
-			FROM {$wpdb->term_relationships} AS tr
-			INNER JOIN {$wpdb->posts} AS posts
-			ON posts.ID = tr.object_id
-			INNER JOIN {$wpdb->term_taxonomy} AS tt
-			ON tr.term_taxonomy_id = tt.term_taxonomy_id
-			WHERE tt.taxonomy IN ('wpsc-variation')
-			AND tt.parent IN ({$parent_terms})
-			AND tt.term_id IN ({$child_terms})
-			AND posts.post_parent = {$parent_product}
-			
-			GROUP BY tr.object_id
-			HAVING `count` = {$term_count}";
-				return $new_sql;
-			}
-		}
-
-
-		return $sql;
-	}
-
 /**
  * wpsc_update_featured_products function.
  *

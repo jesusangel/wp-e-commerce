@@ -406,8 +406,6 @@ function wpsc_product_variation_forms() {
 		$image_data                   = (array)get_posts( $args );
 		$parent_product_data['image'] = array_shift( $image_data );
 
-		add_filter( 'posts_request', 'wpsc_edit_variations_request_sql' );
-
 		$wp_query = new WP_Query( $query );
 		if ( !isset( $parent_product_data ) )
 			$parent_product_data = null;
