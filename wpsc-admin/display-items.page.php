@@ -82,6 +82,7 @@ function wpsc_additional_column_name_variations( $columns ){
 
     return apply_filters( 'wpsc_variation_column_headers', $columns);
 }
+
 /**
  * wpsc_additional_column_data.
  *
@@ -292,8 +293,8 @@ function wpsc_cats_restrict_manage_posts() {
  * @since 3.8
  */
 function wpsc_no_minors_allowed( $vars ) {
- $vars['post_parent'] = 0;
- return $vars;
+    $vars['post_parent'] = 0;
+    return $vars;
 }
 
 add_filter( 'request', 'wpsc_no_minors_allowed' );
