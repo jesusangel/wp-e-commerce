@@ -217,14 +217,17 @@ endif;
 	<?php endif; ?>
 
 	<?php if ( wpsc_show_user_login_form() && !is_user_logged_in() ): ?>
-			<p><?php _e('In order to buy from us, you\'ll need an account. Joining is free and easy. All you need is a username, password and valid email address.');?></p>
+			<p><?php _e('You must sign in or register with us to continue with your purchase');?></p>
 			<div class="wpsc_registration_form">
-				<h2><?php _e( 'Sign in' ); ?></h2>
+				
 				<fieldset class='wpsc_registration_form'>
+					<h2><?php _e( 'Sign in' ); ?></h2>
+					
 					<?php
 					$args = array( 'remember' => false );
 					wp_login_form( $args );
 					?>
+					<div class="wpsc_signup_text"><?php _e('If you have bought from us before please sign in here to purchase');?></div>
 				</fieldset>
 			</div>
 	<?php endif; ?>	
@@ -241,9 +244,10 @@ endif;
           get_currentuserinfo();   ?>
 
 		<div class="wpsc_registration_form">
-			<h2><?php _e('Join up now');?></h2>
+			
 	        <fieldset class='wpsc_registration_form wpsc_right_registration'>
-	            
+	        	<h2><?php _e('Join up now');?></h2>
+	      
 				<label><?php _e('Username'); ?>:</label>
 				<input type="text" name="log" id="log" value="" size="20"/><br/>
 				
@@ -253,7 +257,9 @@ endif;
 				<label><?php _e('E-mail'); ?>:</label>
 	            <input type="text" name="user_email" id="user_email" value="<?php echo attribute_escape(stripslashes($user_email)); ?>" size="20" /><br />
 	            
+	            <div class="wpsc_signup_text"><?php _e('Signing up is free and easy! please fill out your details your registration will happen automatically as you checkout. Don\'t forget to use your details to login with next time!');?></div>
 	        </fieldset>
+	        
         </div>
         <div class="clear"></div>
    <?php endif; // closes user login form

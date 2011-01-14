@@ -1233,6 +1233,7 @@ background-color: #f5f5f5;
 .wpsc_registration_form label {
 	width:100px;
 	display: inline-table;
+	margin-bottom: 10px;
 }
 
 .wpsc_registration_form fieldset {
@@ -1250,6 +1251,12 @@ background-color: #f5f5f5;
 	border-left-color: #E7E7E7;
 	border-left-width: 2px;
 	padding-left: 20px;
+}
+
+.wpsc_signup_text {
+	padding-top: 15px;
+	font-size: 12px;
+
 }
 
 .clear{

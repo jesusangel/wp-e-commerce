@@ -212,15 +212,6 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
 	}
 	do_action('wpsc_edit_product', $product_id);
 	wpsc_ping();
-	} else {
-		$_SESSION['product_error_messages'] = array();	
-		if($post_data['title'] == ''){
-			$_SESSION['product_error_messages'][] = __('<strong>ERROR</strong>: Please enter a Product name.<br />');
-		}
-		if(!isset($post_data['category'])){
-			$_SESSION['product_error_messages'][] = __('<strong>ERROR</strong>: Please enter a Product Category.<br />');
-		}
-		$_SESSION['wpsc_failed_product_post_data'] = $post_data;
 	}
 	return $product_id;
 }
