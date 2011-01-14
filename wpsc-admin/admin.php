@@ -104,8 +104,9 @@ function wpsc_admin_pages() {
 		do_action( 'wpsc_add_submenu' );
 	};
 
-        // Include the javascript and CSS for this page
+	// Include the javascript and CSS for this page
 	// This is so important that I can't even express it in one line
+
 	foreach ( $page_hooks as $page_hook ) {
 		add_action( 'load-' . $page_hook, 'wpsc_admin_include_css_and_js_refac' );
 
@@ -225,12 +226,11 @@ function wpsc_admin_include_css_and_js_refac( $pagehook )  {
 		$siteurl = str_replace( "http://", "https://", $siteurl );
 
 	wp_admin_css( 'dashboard' );
-	//wp_admin_css( 'media' );
 
 	$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
         $pages = array( 'index.php', 'options-general.php', 'edit.php', 'post.php', 'post-new.php' );
 
-          if ( ( in_array( $pagehook, $pages ) && $post_type == 'wpsc-product' )  || $current_screen->id == 'dashboard_page_wpsc-sales-logs' || $current_screen->id == 'settings_page_wpsc-settings') {
+          if ( ( in_array( $pagehook, $pages ) && $post_type == 'wpsc-product' )  || $current_screen->id == 'dashboard_page_wpsc-sales-logs' || $current_screen->id == 'settings_page_wpsc-settings' || $current_screen->id == 'wpsc-product_page_wpsc-edit-coupons') {
             wp_enqueue_script( 'livequery',                      WPSC_URL . '/wpsc-admin/js/jquery.livequery.js',             array( 'jquery' ), '1.0.3' );
             wp_enqueue_script( 'wp-e-commerce-admin-parameters', $siteurl . '/wp-admin/admin.php?wpsc_admin_dynamic_js=true', false,             $version_identifier );
             wp_enqueue_script( 'wp-e-commerce-admin',            WPSC_URL . '/wpsc-admin/js/admin.js',                        array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $version_identifier, false );
