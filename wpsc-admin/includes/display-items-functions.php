@@ -452,7 +452,8 @@ function wpsc_product_variation_forms() {
             wpsc_admin_product_listing_nai();
 
             endif;
-        endif; ?>
+        endif;
+        ?>
 
 <?php
 }

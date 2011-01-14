@@ -293,7 +293,12 @@ function wpsc_cats_restrict_manage_posts() {
  * @since 3.8
  */
 function wpsc_no_minors_allowed( $vars ) {
+    global $current_screen;
+    
+    if( $current_screen->id != 'wpsc-product' )
+        return $vars;
     $vars['post_parent'] = 0;
+
     return $vars;
 }
 
