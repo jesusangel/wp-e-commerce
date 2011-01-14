@@ -129,7 +129,7 @@ function wpsc_additional_column_data( $column ) {
 
                 if( $is_parent ) :
                     _e( 'N/A', 'wpsc' );
-		else :
+				else :
                     $product_data['meta'] = array();
                     $product_data['meta'] = get_post_meta( $post->ID, '' );
                     foreach( $product_data['meta'] as $meta_name => $meta_value )
@@ -286,6 +286,17 @@ function wpsc_cats_restrict_manage_posts() {
     }
 }
 
+/**
+ * wpsc no minors allowed
+ * Restrict the products page to showing only parent products and not variations.
+ * @since 3.8
+ */
+function wpsc_no_minors_allowed( $vars ) {
+ $vars['post_parent'] = 0;
+ return $vars;
+}
+
+add_filter( 'request', 'wpsc_no_minors_allowed' );
 add_action( 'admin_head', 'wpsc_additional_column_name_variations' );
 add_action( 'restrict_manage_posts', 'wpsc_cats_restrict_manage_posts' );
 add_action( 'manage_pages_custom_column', 'wpsc_additional_column_data', 10, 2 );
