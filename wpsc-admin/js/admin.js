@@ -274,19 +274,22 @@ jQuery(document).ready( function () {
 		});
 
 	});
-	// this makes the product list table sortable
-	jQuery('table.widefat').sortable({
+
+        if( dragndrop.set == "true" && typenow == "wpsc-product" ) {
+            // this makes the product list table sortable
+            jQuery('table.widefat').sortable({
 		update: function(event, ui) {
-			category_id = jQuery('input#products_page_category_id').val();
+			category_id = jQuery('select#wpsc_product_category option:selected').val();
 			product_order = jQuery('table.widefat').sortable( 'serialize' );
 			post_values = "category_id="+category_id+"&"+product_order;
 			jQuery.post( 'index.php?wpsc_admin_action=save_product_order', post_values, function(returned_data) { });
 		},
-		items: 'tr.product-edit',
+		items: 'tr',
 		axis: 'y',
-		containment: 'table#wpsc_product_list',
+		containment: 'table.widefat',
 		placeholder: 'product-placeholder'
-	});
+            });
+	}
 
 	jQuery('table#wpsc_checkout_list').livequery(function(event){
 		//this makes the checkout form fields sortable

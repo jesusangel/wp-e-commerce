@@ -239,6 +239,7 @@ function wpsc_admin_include_css_and_js_refac( $pagehook )  {
             wp_enqueue_script('inline-edit-post');
             wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
             wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl . "/wp-admin/admin.php?wpsc_admin_dynamic_css=true", false, $version_identifier, 'all' );
+            wp_localize_script( 'wp-e-commerce-admin', 'dragndrop', array( 'set' => ( get_option( 'wpsc_sort_by' ) == 'dragndrop' ? 'true' : 'false' ) ) );
         }
         // Prototype breaks dragging and dropping, I need it gone
 	wp_deregister_script( 'prototype' );
