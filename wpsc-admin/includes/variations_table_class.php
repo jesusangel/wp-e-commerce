@@ -693,6 +693,31 @@ class WPEC_Variations_List_Table extends WP_List_Table {
 				<span class="input-text-wrap"><input type="text" name="post_title" class="ptitle" value="" /></span>
 			</label>
 
+			<label>
+				<span class="title"><?php _e( 'Weight' ); ?></span>
+				<span class="input-text-wrap"><input type="text" name="weight" class="ptitle" value="" /></span>
+			</label>
+
+			<label>
+				<span class="title"><?php _e( 'Stock' ); ?></span>
+				<span class="input-text-wrap"><input type="text" name="weight" class="ptitle" value="" /></span>
+			</label>
+
+			<label>
+				<span class="title"><?php _e( 'Price' ); ?></span>
+				<span class="input-text-wrap"><input type="text" name="weight" class="ptitle" value="" /></span>
+			</label>
+
+			<label>
+				<span class="title"><?php _e( 'Sale Price' ); ?></span>
+				<span class="input-text-wrap"><input type="text" name="weight" class="ptitle" value="" /></span>
+			</label>
+
+			<label>
+				<span class="title"><?php _e( 'SKU' ); ?></span>
+				<span class="input-text-wrap"><input type="text" name="weight" class="ptitle" value="" /></span>
+			</label>
+
 
 	<?php endif; // $bulk
 	endif; // post_type_supports title 

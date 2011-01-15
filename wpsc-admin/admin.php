@@ -200,14 +200,14 @@ function wpsc_meta_boxes() {
 
 	$pagename = 'wpsc-product';
         remove_meta_box( 'wpsc-variationdiv', 'wpsc-product', 'core' );
-	add_meta_box( 'wpsc_price_control_forms','Price Control','wpsc_price_control_forms',$pagename,'normal','high' );
-	add_meta_box( 'wpsc_stock_control_forms','Stock Control','wpsc_stock_control_forms',$pagename,'normal','high' );
-	add_meta_box( 'wpsc_product_taxes_forms','Taxes','wpsc_product_taxes_forms',$pagename,'normal','high' );
+	add_meta_box( 'wpsc_price_control_forms','Price Control','wpsc_price_control_forms',$pagename,'side','low' );
+	add_meta_box( 'wpsc_stock_control_forms','Stock Control','wpsc_stock_control_forms',$pagename,'side','low' );
+	add_meta_box( 'wpsc_product_taxes_forms','Taxes','wpsc_product_taxes_forms',$pagename,'side','low' );
+	add_meta_box( 'wpsc_additional_desc', 'Additional Description', 'wpsc_additional_desc', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_variation_forms', 'Variations', 'wpsc_product_variation_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_download_forms', 'Product Download', 'wpsc_product_download_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_image_forms', 'Product Images', 'wpsc_product_image_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_shipping_forms', 'Shipping', 'wpsc_product_shipping_forms', $pagename, 'normal', 'high' );
-	add_meta_box( 'wpsc_additional_desc', 'Additional Description', 'wpsc_additional_desc', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_advanced_forms', 'Advanced Settings', 'wpsc_product_advanced_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_external_link_forms', 'Off Site Product link', 'wpsc_product_external_link_forms', $pagename, 'normal', 'high' );
 }
