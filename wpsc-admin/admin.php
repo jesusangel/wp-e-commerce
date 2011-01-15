@@ -260,12 +260,12 @@ function wpsc_admin_dynamic_js() {
 	$unique_names1 = get_option( 'wpsc_checkout_unique_names' ); 
 	
 	$form_types = '';
-	foreach ( $form_types1 as $form_type ) {
+	foreach ( (array)$form_types1 as $form_type ) {
 		$form_types .= "<option value='" . $form_type . "'>" . __( $form_type, 'wpsc' ) . "</option>";
 	}
 
 	$unique_names = "<option value='-1'>Select a Unique Name</option>";
-	foreach ( $unique_names1 as $unique_name ) {
+	foreach ( (array)$unique_names1 as $unique_name ) {
 		$unique_names.= "<option value='" . $unique_name . "'>" . $unique_name . "</option>";
 	}
 
