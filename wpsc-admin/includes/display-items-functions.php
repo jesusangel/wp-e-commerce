@@ -1072,4 +1072,111 @@ function edit_multiple_image_gallery( $product_data ) {
 			echo get_the_post_thumbnail( $post->ID, 'admin-product-thumbnails' );
 	}
 }
+
+/**
+* wpsc_save_quickedit_box function
+* Saves input for the various meta in the quick edit boxes
+*
+* @todo UI
+* @todo Data validation / sanitization / security
+* @todo AJAX should probably return weight unit
+* @return $post_id (int) Post ID
+*/
+
+function wpsc_save_quickedit_box( $post_id ) {
+
+    if( !defined( 'DOING_AJAX' ) )
+        return;
+
+    $is_parent = ( bool )wpsc_product_has_children( $post_id );
+    $product_meta = get_post_meta( $post_id, '_wpsc_product_metadata', true );
+    $weight_unit = $product_meta["weight_unit"];
+    $weight = wpsc_convert_weight( $_POST["weight"], $weight_unit, "gram" );
+
+    if( isset( $product_meta["weight"] ) )
+        unset($product_meta["weight"]);
+
+    $product_meta["weight"] = $weight;
+
+    if( !$is_parent ) {
+        update_post_meta( $post_id, '_wpsc_product_metadata', $product_meta );
+        update_post_meta( $post_id, '_wpsc_stock', $_POST['stock'] );
+        update_post_meta( $post_id, '_wpsc_price', $_POST['price'] );
+        update_post_meta( $post_id, '_wpsc_special_price', $_POST['sale_price'] );
+    }
+        update_post_meta( $post_id, '_wpsc_sku', $_POST['sku'] );
+
+    return $post_id;
+}
+
+/**
+* wpsc_quick_edit_boxes function
+* Creates inputs for the various meta in the quick edit boxes.
+*
+ * @todo UI
+ * @internal Tried accessing post_id in here to do the is_parent/variation thing - no luck :(
+*/
+
+function wpsc_quick_edit_boxes( $col_name, $type ) {
+ 
+    if( $type != 'wpsc-product' )
+        return;
+    ?>
+
+<fieldset class="inline-edit-col-left wpsc-cols">
+    <div class="inline-edit-col">
+        <div class="inline-edit-group">
+            <?php
+                switch ( $col_name ) :
+                case 'SKU' :
+            ?>
+            <label class="alignleft">
+                <span class="checkbox-title">SKU: </span>
+                <input type="text" name="sku" id="wpsc_ie_sku">
+            </label>
+            <?php
+                break;
+                case 'weight' :
+            ?>
+            <label class="alignleft">
+                <span class="checkbox-title">Weight: </span>
+                <input type="text" name="weight" id="wpsc_ie_weight">
+            </label>
+            <?php
+                break;
+                case 'stock' :
+            ?>
+            <label class="alignleft">
+                <span class="checkbox-title">Stock: </span>
+                <input type="text" name="stock" id="wpsc_ie_stock">
+            </label>
+            <?php
+                break;
+                case 'price' :
+            ?>
+            <label class="alignleft">
+                <span class="checkbox-title">Price: </span>
+                <input type="text" name="price" id="wpsc_ie_price">
+            </label>
+            <?php
+                break;
+                case 'sale_price' :
+            ?>
+            <label class="alignleft">
+                <span class="checkbox-title">Sale Price: </span>
+                <input type="text" name="sale_price" id="wpsc_ie_sale_price">
+            </label>
+            <?php
+                break;
+            endswitch;
+            ?>
+         </div>
+    </div>
+</fieldset>
+<?php
+}
+
+add_action( 'quick_edit_custom_box', 'wpsc_quick_edit_boxes', 10, 2 );
+add_action( 'save_post', 'wpsc_save_quickedit_box' );
+
 ?>

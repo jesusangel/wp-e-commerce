@@ -275,6 +275,37 @@ jQuery(document).ready( function () {
 
 	});
 
+      //Added for inline editing capabilities
+     jQuery('a.editinline').live('click', function() {
+        var id = inlineEditPost.getId(this);
+
+        var val_weight = jQuery('#inline_' + id + '_weight').text();
+        jQuery('input#wpsc_ie_weight').val(val_weight);
+
+        var val_sku = jQuery('#inline_' + id + '_sku').text();
+        jQuery('input#wpsc_ie_sku').val(val_sku);
+
+        var val_price = jQuery('#inline_' + id + '_price').text();
+        jQuery('input#wpsc_ie_price').val(val_price);
+
+        var val_sale_price = jQuery('#inline_' + id + '_sale_price').text();
+        jQuery('input#wpsc_ie_sale_price').val(val_sale_price);
+
+        var val_stock = jQuery('#inline_' + id + '_stock').text();
+        jQuery('input#wpsc_ie_stock').val(val_stock);
+
+    });
+
+    //As far as I can tell, WP provides no good way of unsetting elements in the bulk edit area...tricky jQuery action will do for now....not ideal whatsoever, nor eternally stable.
+    //@todo If this is the best way to do this, we should really use wp_localize_script to localize the strings.
+    jQuery('fieldset.inline-edit-col-left .inline-edit-date').css('display','none');
+    jQuery('fieldset.inline-edit-col-center span.title:eq(1), ul.cat-checklist:eq(1)').css('display','none');
+    jQuery("label:contains('Date')").css('display', 'none');
+    jQuery(".inline-edit-group:contains('Password')").css('display', 'none');
+    jQuery('fieldset.inline-edit-col-left.wpsc-cols').css({'float': 'right', 'clear' : 'right'});
+    jQuery("label:contains('Parent')").css('display', 'none');
+    jQuery("label:contains('Status')").css('display', 'none');
+    
         if( dragndrop.set == "true" && typenow == "wpsc-product" ) {
             // this makes the product list table sortable
             jQuery('table.widefat').sortable({
@@ -287,7 +318,9 @@ jQuery(document).ready( function () {
 		items: 'tr',
 		axis: 'y',
 		containment: 'table.widefat',
-		placeholder: 'product-placeholder'
+		placeholder: 'product-placeholder',
+                cursor: 'move',
+                cancel: 'tr.inline-edit-wpsc-product'
             });
 	}
 

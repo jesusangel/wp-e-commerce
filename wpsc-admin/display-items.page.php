@@ -166,29 +166,36 @@ function wpsc_additional_column_data( $column ) {
 					break;
 			}
                         echo $weight.$unit;
+                        echo '<div id="inline_' . $post->ID . '_weight" class="hidden">' . $weight . '</div>';
+
                   endif;
                 break;
             case 'stock' :
                 $stock = get_post_meta( $post->ID, '_wpsc_stock', true );
                     if( $stock == '' )
                         $stock = 'N/A';
-                    if( !$is_parent )
+                    if( !$is_parent ) {
                         echo $stock;
+                        echo '<div id="inline_' . $post->ID . '_stock" class="hidden">' . $stock . '</div>';
+                    }
                     else
                         echo '~'.wpsc_variations_stock_remaining( $post->ID );
                  break;
             case 'price' :
                 $price = get_post_meta( $post->ID, '_wpsc_price', true );
-                if( !$is_parent )
+                if( !$is_parent ) {
                     echo wpsc_currency_display( $price );
+                    echo '<div id="inline_' . $post->ID . '_price" class="hidden">' . $price . '</div>';
+                }
                 else
                     echo wpsc_product_variation_price_available( $post->ID ).'+';
                 break;
             case 'sale_price' :
                 $price = get_post_meta( $post->ID, '_wpsc_special_price', true );
-                if( !$is_parent )
+                if( !$is_parent ) {
                     echo wpsc_currency_display( $price );
-                else
+                    echo '<div id="inline_' . $post->ID . '_sale_price" class="hidden">' . $price . '</div>';
+                } else
                     echo wpsc_product_variation_price_available( $post->ID ).'+';
                 break;
             case 'SKU' :
@@ -196,8 +203,8 @@ function wpsc_additional_column_data( $column ) {
                     if( $sku == '' )
                         $sku = 'N/A';
 
-                    if( $is_parent )
-                        echo $sku;
+                    echo $sku;
+                    echo '<div id="inline_' . $post->ID . '_sku" class="hidden">' . $sku . '</div>';
                break;
             case 'cats' :
                 $categories = get_the_product_category( $post->ID );

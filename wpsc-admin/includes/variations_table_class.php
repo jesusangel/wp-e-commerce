@@ -485,22 +485,20 @@ class WPEC_Variations_List_Table extends WP_List_Table {
 			if($sku == ''){
 				$sku = 'N/A';
 			}
-		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
 				<td  <?php echo $attributes ?>>
 					<span class="skudisplay"><?php echo $sku; ?></span>
-
+                                        <?php echo '<div id="inline_' . $post->ID . '_sku" class="hidden">' . $sku . '</div>'; ?>
 				</td>
 			<?php
 		break;
 		case 'sale_price':
 
 			$price = get_post_meta($product->ID, '_wpsc_special_price', true);
-		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
 				<td  <?php echo $attributes ?>>
 					<?php echo wpsc_currency_display( $price ); ?>
-
+                                        <?php echo '<div id="inline_' . $post->ID . '_sale_price" class="hidden">' . $price . '</div>'; ?>
 				</td>
 			<?php
 
@@ -536,7 +534,7 @@ class WPEC_Variations_List_Table extends WP_List_Table {
 				<?php
 
 
-		     }else{
+		     } else {
 		      	$image_url = WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif";
 				?>
 					<img title='Drag to a new position' src='<?php echo $image_url; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
@@ -549,15 +547,14 @@ class WPEC_Variations_List_Table extends WP_List_Table {
 			</td>
 			<?php
 		break;
-
-
-
+                
 		case 'price':  /* !price case */
 
 			$price = get_post_meta($product->ID, '_wpsc_price', true);
 			?>
 				<td  <?php echo $attributes ?>>
 					<?php echo wpsc_currency_display( $price ); ?>
+                                        <?php echo '<div id="inline_' . $post->ID . '_price" class="hidden">' . $price . '</div>'; ?>
 				</td>
 			<?php
 		break;
@@ -598,6 +595,7 @@ class WPEC_Variations_List_Table extends WP_List_Table {
 			?>
 				<td  <?php echo $attributes ?>>
 					<span class="weightdisplay"><?php echo $weight; ?></span>
+                                        <?php echo '<div id="inline_' . $post->ID . '_weight" class="hidden">' . $weight . '</div>'; ?>
 				</td>
 			<?php
 
@@ -611,7 +609,7 @@ class WPEC_Variations_List_Table extends WP_List_Table {
 			?>
 				<td  <?php echo $attributes ?>>
 					<span class="stockdisplay"><?php echo $stock; ?></span>
-
+                                        <?php echo '<div id="inline_' . $post->ID . '_stock" class="hidden">' . $stock . '</div>'; ?>
 				</td>
 	<?php
 		break;
@@ -692,32 +690,6 @@ class WPEC_Variations_List_Table extends WP_List_Table {
 				<span class="title"><?php _e( 'Title' ); ?></span>
 				<span class="input-text-wrap"><input type="text" name="post_title" class="ptitle" value="" /></span>
 			</label>
-
-			<label>
-				<span class="title"><?php _e( 'Weight' ); ?></span>
-				<span class="input-text-wrap"><input type="text" name="weight" class="ptitle" value="" /></span>
-			</label>
-
-			<label>
-				<span class="title"><?php _e( 'Stock' ); ?></span>
-				<span class="input-text-wrap"><input type="text" name="weight" class="ptitle" value="" /></span>
-			</label>
-
-			<label>
-				<span class="title"><?php _e( 'Price' ); ?></span>
-				<span class="input-text-wrap"><input type="text" name="weight" class="ptitle" value="" /></span>
-			</label>
-
-			<label>
-				<span class="title"><?php _e( 'Sale Price' ); ?></span>
-				<span class="input-text-wrap"><input type="text" name="weight" class="ptitle" value="" /></span>
-			</label>
-
-			<label>
-				<span class="title"><?php _e( 'SKU' ); ?></span>
-				<span class="input-text-wrap"><input type="text" name="weight" class="ptitle" value="" /></span>
-			</label>
-
 
 	<?php endif; // $bulk
 	endif; // post_type_supports title 
