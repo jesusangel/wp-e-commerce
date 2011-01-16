@@ -45,7 +45,7 @@ class wpec_taxes_controller {
       global $wpsc_cart;
 
       //initialize return variable
-      $returnable = 0;
+      $returnable = array( 'total' => 0, 'rate' => 0);
 
       //check if tax is enabled
       if ( $this->wpec_taxes->wpec_taxes_get_enabled() ) {
