@@ -230,7 +230,7 @@ function wpsc_additional_column_data( $column ) {
         <?php
                 break;
             case 'hidden_alerts' :
-                $product_alert = apply_filters( 'wpsc_product_alert', array( false, '' ), $product );
+                $product_alert = apply_filters( 'wpsc_product_alert', array( false, '' ), $post );
                     if( !empty( $product_alert['messages'] ) )
                         $product_alert['messages'] = implode( "\n",( array )$product_alert['messages'] );
 

@@ -343,6 +343,7 @@ function wpsc_check_weight($state, $product) {
 	$has_no_weight = false;
 	$shipping_modules = array();
 	$product_meta = get_product_meta( $product->ID, 'product_metadata',true );
+	if(wpsc_product_has_children($product->ID)) return $state;
 	// only do anything if UPS is on and shipping is used
 	if( array_search( 'ups', $custom_shipping ) !== false )
 		$shipping_modules[] = 'UPS';
@@ -350,7 +351,6 @@ function wpsc_check_weight($state, $product) {
 		$shipping_modules[] = 'Weight Rate';
 	if( array_search( 'usps', $custom_shipping ) !== false )
 		$shipping_modules[] = 'Weight Rate';
-	
 	
 	if( $product_meta['no_shipping'] != 1 && !empty( $shipping_modules ) ) {
 		if( $product_meta['weight'] == 0 ) // otherwise, use the weight from the products list table
