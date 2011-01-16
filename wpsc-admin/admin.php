@@ -110,7 +110,7 @@ function wpsc_admin_pages() {
 	foreach ( $page_hooks as $page_hook ) {
 		add_action( 'load-' . $page_hook, 'wpsc_admin_include_css_and_js_refac' );
 
-                switch ( $page_hook ) {
+        switch ( $page_hook ) {
 
 			case $edit_options_page :
 				add_action( 'load-' . $page_hook, 'wpsc_admin_include_optionspage_css_and_js' );
@@ -220,7 +220,6 @@ add_action( 'admin_enqueue_scripts', 'wpsc_admin_include_css_and_js_refac' );
 function wpsc_admin_include_css_and_js_refac( $pagehook )  {
 
       global $post_type, $current_screen;
-      
 	$siteurl = get_option( 'siteurl' );
 	if ( is_ssl ( ) )
 		$siteurl = str_replace( "http://", "https://", $siteurl );
@@ -241,6 +240,8 @@ function wpsc_admin_include_css_and_js_refac( $pagehook )  {
             wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl . "/wp-admin/admin.php?wpsc_admin_dynamic_css=true", false, $version_identifier, 'all' );
             wp_localize_script( 'wp-e-commerce-admin', 'dragndrop', array( 'set' => ( get_option( 'wpsc_sort_by' ) == 'dragndrop' ? 'true' : 'false' ) ) );
         }
+        if('dashboard_page_wpsc-upgrades' == $pagehook)
+       		wp_enqueue_style( 'wp-e-commerce-admin',	WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
         // Prototype breaks dragging and dropping, I need it gone
 	wp_deregister_script( 'prototype' );
 

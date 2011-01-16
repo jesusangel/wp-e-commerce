@@ -1050,13 +1050,16 @@ function wpsc_filter_delete_text($translation, $text, $domain){
 	}
 	return $translation;
 }
-function edit_multiple_image_gallery( $product_data ) {
+function edit_multiple_image_gallery( $post ) {
 	global $wpdb;
 //Not sure when this was added, but this is ONLY going to show the product thumbnail, one image, not all the images, in the product
 //images metabox...is that what we want?
 	$siteurl = get_option( 'siteurl' );
-
+	
 	if ( $post->ID > 0 ) {
+		if ( has_post_thumbnail( $post->ID ) )
+			echo get_the_post_thumbnail( $post->ID, 'admin-product-thumbnails' );
+	
 		$args = array(
 			'post_type' => 'attachment',
 			'numberposts' => -1,
@@ -1067,9 +1070,14 @@ function edit_multiple_image_gallery( $product_data ) {
 		);
 
 		$attached_images = (array)get_posts( $args );
-
-		if ( has_post_thumbnail( $post->ID ) )
-			echo get_the_post_thumbnail( $post->ID, 'admin-product-thumbnails' );
+		
+		if(count($attached_images) > 0){
+			foreach($attached_images as $images){
+				$attached_image = wp_get_attachment_image( $images->ID, 'admin-product-thumbnails' );
+				echo $attached_image. '&nbsp;';
+			}
+		}
+		
 	}
 }
 
