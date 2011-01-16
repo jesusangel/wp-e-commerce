@@ -871,8 +871,9 @@ class wpsc_checkout {
 				$changes_saved = true;
 			}
 		}
-
-		return array( 'is_valid' => !$any_bad_inputs, 'error_messages' => $bad_input_message );
+		$states = array( 'is_valid' => !$any_bad_inputs, 'error_messages' => $bad_input_message );
+		$states = do_action('wpsc_checkout_form_validation', $states);
+		return $states;
 	}
 
 	/**
