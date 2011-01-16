@@ -114,15 +114,19 @@ If you want to change the look of your site, select the files you want to edit f
 				<p><?php
 					wp_nonce_field('wpsc_copy_themes');
 					?>
-					<input type='submit' value='Move Template Files' class="button" name='wpsc_move_themes' />
-					
-					<?php 
-					printf( __( '<a href="%s" class="button preview">Backup Your WordPress Theme</a>', 'wpsc' ), wp_nonce_url( 'admin.php?wpsc_admin_action=backup_themes', 'backup_themes' ) ); ?>				<br style="clear:both" />
-					
+					<input type='submit' value='Move Template Files &rarr;' class="button" name='wpsc_move_themes' />
 				</p>
+				 <p><?php _e('You can create a copy of your WordPress Theme by clicking the backup button bellow. Once copied you can find them here:' ,'wpsc'); ?></p>				
+				<p class="howto"> /wp-content/uploads/wpsc/theme_backup/ </p>
+				<p>
+					<?php 
+					printf( __( '<a href="%s" class="button">Backup Your WordPress Theme</a>', 'wpsc' ), wp_nonce_url( 'admin.php?wpsc_admin_action=backup_themes', 'backup_themes' ) ); ?>				
+					<br style="clear:both" />
+				</p>
+
 				<br style="clear:both" />
 				 <p><?php _e('If you have moved your files in some other way i.e FTP, you may need to click the Flush Theme Cache. This will refresh the locations WordPress looks for your templates.' ,'wpsc'); ?></p>
-				<p><?php printf( __( '<a href="%s" class="button preview">Flush Theme Cache</a>', 'wpsc' ), wp_nonce_url( 'admin.php?wpsc_flush_theme_transients=true', 'wpsc_flush_theme_transients' ) ); ?></p>
+				<p><?php printf( __( '<a href="%s" class="button">Flush Theme Cache</a>', 'wpsc' ), wp_nonce_url( 'admin.php?wpsc_flush_theme_transients=true', 'wpsc_flush_theme_transients' ) ); ?></p>
 				<br style="clear:both" />
 				<br style="clear:both" />
 				</div>
