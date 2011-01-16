@@ -211,7 +211,7 @@ function wpsc_additional_column_data( $column ) {
                     if ( !empty( $categories ) ) {
                         $out = array();
                         foreach ( $categories as $c )
-                            $out[] = "<a href='admin.php?page=wpsc-edit-products&amp;category={$c->slug}'> " . esc_html( sanitize_term_field( 'name', $c->name, $c->term_id, 'category', 'display' ) ) . "</a>";
+                            $out[] = "<a href='?post_type=wpsc-product&amp;wpsc_product_category={$c->slug}'> " . esc_html( sanitize_term_field( 'name', $c->name, $c->term_id, 'category', 'display' ) ) . "</a>";
                             echo join( ', ', $out );
 			} else {
                             _e('Uncategorized');
