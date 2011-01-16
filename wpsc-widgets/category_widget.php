@@ -94,6 +94,7 @@ class WP_Widget_Product_Categories extends WP_Widget {
 		$instance['grid']       = $new_instance['grid'] ? 1 : 0;
 		$instance['height']     = (int)$new_instance['height'];
 		$instance['width']      = (int)$new_instance['width'];
+		$instance['show_name']	= (bool)$new_instance['show_name'];	
 		return $instance;
 
 	}
@@ -119,7 +120,9 @@ class WP_Widget_Product_Categories extends WP_Widget {
 		$image    = (bool) $instance['image'];
 		$width    = (int) $instance['width'];
 		$height   = (int) $instance['height'];
-		$grid     = (bool) $instance['grid']; ?>
+		$grid     = (bool) $instance['grid'];
+		$show_name= (bool) $instance['show_name'];	
+		 ?>
 
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:' ); ?></label>
@@ -140,6 +143,10 @@ class WP_Widget_Product_Categories extends WP_Widget {
 		</p>
 
 		<div class="wpsc_category_image"<?php if( !checked( $image ) ) { echo ' style="display:none;"'; } ?>>
+			<p>
+				
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('show_name'); ?>" name="<?php echo $this->get_field_name('show_name'); ?>"<?php checked( $show_name ); ?> /><label for="<?php echo $this->get_field_id('show_name'); ?>"><?php _e(' Show Category Name when no Image Available', 'wpsc'); ?></label>
+			</p>
 			<p>
 				<label for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Width:', 'wpsc'); ?></label>
 				<input type="text" id="<?php echo $this->get_field_id('width'); ?>" name="<?php echo $this->get_field_name('width'); ?>" value="<?php echo $width ; ?>" size="3" />
