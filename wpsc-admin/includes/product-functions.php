@@ -159,6 +159,9 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
 	// and the custom meta
 	wpsc_update_custom_meta($product_id, $post_data);
 
+	// sort out the variations
+	wpsc_update_variations();
+
 	//and the alt currency
 	foreach((array)$post_data['newCurrency'] as $key =>$value){
 		wpsc_update_alt_product_currency($product_id, $value, $post_data['newCurrPrice'][$key]);
