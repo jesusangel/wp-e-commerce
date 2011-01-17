@@ -69,7 +69,6 @@ function wpsc_css_header() {
 }
 function wpsc_price_control_forms(){
 	global $post, $wpdb, $variations_processor, $wpsc_product_defaults;
-        
         $product_data = get_post_custom( $post->ID );
         $product_data['meta'] = maybe_unserialize( $product_data );
 
@@ -105,7 +104,7 @@ function wpsc_price_control_forms(){
 		
 	$currency_data = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CURRENCY_LIST . "` ORDER BY `country` ASC", ARRAY_A );	
 	?>
-
+        <input type="hidden" id="parent_post" name="parent_post" value="<?php echo $post->post_parent; ?>" />
         <?php /* Lots of tedious work is avoided with this little line. */ ?>
         <input type="hidden" id="product_id" name="product_id" value="<?php echo $post->ID; ?>" />
 
@@ -320,6 +319,7 @@ function wpsc_product_variation_forms() {
 
 	// Get variation data from WP Terms
 	$product_term_data = wp_get_object_terms( $post->ID, 'wpsc-variation' );
+	echo '<pre>'.print_r($product_term_data,1).'</pre>';
 	if ( !empty( $product_term_data ) ) {
 		foreach ( $product_term_data as $product_term )
 			$product_terms[] = $product_term->term_id;

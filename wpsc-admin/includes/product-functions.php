@@ -47,7 +47,6 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
        //Type-casting ( not so much sanitization, which would be good to do )
         $post_data = $_POST;
         $product_id = $post_ID;
-
 	$post_data['additional_description'] = isset($post_data['additional_description']) ? $post_data['additional_description'] : '';
         $post_meta['meta'] = (array)$_POST['meta'];
 	$post_data['meta']['_wpsc_price'] = (float)str_replace( ',','',$post_data['meta']['_wpsc_price'] );
@@ -187,7 +186,10 @@ function wpsc_pre_update( $data , $postarr ) {
     if( isset( $postarr["additional_description"] ) && !empty( $postarr["additional_description"] ) )
         $data["post_excerpt"] = $postarr["additional_description"];
 
+	 if( isset( $postarr["parent_post"] ) && !empty( $postarr["parent_post"] ) )
+        $data["post_parent"] = $postarr["parent_post"];
 
+	
     if ( $postarr['meta']['_wpsc_product_metadata']['enable_comments'] == 0 || empty( $postarr['meta']['_wpsc_product_metadata']['enable_comments'] ) )
         $data["comment_status"] = "closed";
     else
