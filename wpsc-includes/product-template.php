@@ -268,6 +268,41 @@ function wpsc_show_pnp(){
 		return true;
 	return false;
 }
+/**
+* wpsc_product_variation_price_available function 
+* Checks for the lowest price of a products variations 
+*
+* @return $price (string) number formatted price
+*/
+function wpsc_product_variation_price_available($product_id){
+	global $wpdb;
+	$price = $wpdb->get_var('
+		SELECT 
+			`pm`.`meta_value`
+		FROM 
+			`' . $wpdb->postmeta . '` `pm` 
+		JOIN 
+			`' . $wpdb->posts . '` `p` 
+			ON 
+			`pm`.`post_id` = `p`.`id` 
+		WHERE 
+			`p`.`post_type`= "wpsc-product"
+			AND
+			`p`.`post_parent` = ' . $product_id . '
+			AND
+			`pm`.`meta_key` = "_wpsc_price"
+			AND 
+			`p`.`ID` IN (
+				SELECT `' . $wpdb->postmeta . '`.`post_id` FROM `' . $wpdb->postmeta . '` WHERE `meta_key` = "_wpsc_stock" AND `meta_value` != "0"
+			)
+		ORDER BY 
+			`meta_value` ASC 
+		LIMIT 1'
+	);
+
+	$price = wpsc_currency_display($price, array('display_as_html' => false));
+	return $price;
+}
 
 /**
  * wpsc product price function
@@ -277,28 +312,29 @@ function wpsc_the_product_price( $no_decimals = false ) {
 	global $wpsc_query, $wpsc_variations, $wpdb;
 	if ( isset($wpsc_variations->first_variations) && count( $wpsc_variations->first_variations ) > 0 ) {
 		//select the variation ID with lowest price
-		$product_id = $wpdb->get_var('SELECT `posts`.`id` FROM ' . $wpdb->posts . ' `posts` JOIN ' . $wpdb->postmeta . ' `postmeta` ON `posts`.`id` = `postmeta`.`post_id` WHERE `posts`.`post_parent` = ' . get_the_ID() . ' AND `posts`.`post_type` = "wpsc-product" AND `posts`.`post_status` = "inherit" AND `postmeta`.`meta_key`="_wpsc_price" ORDER BY (`postmeta`.`meta_value`)+0 ASC LIMIT 1');
+		$output = wpsc_product_variation_price_available(get_the_ID());
 		$from = ' from ';
 	} else {
 		$product_id = get_the_ID();
 		$from = '';
+		$full_price = get_post_meta( $product_id, '_wpsc_price', true );
+		$special_price = get_post_meta( $product_id, '_wpsc_special_price', true );
+		$price = $full_price;
+		
+		if ( ($full_price > $special_price) && ($special_price > 0) )
+			$price = $special_price;
+			
+		if ( $no_decimals == true )
+			$price = array_shift( explode( ".", $price ) );
+		
+		$args = array(
+			'display_as_html' => false,
+			'display_decimal_point' => !$no_decimals
+		);	
+		$output = wpsc_currency_display( $price,$args );
 	}
 
-	$full_price = get_post_meta( $product_id, '_wpsc_price', true );
-	$special_price = get_post_meta( $product_id, '_wpsc_special_price', true );
-	$price = $full_price;
 	
-	if ( ($full_price > $special_price) && ($special_price > 0) )
-		$price = $special_price;
-		
-	if ( $no_decimals == true )
-		$price = array_shift( explode( ".", $price ) );
-	
-	$args = array(
-		'display_as_html' => false,
-		'display_decimal_point' => !$no_decimals
-	);	
-	$output = wpsc_currency_display( $price,$args );
 	//if product has variations - add 'from'
 	$from = apply_filters('wpsc_product_variation_text',$from);
 	if ( isset($wpsc_variations->first_variations) && count( $wpsc_variations->first_variations ) > 0 && !empty($from))
@@ -324,7 +360,7 @@ function wpsc_calculate_price( $product_id, $variations = null, $special = true 
 		$product_id = $wpdb->get_var($sql);
 	}
 	
-	if ( $special == true ) {
+	if ( $special ) {
 		$full_price = get_post_meta( $product_id, '_wpsc_price', true );
 		$special_price = get_post_meta( $product_id, '_wpsc_special_price', true );
 
