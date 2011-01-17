@@ -39,7 +39,8 @@ function wpsc_is_admin() {
 function wpsc_additional_column_names( $columns ){
     unset( $columns['title'] );
     unset( $columns['date'] );
-
+    unset( $columns['author'] );
+    
     $columns['image'] = __('');
     $columns['title'] = __('Name');
     $columns['weight'] = __('Weight');
