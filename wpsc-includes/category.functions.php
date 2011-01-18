@@ -44,11 +44,12 @@ function wpsc_list_categories($callback_function, $parameters = null, $category_
 * Gets the Function Parent Image link and checks whether Image should be displayed or not
 * 
 */
-function wpsc_parent_category_image($show_thumbnails , $category_image , $width, $height, $grid=false){
+function wpsc_parent_category_image($show_thumbnails , $category_image , $width, $height, $grid=false, $show_name){
 
 	if(!$show_thumbnails) return;
 	
 	if($category_image == WPSC_CATEGORY_URL){
+		if(!$show_name) return;
 	?>
 	<span class='wpsc_category_image item_no_image ' style='width:<?php echo $width; ?>px; height: <?php echo $height; ?>px;'>
 		<span class='link_substitute' >
@@ -276,10 +277,10 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		if(($query['show_thumbnails'] == 1)) {
 			if((!empty($category_image)) && is_file(WPSC_CATEGORY_DIR.$category_image)) {
 				$category_image_html = "<img src='".WPSC_CATEGORY_URL."$category_image' alt='{$category_row->name}' title='{$category_row->name}' style='width: {$width}px; height: {$height}px;' class='wpsc_category_image' />";
-			} elseif($query['show_name'] == 1) {
+			} elseif(1 == $query['show_name']) {
 				$category_image_html .= "<span class='wpsc_category_image item_no_image ' style='width: {$width}px; height: {$height}px;'>\n\r";
 				$category_image_html .= "	<span class='link_substitute' >\n\r";
-				$category_image_html .= "		<span>".$category_row->name."</span>\n\r";
+				$category_image_html .= "		<span>".__('N/A','wpsc')."</span>\n\r";
 				$category_image_html .= "	</span>\n\r";
 				$category_image_html .= "</span>\n\r";
 			}

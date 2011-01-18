@@ -145,7 +145,7 @@ class WP_Widget_Product_Categories extends WP_Widget {
 		<div class="wpsc_category_image"<?php if( !checked( $image ) ) { echo ' style="display:none;"'; } ?>>
 			<p>
 				
-				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('show_name'); ?>" name="<?php echo $this->get_field_name('show_name'); ?>"<?php checked( $show_name ); ?> /><label for="<?php echo $this->get_field_id('show_name'); ?>"><?php _e(' Show Category Name when no Image Available', 'wpsc'); ?></label>
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('show_name'); ?>" name="<?php echo $this->get_field_name('show_name'); ?>"<?php checked( $show_name ); ?> /><label for="<?php echo $this->get_field_id('show_name'); ?>"><?php _e(' Show N/A when No Image Available', 'wpsc'); ?></label>
 			</p>
 			<p>
 				<label for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Width:', 'wpsc'); ?></label>
