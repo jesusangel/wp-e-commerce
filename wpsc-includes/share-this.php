@@ -1,18 +1,18 @@
 <?php
 global $social_sites;
-@define('wpsc_akst_AKST_ADDTOCONTENT', true);
+@define('wpsc_akst_ADDTOCONTENT', true);
 // set this to false if you do not want to automatically add the Share This link to your content
 
 
-@define('wpsc_akst_AKST_ADDTOFOOTER', true);
+@define('wpsc_akst_ADDTOFOOTER', true);
 // set this to false if you do not want to automatically add the Share This form to the page in your footer
 
 
-@define('wpsc_akst_AKST_ADDTOFEED', true);
+@define('wpsc_akst_ADDTOFEED', true);
 // set this to false if you do not want to automatically add the Share This link to items in your feed
 
 
-@define('wpsc_akst_AKST_SHOWICON', true);
+@define('wpsc_akst_SHOWICON', true);
 // set this to false if you do not want to show the Share This icon next to the Share This link
 
 
