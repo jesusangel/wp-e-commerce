@@ -745,6 +745,7 @@ class wpsc_checkout {
 	function validate_forms() {
 		global $wpdb, $current_user, $user_ID;
 		$any_bad_inputs = false;
+		$bad_input_message = '';
 		// Credit Card Number Validation for PayPal Pro and maybe others soon
 		if ( isset( $_POST['card_number'] ) ) {
 			//should do some php CC validation here~
