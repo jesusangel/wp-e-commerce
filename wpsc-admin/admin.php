@@ -74,9 +74,9 @@ function wpsc_admin_pages() {
 		$page_hooks[] = add_submenu_page( 'index.php', __( 'Store Upgrades', 'wpsc' ), __( 'Store Upgrades', 'wpsc' ), 'administrator', 'wpsc-upgrades', 'wpsc_display_upgrades_page' );
 
 		// Set the base page for Products
-		$products_page = 'wpsc-edit-products';
+		$products_page = 'edit.php?post_type=wpsc-product';
 
-		$page_hooks[] = $edit_coupons_page = add_submenu_page( 'edit.php?post_type=wpsc-product' , __( 'Coupons', 'wpsc' ), __( 'Coupons', 'wpsc' ), 'administrator', 'wpsc-edit-coupons', 'wpsc_display_coupons_page' );
+		$page_hooks[] = $edit_coupons_page = add_submenu_page( $products_page , __( 'Coupons', 'wpsc' ), __( 'Coupons', 'wpsc' ), 'administrator', 'wpsc-edit-coupons', 'wpsc_display_coupons_page' );
 
 		// Add Settings pages
 		$page_hooks[] = $edit_options_page = add_options_page( __( 'Store Settings', 'wpsc' ), __( 'Store', 'wpsc' ), 'administrator', 'wpsc-settings', 'wpsc_display_settings_page' );
