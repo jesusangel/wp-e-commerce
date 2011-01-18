@@ -319,7 +319,6 @@ function wpsc_product_variation_forms() {
 
 	// Get variation data from WP Terms
 	$product_term_data = wp_get_object_terms( $post->ID, 'wpsc-variation' );
-	echo '<pre>'.print_r($product_term_data,1).'</pre>';
 	if ( !empty( $product_term_data ) ) {
 		foreach ( $product_term_data as $product_term )
 			$product_terms[] = $product_term->term_id;
@@ -436,7 +435,7 @@ function wpsc_product_variation_forms() {
 ?>
 					<tr>
 						<td colspan="8">
-							<?php _e( 'You have no Products added.', 'wpsc' ); ?>
+							<?php _e( 'You have no Variations added.', 'wpsc' ); ?>
 						</td>
 					</tr>
 
