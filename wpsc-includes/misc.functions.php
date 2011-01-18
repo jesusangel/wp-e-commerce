@@ -123,7 +123,7 @@ function wpsc_post_title_seo( $title ) {
 	return stripslashes( $title );
 }
 
-add_filter( 'single_post_title', 'wpsc_post_title_seo' );
+//add_filter( 'single_post_title', 'wpsc_post_title_seo' );
 
 /**
  * WPSC canonical URL function
