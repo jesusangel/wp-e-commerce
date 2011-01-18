@@ -872,7 +872,7 @@ class wpsc_checkout {
 			}
 		}
 		$states = array( 'is_valid' => !$any_bad_inputs, 'error_messages' => $bad_input_message );
-		$states = do_action('wpsc_checkout_form_validation', $states);
+		$states = apply_filters('wpsc_checkout_form_validation', $states);
 		return $states;
 	}
 
