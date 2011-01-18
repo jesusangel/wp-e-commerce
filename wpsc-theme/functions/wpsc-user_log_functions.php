@@ -103,8 +103,7 @@ function validate_form_data() {
 				$meta_data[$value_id] = $value;
 			}
 		}
-		$new_meta_data = serialize( $meta_data );
-		update_usermeta( $user_ID, 'wpshpcrt_usr_profile', $meta_data );
+		update_user_meta( $user_ID, 'wpshpcrt_usr_profile', $meta_data );
 	}
 	if ( $changes_saved ) {
 		$message = __( 'Thanks, your changes have been saved.', 'wpsc' );

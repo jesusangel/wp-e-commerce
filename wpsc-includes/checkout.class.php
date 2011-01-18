@@ -821,7 +821,6 @@ class wpsc_checkout {
 		//Basic Form field validation for billing and shipping details
 		foreach ( $this->checkout_items as $form_data ) {
 			$value = $_POST['collected_data'][$form_data->id];
-			$value_id = (int)$value_id;
 			$_SESSION['wpsc_checkout_saved_values'][$form_data->id] = $value;
 			$bad_input = false;
 			if ( ($form_data->mandatory == 1) || ($form_data->type == "coupon") ) {
@@ -857,20 +856,9 @@ class wpsc_checkout {
 			}
 		}
 
-		if ( ($any_bad_inputs == false) && ($user_ID > 0) ) {
-			$saved_data_sql = "SELECT * FROM `" . $wpdb->usermeta . "` WHERE `user_id` = '" . $user_ID . "' AND `meta_key` = 'wpshpcrt_usr_profile';";
-			$saved_data = $wpdb->get_row( $saved_data_sql, ARRAY_A );
-			$new_meta_data = serialize( $_POST['collected_data'] );
-			if ( $saved_data != null ) {
-				$sql = "UPDATE `" . $wpdb->usermeta . "` SET `meta_value` =  '$new_meta_data' WHERE `user_id` IN ('$user_ID') AND `meta_key` IN ('wpshpcrt_usr_profile');";
-				$wpdb->query( $sql );
-				$changes_saved = true;
-			} else {
-				$sql = "INSERT INTO `" . $wpdb->usermeta . "` ( `user_id` , `meta_key` , `meta_value` ) VALUES ( " . $user_ID . ", 'wpshpcrt_usr_profile', '$new_meta_data');";
-				$wpdb->query( $sql );
-				$changes_saved = true;
-			}
-		}
+		if ( ($any_bad_inputs == false) && ($user_ID > 0) )
+			update_user_meta($user_ID, 'wpshpcrt_usr_profile', $_POST['collected_data']);
+
 		$states = array( 'is_valid' => !$any_bad_inputs, 'error_messages' => $bad_input_message );
 		$states = apply_filters('wpsc_checkout_form_validation', $states);
 		return $states;
