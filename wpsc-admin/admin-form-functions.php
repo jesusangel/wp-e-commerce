@@ -292,6 +292,7 @@ function wpsc_packing_slip($purchase_id) {
 	global $wpdb;
 	$purch_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='".$purchase_id."'";
 		$purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
+
 					//echo "<p style='padding-left: 5px;'><strong>".__('Date', 'wpsc')."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
 
 		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$purchase_id."";
@@ -315,51 +316,65 @@ function wpsc_packing_slip($purchase_id) {
 			
 			if($input_data != null) {
 				$form_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'",ARRAY_A);
-
+				
 				foreach($form_data as $form_field) {
+
 					switch($form_field['type']) {
-					case 'country':
-
-						$delivery_region_count = $wpdb->get_var("SELECT COUNT(`regions`.`id`) FROM `".WPSC_TABLE_REGION_TAX."` AS `regions` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('".$wpdb->escape( $purch_data['billing_country'])."')");
-
-						if(is_numeric($purch_data['shipping_region']) && ($delivery_region_count > 0)) {
-							echo "	<tr><td>".__('State', 'wpsc').":</td><td>".wpsc_get_region($purch_data['shipping_region'])."</td></tr>\n\r";
-						}
-						echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".wpsc_get_country($purch_data['billing_country'])."</td></tr>\n\r";
+						case 'country':
+	
+							$delivery_region_count = $wpdb->get_var("SELECT COUNT(`regions`.`id`) FROM `".WPSC_TABLE_REGION_TAX."` AS `regions` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('".$wpdb->escape( $purch_data['billing_country'])."')");
+				
+							if(is_numeric($purch_data['billing_region']) && ($delivery_region_count > 0)) 
+								echo "	<tr><td>".__('State', 'wpsc').":</td><td>".wpsc_get_region($purch_data['billing_region'])."</td></tr>\n\r";
+							
+							 echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
 						break;
 								
 						case 'delivery_country':
-						echo "	<tr><td>".$form_field['name'].":</td><td>".wpsc_get_country($purch_data['shipping_country'])."</td></tr>\n\r";
+						
+							if(is_numeric($purch_data['shipping_region']) && ($delivery_region_count > 0)) 
+								echo "	<tr><td>".__('State', 'wpsc').":</td><td>".wpsc_get_region($purch_data['shipping_region'])."</td></tr>\n\r";
+							
+							 echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
 						break;
 
 						case 'heading':
-                                                    if($form_field['name'] == "Hidden Fields")
-                                                        continue;
-                                                    else
-                                                        echo "	<tr class='heading'><td colspan='2'><strong>".wp_kses($form_field['name'], array()).":</strong></td></tr>\n\r";
+	                        
+	                        if($form_field['name'] == "Hidden Fields")
+	                          continue;
+	                        else
+	                          echo "	<tr class='heading'><td colspan='2'><strong>".wp_kses($form_field['name'], array()).":</strong></td></tr>\n\r";
 						break;
 
-						default:
-                                                    if( $form_field['name'] == "Cupcakes") {
-                                                    parse_str($rekeyed_input[$form_field['id']]['value'], $cupcakes );
-                                                    foreach( $cupcakes as $product_id => $quantity ) {
-                                                    $product = get_post($product_id);
+						default:				
 
-                                                    $string .= "(".$quantity.") ".$product->post_title.", ";
+                        if( $form_field['name'] == "Cupcakes") {
+                        	parse_str($rekeyed_input[$form_field['id']]['value'], $cupcakes );
+                        
+	                        foreach( $cupcakes as $product_id => $quantity ) {
+	                        
+	                        	$product = get_post($product_id);
+	                        	$string .= "(".$quantity.") ".$product->post_title.", ";
+	                        	
+	                        }
+	                        $string = rtrim($string, ", ");
+	                        echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($string), ENT_QUOTES)."</td></tr>\n\r";
 
-                                                    }
-                                                    $string = rtrim($string, ", ");
-                                                    echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($string), ENT_QUOTES)."</td></tr>\n\r";
-
-                                                    } else {
-                                                        echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
-
-                                                    }
+                        } else {
+                        
+                        	if ($form_field['name']=="State" && !empty($purch_data['billing_region']) || $form_field['name']=="State" && !empty($purch_data['billing_region']))
+                      echo "";
+                     		 else
+                            	echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
+                        
+                        }
 
 						break;
 					}
+
 				}
 			} else {
+			
 				echo "	<tr><td>".__('Name', 'wpsc').":</td><td>".$purch_data['firstname']." ".$purch_data['lastname']."</td></tr>\n\r";
 				echo "	<tr><td>".__('Address', 'wpsc').":</td><td>".$purch_data['address']."</td></tr>\n\r";
 				echo "	<tr><td>".__('Phone', 'wpsc').":</td><td>".$purch_data['phone']."</td></tr>\n\r";
@@ -404,7 +419,6 @@ function wpsc_packing_slip($purchase_id) {
 			$all_no_shipping = true;
 			$file_link_list = array();
 			foreach($cart_log as $cart_row) {
-			
 				$alternate = "";
 				$j++;
 				if(($j % 2) != 0) {

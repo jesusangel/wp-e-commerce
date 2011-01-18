@@ -458,7 +458,13 @@ function wpsc_display_purchlog_buyers_email() {
 
 function wpsc_display_purchlog_buyers_address() {
    global $purchlogitem;
-   return nl2br(trim(htmlentities( stripslashes( $purchlogitem->userinfo['billingaddress']['value'] ), ENT_QUOTES ), "\n\r")).' '.htmlentities( stripslashes( $purchlogitem->userinfo['billingpostcode']['value'] ), ENT_QUOTES );
+
+   if(is_numeric($purchlogitem->extrainfo->billing_region))
+   		$state = wpsc_get_region($purchlogitem->extrainfo->billing_region);
+   else 
+   		$state = $purchlogitem->userinfo['billingstate']['value'];
+
+   return nl2br(trim(htmlentities( stripslashes( $purchlogitem->userinfo['billingaddress']['value'] ), ENT_QUOTES ), "\n\r")).'<br />'.htmlentities( stripslashes( $state ), ENT_QUOTES ) .', '.htmlentities( stripslashes( $purchlogitem->userinfo['billingpostcode']['value'] ), ENT_QUOTES ).'<br />'.htmlentities( stripslashes( $purchlogitem->extrainfo->billing_country ), ENT_QUOTES );
 }
 
 function wpsc_display_purchlog_buyers_phone() {
@@ -483,9 +489,15 @@ function wpsc_display_purchlog_shipping_city() {
 
 function wpsc_display_purchlog_shipping_state_and_postcode() {
    global $purchlogitem;
-   if ( !empty( $purchlogitem->shippinginfo['shippingstate']['value'] ) && !empty( $purchlogitem->shippinginfo['shippingpostcode']['value'] ) ) {
-      return $purchlogitem->shippingstate( $purchlogitem->shippinginfo['shippingstate']['value'] ) . ', ' . $purchlogitem->shippinginfo['shippingpostcode']['value'];
-   }
+   
+   if( is_numeric($purchlogitem->extrainfo->shipping_region) )
+   		$state = wpsc_get_region($purchlogitem->extrainfo->shipping_region);
+   else
+   		$state = $purchlogitem->shippinginfo['shippingstate']['value'];
+   		
+   if ( !empty( $state ) && !empty( $purchlogitem->shippinginfo['shippingpostcode']['value'] ) ) {
+      return $state . ', ' . $purchlogitem->shippinginfo['shippingpostcode']['value'];
+	 }
 }
 
 function wpsc_display_purchlog_shipping_country() {

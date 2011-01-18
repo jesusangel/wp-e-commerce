@@ -560,17 +560,16 @@ function wpsc_submit_checkout() {
 			$base_shipping = $wpsc_cart->calculate_base_shipping();
 		else
 			$base_shipping = 0;
+			
+		$delivery_country = $wpsc_cart->delivery_country;
+		$delivery_region = $wpsc_cart->delivery_region;
 		
 		if ( wpsc_uses_shipping ( ) ) {
 			$shipping_method = $wpsc_cart->selected_shipping_method;
 			$shipping_option = $wpsc_cart->selected_shipping_option;
-			$delivery_country = $wpsc_cart->delivery_country;
-			$delivery_region = $wpsc_cart->delivery_region;
 		} else {
 			$shipping_method = '';
 			$shipping_option = '';
-			$delivery_country = '';
-			$delivery_region = '';
 		}
 		if ( isset( $_POST['how_find_us'] ) )
 			$find_us = $_POST['how_find_us'];
