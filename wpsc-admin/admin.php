@@ -36,6 +36,24 @@ if ( !get_option( 'wpsc_checkout_form_sets' ) ) {
 }
 
 /**
+ * Checks whether to display or hide the update wp-e-commerce link
+ * @access public
+ *
+ * @since 3.8
+ * @return boolean true - show link, false- hide link
+ */
+function wpsc_show_update_link(){
+	global $wpdb;
+	// Check if old product_list table exists
+	// If it exists AND get_option wpsc_upgrade_complete is not true then return true
+	$sql = 'SHOW TABLES LIKE "'.$wpdb->prefix.'wpsc_product_list"';
+	$var = $wpdb->get_var($sql);
+	if(!empty($var) && false == get_option('wpsc_hide_update'))
+		return true;
+	else
+		return false;
+}
+/**
  * wpsc_admin_pages function, all the definitons of admin pages are stores here.
  * No parameters, returns nothing
  *
@@ -64,11 +82,7 @@ function wpsc_admin_pages() {
 		// Add to Dashboard
 		$page_hooks[] = $purchase_log_page = add_submenu_page( 'index.php', __( 'Store Sales', 'wpsc' ), __( 'Store Sales', 'wpsc' ), 'administrator', 'wpsc-sales-logs', 'wpsc_display_sales_logs' );
 
-//		This doesnt work,, need a better trigger
-//		if ( !isset( $show_update_page ) )
-			$show_update_page = 1;
-
-		if ( 1 === (int)$show_update_page )
+		if ( wpsc_show_update_link() )
 			$page_hooks[] = add_submenu_page( 'index.php', __( 'Update Store', 'wpsc' ), __( 'Store Update', 'wpsc' ), 'administrator', 'wpsc-update', 'wpsc_display_update_page' );
 
 		$page_hooks[] = add_submenu_page( 'index.php', __( 'Store Upgrades', 'wpsc' ), __( 'Store Upgrades', 'wpsc' ), 'administrator', 'wpsc-upgrades', 'wpsc_display_upgrades_page' );
