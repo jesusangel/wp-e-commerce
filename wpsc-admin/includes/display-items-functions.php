@@ -304,15 +304,15 @@ function wpsc_product_taxes_forms(){
 function wpsc_product_variation_forms() {
 	global $post, $wpdb, $wp_query, $variations_processor, $wpsc_product_defaults;
 
-        $db_version = get_option( 'db_version' );
+    $db_version = get_option( 'db_version' );
 
-        $product_data = get_post_custom( $post->ID );
-        $product_data['meta'] = maybe_unserialize( $product_data );
+    $product_data = get_post_custom( $post->ID );
+    $product_data['meta'] = maybe_unserialize( $product_data );
 
-        foreach( $product_data['meta'] as $meta_key => $meta_value )
-            $product_data['meta'][$meta_key] = $meta_value[0];
+    foreach( $product_data['meta'] as $meta_key => $meta_value )
+        $product_data['meta'][$meta_key] = $meta_value[0];
 
-        $product_meta = maybe_unserialize( $product_data["_wpsc_product_metadata"][0] );
+    $product_meta = maybe_unserialize( $product_data["_wpsc_product_metadata"][0] );
 
 	$siteurl = get_option( 'siteurl' );
 	$output  = '';
@@ -389,7 +389,7 @@ function wpsc_product_variation_forms() {
 			'post_type'   => 'wpsc-product',
 			'orderby'     => 'menu_order post_title',
 			'post_parent' => $parent_product,
-			'post_status' => 'all',
+			'post_status' => 'publish, inherit',
 			'order'       => "ASC"
 		);
                 

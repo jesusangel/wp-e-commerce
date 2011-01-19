@@ -160,7 +160,7 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
 	wpsc_update_custom_meta($product_id, $post_data);
 
 	// sort out the variations
-	wpsc_update_variations();
+	wpsc_edit_product_variations( $product_id, $post_data );
 
 	//and the alt currency
 	foreach((array)$post_data['newCurrency'] as $key =>$value){
@@ -529,17 +529,14 @@ function term_id_price($term_id, $parent_price) {
 function wpsc_edit_product_variations($product_id, $post_data) {
 	global $wpdb, $user_ID;
 	$variations = array();
+	$product_children = array();
 	if (!isset($post_data['edit_var_val'])) $post_data['edit_var_val'] = '';
 	
 	$variations = (array)$post_data['edit_var_val'];
-	// bail if the array is empty
-	if(count($variations) < 1) {
-		return false;
-	}
-	
-	
+
 	// Generate the arrays for variation sets, values and combinations
-        $wpsc_combinator = new wpsc_variation_combinator($variations);
+    $wpsc_combinator = new wpsc_variation_combinator($variations);
+    
 	// Retrieve the array containing the variation set IDs
 	$variation_sets = $wpsc_combinator->return_variation_sets();
 	
@@ -551,10 +548,9 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 	
 	$product_terms = wp_get_object_terms($product_id, 'wpsc-variation');
 	
-	
 	$variation_sets_and_values = array_merge($variation_sets, $variation_values);
-	wp_set_object_terms($product_id, $variation_sets_and_values, 'wpsc-variation');
-	
+	wp_set_object_terms($product_id, $variation_sets_and_values, 'wpsc-variation');	
+		
 	$child_product_template = array(
 		'post_author' => $user_ID,
 		'post_content' => $post_data['description'],
@@ -580,6 +576,7 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 			'include' => implode(",", $combination),
 			'orderby' => 'parent',
 		));
+		
 		foreach($combination_terms as $term) {
 			$term_ids[] = $term->term_id;
 			$term_slugs[] = $term->slug;
@@ -597,7 +594,6 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 			'suppress_filters' => true
 		));
 		$selected_post = array_shift($selected_post);
-		
 		$child_product_id = wpsc_get_child_object_in_terms($product_id, $term_ids, 'wpsc-variation');
 		$already_a_variation = true;
 		if($child_product_id == false) {
@@ -613,6 +609,7 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 				$child_product_id = $selected_post->ID;
 			}
 		}
+		$product_children[] = $child_product_id;
 		if($child_product_id > 0) {
 			wp_set_object_terms($child_product_id, $term_slugs, 'wpsc-variation');
 		}
@@ -629,7 +626,7 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 			
 			//Adding this to check for a price on variations.  Applying the highest price, seems to make the most sense.		
 			if ( is_array ($term_ids) ) {
-			$price = array();
+				$price = array();
 				foreach ($term_ids as $term_id_price) {
 					$price[] = term_id_price($term_id_price, $child_product_meta["_wpsc_price"][0]);
 				}
@@ -644,43 +641,67 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 	}
 	
 
-	//For reasons unknown, this code did not previously deal with variation deletions.  Basically, we'll just check if any existing term associations are missing from the posted variables, delete if they are.
+	//For reasons unknown, this code did not previously deal with variation deletions.  
+	//Basically, we'll just check if any existing term associations are missing from the posted variables, delete if they are.
 	//Get posted terms (multi-dimensional array, first level = parent var, second level = child var)
 	$posted_term = $variations;
 	//Get currently associated terms
 	$currently_associated_var = $product_terms;
-	
-		foreach ($currently_associated_var as $current) {
-			$currently_associated_vars[] = $current->term_id;
-		}
-		
-		foreach ($posted_term as $term=>$val) {
-				$posted_terms[] = $term;
-				if(is_array($val)) {
-					foreach($val as $term2=>$val2) {
-						$posted_terms[] = $term2; 
-					}
-				}
-		}
-		
-	//if currently associated > posted, get diff (current_associated - posted)
-	if(count($currently_associated_vars) > count($posted_terms) && isset($_REQUEST["product"]) ) {
-	
-		$post_ids_to_delete = array();
-		$term_ids_to_delete = array();
-		$term_ids_to_delete = array_diff($currently_associated_vars, $posted_terms);
 
-		// Whatever remains, find child products of current product with that term, in the variation taxonomy, and delete
-		$post_ids_to_delete = wpsc_get_child_object_in_terms_var($_REQUEST["product_id"], $term_ids_to_delete, 'wpsc-variation');	
-	if(is_array($post_ids_to_delete)) {
-		foreach($post_ids_to_delete as $object_ids) {
-			foreach($object_ids as $object_id) {
-				wp_delete_post($object_id);
+	foreach ($currently_associated_var as $current) {
+		$currently_associated_vars[] = $current->term_id;
+	}
+	
+	foreach ($posted_term as $term=>$val) {
+		$posted_terms[] = $term;
+		if(is_array($val)) {
+			foreach($val as $term2=>$val2) {
+				$posted_terms[] = $term2; 
 			}
 		}
 	}
-}	
-
+	if(!empty($currently_associated_vars)){	
+		$term_ids_to_delete = array();	
+		$term_ids_to_delete = array_diff($currently_associated_vars, $posted_terms);
+	}
+	if(!empty($term_ids_to_delete) && (isset($_REQUEST["product_id"]) ||  isset($_REQUEST["post_ID"]))) {
+		if(isset($_REQUEST["post_ID"]))
+			$post_id = $_REQUEST["post_ID"];
+		else
+			$post_id = $_REQUEST["product_id"];
+			
+		$post_ids_to_delete = array();
+		
+		// Whatever remains, find child products of current product with that term, in the variation taxonomy, and delete
+		$post_ids_to_delete = wpsc_get_child_object_in_terms_var($_REQUEST["product_id"], $term_ids_to_delete, 'wpsc-variation');
+	
+		if(is_array($post_ids_to_delete) && !empty($post_ids_to_delete)) {
+			foreach($post_ids_to_delete as $object_ids) {
+				foreach($object_ids as $object_id) {
+					wp_delete_post($object_id);
+				}
+			}
+		}
+	}	
+	$current_children = get_posts(array(
+		'post_parent' => $product_id,
+		'post_type' => "wpsc-product",
+		'post_status' => 'all'	
+		));
+	foreach((array)$current_children as $child_prod){
+		$childs[] = $child_prod->ID;
+	}
+	if(!empty($childs)){
+		$old_ids_to_delete = array_diff($childs, $product_children);
+		if(is_array($old_ids_to_delete) && !empty($old_ids_to_delete)) {
+			foreach($old_ids_to_delete as $object_ids) {
+				wp_delete_post($object_ids);
+			}
+		}
+	}
+//	echo 'Current Children: <pre>'.print_r($childs,1).'</pre>';
+//	echo 'Children Created: <pre>'.print_r($product_children,1).'</pre>';
+//	echo 'The Difference: <pre>'.print_r($old_ids_to_delete,1).'</pre>';
 }
 
 function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
