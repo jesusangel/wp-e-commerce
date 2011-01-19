@@ -356,7 +356,7 @@ function wpsc_has_purchases_this_month() {
 
 function wpsc_user_details() {
 	global $wpdb, $user_ID, $wpsc_purchlog_statuses, $gateway_checkout_form_fields, $purchase_log, $col_count;
-
+	
 	$nzshpcrt_gateways = nzshpcrt_get_gateways();
 	$i = 0;
 	$subtotal = 0;
@@ -587,33 +587,43 @@ function wpsc_user_details() {
 
 			echo "<strong>" . __( 'Customer Details', 'wpsc' ) . ":</strong>";
 			echo "<table class='customer_details'>";
-			$form_sql = "SELECT * FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE  `log_id` = '" . $purchase['id'] . "'";
-			$input_data = $wpdb->get_results( $form_sql, ARRAY_A );
+				
+				
+			$usersql = "SELECT `".WPSC_TABLE_SUBMITED_FORM_DATA."`.value, `".WPSC_TABLE_CHECKOUT_FORMS."`.* FROM `".WPSC_TABLE_CHECKOUT_FORMS."` LEFT JOIN `".WPSC_TABLE_SUBMITED_FORM_DATA."` ON `".WPSC_TABLE_CHECKOUT_FORMS."`.id = `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.log_id=".$purchase['id']." OR `".WPSC_TABLE_CHECKOUT_FORMS."`.type = 'heading' ORDER BY `".WPSC_TABLE_CHECKOUT_FORMS."`.`checkout_order`" ;
+			$formfields = $wpdb->get_results($usersql, ARRAY_A);
+			if ( !empty($formfields) ) {
+				
+				foreach ( (array)$formfields as $form_field ) {				
+					// If its a heading display the Name otherwise continue on
+					if( 'heading' == $form_field['type'] ){
+						echo "  <tr><td colspan='2'>" . $form_field['name'] . ":</td></tr>";
+						continue;
+					}
+						
+					switch ($form_field['unique_name']){
+						case 'shippingstate':
+							if(is_numeric($purchase['shipping_region'])) 
+ 	            				$state = wpsc_get_region($purchase['shipping_region']); 
+ 	   						else  
+ 	            				$state = $form_field['value']; 
+ 	            			 
+ 	            			 echo "  <tr><td>" . $form_field['name'] . ":</td><td>".$state ."</td></tr>";
+							break;	
+						case 'billingstate':
+							if(is_numeric($purchase['billing_region'])) 
+ 	            				$state = wpsc_get_region($purchase['billing_region']); 
+ 	   						else  
+ 	            				$state = $form_field['value']; 
+						 
+						 echo "  <tr><td>" . $form_field['name'] . ":</td><td>".$state ."</td></tr>";
+							break;
+						default:
+							echo "  <tr><td>" . $form_field['name'] . ":</td><td>" . $form_field['value'] . "</td></tr>";
 
-			if ( $input_data != null ) {
-				foreach ( (array)$input_data as $form_field ) {
-					$form_sql = "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1' AND `id` = '" . $form_field['form_id'] . "' LIMIT 1";
-					$form_data = $wpdb->get_results( $form_sql, ARRAY_A );
-					if ( $form_data != null ) {
-						$form_data = $form_data[0];
-						if ( $form_data['type'] == 'country' ) {
-							if ( $form_field['value'] != null ) {
-								echo "  <tr><td>" . $form_data['name'] . ":</td><td>" . wpsc_get_country( $form_field['value'] ) . "</td></tr>";
-							} else {
-								echo "  <tr><td>" . $form_data['name'] . ":</td><td>" . wpsc_get_country( $purchase['shipping_country'] ) . "</td></tr>";
-							}
-						} else {
-							echo "  <tr><td>" . $form_data['name'] . ":</td><td>" . $form_field['value'] . "</td></tr>";
-						}
 					}
 				}
-			} else {
-				echo "  <tr><td>" . __( 'Name', 'wpsc' ) . ":</td><td>" . $purchase['firstname'] . " " . $purchase['lastname'] . "</td></tr>";
-				echo "  <tr><td>" . __( 'Address', 'wpsc' ) . ":</td><td>" . $purchase['address'] . "</td></tr>";
-				echo "  <tr><td>" . __( 'Phone', 'wpsc' ) . ":</td><td>" . $purchase['phone'] . "</td></tr>";
-				echo "  <tr><td>" . __( 'Email', 'wpsc' ) . ":</td><td>" . $purchase['email'] . "</td></tr>";
 			}
-
+			
 			$payment_gateway_names = '';
 			$payment_gateway_names = get_option('payment_gateway_names');
 
