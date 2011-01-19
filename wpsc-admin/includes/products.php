@@ -470,9 +470,9 @@ if ( $wp_list_table->has_items() )
  *
  */
 function wpsc_inline_edit() {
-		global $mode;
+		global $mode, $current_screen;
 
-		$screen = get_current_screen();
+		$screen = $current_screen;
 
 		$post = get_default_post_to_edit( $screen->post_type );
 		$post_type_object = get_post_type_object( $screen->post_type );
