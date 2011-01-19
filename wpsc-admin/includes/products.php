@@ -157,7 +157,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			$actions = array();
 			if ( current_user_can('edit_post', $product->ID) && 'trash' != $product->post_status ) {
 				$actions['edit'] = '<a class="edit-product" href="'.$edit_link.'" title="' . esc_attr(__('Edit this product', 'wpsc')) . '">'. __('Edit', 'wpsc') . '</a>';
-				$actions['quick_edit'] = "<a class='wpsc-quickedit' title='".esc_attr(__('Quick Edit', 'wpsc'))."' href='#'>".__('Quick Edit')."</a>";
+				$actions['quick_edit'] = "<a class='editinline' title='".esc_attr(__('Quick Edit', 'wpsc'))."' href='#'>".__('Quick Edit')."</a>";
 			}
 
 			if ( in_array($product->post_status, array('pending', 'draft')) ) {
@@ -237,7 +237,9 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			$price = get_post_meta($product->ID, '_wpsc_price', true);
 			?>
 				<td  <?php echo $attributes ?>>
-					<?php echo wpsc_currency_display( $price ); ?>
+					<?php echo wpsc_currency_display( $price ); 
+                                            echo '<div id="inline_' . $post->ID . '_price" class="hidden">' . $price . '</div>';
+                                        ?>
 				</td>
 			<?php
 		break;
@@ -277,7 +279,9 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			}
 			?>
 				<td  <?php echo $attributes ?>>
-					<span class="weightdisplay"><?php echo $weight; ?></span>
+                                    <?php echo $weight;
+                                           echo '<div id="inline_' . $post->ID . '_weight" class="hidden">' . $weight . '</div>';
+                                    ?>
 				</td>
 			<?php
 
@@ -290,8 +294,9 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			}
 			?>
 				<td  <?php echo $attributes ?>>
-					<span class="stockdisplay"><?php echo $stock; ?></span>
-					
+                                    <?php echo $stock;
+                                    echo '<div id="inline_' . $post->ID . '_stock" class="hidden">' . $stock . '</div>';
+                                    ?>
 				</td>
 	<?php
 		break;
@@ -331,25 +336,25 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		break;
 		case 'SKU':
 			$sku = get_post_meta($product->ID, '_wpsc_sku', true);
-			if($sku == ''){
-				$sku = 'N/A';
-			}
-		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
+			if( $sku == '' )
+                            $sku = 'N/A';
+			
 			?>
 				<td  <?php echo $attributes ?>>
-					<span class="skudisplay"><?php echo $sku; ?></span>
-				
+                                    <?php echo $sku;
+                                     echo '<div id="inline_' . $post->ID . '_sku" class="hidden">' . $sku . '</div>';
+                                    ?>
 				</td>
 			<?php
 		break;
 		case 'sale_price':
 
 			$price = get_post_meta($product->ID, '_wpsc_special_price', true);
-		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
 				<td  <?php echo $attributes ?>>
-					<?php echo wpsc_currency_display( $price ); ?>
-					
+                                  <?php echo wpsc_currency_display( $price );
+                                        echo '<div id="inline_' . $post->ID . '_sale_price" class="hidden">' . $price . '</div>';
+                                  ?>
 				</td>
 			<?php
 
@@ -421,40 +426,19 @@ function wpsc_product_row(&$product, $parent_product = null) {
 }
 
 /**
- * Pretty much copied straight from WP - Modified somewhat to just get it working.
+ * For future use...maybe.
  * @access public
  *
  * @since 3.8
+ * @access private
  */
 
-function wpsc_admin_product_listing_nai() {
+function _wpsc_admin_product_listing_nai() {
 global $post_type, $wp_query;
 include ( WPSC_FILE_PATH.'/wpsc-admin/includes/variations_table_class.php' );
 
 
-$wp_list_table = get_list_table('WPEC_Variations_List_Table');
-$wp_list_table->check_permissions();
-
-$doaction = $wp_list_table->current_action();
-
-if ( $doaction ) {
-
-	$sendback = remove_query_arg( array('trashed', 'untrashed', 'deleted', 'ids'), wp_get_referer() );
-	$sendback = add_query_arg( 'paged', $pagenum, $sendback );
-	if ( strpos($sendback, 'post.php') !== false )
-		$sendback = admin_url($post_new_file);
-
-        $post_ids = array_map('intval', (array) $_REQUEST['post']);
-
-	if ( !is_array( $post_ids ) ) {
-		wp_redirect( admin_url("edit.php?post_type=$post_type") );
-		exit;
-	}
-
-} elseif ( ! empty($_REQUEST['_wp_http_referer']) ) {
-	 wp_redirect( remove_query_arg( array('_wp_http_referer', '_wpnonce'), stripslashes($_SERVER['REQUEST_URI']) ) );
-	 exit;
-}
+$wp_list_table = get_list_table( 'WPEC_Variations_List_Table' );
 
 	$parent_file = "edit.php?post_type=$post_type";
 	$submenu_file = "edit.php?post_type=$post_type";
@@ -481,4 +465,105 @@ if ( $wp_list_table->has_items() )
 <br class="clear" />
 <?php
 }
+/*
+ * New function - hopefully we'll be able to deprecate soon, once we know what's going on exactly with WP_List_Table
+ *
+ */
+function wpsc_inline_edit() {
+		global $mode;
+
+		$screen = get_current_screen();
+
+		$post = get_default_post_to_edit( $screen->post_type );
+		$post_type_object = get_post_type_object( $screen->post_type );
+                $column_count = count( get_column_headers( 'wpsc-product_variants' ) );
+
+		$taxonomy_names = get_object_taxonomies( $screen->post_type );
+		$hierarchical_taxonomies = array();
+		$flat_taxonomies = array();
+		foreach ( $taxonomy_names as $taxonomy_name ) {
+			$taxonomy = get_taxonomy( $taxonomy_name );
+
+			if ( !$taxonomy->show_ui )
+				continue;
+
+			if ( $taxonomy->hierarchical )
+				$hierarchical_taxonomies[] = $taxonomy;
+			else
+				$flat_taxonomies[] = $taxonomy;
+		}
+
+		$m = ( isset( $mode ) && 'excerpt' == $mode ) ? 'excerpt' : 'list';
+		$can_publish = current_user_can( $post_type_object->cap->publish_posts );
+		$core_columns = array( 'title' => true );
+
+	?>
+
+	<form method="get" action=""><table style="display: none"><tbody id="inlineedit">
+		<?php
+		$hclass = count( $hierarchical_taxonomies ) ? 'post' : 'page';
+		$bulk = 0;
+		while ( $bulk < 2 ) { ?>
+
+		<tr id="<?php echo $bulk ? 'bulk-edit' : 'inline-edit'; ?>" class="inline-edit-row inline-edit-row-<?php echo "$hclass inline-edit-$screen->post_type ";
+			echo $bulk ? "bulk-edit-row bulk-edit-row-$hclass bulk-edit-$screen->post_type" : "quick-edit-row quick-edit-row-$hclass inline-edit-$screen->post_type";
+		?>" style="display: none"><td colspan="<?php echo $column_count; ?>" class="colspanchange">
+
+		<fieldset class="inline-edit-col-left"><div class="inline-edit-col">
+			<h4><?php echo $bulk ? __( 'Bulk Edit' ) : __( 'Quick Edit' ); ?></h4>
+	<?php
+
+	if ( post_type_supports( $screen->post_type, 'title' ) ) :
+		if ( $bulk ) : ?>
+			<div id="bulk-title-div">
+				<div id="bulk-titles"></div>
+			</div>
+
+	<?php else : // $bulk ?>
+
+			<label>
+				<span class="title"><?php _e( 'Title' ); ?></span>
+				<span class="input-text-wrap"><input type="text" name="post_title" class="ptitle" value="" /></span>
+			</label>
+
+	<?php endif; // $bulk
+	endif; // post_type_supports title
+
+	?>
+
+		</div></fieldset>
+
+	<?php
+		$columns = get_column_headers( 'wpsc-product_variants' );
+
+		foreach ( $columns as $column_name => $column_display_name ) {
+			if ( isset( $core_columns[$column_name] ) )
+				continue;
+			do_action( $bulk ? 'bulk_edit_custom_box' : 'quick_edit_custom_box', $column_name, $screen->post_type );
+		}
+	?>
+		<p class="submit inline-edit-save">
+			<a accesskey="c" href="#inline-edit" title="<?php _e( 'Cancel' ); ?>" class="button-secondary cancel alignleft"><?php _e( 'Cancel' ); ?></a>
+			<?php if ( ! $bulk ) {
+				wp_nonce_field( 'inlineeditnonce', '_inline_edit', false );
+				$update_text = __( 'Update' );
+				?>
+				<a accesskey="s" href="#inline-edit" title="<?php _e( 'Update' ); ?>" class="button-primary save alignright"><?php echo esc_attr( $update_text ); ?></a>
+				<img class="waiting" style="display:none;" src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" alt="" />
+			<?php } else {
+				submit_button( __( 'Update' ), 'button-primary alignright', 'bulk_edit', false, array( 'accesskey' => 's' ) );
+			} ?>
+			<input type="hidden" name="post_view" value="<?php echo esc_attr( $m ); ?>" />
+			<input type="hidden" name="screen" value="<?php echo esc_attr( $screen->id ); ?>" />
+			<br class="clear" />
+		</p>
+		</td></tr>
+	<?php
+		$bulk++;
+		}
+?>
+		</tbody></table></form>
+<?php
+	}
+
 ?>

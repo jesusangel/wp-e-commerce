@@ -412,7 +412,6 @@ function wpsc_product_variation_forms() {
 
 			<p><a name='variation_control'>&nbsp;</a><?php _e( 'Check or uncheck variation boxes and then click Update Variations to add or remove variations.' ) ?></p>
 
-                        <?php if( $db_version <= '15477' ) :  ?>
                         <table class="widefat page" id='wpsc_product_list' cellspacing="0">
 				<thead>
 					<tr>
@@ -429,9 +428,10 @@ function wpsc_product_variation_forms() {
 				<tbody>
             <?php
 		wpsc_admin_product_listing( $parent_product_data );
+                wpsc_inline_edit();
             ?>
 <?php
-		if ( count( $wp_query->posts ) < 1 ) :
+            if ( count( $wp_query->posts ) < 1 ) :
 ?>
 					<tr>
 						<td colspan="8">
@@ -445,16 +445,7 @@ function wpsc_product_variation_forms() {
 			</table>
                         
         <?php
-            //3.0.4 or lower is above, 3.1+ is below (at the moment, they're the same)
-            else:
-
-            wpsc_admin_product_listing_nai();
-
-            endif;
         endif;
-        ?>
-
-<?php
 }
 function wpsc_product_shipping_forms() {
 	global $post, $wpdb, $variations_processor, $wpsc_product_defaults;
@@ -1051,8 +1042,7 @@ function wpsc_filter_delete_text($translation, $text, $domain){
 }
 function edit_multiple_image_gallery( $post ) {
 	global $wpdb;
-//Not sure when this was added, but this is ONLY going to show the product thumbnail, one image, not all the images, in the product
-//images metabox...is that what we want?
+        //Make sure thumbnail isn't duplicated
 	$siteurl = get_option( 'siteurl' );
 	
 	if ( $post->ID > 0 ) {
@@ -1126,8 +1116,6 @@ function wpsc_save_quickedit_box( $post_id ) {
 
 function wpsc_quick_edit_boxes( $col_name, $type ) {
  
-    if( $type != 'wpsc-product' )
-        return;
     ?>
 
 <fieldset class="inline-edit-col-left wpsc-cols">
