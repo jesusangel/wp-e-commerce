@@ -295,7 +295,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			$message_html = str_replace( '%find_us%', $purchase_log['find_us'], $message_html );
 
 			if ( !empty($email) && ($purchase_log['email_sent'] != 1) ) {
-
+				$wpdb->update(WPSC_TABLE_PURCHASE_LOGS, array('email_sent' => '1'), array('id' => $purchase_log['id']) );
 				add_filter( 'wp_mail_from', 'wpsc_replace_reply_address', 0 );
 				add_filter( 'wp_mail_from_name', 'wpsc_replace_reply_name', 0 );
 
