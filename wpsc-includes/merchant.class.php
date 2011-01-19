@@ -162,7 +162,7 @@ class wpsc_merchant {
 
 		if ( count( $address_data['shipping'] ) < 1 )
 			$address_data['shipping'] = $address_data['billing'];
-			if( !empty($purchase_logs['discount_value']) )
+		if( !empty($purchase_logs['discount_value']) && $purchase_logs['discount_value'] > 0 )
 			$has_discount = true;
 		else
 			$has_discount = false;
