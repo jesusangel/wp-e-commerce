@@ -552,14 +552,14 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 	wp_set_object_terms($product_id, $variation_sets_and_values, 'wpsc-variation');	
 		
 	$child_product_template = array(
-		'post_author' => $user_ID,
-		'post_content' => $post_data['description'],
-		'post_excerpt' => $post_data['additional_description'],
-		'post_title' => $post_data['name'],
-		'post_status' => 'inherit',
-		'post_type' => "wpsc-product",
-		'post_name' => sanitize_title($post_data['name']),
-		'post_parent' => $product_id
+		'post_author' 	=> $user_ID,
+		'post_content' 	=> $post_data['description'],
+		'post_excerpt' 	=> $post_data['additional_description'],
+		'post_title' 	=> $post_data['name'],
+		'post_status' 	=> 'inherit',
+		'post_type' 	=> "wpsc-product",
+		'post_name' 	=> sanitize_title($post_data['name']),
+		'post_parent' 	=> $product_id
 	);
 				
 	$child_product_meta = get_post_custom($product_id);
@@ -572,9 +572,9 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 		$product_values = $child_product_template;
 
 		$combination_terms = get_terms('wpsc-variation', array(
-			'hide_empty' => 0,
-			'include' => implode(",", $combination),
-			'orderby' => 'parent',
+			'hide_empty'	=> 0,
+			'include' 		=> implode(",", $combination),
+			'orderby' 		=> 'parent',
 		));
 		
 		foreach($combination_terms as $term) {
@@ -587,11 +587,11 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 		$product_values['post_name'] = sanitize_title($product_values['post_title']);
 
 		$selected_post = get_posts(array(
-			'name' => $product_values['post_name'],
-			'post_parent' => $product_id,
-			'post_type' => "wpsc-product",
-			'post_status' => 'all',
-			'suppress_filters' => true
+			'name' 				=> $product_values['post_name'],
+			'post_parent' 		=> $product_id,
+			'post_type' 		=> "wpsc-product",
+			'post_status' 		=> 'all',
+			'suppress_filters' 	=> true
 		));
 		$selected_post = array_shift($selected_post);
 		$child_product_id = wpsc_get_child_object_in_terms($product_id, $term_ids, 'wpsc-variation');
@@ -664,12 +664,11 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 		$term_ids_to_delete = array();	
 		$term_ids_to_delete = array_diff($currently_associated_vars, $posted_terms);
 	}
-	if(!empty($term_ids_to_delete) && (isset($_REQUEST["product_id"]) ||  isset($_REQUEST["post_ID"]))) {
-		if(isset($_REQUEST["post_ID"]))
-			$post_id = $_REQUEST["post_ID"];
-		else
-			$post_id = $_REQUEST["product_id"];
-			
+	if(isset($_REQUEST["post_ID"]))
+		$post_id = $_REQUEST["post_ID"];
+	elseif(isset($_REQUEST["product_id"]))
+		$post_id = $_REQUEST["product_id"];
+	if(!empty($term_ids_to_delete) && (isset($_REQUEST["product_id"]) ||  isset($post_id))) {
 		$post_ids_to_delete = array();
 		
 		// Whatever remains, find child products of current product with that term, in the variation taxonomy, and delete
@@ -683,11 +682,12 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 			}
 		}
 	}	
-	$current_children = get_posts(array(
-		'post_parent' => $product_id,
-		'post_type' => "wpsc-product",
-		'post_status' => 'all'	
+	$current_children = query_posts(array(
+		'post_parent'	=> $post_id,
+		'post_type'		=> "wpsc-product",
+		'post_status'	=> 'all'
 		));
+
 	foreach((array)$current_children as $child_prod){
 		$childs[] = $child_prod->ID;
 	}
@@ -699,9 +699,6 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 			}
 		}
 	}
-//	echo 'Current Children: <pre>'.print_r($childs,1).'</pre>';
-//	echo 'Children Created: <pre>'.print_r($product_children,1).'</pre>';
-//	echo 'The Difference: <pre>'.print_r($old_ids_to_delete,1).'</pre>';
 }
 
 function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
