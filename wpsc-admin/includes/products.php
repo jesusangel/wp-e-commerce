@@ -523,7 +523,7 @@ function wpsc_inline_edit() {
 
 			<label>
 				<span class="title"><?php _e( 'Title' ); ?></span>
-				<span class="input-text-wrap"><input type="text" name="post_title" class="ptitle" value="" /></span>
+<!-- 				<span class="input-text-wrap"><input type="text" name="post_title" class="ptitle" value="" /></span> -->
 			</label>
 
 	<?php endif; // $bulk
