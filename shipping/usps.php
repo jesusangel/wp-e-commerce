@@ -339,6 +339,7 @@ class usps {
                 if (strpos($response[$i], '<Rate>')) {
                     $service = ereg('<MailService>(.*)</MailService>', $response[$i], $regs);
                     $service = $regs[1];
+                    $service = str_replace('&amp;lt;sup&amp;gt;&amp;amp;reg;&amp;lt;/sup&amp;gt;', '<sup>&reg;</sup>', $service);                    					$service = str_replace('&amp;lt;sup&amp;gt;&amp;amp;trade;&amp;lt;/sup&amp;gt;', '<sup>&trade;</sup>', $service);
                     $postage = ereg('<Rate>(.*)</Rate>', $response[$i], $regs);
                     $postage = $regs[1];
                     $postage = $postage + get_option('usps_extra_cost');
