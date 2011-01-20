@@ -37,7 +37,7 @@
 
 						<?php wpsc_start_category_query( array( 'parent_category_id' => $category_id, 'show_thumbnails' => $show_thumbnails , 'show_name' => $show_name) ); ?>
 
-							<li class="wpsc_category_<?php wpsc_print_category_id(); ?>">
+							<li class="wpsc_category_<?php wpsc_print_category_id(); wpsc_print_category_classes_section();?>">
 								<a href="<?php wpsc_print_category_url(); ?>" class="wpsc_category_image_link">
 
 									<?php wpsc_print_category_image( $width, $height ); ?>

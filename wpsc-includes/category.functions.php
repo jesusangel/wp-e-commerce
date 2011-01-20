@@ -115,8 +115,7 @@ function wpsc_print_category_id() {
 */
 function wpsc_print_category_classes($currcat = '') {
 	global $wp_query;
-
-	if(is_object($currcat) && isset($currcat['slug']) && isset($wp_query->query_vars['wpsc_product_category']) && $currcat['slug'] == $wp_query->query_vars['wpsc_product_category']){
+	if( is_array($currcat) && isset($currcat['slug']) && isset($wp_query->query_vars['wpsc_product_category']) && $currcat['slug'] == $wp_query->query_vars['wpsc_product_category']){
 		echo ' wpsc-current-cat ';
 	}
 }
