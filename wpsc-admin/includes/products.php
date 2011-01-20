@@ -551,7 +551,10 @@ function wpsc_inline_edit() {
 				<a accesskey="s" href="#inline-edit" title="<?php _e( 'Update' ); ?>" class="button-primary save alignright"><?php echo esc_attr( $update_text ); ?></a>
 				<img class="waiting" style="display:none;" src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" alt="" />
 			<?php } else {
-				submit_button( __( 'Update' ), 'button-primary alignright', 'bulk_edit', false, array( 'accesskey' => 's' ) );
+				/* We can replace this with submit_button in 3.1 */
+				?>
+				<input type="submit" name="bulk_edit" id="bulk_edit" class="button-primary alignright" value="Update" accesskey="s"  />
+				<?php
 			} ?>
 			<input type="hidden" name="post_view" value="<?php echo esc_attr( $m ); ?>" />
 			<input type="hidden" name="screen" value="<?php echo esc_attr( $screen->id ); ?>" />
