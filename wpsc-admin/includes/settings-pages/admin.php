@@ -110,12 +110,12 @@ global $wpdb;
 			<h3 class="form_group"><?php _e('Custom Messages', 'wpsc');?>:</h3>
 			<table class='wpsc_options form-table'>
 				<tr>
-					<th colspan="2"><?php _e('Tags can be used', 'wpsc');?>: %shop_name%,<!-- %order_status%,--> %product_list%, %total_price%, %total_shipping%, %find_us%, %total_tax%</th>
+					<th colspan="2"><?php _e('Tags can be used', 'wpsc');?>: %purchase_id%, %shop_name%,<!-- %order_status%,--> %product_list%, %total_price%, %total_shipping%, %find_us%, %total_tax%</th>
 				</tr>
 				<tr>
 					<td class='wpsc_td_note' colspan='2'>
 						<span class="wpscsmall description">
-						Note: The purchase receipt is the message e-mailed to users after purchasing products from your shop.
+						<?php _e('Note: The purchase receipt is the message e-mailed to users after purchasing products from your shop.' , 'wpsc'); ?>
 						</span>
 					</td>
 				</tr>
@@ -126,7 +126,7 @@ global $wpdb;
 				<tr>
 					<td class='wpsc_td_note' colspan='2'>
 						<span class="wpscsmall description">
-						Note: The Admin Report is the email sent to the e-mail address set above as soon as someone successfully buys a product.
+						<?php _e('Note: The Admin Report is the email sent to the e-mail address set above as soon as someone successfully buys a product.' , 'wpsc'); ?>
 						</span>
 					</td>
 				</tr>
@@ -141,7 +141,7 @@ global $wpdb;
 				<tr>
 					<td class='wpsc_td_note' colspan='2'>
 						<span class="wpscsmall description">
-						Note: The Tracking Subject, is the subject for The Tracking Message email. The Tracking Message is the message e-mailed to users when you click 'Email buyer' on the sales log. This option is only available for purchases with the status of 'Job Dispatched'. Tags you can use in the email message section are %trackid% and %shop_name%
+						<?php _e('Note: The Tracking Subject, is the subject for The Tracking Message email. The Tracking Message is the message e-mailed to users when you click \'Email buyer\' on the sales log. This option is only available for purchases with the status of \'Job Dispatched\'. Tags you can use in the email message section are %trackid% and %shop_name%' , 'wpsc'); ?>
 						</span>
 					</td>
 				</tr>
