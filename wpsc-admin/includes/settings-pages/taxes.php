@@ -121,10 +121,15 @@ function wpec_options_taxes() {
 					  2. If a country tax rate is specified and then a region tax
 					  rate, the region tax rate takes precedence.
 					 * */
+                
+                /**
+                 * Removed Shipping Restriction on Included tax - 01-20-2011
 					//if tax is included warn about shipping
 					if ( $wpec_taxes_controller->wpec_taxes_isincluded() ) {
 						echo '<p>' . __( 'Note: Tax is not applied to shipping when product prices are tax inclusive.' ) . '</p>';
 					}// if
+               **/
+               
 					//get current tax rates
 					$tax_rates = $wpec_taxes_controller->wpec_taxes->wpec_taxes_get_rates();
 					$tax_rate_count = 0;

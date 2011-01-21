@@ -40,58 +40,141 @@ class wpec_taxes_controller {
     * @param: void
     * @return: array containing total tax and rate if applicable
     * */
-   function wpec_taxes_calculate_total() {
-      //get the cart - NOTE: billing country is selected_country and shipping country is delivery_country
-      global $wpsc_cart;
+	function wpec_taxes_calculate_total() {
+		//get the cart - NOTE: billing country is selected_country and shipping country is delivery_country
+		global $wpsc_cart;
 
-      //initialize return variable
-      $returnable = array( 'total' => 0, 'rate' => 0);
+		//initialize return variable
+		$returnable = array( 'total' => 0, 'rate' => 0);
 
-      //check if tax is enabled
-      if ( $this->wpec_taxes->wpec_taxes_get_enabled() ) {
-         //get base country code
-         $wpec_selected_country = $this->wpec_taxes_retrieve_selected_country();
+		//check if tax is enabled
+		if ( $this->wpec_taxes->wpec_taxes_get_enabled() ) {
+			//run tax logic and calculate tax
+			if ( $this->wpec_taxes_run_logic() ) {
+				//get selected country code
+				$wpec_selected_country = $this->wpec_taxes_retrieve_selected_country();
+				
+				//set tax region
+				$region = $this->wpec_taxes_retrieve_region();
+				
+				//get the rate for the country and region if set
+				$tax_rate = $this->wpec_taxes->wpec_taxes_get_rate( $wpec_selected_country, $region );
+			
+				//start the total_tax off at 0
+				$total_tax = 0;
 
-         //run tax logic and calculate tax
-         if ( $this->wpec_taxes_run_logic() ) {
-            //set tax region
-            $region = $this->wpec_taxes_retrieve_region();
+				foreach ( $wpsc_cart->cart_items as $cart_item ) {
+					//if the tax is inclusive calculate vat
+					if ( $this->wpec_taxes_isincluded() ) {
+						//run wpec_taxes_calculate_included_tax
+						$taxes = $this->wpec_taxes_calculate_included_tax( $cart_item );
 
-            //if the tax is inclusive calculate vat
-            if ( $this->wpec_taxes_isincluded() ) {
-               //start the total_tax off at 0
-               $total_tax = 0;
+						$total_tax += $taxes['tax'];
+					}
+					else
+					{
+						//run wpec_taxes_calculate_excluded_tax
+						$taxes = $this->wpec_taxes_calculate_excluded_tax( $cart_item, $tax_rate );
 
-               //loop through products
-               foreach ( $wpsc_cart->cart_items as $cart_item ) {
-                  //run wpec_taxes_calculate_included_tax
-                  $taxes = $this->wpec_taxes_calculate_included_tax( $cart_item );
+						$total_tax += $taxes['tax'];
+					}// if
+				}// foreach
 
-                  $total_tax += $taxes['tax'];
-               }// foreach
+				//add shipping tax if set
+				if ( $tax_rate['shipping'] ) {
+					$total_tax += $this->wpec_taxes_calculate_tax( $wpsc_cart->calculate_total_shipping(), $tax_rate['rate'] );
+				}// if
+				
+				$returnable = array( 'total' => $total_tax );
 
-               $returnable = array( 'total' => $total_tax );
-            } else {
-               //check if there are any rates setup for the base_country
-              //calculate subtotal for the items
-              $taxable_total = $wpsc_cart->calculate_subtotal();
+				if ( !$this->wpec_taxes_isincluded() ) {
+					$returnable['rate'] = $tax_rate['rate'];
+				}// if
+			}// if
+		} //if
 
-              //get the rate for the country and region if set
-              $tax_rate = $this->wpec_taxes->wpec_taxes_get_rate( $wpec_selected_country, $region );
+		return $returnable;
+	} // wpec_taxes_calculate_total
+	
+	/**
+    * @description: wpec_taxes_calculate_tax - a simple function to calculate tax based on a given
+    *               price and tax percentage.
+    *
+    * @param: price - the price you wish to calculate tax for
+    * @param: tax_percentage - the percentage you wish to use to calculate the tax
+    * @return: calculated price
+    * */
+   function wpec_taxes_calculate_tax( $price, $tax_percentage ) {
+      $returnable = 0;
 
-              //is the region configured to apply tax on shipping? if so add shipping price to the taxable total
-              if ( $tax_rate['shipping'] ) {
-                 $taxable_total += $wpsc_cart->calculate_total_shipping();
-              }// if
-              //calculate tax
-              $returnable = array( 'total' => $this->wpec_taxes_calculate_tax( $taxable_total, $tax_rate['rate'] ), 'rate' => $tax_rate['rate'] );
-            }// if
-         }// if
-      } //if
+      if ( !empty( $tax_percentage ) ) {
+         $returnable = $price * ($tax_percentage / 100);
+      }// if
 
       return $returnable;
-   } // wpec_taxes_calculate_total
+   } // wpec_taxes_calculate_tax
+	
+	function wpec_taxes_calculate_excluded_tax( $cart_item, $tax_rate )
+	{
+		$returnable = false;
+		
+		//do not calculate tax for this item if it is not taxable
+      if(!isset($cart_item->meta[0]['wpec_taxes_taxable']))
+      {
+         if ( $this->wpec_taxes_run_logic() ) {	
+				//get the taxable amount
+				if(isset($cart_item->meta[0]['wpec_taxes_taxable_amount']) && !empty($cart_item->meta[0]['wpec_taxes_taxable_amount']))
+				{
+					//if there is a taxable amount defined for this product use this to calculate taxes
+					$taxable_amount = $cart_item->meta[0]['wpec_taxes_taxable_amount'];
+				}
+				else
+				{
+					//there is no taxable amount found - use the unit price
+					$taxable_amount = $cart_item->unit_price;
+				}// if
+				//get the taxable price - unit price multiplied by qty
+            $taxable_price = $taxable_amount * $cart_item->quantity;
+				
+				//calculate tax
+				$returnable = array( 'tax' => $this->wpec_taxes_calculate_tax( $taxable_price, $tax_rate['rate'] ), 'rate' => $tax_rate['rate'] );
+			}// if
+		}// if
+		
+		return $returnable;
+	}// wpec_taxes_calculate_excluded_tax
 
+   /**
+    * @description: wpec_taxes_calculate_included_tax - provided a cart item
+    *               this function will calcuate the included tax for it. It returns
+    *               the tax to be added as well as the rate that was charged.
+    *
+    * @param: cart_item - the cart item that you wish to retrieve tax for
+    * @return: array containing the tax and rate or false depending on the logic settings
+    * */
+   function wpec_taxes_calculate_included_tax( $cart_item ) {
+      global $wpsc_cart;
+      $returnable = false;
+      
+      //do not calculate tax for this item if it is not taxable
+      if(!isset($cart_item->meta[0]['wpec_taxes_taxable']))
+      {
+         if ( $this->wpec_taxes_run_logic() ) {
+            $wpec_base_country = $this->wpec_taxes_retrieve_selected_country();
+            $region = $this->wpec_taxes_retrieve_region();
+
+            //get the tax percentage rate
+            $tax_rate = $this->wpec_taxes->wpec_taxes_get_included_rate( $cart_item->meta[0]['wpec_taxes_band'], $wpec_base_country, $region );
+
+            //get the taxable price - unit price multiplied by qty
+            $taxable_price = $cart_item->unit_price * $cart_item->quantity;
+
+            $returnable = array( 'tax' => $this->wpec_taxes_calculate_tax( $taxable_price, $tax_rate ), 'rate' => $tax_rate );
+         }// if
+      }// if
+
+      return $returnable;
+   } //wpec_taxes_calculate_included_tax
 
    function wpec_taxes_retrieve_selected_country(){
 		global $wpsc_cart;
@@ -224,7 +307,6 @@ class wpec_taxes_controller {
                'label' => __( 'Custom Tax Band' )
             );
             $band_select_settings = wp_parse_args( $input_settings, $default_select_settings );
-            extract( $band_select_settings, EXTR_SKIP );
 
             //set the default option
             $default_option = (isset( $custom_tax_band )) ? $custom_tax_band : __( 'Disabled' );
@@ -234,61 +316,14 @@ class wpec_taxes_controller {
          } else {
             $returnable = '<p>' . __( 'No Tax Bands Setup. Set Tax Bands up in <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>' ) . '</p>';
          }// if
-      } else {
+      } elseif(!$this->wpec_taxes->wpec_taxes_get_enabled()) {
          $returnable = '<p>';
-         $returnable .= ( $this->wpec_taxes->wpec_taxes_get_enabled()) ? __( 'Product prices are Tax Exclusive. See <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>' ) :
-               __( 'Taxes are not enabled. See <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>' );
+         $returnable .= __( 'Taxes are not enabled. See <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>' );
          $returnable .= '</p>';
       }// if
 
       return $returnable;
    } // wpec_taxes_display_tax_bands
-
-   /**
-    * @description: wpec_taxes_calculate_tax - a simple function to calculate tax based on a given
-    *               price and tax percentage.
-    *
-    * @param: price - the price you wish to calculate tax for
-    * @param: tax_percentage - the percentage you wish to use to calculate the tax
-    * @return: calculated price
-    * */
-   function wpec_taxes_calculate_tax( $price, $tax_percentage ) {
-      $returnable = 0;
-
-      if ( !empty( $tax_percentage ) ) {
-         $returnable = $price * ($tax_percentage / 100);
-      }// if
-
-      return $returnable;
-   } // wpec_taxes_calculate_tax
-
-   /**
-    * @description: wpec_taxes_calculate_included_tax - provided a cart item
-    *               this function will calcuate the included tax for it. It returns
-    *               the tax to be added as well as the rate that was charged.
-    *
-    * @param: cart_item - the cart item that you wish to retrieve tax for
-    * @return: array containing the tax and rate or false depending on the logic settings
-    * */
-   function wpec_taxes_calculate_included_tax( $cart_item ) {
-      global $wpsc_cart;
-      $returnable = false;
-
-      if ( $this->wpec_taxes_run_logic() ) {
-         $wpec_base_country = $this->wpec_taxes_retrieve_selected_country();
-         $region = $this->wpec_taxes_retrieve_region();
-
-         //get the tax percentage rate
-         $tax_rate = $this->wpec_taxes->wpec_taxes_get_included_rate( $cart_item->meta[0]['wpec_taxes_band'], $wpec_base_country, $region );
-
-         //get the taxable price - unit price multiplied by qty
-         $taxable_price = $cart_item->unit_price * $cart_item->quantity;
-
-         $returnable = array( 'tax' => $this->wpec_taxes_calculate_tax( $taxable_price, $tax_rate ), 'rate' => $tax_rate );
-      }// if
-
-      return $returnable;
-   } //wpec_taxes_calculate_included_tax
 
    /**
     * @description: wpec_taxes_product_rate_percentage - returns the percentage for the specified tax band.

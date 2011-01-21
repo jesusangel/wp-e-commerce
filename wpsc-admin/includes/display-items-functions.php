@@ -280,8 +280,10 @@ function wpsc_product_taxes_forms(){
 	$custom_tax = $product_data['meta']['_wpsc_custom_tax'];
 
 	
-	if ( !isset( $product_meta['custom_tax'] ) )
-		$product_meta['custom_tax'] = 0.00;
+	if ( !isset( $product_meta['custom_tax'] ) ){
+      $product_meta['custom_tax'] = 0.00;
+   }
+   
 	//Add New WPEC-Taxes Bands Here
 	$wpec_taxes_controller = new wpec_taxes_controller();
 
@@ -292,9 +294,44 @@ function wpsc_product_taxes_forms(){
 		'label' => __( 'Custom Tax Band' )
 	);
 	$wpec_taxes_band = '';
-	if(isset($product_meta['wpec_taxes_band']))
-		$wpec_taxes_band = $product_meta['wpec_taxes_band'];
-	echo $wpec_taxes_controller->wpec_taxes_display_tax_bands( $band_select_settings, $wpec_taxes_band );
+	if(isset($product_meta['wpec_taxes_band'])){
+      $wpec_taxes_band = $product_meta['wpec_taxes_band'];
+   }
+   
+   $taxable_checkbox_settings = array(
+      'type' => 'checkbox',
+      'id' => 'wpec_taxes_taxable',
+      'name' => 'meta[_wpsc_product_metadata][wpec_taxes_taxable]',
+      'label' => __( 'This product is not taxable.' )
+   );
+   
+   if(isset($product_meta['wpec_taxes_taxable']) && 'on' == $product_meta['wpec_taxes_taxable']){
+      $taxable_checkbox_settings['checked'] = 'checked';
+   }
+	
+	//add taxable amount only for exclusive tax
+	if(!$wpec_taxes_controller->wpec_taxes_isincluded())
+	{
+		$taxable_amount_input_settings = array(
+			'id' => 'wpec_taxes_taxable_amount',
+			'name' => 'meta[_wpsc_product_metadata][wpec_taxes_taxable_amount]',
+			'label' => __( 'Taxable Amount' )
+		);
+		
+		if(isset($product_meta['wpec_taxes_taxable_amount'])){
+			$taxable_amount_input_settings['value'] = $product_meta['wpec_taxes_taxable_amount'];
+		}
+	}// if
+      
+	?>
+            <p><?php echo $wpec_taxes_controller->wpec_taxes_display_tax_bands( $band_select_settings, $wpec_taxes_band ); ?></p>
+				<p>
+					<?php if(!$wpec_taxes_controller->wpec_taxes_isincluded()): ?>
+						<?php echo $wpec_taxes_controller->wpec_taxes_build_input( $taxable_amount_input_settings );?>
+					<?php endif;?>
+				</p>
+            <p><?php echo $wpec_taxes_controller->wpec_taxes_build_input( $taxable_checkbox_settings ); ?></p>
+<?php				
 }
 function wpsc_product_variation_forms() {
 	global $post, $wpdb, $wp_query, $variations_processor, $wpsc_product_defaults;
