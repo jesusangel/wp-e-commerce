@@ -14,7 +14,7 @@
 
 		<?php wpsc_start_category_query( array( 'parent_category_id' => $category_id, 'show_thumbnails' => $show_thumbnails, 'show_name' => $show_name) ); ?>
 
-		<a href="<?php wpsc_print_category_url(); ?>" style="padding: 4px 4px 0 0; width:<?php echo $width; ?>px; height:<?php echo $height; ?>px" class="wpsc_category_grid_item" title="<?php wpsc_print_category_name(); ?>">
+		<a href="<?php wpsc_print_category_url(); ?>" style="width:<?php echo $width; ?>px; height:<?php echo $height; ?>px" class="wpsc_category_grid_item" title="<?php wpsc_print_category_name(); ?>">
 			<?php wpsc_print_category_image( $width, $height ); ?>
 		</a>
 
