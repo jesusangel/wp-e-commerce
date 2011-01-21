@@ -294,12 +294,7 @@ function wpsc_product_taxes_forms(){
 	$wpec_taxes_band = '';
 	if(isset($product_meta['wpec_taxes_band']))
 		$wpec_taxes_band = $product_meta['wpec_taxes_band'];
-	?>
-            <p>
-                 <?php echo $wpec_taxes_controller->wpec_taxes_display_tax_bands( $band_select_settings, $wpec_taxes_band ); ?>
-            </p>
-
-<?php				
+	echo $wpec_taxes_controller->wpec_taxes_display_tax_bands( $band_select_settings, $wpec_taxes_band );
 }
 function wpsc_product_variation_forms() {
 	global $post, $wpdb, $wp_query, $variations_processor, $wpsc_product_defaults;
