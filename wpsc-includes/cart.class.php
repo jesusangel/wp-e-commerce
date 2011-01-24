@@ -648,7 +648,7 @@ class wpsc_cart {
       global $wpsc_cart;
       if(is_object($wpsc_cart) && is_object($wpsc_cart->cart_items))
       {
-         foreach($wpsc_cart->cart_items as &$cart_item)
+         foreach($wpsc_cart->cart_items as $cart_item)
          {
             $cart_item->refresh_item();
          }// foreach
@@ -1558,7 +1558,7 @@ class wpsc_cart_item {
     * @param objcet  the cart object
     * @return boolean true on sucess, false on failure
    */
-   function wpsc_cart_item($product_id, $parameters, &$cart) {
+   function wpsc_cart_item($product_id, $parameters, $cart) {
     global $wpdb;
     // still need to add the ability to limit the number of an item in the cart at once.
     // each cart item contains a reference to the cart that it is a member of, this makes that reference
