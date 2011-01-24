@@ -350,7 +350,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 
 			//echo '======REPORT======<br />'.$report.'<br />';
 			//echo '======EMAIL======<br />'.$message.'<br />';
-			if ( (get_option( 'purch_log_email' ) != null) && ($purchase_log['email_sent'] != 1) )
+			if ( (get_option( 'purch_log_email' ) != null) )
 				wp_mail( get_option( 'purch_log_email' ), __( 'Purchase Report', 'wpsc' ), $report );
 
 			/// Adjust stock and empty the cart
