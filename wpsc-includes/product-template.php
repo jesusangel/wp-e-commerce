@@ -131,26 +131,26 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	
 	// Should we show the FIRST PAGE link?
 	if($current_page > 1)
-		$output .= "<a href=\"". $page_link . $additional_links . "\" title=\"First Page\"> &laquo; First </a>";
+		$output .= "<a href=\"". $page_link . $additional_links . "\" title=\"" . __('First Page', 'wpsc') . "\">" . __('&laquo; First', 'wpsc') . "</a>";
 
 	// Should we show the PREVIOUS PAGE link?
 	if($current_page > 2) {
 		$previous_page = $current_page - 1;	
-		$output .= " <a href=\"". $page_link .$separator. $previous_page . $additional_links . "\" title=\"Previous Page\"> &lt; Previous </a>";
+		$output .= " <a href=\"". $page_link .$separator. $previous_page . $additional_links . "\" title=\"" . __('Previous Page', 'wpsc') . "\">" . __('&lt; Previous', 'wpsc') . "</a>";
 	}
 	$i =$current_page - $num_paged_links;
 	$count = 1;
 	if($i <= 0) $i =1;
 	while($i < $current_page){
 		if($count <= $num_paged_links){
-			$output .= " <a href=\"". $page_link .$separator. $i . $additional_links . "\" title=\"Page ".$i." \"> ".$i."  </a>";
+			$output .= " <a href=\"". $page_link .$separator. $i . $additional_links . "\" title=\"" . sprintf( __('Page %s', 'wpsc'), $i ) . " \">".$i."</a>";
 		}
 		$i++;
 		$count++;
 	}
 	// Current Page Number	
 	if($current_page > 0)
-		$output .= "<span class='current'> ". $current_page ." </span>";
+		$output .= "<span class='current'>$current_page</span>";
 
 	//Links after Current Page
 	$i = $current_page + $num_paged_links;
@@ -169,11 +169,11 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	
 	if($current_page < $totalpages) {
 		$next_page = $current_page + 1;
-		$output .= "<a href=\"". $page_link  .$separator. $next_page . $additional_links . "\" title=\"Next Page\"> Next &gt; </a>";
+		$output .= "<a href=\"". $page_link  .$separator. $next_page . $additional_links . "\" title=\"" . __('Next Page', 'wpsc') . "\">" . __('Next &gt;', 'wpsc') . "</a>";
 	}
 	// Should we show the LAST PAGE link?
 	if($current_page < $totalpages) {
-		$output .= " <a href=\"". $page_link  .$separator. $totalpages . $additional_links . "\" title=\"Last Page\"> Last &raquo; </a>";
+		$output .= " <a href=\"". $page_link  .$separator. $totalpages . $additional_links . "\" title=\"" . __('Last Page', 'wpsc') . "\">" . __('Last &raquo;', 'wpsc') . "</a>";
 	}
 	// Return the output.
 	echo $output;
