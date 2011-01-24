@@ -725,9 +725,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc_display_invoice' == $_RE
  */
 function wpsc_purchlog_resend_email() {
 	global $wpdb;
-	$shipping=0;
-	$siteurl = get_option( 'siteurl' );
-	$log_id = (int)$_GET['email_buyer_id'];
 	$wpec_taxes_controller = new wpec_taxes_controller();
 	if ( is_numeric( $log_id ) ) {
 		$selectsql = "SELECT `sessionid` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `id`= " . $log_id . " LIMIT 1";
