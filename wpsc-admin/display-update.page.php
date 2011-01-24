@@ -68,6 +68,7 @@ function wpsc_display_update_page() { ?>
 			echo '<br />Updating Product Files...';
 			wpsc_update_files();
 			echo '<br />Updating Database...';
+			wpsc_create_or_update_tables();
 			wpsc_update_database();
 			echo '<br /><br /><strong>WP e-Commerce updated successfully!</strong>';
 			update_option('wpsc_version', 3.8);
