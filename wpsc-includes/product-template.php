@@ -158,7 +158,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	if($current_page < $totalpages){
 		while(($i) > $current_page){
 			if($count < $num_paged_links && ($count+$current_page) <= $totalpages){
-			$output .= " <a href=\"". $page_link .$separator. ($count+$current_page) .$additional_links . "\" title=\"Page ".($count+$current_page)." \"> ".($count+$current_page)."  </a>";
+			$output .= " <a href=\"". $page_link .$separator. ($count+$current_page) .$additional_links . "\" title=\"Page ".($count+$current_page)." \">".($count+$current_page)."</a>";
 			$i++;
 			}else{
 			break;
@@ -173,7 +173,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	}
 	// Should we show the LAST PAGE link?
 	if($current_page < $totalpages) {
-		$output .= " <a href=\"". $page_link  .$separator. $totalpages . $additional_links . "\" title=\"" . __('Last Page', 'wpsc') . "\">" . __('Last &raquo;', 'wpsc') . "</a>";
+		$output .= "<a href=\"". $page_link  .$separator. $totalpages . $additional_links . "\" title=\"" . __('Last Page', 'wpsc') . "\">" . __('Last &raquo;', 'wpsc') . "</a>";
 	}
 	// Return the output.
 	echo $output;
