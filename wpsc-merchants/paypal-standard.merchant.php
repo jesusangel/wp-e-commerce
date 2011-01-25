@@ -284,13 +284,11 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 		
 		$response = wp_remote_post($paypal_url, $options);
 		if( 'VERIFIED' == $response['body'] ) {
-			wp_mail('jghazally@gmail.com','IPN Success','Yaaaays<pre>'.print_r($response,1).'</pre>');
 			$this->paypal_ipn_values = $received_values;
 			$this->session_id = $received_values['invoice'];
 			$this->set_purchase_processed_by_sessionid(3);
 
 		} else {
-			wp_mail('jghazally@gmail.com','IPN Failed','Pooos<pre>'.print_r($response,1).'</pre>');
 			exit("IPN Request Failure");
 		}
 	}

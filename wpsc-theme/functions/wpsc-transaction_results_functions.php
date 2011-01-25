@@ -98,27 +98,9 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 	
 		if( $is_transaction ){
 			$message = __('The Transaction was successful', 'wpsc')."\r\n".$message;
-			$message_html = __('The Transaction was successful', 'wpsc')."<br />".$message;
+			$message_html = __('The Transaction was successful', 'wpsc')."<br />".$message_html;
 		}
-/*
-		// Checks for PayPal IPN
-		if ( (!isset( $_GET['ipn_request'] ) || 'true' != $_GET['ipn_request']) 
-			&& ((get_option( 'paypal_ipn' ) == 1)  && ('wpsc_merchant_paypal_standard' == $purchase_log['gateway'] )) ) {
 
-			if ( $purchase_log == null ) {
-				if ( (get_option( 'purch_log_email' ) != null) && ($purchase_log['email_sent'] != 1 || $resend_email) ) {
-					$order_url = site_url( "/wp-admin/admin.php?page=wpsc-sales-logs&purchaselog_id=" . $purchase_log['id'] );
-					wp_mail( get_option( 'purch_log_email' ), __( 'New pending order', 'wpsc' ), __( 'There is a new order awaiting processing:', 'wpsc' ) . $order_url, "From: " . get_option( 'return_email' ) . "" );
-				}
-				$message_html = __( 'We&#39;re Sorry, your order has not been accepted, the most likely reason is that you have insufficient funds.', 'wpsc' );
-
-		//		return false;
-			} else if (!$is_transaction) {
-				$message_html = __( 'Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc' ) . "<p style='margin: 1em 0px 0px 0px;' >" . nl2br( stripslashes( get_option( 'payment_instructions' ) ) ) . "</p>";
-		//		return;
-			}
-		}
-*/
 		if ( !empty($purchase_log['shipping_country']) ) {
 			$billing_country = $purchase_log['billing_country'];
 			$shipping_country = $purchase_log['shipping_country'];
