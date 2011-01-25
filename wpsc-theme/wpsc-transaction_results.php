@@ -19,7 +19,7 @@
 		// Code to check whether transaction is processed, true if accepted false if pending or incomplete
 		
 		
-		echo "<br />" . nl2br(str_replace("$",'\$',$message_html));						
+		echo "<br />" . wpautop(str_replace("$",'\$',$message_html));						
 	}elseif ( true === $echo_to_screen && ( !isset($purchase_log) ) ) {
 			_e('Oops, there is nothing in your cart.', 'wpsc') . "<a href=".get_option("product_list_url").">" . __('Please visit our shop', 'wpsc') . "</a>";
 	}

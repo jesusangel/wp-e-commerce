@@ -70,7 +70,7 @@ function wpsc_transaction_theme() {
  */
 function transaction_results( $sessionid, $echo_to_screen = true, $transaction_id = null ) {
 	// Do we seriously need this many globals?
-	global $wpdb, $wpsc_cart, $purchase_log, $order_url; 
+	global $wpdb, $wpsc_cart, $echo_to_screen, $purchase_log, $order_url; 
 	global $message_html, $cart, $errorcode,$wpsc_purchlog_statuses, $wpsc_gateways;
 	
 	$wpec_taxes_controller = new wpec_taxes_controller();
@@ -100,6 +100,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			$message = __('The Transaction was successful', 'wpsc')."\r\n".$message;
 			$message_html = __('The Transaction was successful', 'wpsc')."<br />".$message;
 		}
+/*
 		// Checks for PayPal IPN
 		if ( (!isset( $_GET['ipn_request'] ) || 'true' != $_GET['ipn_request']) 
 			&& ((get_option( 'paypal_ipn' ) == 1)  && ('wpsc_merchant_paypal_standard' == $purchase_log['gateway'] )) ) {
@@ -111,12 +112,13 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 				}
 				$message_html = __( 'We&#39;re Sorry, your order has not been accepted, the most likely reason is that you have insufficient funds.', 'wpsc' );
 
-				return false;
+		//		return false;
 			} else if (!$is_transaction) {
 				$message_html = __( 'Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc' ) . "<p style='margin: 1em 0px 0px 0px;' >" . nl2br( stripslashes( get_option( 'payment_instructions' ) ) ) . "</p>";
-				return;
+		//		return;
 			}
 		}
+*/
 		if ( !empty($purchase_log['shipping_country']) ) {
 			$billing_country = $purchase_log['billing_country'];
 			$shipping_country = $purchase_log['shipping_country'];
@@ -350,7 +352,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 
 			//echo '======REPORT======<br />'.$report.'<br />';
 			//echo '======EMAIL======<br />'.$message.'<br />';
-			if ( (get_option( 'purch_log_email' ) != null) )
+			if ( (get_option( 'purch_log_email' ) != null) && ($purchase_log['email_sent'] != 1) )
 				wp_mail( get_option( 'purch_log_email' ), __( 'Purchase Report', 'wpsc' ), $report );
 
 			/// Adjust stock and empty the cart
