@@ -435,7 +435,6 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 function _wpsc_admin_product_listing_nai() {
 global $post_type, $wp_query;
-include ( WPSC_FILE_PATH.'/wpsc-admin/includes/variations_table_class.php' );
 
 
 $wp_list_table = get_list_table( 'WPEC_Variations_List_Table' );
