@@ -795,7 +795,6 @@ function wpsc_item_process_file($product_id, $submitted_file, $preview_file = nu
 	}
 
 	$file = wp_handle_upload($submitted_file, $overrides, $time);
-	exit('<pre>'.print_r($file,1).'</pre>');
 	if ( isset($file['error']) )
 		return new WP_Error( 'upload_error', $file['error'] );
 
@@ -827,7 +826,6 @@ function wpsc_item_process_file($product_id, $submitted_file, $preview_file = nu
 function wpsc_modify_upload_directory($input) {
 	$previous_subdir = $input['subdir'];
 	$download_subdir = str_replace($input['basedir'], '', WPSC_FILE_DIR);
-
 	$input['path'] = substr_replace(str_replace($previous_subdir, $download_subdir, $input['path']),'',-1);
 	$input['url'] = substr_replace(str_replace($previous_subdir, $download_subdir, $input['url']),'',-1);
 	$input['subdir'] = substr_replace(str_replace($previous_subdir, $download_subdir, $input['subdir']),'',-1);
@@ -838,9 +836,9 @@ function wpsc_modify_preview_directory($input) {
 	$previous_subdir = $input['subdir'];
 	$download_subdir = str_replace($input['basedir'], '', WPSC_PREVIEW_DIR);
 	
-	$input['path'] = str_replace($previous_subdir, $download_subdir, $input['path']);
-	$input['url'] = str_replace($previous_subdir, $download_subdir, $input['url']);
-	$input['subdir'] = str_replace($previous_subdir, $download_subdir, $input['subdir']);
+	$input['path'] = substr_replace(str_replace($previous_subdir, $download_subdir, $input['path']),'',-1);
+	$input['url'] = substr_replace(str_replace($previous_subdir, $download_subdir, $input['url']),'',-1);
+	$input['subdir'] = substr_replace(str_replace($previous_subdir, $download_subdir, $input['subdir']),'',-1);
 	
 	return $input;
 }
