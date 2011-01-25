@@ -68,7 +68,7 @@ function wpsc_transaction_theme() {
  * @param echo_to_screen (boolean) whether to output the results or return them (potentially redundant)
  * @param $transaction_id (int) the transaction id
  */
-function transaction_results( $sessionid, $echo_to_screen = true, $transaction_id = null ) {
+function transaction_results( $sessionid, $display_to_screen = true, $transaction_id = null ) {
 	// Do we seriously need this many globals?
 	global $wpdb, $wpsc_cart, $echo_to_screen, $purchase_log, $order_url; 
 	global $message_html, $cart, $errorcode,$wpsc_purchlog_statuses, $wpsc_gateways;
@@ -85,8 +85,10 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 	else
 		$resend_email = false;
 		
-	if( !is_bool( $echo_to_screen )  )
-		$echo_to_screen = true;
+	if( !is_bool( $display_to_screen )  )
+		$display_to_screen = true;
+		
+	$echo_to_screen = $display_to_screen;
 
 	if ( is_numeric( $sessionid ) ) {
 		if ( $echo_to_screen )
