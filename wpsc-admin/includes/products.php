@@ -132,7 +132,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 				<?php if($parent_product): ?>
 					<input type="hidden" class="wpsc_ie_id wpsc_ie_field" value="<?php echo $product->ID ?>">
 					<input type="text" class="wpsc_ie_title wpsc_ie_field" value="<?php echo $title ?>">
-					<div class="wpsc_inline_actions"><img src="<?php bloginfo('url') ?>/wp-admin/images/wpspin_light.gif" class="loading_indicator"><input type="button" class="button-primary wpsc_ie_save" value="Save"> <input type="button" class="button-secondary cancel wpsc_ie_cancel" value="Cancel"></div>
+					<div class="wpsc_inline_actions"><input type="button" class="button-primary wpsc_ie_save" value="Save"><img src="<?php bloginfo('url') ?>/wp-admin/images/wpspin_light.gif" class="loading_indicator"><br/><input type="button" class="button-secondary cancel wpsc_ie_cancel" value="Cancel"></div>
 				<?php endif; ?>
 			<?php } else {
 				echo $title;

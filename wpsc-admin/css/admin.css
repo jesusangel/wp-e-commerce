@@ -1708,6 +1708,6 @@ div#wpsc-variationdiv {
 .wpsc_inline_actions .loading_indicator{
 	position:relative;
 	top:3px;
-	right:2px;
+	left:2px;
 	visibility: hidden;
 }
