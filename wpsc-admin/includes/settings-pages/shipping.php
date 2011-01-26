@@ -156,7 +156,15 @@ function wpsc_options_shipping() {
 								</td>
 
 							</tr>
+							<tr>
+								<td>
+								<div class='submit' <?php echo $update_button_css; ?>>
+									<input type='submit' value='<?php _e( 'Update &raquo;', 'wpsc' ); ?>' name='updateoption' />
+								</div>
+								</td>
+							</tr>
 							<?php do_action('wpsc_shipping_settings_page'); ?>
+							
 						</table>
 								</div>
 									</div>

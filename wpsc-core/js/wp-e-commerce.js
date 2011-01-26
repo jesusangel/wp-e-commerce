@@ -378,7 +378,13 @@ function set_shipping_country(html_form_id, form_id){
 		shipping_region = "&shipping_region="+region;
 	}
 
-	form_values = "wpsc_ajax_action=change_tax&form_id="+form_id+"&shipping_country="+country+shipping_region;
+	form_values = {
+		wpsc_ajax_action: "change_tax",
+		form_id: form_id,
+		shipping_country: country,
+		shipping_region: region
+	}
+	
 	jQuery.post( 'index.php', form_values, function(returned_data) {
 		eval(returned_data);
 	});

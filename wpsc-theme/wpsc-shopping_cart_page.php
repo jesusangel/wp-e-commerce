@@ -184,6 +184,7 @@ endif;
          <?php if (!wpsc_have_shipping_quote()) : // No valid shipping quotes ?>
                </table>
                </div>
+			</div>
             <?php return; ?>
          <?php endif; ?>
       </table>
