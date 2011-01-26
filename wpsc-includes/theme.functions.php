@@ -1060,17 +1060,17 @@ function wpsc_all_products_on_page(){
 	global $wp_query,$wpsc_query;
 	do_action('wpsc_swap_the_template');
 	if($wp_query->query_vars['post_type'] == 'wpsc-product'){
-		if (isset($wp_query->post_count) && 1 == $wp_query->post_count && file_exists(TEMPLATEPATH.'/single-wpsc-product.php')){
-			include(TEMPLATEPATH. '/single-wpsc-product.php');
+		if (isset($wp_query->post_count) && 1 == $wp_query->post_count && file_exists(STYLESHEETPATH.'/single-wpsc-product.php')){
+			include(STYLESHEETPATH. '/single-wpsc-product.php');
 			exit();
-		}elseif(file_exists(TEMPLATEPATH.'/page.php')){
-			include(TEMPLATEPATH. '/page.php');
+		}elseif(file_exists(STYLESHEETPATH.'/page.php')){
+			include(STYLESHEETPATH. '/page.php');
 			exit();
-		}elseif(file_exists(TEMPLATEPATH.'/single.php')){
-			include(TEMPLATEPATH. '/single.php');
+		}elseif(file_exists(STYLESHEETPATH.'/single.php')){
+			include(STYLESHEETPATH. '/single.php');
 			exit();
-		}elseif(file_exists(TEMPLATEPATH.'/index.php')){
-			include(TEMPLATEPATH. '/index.php');
+		}elseif(file_exists(STYLESHEETPATH.'/index.php')){
+			include(STYLESHEETPATH. '/index.php');
 			exit();		
 		}
 	}
