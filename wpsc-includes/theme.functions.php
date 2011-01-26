@@ -644,8 +644,11 @@ if ( !is_admin() )
 	add_action( 'init', 'wpsc_enqueue_user_script_and_css' );
 
 function wpsc_product_list_rss_feed() {
-	$rss_url = add_query_arg( 'wpsc_action', 'rss' );
+	$rss_url = get_option('siteurl');
+	$rss_url = add_query_arg( 'wpsc_action', 'rss', $rss_url );
 	$rss_url = str_replace('&', '&amp;', $rss_url);
+	$rss_url = esc_url( $rss_url ); // URL santization - IMPORTANT!
+
 	echo "<link rel='alternate' type='application/rss+xml' title='" . get_option( 'blogname' ) . " Product List RSS' href='{$rss_url}'/>";
 }
 add_action( 'wp_head', 'wpsc_product_list_rss_feed' );

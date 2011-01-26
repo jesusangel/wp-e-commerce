@@ -654,10 +654,12 @@ if ( isset( $_REQUEST['wpsc_action'] ) && ($_REQUEST['wpsc_action'] == 'gateway_
 }
 
 function wpsc_product_rss() {
-	global $wpsc_query, $wpdb;
+	global $wp_query,$wpsc_query, $wpdb;
+	list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
 	header( "Content-Type: application/xml; charset=UTF-8" );
 	header( 'Content-Disposition: inline; filename="E-Commerce_Product_List.rss"' );
 	require_once(WPSC_FILE_PATH . '/wpsc-includes/rss_template.php');
+	list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
 	exit();
 }
 

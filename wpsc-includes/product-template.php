@@ -968,7 +968,7 @@ function wpsc_product_postage_and_packaging() {
  * TODO determine why this function is here
  * @return string - returns some form of product price
  */
-function wpsc_product_normal_price() {
+function wpsc_product_normal_price($forRSS = false) {
 	global $wpsc_query, $wpdb, $wpsc_variations;
 	if ( count( $wpsc_variations->first_variations ) > 0 ) {
 		//select the variation ID with lovest price
@@ -980,7 +980,10 @@ function wpsc_product_normal_price() {
 	}
 	$from = apply_filters('wpsc_product_variation_text',$from);
 	$price = get_product_meta( $product_id, 'price', true );
-	$output = $from.wpsc_currency_display( $price );
+	if($forRSS)
+		$output = $from.wpsc_currency_display( $price, array( 'display_as_html' => false ) );
+	else
+		$output = $from.wpsc_currency_display( $price );
 	return $output;
 }
 
