@@ -16,7 +16,7 @@ require_once( WPSC_FILE_PATH . '/wpsc-admin/display-variations.page.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-upgrades.page.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/display-items-functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/product-functions.php' );
-require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/save-data.functions.php');
+require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/save-data.functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/updating-functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-coupons.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/purchaselogs.class.php' );
@@ -24,7 +24,7 @@ require_once( WPSC_FILE_PATH . '/wpsc-includes/theming.class.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/ajax-and-init.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-options-settings.page.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-sales-logs.php' );
-if ( (isset( $_SESSION['wpsc_activate_debug_page'] ) && ($_SESSION['wpsc_activate_debug_page'] == true)) || (defined( 'WPSC_ADD_DEBUG_PAGE' ) && (constant( 'WPSC_ADD_DEBUG_PAGE' ) == true)) )
+if ( ( isset( $_SESSION['wpsc_activate_debug_page'] ) && ( $_SESSION['wpsc_activate_debug_page'] == true ) ) || ( defined( 'WPSC_ADD_DEBUG_PAGE' ) && ( constant( 'WPSC_ADD_DEBUG_PAGE' ) == true ) ) )
 	require_once( WPSC_FILE_PATH . '/wpsc-admin/display-debug.page.php' );
 
 //settings pages include
@@ -37,18 +37,19 @@ if ( !get_option( 'wpsc_checkout_form_sets' ) ) {
 
 /**
  * Checks whether to display or hide the update wp-e-commerce link
+ *
  * @access public
  *
  * @since 3.8
  * @return boolean true - show link, false- hide link
  */
-function wpsc_show_update_link(){
+function wpsc_show_update_link() {
 	global $wpdb;
 	// Check if old product_list table exists
 	// If it exists AND get_option wpsc_upgrade_complete is not true then return true
 	$sql = 'SHOW TABLES LIKE "'.$wpdb->prefix.'wpsc_product_list"';
-	$var = $wpdb->get_var($sql);
-	if(!empty($var) && false == get_option('wpsc_hide_update'))
+	$var = $wpdb->get_var( $sql );
+	if ( !empty( $var ) && false == get_option( 'wpsc_hide_update' ) )
 		return true;
 	else
 		return false;
@@ -72,8 +73,8 @@ function wpsc_admin_pages() {
 		if ( 'true' == $_GET['wpsc_activate_debug_page'] ) {
 			$_SESSION['wpsc_activate_debug_page'] = true;
 		} else if ( 'false' == $_GET['wpsc_activate_debug_page'] ) {
-			$_SESSION['wpsc_activate_debug_page'] = false;
-		}
+				$_SESSION['wpsc_activate_debug_page'] = false;
+			}
 	}
 
 	// Only add pages if the function exists to do so?
@@ -94,7 +95,7 @@ function wpsc_admin_pages() {
 
 		// Add Settings pages
 		$page_hooks[] = $edit_options_page = add_options_page( __( 'Store Settings', 'wpsc' ), __( 'Store', 'wpsc' ), 'administrator', 'wpsc-settings', 'wpsc_display_settings_page' );
-		add_action('admin_print_scripts-' . $edit_options_page , 'wpsc_print_admin_scripts');
+		add_action( 'admin_print_scripts-' . $edit_options_page , 'wpsc_print_admin_scripts' );
 
 		// Debug Page
 		if ( ( defined( 'WPSC_ADD_DEBUG_PAGE' ) && ( WPSC_ADD_DEBUG_PAGE == true ) ) || ( isset( $_SESSION['wpsc_activate_debug_page'] ) && ( true == $_SESSION['wpsc_activate_debug_page'] ) ) )
@@ -110,9 +111,9 @@ function wpsc_admin_pages() {
 			add_contextual_help( 'products_page_edit-tags',              $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/variations/'>About the Variations Page</a>" );
 			add_contextual_help( 'settings_page_wpsc-settings',          $header . "<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/general/'>General Settings</a><br />
 																						<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/checkout/'>Checkout Options</a> <br />" );
-                        add_contextual_help( 'products_page_wpsc-edit-coupons',          $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/marketing'>Marketing Options</a><br />");
+			add_contextual_help( 'products_page_wpsc-edit-coupons',          $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/marketing'>Marketing Options</a><br />" );
 		}
- 
+
 		$page_hooks = apply_filters( 'wpsc_additional_pages', $page_hooks, $products_page );
 
 		do_action( 'wpsc_add_submenu' );
@@ -124,19 +125,19 @@ function wpsc_admin_pages() {
 	foreach ( $page_hooks as $page_hook ) {
 		add_action( 'load-' . $page_hook, 'wpsc_admin_include_css_and_js_refac' );
 
-        switch ( $page_hook ) {
+		switch ( $page_hook ) {
 
-			case $edit_options_page :
-				add_action( 'load-' . $page_hook, 'wpsc_admin_include_optionspage_css_and_js' );
-				break;
+		case $edit_options_page :
+			add_action( 'load-' . $page_hook, 'wpsc_admin_include_optionspage_css_and_js' );
+			break;
 
-			case $purchase_log_page :
-				add_action( 'admin_head', 'wpsc_product_log_rss_feed' );
-				break;
-				
-			case $edit_coupons_page :
-				add_action( 'load-' . $page_hook, 'wpsc_admin_include_coupon_js' );
-				break;
+		case $purchase_log_page :
+			add_action( 'admin_head', 'wpsc_product_log_rss_feed' );
+			break;
+
+		case $edit_coupons_page :
+			add_action( 'load-' . $page_hook, 'wpsc_admin_include_coupon_js' );
+			break;
 		}
 	}
 
@@ -190,18 +191,18 @@ function wpsc_admin_include_css_and_js(  ) {
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
 	wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl . "/wp-admin/admin.php?wpsc_admin_dynamic_css=true", false, $version_identifier, 'all' );
 
-        // Prototype breaks dragging and dropping, I need it gone
+	// Prototype breaks dragging and dropping, I need it gone
 	wp_deregister_script( 'prototype' );
 
-        // remove the old javascript and CSS, we want it no more, it smells bad
+	// remove the old javascript and CSS, we want it no more, it smells bad
 	remove_action( 'admin_head', 'wpsc_admin_css' );
-	
+
 	// Localize scripts
-	wp_localize_script('wp-e-commerce-admin', 'wpsc_adminL10n', array(
-		'unsaved_changes_detected' => __('Unsaved changes have been detected. Click OK to lose these changes and continue.', 'wpsc'),
-		'dragndrop_set' => ( get_option( 'wpsc_sort_by' ) == 'dragndrop' ? 'true' : 'false' ),
-		'l10n_print_after' => 'try{convertEntities(wpsc_adminL10n);}catch(e){};'
-	));
+	wp_localize_script( 'wp-e-commerce-admin', 'wpsc_adminL10n', array(
+			'unsaved_changes_detected' => __( 'Unsaved changes have been detected. Click OK to lose these changes and continue.', 'wpsc' ),
+			'dragndrop_set' => ( get_option( 'wpsc_sort_by' ) == 'dragndrop' ? 'true' : 'false' ),
+			'l10n_print_after' => 'try{convertEntities(wpsc_adminL10n);}catch(e){};'
+		) );
 }
 
 /**
@@ -220,27 +221,27 @@ function wpsc_admin_include_optionspage_css_and_js() {
 function wpsc_meta_boxes() {
 	global $post;
 	$pagename = 'wpsc-product';
-        remove_meta_box( 'wpsc-variationdiv', 'wpsc-product', 'core' );
+	remove_meta_box( 'wpsc-variationdiv', 'wpsc-product', 'core' );
 
-        //if a variation page do not show these metaboxes
-        if( $post->post_parent == 0 ){
-            add_meta_box( 'wpsc_product_variation_forms', 'Variations', 'wpsc_product_variation_forms', $pagename, 'normal', 'high' );
-            add_meta_box( 'wpsc_product_external_link_forms', 'Off Site Product link', 'wpsc_product_external_link_forms', $pagename, 'normal', 'high' );
-        }else{
-            remove_meta_box( 'tagsdiv-product_tag', 'wpsc-product', 'core' );
-            remove_meta_box( 'wpsc_product_external_link_forms', 'wpsc-product', 'core' );
-            remove_meta_box( 'wpsc_product_categorydiv', 'wpsc-product', 'core' );
-		}
+	//if a variation page do not show these metaboxes
+	if ( $post->post_parent == 0 ) {
+		add_meta_box( 'wpsc_product_variation_forms', 'Variations', 'wpsc_product_variation_forms', $pagename, 'normal', 'high' );
+		add_meta_box( 'wpsc_product_external_link_forms', 'Off Site Product link', 'wpsc_product_external_link_forms', $pagename, 'normal', 'high' );
+	}else {
+		remove_meta_box( 'tagsdiv-product_tag', 'wpsc-product', 'core' );
+		remove_meta_box( 'wpsc_product_external_link_forms', 'wpsc-product', 'core' );
+		remove_meta_box( 'wpsc_product_categorydiv', 'wpsc-product', 'core' );
+	}
 
-	add_meta_box( 'wpsc_price_control_forms','Price Control','wpsc_price_control_forms',$pagename,'side','low' );
-	add_meta_box( 'wpsc_stock_control_forms','Stock Control','wpsc_stock_control_forms',$pagename,'side','low' );
-	add_meta_box( 'wpsc_product_taxes_forms','Taxes','wpsc_product_taxes_forms',$pagename,'side','low' );
+	add_meta_box( 'wpsc_price_control_forms', 'Price Control', 'wpsc_price_control_forms', $pagename, 'side', 'low' );
+	add_meta_box( 'wpsc_stock_control_forms', 'Stock Control', 'wpsc_stock_control_forms', $pagename, 'side', 'low' );
+	add_meta_box( 'wpsc_product_taxes_forms', 'Taxes', 'wpsc_product_taxes_forms', $pagename, 'side', 'low' );
 	add_meta_box( 'wpsc_additional_desc', 'Additional Description', 'wpsc_additional_desc', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_download_forms', 'Product Download', 'wpsc_product_download_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_image_forms', 'Product Images', 'wpsc_product_image_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_shipping_forms', 'Shipping', 'wpsc_product_shipping_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_advanced_forms', 'Advanced Settings', 'wpsc_product_advanced_forms', $pagename, 'normal', 'high' );
-	
+
 }
 
 add_action( 'admin_footer', 'wpsc_meta_boxes' );
@@ -248,9 +249,9 @@ add_action( 'admin_footer', 'wpsc_meta_boxes' );
 add_action( 'admin_head', 'wpsc_admin_include_css_and_js' );
 add_action( 'admin_head', 'wpsc_admin_include_css_and_js_refac' );
 add_action( 'admin_enqueue_scripts', 'wpsc_admin_include_css_and_js_refac' );
-function wpsc_admin_include_css_and_js_refac( $pagehook )  {
+function wpsc_admin_include_css_and_js_refac( $pagehook ) {
 
-      global $post_type, $current_screen;
+	global $post_type, $current_screen;
 	$siteurl = get_option( 'siteurl' );
 	if ( is_ssl ( ) )
 		$siteurl = str_replace( "http://", "https://", $siteurl );
@@ -258,35 +259,35 @@ function wpsc_admin_include_css_and_js_refac( $pagehook )  {
 	wp_admin_css( 'dashboard' );
 
 	$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
-        $pages = array( 'index.php', 'options-general.php', 'edit.php', 'post.php', 'post-new.php' );
+	$pages = array( 'index.php', 'options-general.php', 'edit.php', 'post.php', 'post-new.php' );
 
-          if ( ( in_array( $pagehook, $pages ) && $post_type == 'wpsc-product' )  || $current_screen->id == 'edit-wpsc_product_category' || $current_screen->id == 'dashboard_page_wpsc-sales-logs' || $current_screen->id == 'settings_page_wpsc-settings' || $current_screen->id == 'wpsc-product_page_wpsc-edit-coupons') {
-            wp_enqueue_script( 'livequery',                      WPSC_URL . '/wpsc-admin/js/jquery.livequery.js',             array( 'jquery' ), '1.0.3' );
-            wp_enqueue_script( 'wp-e-commerce-admin-parameters', $siteurl . '/wp-admin/admin.php?wpsc_admin_dynamic_js=true', false,             $version_identifier );
-            wp_enqueue_script( 'wp-e-commerce-admin',            WPSC_URL . '/wpsc-admin/js/admin.js',                        array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $version_identifier, false );
-            wp_enqueue_script( 'wp-e-commerce-legacy-ajax',      WPSC_URL . '/wpsc-admin/js/ajax.js',                         false,             $version_identifier ); // needs removing
-            wp_enqueue_script( 'wp-e-commerce-variations',       WPSC_URL . '/wpsc-admin/js/variations.js',                   array( 'jquery' ), $version_identifier );
-            wp_enqueue_script('inline-edit-post');
-            wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
-            wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl . "/wp-admin/admin.php?wpsc_admin_dynamic_css=true", false, $version_identifier, 'all' );
-        		// Localize scripts
-			wp_localize_script('wp-e-commerce-admin', 'wpsc_adminL10n', array(
-				'unsaved_changes_detected' => __('Unsaved changes have been detected. Click OK to lose these changes and continue.', 'wpsc'),
+	if ( ( in_array( $pagehook, $pages ) && $post_type == 'wpsc-product' )  || $current_screen->id == 'edit-wpsc_product_category' || $current_screen->id == 'dashboard_page_wpsc-sales-logs' || $current_screen->id == 'settings_page_wpsc-settings' || $current_screen->id == 'wpsc-product_page_wpsc-edit-coupons' ) {
+		wp_enqueue_script( 'livequery',                      WPSC_URL . '/wpsc-admin/js/jquery.livequery.js',             array( 'jquery' ), '1.0.3' );
+		wp_enqueue_script( 'wp-e-commerce-admin-parameters', $siteurl . '/wp-admin/admin.php?wpsc_admin_dynamic_js=true', false,             $version_identifier );
+		wp_enqueue_script( 'wp-e-commerce-admin',            WPSC_URL . '/wpsc-admin/js/admin.js',                        array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $version_identifier, false );
+		wp_enqueue_script( 'wp-e-commerce-legacy-ajax',      WPSC_URL . '/wpsc-admin/js/ajax.js',                         false,             $version_identifier ); // needs removing
+		wp_enqueue_script( 'wp-e-commerce-variations',       WPSC_URL . '/wpsc-admin/js/variations.js',                   array( 'jquery' ), $version_identifier );
+		wp_enqueue_script( 'inline-edit-post' );
+		wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
+		wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl . "/wp-admin/admin.php?wpsc_admin_dynamic_css=true", false, $version_identifier, 'all' );
+		// Localize scripts
+		wp_localize_script( 'wp-e-commerce-admin', 'wpsc_adminL10n', array(
+				'unsaved_changes_detected' => __( 'Unsaved changes have been detected. Click OK to lose these changes and continue.', 'wpsc' ),
 				'dragndrop_set' => ( get_option( 'wpsc_sort_by' ) == 'dragndrop' ? 'true' : 'false' ),
 				'l10n_print_after' => 'try{convertEntities(wpsc_adminL10n);}catch(e){};'
-			));
-        }
-        if('dashboard_page_wpsc-upgrades' == $pagehook)
-       		wp_enqueue_style( 'wp-e-commerce-admin',	WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
-       wp_deregister_script( 'prototype' );
+			) );
+	}
+	if ( 'dashboard_page_wpsc-upgrades' == $pagehook )
+		wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
+	wp_deregister_script( 'prototype' );
 
-        // remove the old javascript and CSS, we want it no more, it smells bad
+	// remove the old javascript and CSS, we want it no more, it smells bad
 	remove_action( 'admin_head', 'wpsc_admin_css' );
 }
 
 function wpsc_admin_dynamic_js() {
 	header( 'Content-Type: text/javascript' );
-	header( 'Expires: ' . gmdate( 'r', mktime( 0, 0, 0, date( 'm' ), (date( 'd' ) + 12 ), date( 'Y' ) ) ) . '' );
+	header( 'Expires: ' . gmdate( 'r', mktime( 0, 0, 0, date( 'm' ), ( date( 'd' ) + 12 ), date( 'Y' ) ) ) . '' );
 	header( 'Cache-Control: public, must-revalidate, max-age=86400' );
 	header( 'Pragma: public' );
 
@@ -294,8 +295,8 @@ function wpsc_admin_dynamic_js() {
 	$hidden_boxes = get_option( 'wpsc_hidden_box' );
 
 	$form_types1 = get_option( 'wpsc_checkout_form_fields' );
-	$unique_names1 = get_option( 'wpsc_checkout_unique_names' ); 
-	
+	$unique_names1 = get_option( 'wpsc_checkout_unique_names' );
+
 	$form_types = '';
 	foreach ( (array)$form_types1 as $form_type ) {
 		$form_types .= "<option value='" . $form_type . "'>" . __( $form_type, 'wpsc' ) . "</option>";
@@ -350,13 +351,13 @@ function wpsc_admin_dynamic_js() {
 	exit();
 }
 
-if ( isset( $_GET['wpsc_admin_dynamic_js'] ) && ($_GET['wpsc_admin_dynamic_js'] == 'true') ) {
+if ( isset( $_GET['wpsc_admin_dynamic_js'] ) && ( $_GET['wpsc_admin_dynamic_js'] == 'true' ) ) {
 	add_action( "admin_init", 'wpsc_admin_dynamic_js' );
 }
 
 function wpsc_admin_dynamic_css() {
 	header( 'Content-Type: text/css' );
-	header( 'Expires: ' . gmdate( 'r', mktime( 0, 0, 0, date( 'm' ), (date( 'd' ) + 12 ), date( 'Y' ) ) ) . '' );
+	header( 'Expires: ' . gmdate( 'r', mktime( 0, 0, 0, date( 'm' ), ( date( 'd' ) + 12 ), date( 'Y' ) ) ) . '' );
 	header( 'Cache-Control: public, must-revalidate, max-age=86400' );
 	header( 'Pragma: public' );
 	$flash = 0;
@@ -386,7 +387,7 @@ function wpsc_admin_dynamic_css() {
 	exit();
 }
 
-if ( isset( $_GET['wpsc_admin_dynamic_css'] ) && ($_GET['wpsc_admin_dynamic_css'] == 'true') ) {
+if ( isset( $_GET['wpsc_admin_dynamic_css'] ) && ( $_GET['wpsc_admin_dynamic_css'] == 'true' ) ) {
 	add_action( "admin_init", 'wpsc_admin_dynamic_css' );
 }
 
@@ -407,7 +408,7 @@ function wpsc_admin_latest_activity() {
 	$year = date( "Y" );
 	$month = date( "m" );
 	$start_timestamp = mktime( 0, 0, 0, $month, 1, $year );
-	$end_timestamp = mktime( 0, 0, 0, ($month + 1 ), 0, $year );
+	$end_timestamp = mktime( 0, 0, 0, ( $month + 1 ), 0, $year );
 	$sql = "SELECT COUNT(*) FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `date` BETWEEN '$start_timestamp' AND '$end_timestamp' AND `processed` IN (2,3,4) ORDER BY `date` DESC";
 	$currentMonthOrders = $wpdb->get_var( $sql );
 
@@ -425,7 +426,7 @@ function wpsc_admin_latest_activity() {
 	echo "<p class='dashboardWidgetSpecial'>";
 	//calculates average sales amount per order for the month
 	if ( $currentMonthOrders > 0 ) {
-		$monthsAverage = ((int)admin_display_total_price( $start_timestamp, $end_timestamp ) / (int)$currentMonthOrders);
+		$monthsAverage = ( (int)admin_display_total_price( $start_timestamp, $end_timestamp ) / (int)$currentMonthOrders );
 		echo wpsc_currency_display( $monthsAverage );
 	}
 	//echo "</span>";
@@ -451,8 +452,8 @@ function wpsc_admin_latest_activity() {
 	echo "</p>";
 	echo "<p class='dashboardWidgetSpecial'>";
 	//calculates average sales amount per order for the month
-	if ( (admin_display_total_price() > 0) && ($totalOrders > 0) ) {
-		$totalAverage = ((int)admin_display_total_price() / (int)$totalOrders);
+	if ( ( admin_display_total_price() > 0 ) && ( $totalOrders > 0 ) ) {
+		$totalAverage = ( (int)admin_display_total_price() / (int)$totalOrders );
 	} else {
 		$totalAverage = 0;
 	}
@@ -486,27 +487,27 @@ function wpsc_dashboard_widget_setup() {
 		wp_add_dashboard_widget( 'wpsc_dashboard_widget', __( 'Sales Summary', 'wpsc' ), 'wpsc_dashboard_widget' );
 		wp_add_dashboard_widget( 'wpsc_quarterly_dashboard_widget', __( 'Sales by Quarter', 'wpsc' ), 'wpsc_quarterly_dashboard_widget' );
 		wp_add_dashboard_widget( 'wpsc_dashboard_4months_widget', __( 'Sales by Month', 'wpsc' ), 'wpsc_dashboard_4months_widget' );
-	
+
 		// Sort the Dashboard widgets so ours it at the top
 		global $wp_meta_boxes;
 		$normal_dashboard = $wp_meta_boxes['dashboard']['normal']['core'];
 		// Backup and delete our new dashbaord widget from the end of the array
-		$wpsc_widget_backup = array('wpsc_dashboard_news' => $normal_dashboard['wpsc_dashboard_news']);
-		$wpsc_widget_backup += array('wpsc_dashboard_widget' => $normal_dashboard['wpsc_dashboard_widget']);	
-		$wpsc_widget_backup += array('wpsc_quarterly_dashboard_widget' => $normal_dashboard['wpsc_quarterly_dashboard_widget']);
-		$wpsc_widget_backup += array('wpsc_dashboard_4months_widget' => $normal_dashboard['wpsc_dashboard_4months_widget']);
+		$wpsc_widget_backup = array( 'wpsc_dashboard_news' => $normal_dashboard['wpsc_dashboard_news'] );
+		$wpsc_widget_backup += array( 'wpsc_dashboard_widget' => $normal_dashboard['wpsc_dashboard_widget'] );
+		$wpsc_widget_backup += array( 'wpsc_quarterly_dashboard_widget' => $normal_dashboard['wpsc_quarterly_dashboard_widget'] );
+		$wpsc_widget_backup += array( 'wpsc_dashboard_4months_widget' => $normal_dashboard['wpsc_dashboard_4months_widget'] );
 
-		unset($normal_dashboard['wpsc_dashboard_news']);
-		unset($normal_dashboard['wpsc_dashboard_widget']);
-		unset($normal_dashboard['wpsc_quarterly_dashboard_widget']);
-		unset($normal_dashboard['wpsc_dashboard_4months_widget']);
-	
+		unset( $normal_dashboard['wpsc_dashboard_news'] );
+		unset( $normal_dashboard['wpsc_dashboard_widget'] );
+		unset( $normal_dashboard['wpsc_quarterly_dashboard_widget'] );
+		unset( $normal_dashboard['wpsc_dashboard_4months_widget'] );
+
 		// Merge the two arrays together so our widget is at the beginning
-	
-		$sorted_dashboard = array_merge($wpsc_widget_backup, $normal_dashboard);
-	
-		// Save the sorted array back into the original metaboxes 
-	
+
+		$sorted_dashboard = array_merge( $wpsc_widget_backup, $normal_dashboard );
+
+		// Save the sorted array back into the original metaboxes
+
 		$wp_meta_boxes['dashboard']['normal']['core'] = $sorted_dashboard;
 	}
 }
@@ -517,10 +518,10 @@ function wpsc_dashboard_widget_setup() {
 
 add_action( 'wp_dashboard_setup', 'wpsc_dashboard_widget_setup' );
 
-function wpsc_dashboard_news(){
-	$rss = fetch_feed('http://getshopped.org/category/wp-e-commerce-plugin/'); 
-	$args = array('show_author' => 1, 'show_date' => 1, 'show_summary' => 1, 'items'=>3 );
-	wp_widget_rss_output($rss, $args); 
+function wpsc_dashboard_news() {
+	$rss = fetch_feed( 'http://getshopped.org/category/wp-e-commerce-plugin/' );
+	$args = array( 'show_author' => 1, 'show_date' => 1, 'show_summary' => 1, 'items'=>3 );
+	wp_widget_rss_output( $rss, $args );
 
 }
 
@@ -543,7 +544,7 @@ function wpsc_quarterly_dashboard_widget() {
 	if ( get_option( 'wpsc_business_year_start' ) == false ) {
 ?>
 		<form action='' method='post'>
-			<label for='date_start'><?php _e('Financial Year End' ,'wpsc'); ?>: </label>
+			<label for='date_start'><?php _e( 'Financial Year End' , 'wpsc' ); ?>: </label>
 			<input id='date_start' type='text' class='pickdate' size='11' value='<?php echo get_option( 'wpsc_last_date' ); ?>' name='add_start' />
 			   <!--<select name='add_start[day]'>
 <?php
@@ -565,18 +566,18 @@ function wpsc_quarterly_dashboard_widget() {
 			}
 			echo "<option $selected value='$i'>" . date( "M", mktime( 0, 0, 0, $i, 1, date( "Y" ) ) ) . "</option>";
 		}
-	?>
+?>
 				   </select>
 		   <select name='add_start[year]'>
 	<?php
-		for ( $i = date( "Y" ); $i <= (date( "Y" ) + 12); ++$i ) {
+		for ( $i = date( "Y" ); $i <= ( date( "Y" ) + 12 ); ++$i ) {
 			$selected = '';
 			if ( $i == date( "Y" ) ) {
 				$selected = "selected='true'";
 			}
 			echo "<option $selected value='$i'>" . $i . "</option>";
 		}
-	?>
+?>
 				   </select>-->
 		<input type='hidden' name='wpsc_admin_action' value='wpsc_quarterly' />
 		<input type='submit' class='button primary' value='Submit' name='wpsc_submit' />
@@ -600,8 +601,8 @@ function wpsc_quarterly_dashboard_widget() {
 ?>
 			<div id='box'>
 				<p class='atglance'>
-					<span class='wpsc_quart_left'><?php _e('At a Glance' , 'wpsc'); ?></span>
-					<span class='wpsc_quart_right'><?php _e('Revenue' , 'wpsc'); ?></span>
+					<span class='wpsc_quart_left'><?php _e( 'At a Glance' , 'wpsc' ); ?></span>
+					<span class='wpsc_quart_right'><?php _e( 'Revenue' , 'wpsc' ); ?></span>
 				</p>
 				<div style='clear:both'></div>
 				<p class='quarterly'>
@@ -655,14 +656,14 @@ function wpsc_dashboard_4months_widget() {
 	$months[] = mktime( 0, 0, 0, $this_month, 1, $this_year );
 
 	$products = $wpdb->get_results( "SELECT `cart`.`prodid`,
-	 `cart`.`name` 
+	 `cart`.`name`
 	 FROM `" . WPSC_TABLE_CART_CONTENTS . "` AS `cart`
 	 INNER JOIN `" . WPSC_TABLE_PURCHASE_LOGS . "` AS `logs`
-	 ON `cart`.`purchaseid` = `logs`.`id` 
-	 WHERE `logs`.`processed` >= 2 
+	 ON `cart`.`purchaseid` = `logs`.`id`
+	 WHERE `logs`.`processed` >= 2
 	 AND `logs`.`date` >= " . $months[0] . "
-	 GROUP BY `cart`.`prodid` 
-	 ORDER BY SUM(`cart`.`price` * `cart`.`quantity`) DESC 
+	 GROUP BY `cart`.`prodid`
+	 ORDER BY SUM(`cart`.`price` * `cart`.`quantity`) DESC
 	 LIMIT 4", ARRAY_A ); //get 4 products with top income in 4 last months.
 
 	$timeranges[0]["start"] = mktime( 0, 0, 0, $this_month - 3, 1, $this_year ); //make array of time ranges
@@ -678,12 +679,12 @@ function wpsc_dashboard_4months_widget() {
 	foreach ( (array)$products as $product ) { //run through products and get each product income amounts and name
 		$sale_totals = array( );
 		foreach ( $timeranges as $timerange ) { //run through time ranges of product, and get its income over each time range
-			$prodsql = "SELECT 
-			SUM(`cart`.`price` * `cart`.`quantity`) AS sum 			
+			$prodsql = "SELECT
+			SUM(`cart`.`price` * `cart`.`quantity`) AS sum
 			FROM `" . WPSC_TABLE_CART_CONTENTS . "` AS `cart`
 			INNER JOIN `" . WPSC_TABLE_PURCHASE_LOGS . "` AS `logs`
-				ON `cart`.`purchaseid` = `logs`.`id` 
-			WHERE `logs`.`processed` >= 2 
+				ON `cart`.`purchaseid` = `logs`.`id`
+			WHERE `logs`.`processed` >= 2
 				AND `logs`.`date` >= " . $timerange["start"] . "
 				AND `logs`.`date` < " . $timerange["end"] . "
 				AND `cart`.`prodid` = " . $product['prodid'] . "
@@ -693,7 +694,7 @@ function wpsc_dashboard_4months_widget() {
 		$prod_data[] = array(
 			'sale_totals' => $sale_totals,
 			'product_name' => $product['name'] ); //result: array of 2: $prod_data[0] = array(income)
-		$sums = array( ); //reset array				//$prod_data[1] = product name
+		$sums = array( ); //reset array    //$prod_data[1] = product name
 	}
 
 	$tablerow = 1;
@@ -738,28 +739,30 @@ function wpsc_fav_action( $actions ) {
 }
 add_filter( 'favorite_actions', 'wpsc_fav_action' );
 
-function wpsc_print_admin_scripts(){
+function wpsc_print_admin_scripts() {
 	global $version_identifier;
-	wp_enqueue_script( 'wp-e-commerce-dynamic',       get_bloginfo('url')			. "/index.php?wpsc_user_dynamic_js=true", false,             $version_identifier );
+	wp_enqueue_script( 'wp-e-commerce-dynamic',       get_bloginfo( 'url' )   . "/index.php?wpsc_user_dynamic_js=true", false,             $version_identifier );
 }
 
 /**
  * wpsc_update_permalinks update the product pages permalinks when WordPress permalinks are changed
- * @public 
  *
- * @3.8 
+ * @public
+ *
+ * @3.8
  * @returns nothing
  */
-function wpsc_update_permalinks($return = ''){
-wpsc_update_page_urls(true);
-return $return;
+function wpsc_update_permalinks( $return = '' ) {
+	wpsc_update_page_urls( true );
+	return $return;
 }
 
 /**
  * wpsc_ajax_ie_save save changes made using inline edit
- * @public 
  *
- * @3.8 
+ * @public
+ *
+ * @3.8
  * @returns nothing
  */
 function wpsc_ajax_ie_save() {
@@ -810,10 +813,10 @@ function wpsc_ajax_ie_save() {
 	die();
 }
 
-add_action('permalink_structure_changed' ,'wpsc_update_permalinks');
-add_action('get_sample_permalink_html' ,'wpsc_update_permalinks');
-add_action('wp_ajax_category_sort_order', 'wpsc_ajax_set_category_order');
-add_action('wp_ajax_wpsc_ie_save', 'wpsc_ajax_ie_save');
+add_action( 'permalink_structure_changed' , 'wpsc_update_permalinks' );
+add_action( 'get_sample_permalink_html' , 'wpsc_update_permalinks' );
+add_action( 'wp_ajax_category_sort_order', 'wpsc_ajax_set_category_order' );
+add_action( 'wp_ajax_wpsc_ie_save', 'wpsc_ajax_ie_save' );
 
 
 ?>
