@@ -216,9 +216,10 @@ function wpsc_meta_boxes() {
         remove_meta_box( 'wpsc-variationdiv', 'wpsc-product', 'core' );
 
         //if a variation page do not show these metaboxes
-        if( $post->post_parent == 0 )
+        if( $post->post_parent == 0 ){
             add_meta_box( 'wpsc_product_variation_forms', 'Variations', 'wpsc_product_variation_forms', $pagename, 'normal', 'high' );
-        else{
+            add_meta_box( 'wpsc_product_external_link_forms', 'Off Site Product link', 'wpsc_product_external_link_forms', $pagename, 'normal', 'high' );
+        }else{
             remove_meta_box( 'tagsdiv-product_tag', 'wpsc-product', 'core' );
             remove_meta_box( 'wpsc_product_external_link_forms', 'wpsc-product', 'core' );
             remove_meta_box( 'wpsc_product_categorydiv', 'wpsc-product', 'core' );
@@ -232,7 +233,7 @@ function wpsc_meta_boxes() {
 	add_meta_box( 'wpsc_product_image_forms', 'Product Images', 'wpsc_product_image_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_shipping_forms', 'Shipping', 'wpsc_product_shipping_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_advanced_forms', 'Advanced Settings', 'wpsc_product_advanced_forms', $pagename, 'normal', 'high' );
-	add_meta_box( 'wpsc_product_external_link_forms', 'Off Site Product link', 'wpsc_product_external_link_forms', $pagename, 'normal', 'high' );
+	
 }
 
 add_action( 'admin_footer', 'wpsc_meta_boxes' );
