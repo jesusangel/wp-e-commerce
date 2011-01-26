@@ -762,42 +762,50 @@ return $return;
  * @3.8 
  * @returns nothing
  */
-function wpsc_ajax_ie_save(){
+function wpsc_ajax_ie_save() {
+
+	$product_post_type = get_post_type_object( 'wpsc-product' );
+
+	if ( !current_user_can( $product_post_type->cap->edit_posts ) ) {
+		echo '({"error":"' . __( 'Error: you don\'t have required permissions to edit this product', 'wpsc' ) . '", "id": "'. $_POST['id'] .'"})';
+		die();
+	}
+
 	global $wpdb;
 
 	$product = array(
 		'ID' => $_POST['id'],
 		'post_title' => $_POST['title']
 	);
-	
-	$id = wp_update_post($product);
-	if($id > 0){
-		$product_meta = get_product_meta($product['ID'], 'product_metadata', true);
-		if(is_numeric($_POST['weight']) || empty($_POST['weight']))
+
+	$id = wp_update_post( $product );
+	if ( $id > 0 ) {
+		$product_meta = get_product_meta( $product['ID'], 'product_metadata', true );
+		if ( is_numeric( $_POST['weight'] ) || empty( $_POST['weight'] ) )
 			$product_meta['weight'] = $_POST['weight'];
 
-		update_product_meta($product['ID'], 'product_metadata', $product_meta);
-		update_product_meta($product['ID'], 'price', (float)$_POST['price']);
-		update_product_meta($product['ID'], 'special_price', (float)$_POST['special_price']);
-		update_product_meta($product['ID'], 'sku', $_POST['sku']);
-		if($_POST['stock'] === '')
-			update_product_meta($product['ID'], 'stock', '');
+		update_product_meta( $product['ID'], 'product_metadata', $product_meta );
+		update_product_meta( $product['ID'], 'price', (float)$_POST['price'] );
+		update_product_meta( $product['ID'], 'special_price', (float)$_POST['special_price'] );
+		update_product_meta( $product['ID'], 'sku', $_POST['sku'] );
+		if ( $_POST['stock'] === '' )
+			update_product_meta( $product['ID'], 'stock', '' );
 		else
-			update_product_meta($product['ID'], 'stock', absint($_POST['stock']));
-		
-		$post = get_post($id);
-		$meta = get_product_meta($id, 'product_metadata', true);
-		$price = get_product_meta($id, 'price', true);
-		$special_price = get_product_meta($id, 'special_price', true);
-		$sku = get_product_meta($id, 'sku', true);
-			$sku = ($sku)?$sku:'N/A';
-		$stock = get_product_meta($id, 'stock', true);
-			$stock = ($stock === '')?'N/A':$stock;
-		$results = array('id' => $id, 'title' => $post->post_title, 'weight' => absint($meta['weight']), 'price' => wpsc_currency_display( $price ), 'special_price' => wpsc_currency_display( $special_price ), 'sku' => $sku, 'stock' => $stock);
-		echo '(' . json_encode($results) . ')';
+			update_product_meta( $product['ID'], 'stock', absint( $_POST['stock'] ) );
+
+		$post = get_post( $id );
+		$meta = get_product_meta( $id, 'product_metadata', true );
+		$price = get_product_meta( $id, 'price', true );
+		$special_price = get_product_meta( $id, 'special_price', true );
+		$sku = get_product_meta( $id, 'sku', true );
+		$sku = ( $sku )?$sku:'N/A';
+		$stock = get_product_meta( $id, 'stock', true );
+		$stock = ( $stock === '' )?'N/A':$stock;
+		$results = array( 'id' => $id, 'title' => $post->post_title, 'weight' => absint( $meta['weight'] ), 'price' => wpsc_currency_display( $price ), 'special_price' => wpsc_currency_display( $special_price ), 'sku' => $sku, 'stock' => $stock );
+		echo '(' . json_encode( $results ) . ')';
 		die();
 	} else {
-		echo '({"error":"' . __('Error updating product', 'wpsc') . '", "id": "'. $_POST['id'] .'"})';
+		echo '({"error":"' . __( 'Error updating product', 'wpsc' ) . '", "id": "'. $_POST['id'] .'"})';
 	}
 	die();
 }
