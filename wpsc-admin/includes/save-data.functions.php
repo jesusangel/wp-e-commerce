@@ -41,8 +41,8 @@ add_filter( 'manage_wpsc_product_category_custom_column', 'wpsc_custom_category_
 add_action( 'wpsc_product_category_add_form_fields', 'wpsc_admin_category_forms_add' ); // After left-col
 add_action( 'wpsc_product_category_edit_form_fields', 'wpsc_admin_category_forms_edit' ); // After left-col
 
-//add_action("created_wpsc_product_category", $term_id, $tt_id); //After created
-//add_action("edited_wpsc_product_category", $term_id, $tt_id); //After Saved
+add_action( 'created_wpsc_product_category', 'wpsc_save_category_set' ); //After created
+add_action( 'edited_wpsc_product_category', 'wpsc_save_category_set' ); //After saved
 
 /**
  * wpsc_custom_category_columns
@@ -250,35 +250,11 @@ function wpsc_admin_category_forms_add() {
                                         <?php _e('Height', 'wpsc'); ?> <input type='text' value='<?php if (isset($category['image_height'])) echo $category['image_height']; ?>' name='image_height' size='6'/><br/>
                                 </td>
 			</tr>
-			<?php	}
-			 _e('Delete Image', 'wpsc'); ?><input type='checkbox' name='deleteimage' value='1' /><br/><br/>
+			<?php	
+                            }
+                        ?>
 		</div>
 	</div>
-
-<!--  SHORT CODE META BOX only display if product has been created -->
-
-<?php if ( isset( $_GET["tag_ID"] ) ) {?>
-
-		<div id="poststuff" class="postbox">
-			<h3 class="hndle"><?php _e('Shortcodes and Template Tags'); ?></h3>
-			<div class="inside">
-				<?php
-				$output = '';
-				$product = get_term($_GET["category_id"], "wpsc_product_category" );
-				$output .= " <span class='wpscsmall description'>Template tags and Shortcodes are used to display a particular category or group within your theme / template or any wordpress page or post.</span>\n\r";
-				$output .="<div class='inside'>\n\r";
-				$output .="<div class='editing_this_group form_table'>";
-				$output .="<dl>\n\r";
-				$output .="<dt>Display Category Shortcode: </dt>\n\r";
-				$output .="<dd> [wpsc_products category_url_name='{$product->slug}']</dd>\n\r";
-				$output .="<dt>Display Category Template Tag: </dt>\n\r";
-				$output .="<dd> &lt;?php echo wpsc_display_products_page(array('category_url_name'=>'{$product->slug}')); ?&gt;</dd>\n\r";
-				$output .="</dl>\n\r";
-				$output .= "</div></div>";
-			$output .= "</div>";
-		$output .= "</div>";
-		echo $output;
-}?>
 
 <!-- START OF TARGET MARKET SELECTION -->
 <div id="poststuff" class="postbox">
@@ -368,7 +344,6 @@ function wpsc_admin_category_forms_add() {
 <table class="category_forms">
 	<tr>
 		<td>
-			<?php wp_nonce_field('edit-category', 'wpsc-edit-category'); ?>
 			<input type='hidden' name='wpsc_admin_action' value='wpsc-category-set' />
 		</td>
 	</tr>
@@ -602,7 +577,6 @@ function wpsc_admin_category_forms_edit() {
 	</tr>
 	<tr>
 		<td>
-			<?php wp_nonce_field('edit-category', 'wpsc-edit-category'); ?>
 			<input type='hidden' name='wpsc_admin_action' value='wpsc-category-set' />
 		</td>
 	</tr>
@@ -614,11 +588,9 @@ function wpsc_admin_category_forms_edit() {
  * @param nothing
  * @return nothing
  */
-function wpsc_save_category_set() {
+function wpsc_save_category_set($term_id) {
 	global $wpdb;
-	
-	if(($_POST['submit_action'] == "add") || ($_POST['submit_action'] == "edit")) {
-		check_admin_referer('edit-category', 'wpsc-edit-category');
+	if( !empty( $_POST ) ) {
 		/* Image Processing Code*/
 		if(($_FILES['image'] != null) && preg_match("/\.(gif|jp(e)*g|png){1}$/i",$_FILES['image']['name'])) {
 			if(function_exists("getimagesize")) {
@@ -792,15 +764,6 @@ function wpsc_save_category_set() {
 			}
 	}
 }
-	
-	$sendback = remove_query_arg(array(
-		'wpsc_admin_action',
-		'delete_category',
-		'_wpnonce',
-		'category_id'
-	));
-	$sendback = add_query_arg('message', 1, $sendback);
-	wp_redirect($sendback);
 }
 
 
