@@ -131,7 +131,7 @@ function wpsc_latest_product( $args = null, $instance ) {
 		'numberposts' => $number, 
 		'orderby'     => 'post_date',
 		'post_parent' => 0,
-		'post_status' => 'all',
+		'post_status' => 'publish',
 		'order'       => 'DESC'
 	) );
 	$output = '';

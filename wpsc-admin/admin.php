@@ -269,9 +269,7 @@ function wpsc_admin_include_css_and_js_refac( $pagehook )  {
             wp_enqueue_script('inline-edit-post');
             wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
             wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl . "/wp-admin/admin.php?wpsc_admin_dynamic_css=true", false, $version_identifier, 'all' );
-            // wp_localize_script( 'wp-e-commerce-admin', 'dragndrop', array( 'set' => ( get_option( 'wpsc_sort_by' ) == 'dragndrop' ? 'true' : 'false' ) ) );
-
-			// Localize scripts
+        		// Localize scripts
 			wp_localize_script('wp-e-commerce-admin', 'wpsc_adminL10n', array(
 				'unsaved_changes_detected' => __('Unsaved changes have been detected. Click OK to lose these changes and continue.', 'wpsc'),
 				'dragndrop_set' => ( get_option( 'wpsc_sort_by' ) == 'dragndrop' ? 'true' : 'false' ),
