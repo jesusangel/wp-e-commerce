@@ -344,6 +344,9 @@ jQuery(document).ready(function(){
 			response = eval(response);
 			if(response.error){
 				alert(response.error);
+				jQuery('#post-' + response.id + ' a.row-title, #post-' + response.id + ' td > span').show();
+				jQuery('#post-' + response.id + ' td input.wpsc_ie_field, #post-' + response.id + ' td .wpsc_inline_actions').hide();
+				jQuery('#post-' + response.id + ' .loading_indicator').css('visibility', 'hidden');
 			}
 			else{
 				jQuery('#post-' + response.id + ' .post-title a.row-title').text(response.title);
