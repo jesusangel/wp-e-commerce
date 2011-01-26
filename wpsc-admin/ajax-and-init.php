@@ -1892,25 +1892,24 @@ function variation_price_field( $variation ) {
 	else
 		$price = '';
 
-	if(isset($_GET['action']) && 'add' == $_GET['action']){
+	if( !isset( $_GET['action'] ) ) {
 	?>
 	<div class="form-field">
 		<label for="variation_price"><?php _e( 'Variation Price', 'wpsc' ); ?></label>
-
 		<input type="text" name="variation_price" id="variation_price" style="width:50px;" value="<?php echo $price; ?>"><br />
 		<span class="description"><?php _e( 'You can list a default price here for this variation.  You can list a regular price (18.99), differential price (+1.99 / -2) or even a percentage-based price (+50% / -25%).', 'wpsc' ); ?></span>
 	</div>
 	<?php
-	}else{
+	} else{
 	?>
 	<tr class="form-field">
-		<th scope="row" valign="top">
+            <th scope="row" valign="top">
 		<label for="variation_price"><?php _e( 'Variation Price', 'wpsc' ); ?></label>
-		</td>
-		<td>
+            </th>
+            <td>
 		<input type="text" name="variation_price" id="variation_price" style="width:50px;" value="<?php echo $price; ?>"><br />
 		<span class="description"><?php _e( 'You can list a default price here for this variation.  You can list a regular price (18.99), differential price (+1.99 / -2) or even a percentage-based price (+50% / -25%).', 'wpsc' ); ?></span>
-		</td>
+            </td>
 	</tr>
 	<?php 
 	}

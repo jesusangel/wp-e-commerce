@@ -296,13 +296,25 @@ function wpsc_register_post_types() {
 	) );
 
 	// Product categories, is heirarchical and can use permalinks
-	
+	$labels = array(
+		'name' => _x( 'Product Categories', 'taxonomy general name' ),
+		'singular_name' => _x( 'Product Category', 'taxonomy singular name' ),
+		'search_items' => __( 'Search Product Categories' ),
+		'all_items' => __( 'All Product Categories' ),
+		'parent_item' => __( 'Parent Product Category' ),
+		'parent_item_colon' => __( 'Parent Product Category:' ),
+		'edit_item' => __( 'Edit Product Category' ),
+		'update_item' => __( 'Update Product Category' ),
+		'add_new_item' => __( 'Add New Product Category' ),
+		'new_item_name' => __( 'New Product Category Name' )
+	);
 	register_taxonomy( 'wpsc_product_category', 'wpsc-product', array(
 		'hierarchical' => true,
 		'rewrite' => array(
 			'slug' => $wpsc_page_titles['products'],
 			'with_front' => false
-		)
+		),
+            'labels' => $labels
 	) );
 	$labels = array(
 		'name' => _x( 'Variations', 'taxonomy general name' ),
@@ -328,7 +340,6 @@ function wpsc_register_post_types() {
 	$role = get_role( 'administrator' );
 	$role->add_cap( 'read_wpsc-product' );
 	$role->add_cap( 'read_wpsc-product-file' );
-
 }
 add_action( 'init', 'wpsc_register_post_types', 8 );
 

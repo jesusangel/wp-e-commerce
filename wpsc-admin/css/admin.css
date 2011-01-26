@@ -1696,16 +1696,20 @@ form#posts-filter {
 div#wpsc-variationdiv {
     display:none;
 }
-
-.wpsc_ie_field, .wpsc_inline_actions{
+input.wpsc_cat_image_size {
+    width:40px
+}
+input.wpsc_cat_box {
+    width:auto;
+    margin:6px;
+}
+.wpsc_ie_field, .wpsc_inline_actions {
 	display:none;
 }
-
 .wpsc_ie_field{
 	width:100%;
 }
-
-.wpsc_inline_actions .loading_indicator{
+.wpsc_inline_actions .loading_indicator {
 	position:relative;
 	top:3px;
 	left:2px;

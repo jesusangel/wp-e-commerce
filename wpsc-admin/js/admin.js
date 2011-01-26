@@ -274,6 +274,36 @@ jQuery(document).ready( function () {
 		});
 
 	});
+         if( pagenow == 'edit-wpsc_product_category' ) {
+          jQuery('table.tags').sortable({
+            axis: 'y',
+            items : 'tr',
+            containment: 'table.tags tbody',
+            placeholder: 'product-placeholder',
+            cursor: 'move',
+            tolerance: 'pointer',
+            update: function(event, ui){
+              categorySort(jQuery('table.tags').sortable('toArray'), 0);
+            }
+          });
+
+          function categorySort(order, parent){
+            var data = {
+                    action: 'category_sort_order',
+                    sort_order: order,
+                    parent_id: parent
+            };
+
+            var id = '#debugData_';
+
+            jQuery.post(ajaxurl, data, function(response) {
+                    jQuery(id).append(response);
+            });
+            return false;
+       }
+
+          jQuery('form#addtag').attr('enctype', 'multipart/form-data');
+      }
 
 	//Added for inline editing capabilities
 	jQuery('#wpsc_product_list a.editinline').live('click', function() {
