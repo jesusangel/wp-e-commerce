@@ -1696,3 +1696,18 @@ form#posts-filter {
 div#wpsc-variationdiv {
     display:none;
 }
+
+.wpsc_ie_field, .wpsc_inline_actions{
+	display:none;
+}
+
+.wpsc_ie_field{
+	width:100%;
+}
+
+.wpsc_inline_actions .loading_indicator{
+	position:relative;
+	top:3px;
+	right:2px;
+	visibility: hidden;
+}

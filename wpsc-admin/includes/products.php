@@ -129,6 +129,11 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			<strong>
 			<?php if ( current_user_can('edit_post', $product->ID) && $product->post_status != 'trash' ) { ?>
 				<a class="row-title" href="<?php echo $edit_link; ?>" title="<?php echo esc_attr(sprintf(__('Edit &#8220;%s&#8221;'), $title)); ?>"><?php echo $title ?></a>
+				<?php if($parent_product): ?>
+					<input type="hidden" class="wpsc_ie_id wpsc_ie_field" value="<?php echo $product->ID ?>">
+					<input type="text" class="wpsc_ie_title wpsc_ie_field" value="<?php echo $title ?>">
+					<div class="wpsc_inline_actions"><img src="<?php bloginfo('url') ?>/wp-admin/images/wpspin_light.gif" class="loading_indicator"><input type="button" class="button-primary wpsc_ie_save" value="Save"> <input type="button" class="button-secondary cancel wpsc_ie_cancel" value="Cancel"></div>
+				<?php endif; ?>
 			<?php } else {
 				echo $title;
 			};
@@ -237,9 +242,8 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			$price = get_post_meta($product->ID, '_wpsc_price', true);
 			?>
 				<td  <?php echo $attributes ?>>
-					<?php echo wpsc_currency_display( $price ); 
-                                            echo '<div id="inline_' . $post->ID . '_price" class="hidden">' . $price . '</div>';
-                                        ?>
+					<?php echo wpsc_currency_display( $price ); ?>
+					<input type="text" class="wpsc_ie_field wpsc_ie_price" value="<?php echo $price; ?>">
 				</td>
 			<?php
 		break;
@@ -255,7 +259,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		if(!isset($product_data['meta']['_wpsc_product_metadata']['weight'])) $product_data['meta']['_wpsc_product_metadata']['weight'] = "";
 		if(!isset($product_data['meta']['_wpsc_product_metadata']['weight_unit'])) $product_data['meta']['_wpsc_product_metadata']['weight_unit'] = "";
 
-		$product_data['transformed']['weight'] = wpsc_convert_weight($product_data['meta']['_wpsc_product_metadata']['weight'], "gram", $product_data['meta']['_wpsc_product_metadata']['weight_unit']);
+		$product_data['transformed']['weight'] = wpsc_convert_weight($product_data['meta']['_wpsc_product_metadata']['weight'], "pounds", $product_data['meta']['_wpsc_product_metadata']['weight_unit']);
 			$weight = $product_data['transformed']['weight'];
 			if($weight == ''){
 				$weight = '0';
@@ -279,9 +283,8 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			}
 			?>
 				<td  <?php echo $attributes ?>>
-                                    <?php echo $weight;
-                                           echo '<div id="inline_' . $post->ID . '_weight" class="hidden">' . $weight . '</div>';
-                                    ?>
+					<span><?php echo $weight; ?></span>
+					<input type="text" class="wpsc_ie_field wpsc_ie_weight" value="<?php echo $weight; ?>">
 				</td>
 			<?php
 
@@ -289,14 +292,10 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		case 'stock' :
 			$stock = get_post_meta($product->ID, '_wpsc_stock', true);
-			if($stock == ''){
-				$stock = 'N/A';
-			}
 			?>
 				<td  <?php echo $attributes ?>>
-                                    <?php echo $stock;
-                                    echo '<div id="inline_' . $post->ID . '_stock" class="hidden">' . $stock . '</div>';
-                                    ?>
+					<span><?php echo $stock ? $stock : __('N/A', 'wpsc') ; ?></span>
+					<input type="text" class="wpsc_ie_field wpsc_ie_stock" value="<?php echo $stock; ?>">
 				</td>
 	<?php
 		break;
@@ -336,14 +335,10 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		break;
 		case 'SKU':
 			$sku = get_post_meta($product->ID, '_wpsc_sku', true);
-			if( $sku == '' )
-                            $sku = 'N/A';
-			
 			?>
 				<td  <?php echo $attributes ?>>
-                                    <?php echo $sku;
-                                     echo '<div id="inline_' . $post->ID . '_sku" class="hidden">' . $sku . '</div>';
-                                    ?>
+					<span><?php echo $sku ? $sku : __('N/A', 'wpsc'); ?></span>
+					<input type="text" class="wpsc_ie_field wpsc_ie_sku" value="<?php echo $sku; ?>">
 				</td>
 			<?php
 		break;
@@ -352,9 +347,8 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			$price = get_post_meta($product->ID, '_wpsc_special_price', true);
 			?>
 				<td  <?php echo $attributes ?>>
-                                  <?php echo wpsc_currency_display( $price );
-                                        echo '<div id="inline_' . $post->ID . '_sale_price" class="hidden">' . $price . '</div>';
-                                  ?>
+					<span><?php echo wpsc_currency_display( $price ); ?></span>
+					<input type="text" class="wpsc_ie_field wpsc_ie_special_price" value="<?php echo $price; ?>">
 				</td>
 			<?php
 
@@ -464,108 +458,3 @@ if ( $wp_list_table->has_items() )
 <br class="clear" />
 <?php
 }
-/*
- * New function - hopefully we'll be able to deprecate soon, once we know what's going on exactly with WP_List_Table
- *
- */
-function wpsc_inline_edit() {
-		global $mode, $current_screen;
-
-		$screen = $current_screen;
-
-		$post = get_default_post_to_edit( $screen->post_type );
-		$post_type_object = get_post_type_object( $screen->post_type );
-                $column_count = count( get_column_headers( 'wpsc-product_variants' ) );
-
-		$taxonomy_names = get_object_taxonomies( $screen->post_type );
-		$hierarchical_taxonomies = array();
-		$flat_taxonomies = array();
-		foreach ( $taxonomy_names as $taxonomy_name ) {
-			$taxonomy = get_taxonomy( $taxonomy_name );
-
-			if ( !$taxonomy->show_ui )
-				continue;
-
-			if ( $taxonomy->hierarchical )
-				$hierarchical_taxonomies[] = $taxonomy;
-			else
-				$flat_taxonomies[] = $taxonomy;
-		}
-
-		$m = ( isset( $mode ) && 'excerpt' == $mode ) ? 'excerpt' : 'list';
-		$can_publish = current_user_can( $post_type_object->cap->publish_posts );
-		$core_columns = array( 'title' => true );
-
-	?>
-
-	<form method="get" action=""><table style="display: none"><tbody id="inlineedit">
-		<?php
-		$hclass = count( $hierarchical_taxonomies ) ? 'post' : 'page';
-		$bulk = 0;
-		while ( $bulk < 2 ) { ?>
-
-		<tr id="<?php echo $bulk ? 'bulk-edit' : 'inline-edit'; ?>" class="inline-edit-row inline-edit-row-<?php echo "$hclass inline-edit-$screen->post_type ";
-			echo $bulk ? "bulk-edit-row bulk-edit-row-$hclass bulk-edit-$screen->post_type" : "quick-edit-row quick-edit-row-$hclass inline-edit-$screen->post_type";
-		?>" style="display: none"><td colspan="<?php echo $column_count; ?>" class="colspanchange">
-
-		<fieldset class="inline-edit-col-left"><div class="inline-edit-col">
-			<h4><?php echo $bulk ? __( 'Bulk Edit' ) : __( 'Quick Edit' ); ?></h4>
-	<?php
-
-	if ( post_type_supports( $screen->post_type, 'title' ) ) :
-		if ( $bulk ) : ?>
-			<div id="bulk-title-div">
-				<div id="bulk-titles"></div>
-			</div>
-
-	<?php else : // $bulk ?>
-
-			<label>
-				<span class="title"><?php _e( 'Title' ); ?></span>
-<!-- 				<span class="input-text-wrap"><input type="text" name="post_title" class="ptitle" value="" /></span> -->
-			</label>
-
-	<?php endif; // $bulk
-	endif; // post_type_supports title
-
-	?>
-
-		</div></fieldset>
-
-	<?php
-		$columns = get_column_headers( 'wpsc-product_variants' );
-
-		foreach ( $columns as $column_name => $column_display_name ) {
-			if ( isset( $core_columns[$column_name] ) )
-				continue;
-			do_action( $bulk ? 'bulk_edit_custom_box' : 'quick_edit_custom_box', $column_name, $screen->post_type );
-		}
-	?>
-		<p class="submit inline-edit-save">
-			<a accesskey="c" href="#inline-edit" title="<?php _e( 'Cancel' ); ?>" class="button-secondary cancel alignleft"><?php _e( 'Cancel' ); ?></a>
-			<?php if ( ! $bulk ) {
-				wp_nonce_field( 'inlineeditnonce', '_inline_edit', false );
-				$update_text = __( 'Update' );
-				?>
-				<a accesskey="s" href="#inline-edit" title="<?php _e( 'Update' ); ?>" class="button-primary save alignright"><?php echo esc_attr( $update_text ); ?></a>
-				<img class="waiting" style="display:none;" src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" alt="" />
-			<?php } else {
-				/* We can replace this with submit_button in 3.1 */
-				?>
-				<input type="submit" name="bulk_edit" id="bulk_edit" class="button-primary alignright" value="Update" accesskey="s"  />
-				<?php
-			} ?>
-			<input type="hidden" name="post_view" value="<?php echo esc_attr( $m ); ?>" />
-			<input type="hidden" name="screen" value="<?php echo esc_attr( $screen->id ); ?>" />
-			<br class="clear" />
-		</p>
-		</td></tr>
-	<?php
-		$bulk++;
-		}
-?>
-		</tbody></table></form>
-<?php
-	}
-
-?>

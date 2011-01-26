@@ -460,7 +460,6 @@ function wpsc_product_variation_forms() {
 				<tbody>
             <?php
 		wpsc_admin_product_listing( $parent_product_data );
-                wpsc_inline_edit();
             ?>
 <?php
             if ( count( $wp_query->posts ) < 1 ) :

@@ -275,31 +275,64 @@ jQuery(document).ready( function () {
 
 	});
 
-      //Added for inline editing capabilities
-     jQuery('a.editinline').live('click', function() {
-        var id = inlineEditPost.getId(this);
-
-        var val_weight = jQuery('#inline_' + id + '_weight').text();
-        jQuery('input#wpsc_ie_weight').val(val_weight);
-
-        var val_sku = jQuery('#inline_' + id + '_sku').text();
-        jQuery('input#wpsc_ie_sku').val(val_sku);
-
-        var val_price = jQuery('#inline_' + id + '_price').text();
-        jQuery('input#wpsc_ie_price').val(val_price);
-
-        var val_sale_price = jQuery('#inline_' + id + '_sale_price').text();
-        jQuery('input#wpsc_ie_sale_price').val(val_sale_price);
-
-        var val_stock = jQuery('#inline_' + id + '_stock').text();
-        jQuery('input#wpsc_ie_stock').val(val_stock);
-
-    });
+	//Added for inline editing capabilities
+	jQuery('#wpsc_product_list a.editinline').live('click', function() {
+		jQuery(this).parents('tr:first').find('a.row-title, td > span').hide();
+		jQuery(this).parents('tr:first').find('td input.wpsc_ie_field, td .wpsc_inline_actions').show();
+	});
+	
+	jQuery('#wpsc_product_list .wpsc_ie_cancel').live('click', function(){
+		jQuery(this).parents('tr:first').find('a.row-title, td > span').show();
+		jQuery(this).parents('tr:first').find('td input.wpsc_ie_field, td .wpsc_inline_actions').hide();
+		jQuery(this).parents('tr:first').find('.loading_indicator').css('visibility', 'hidden');
+	});
+	jQuery('#wpsc_product_list .wpsc_ie_save').live('click', function(){
+		jQuery(this).parents('tr:first').find('.loading_indicator').css('visibility', 'visible');
+		var id =jQuery(this).parents('tr:first').find('.wpsc_ie_id').val();
+		var title = jQuery(this).parents('tr:first').find('.wpsc_ie_title').val();
+		var weight = jQuery(this).parents('tr:first').find('.wpsc_ie_weight').val();
+		var stock = jQuery(this).parents('tr:first').find('.wpsc_ie_stock').val();
+		var price = jQuery(this).parents('tr:first').find('.wpsc_ie_price').val();
+		var special_price = jQuery(this).parents('tr:first').find('.wpsc_ie_special_price').val();
+		var sku = jQuery(this).parents('tr:first').find('.wpsc_ie_sku').val();
+		//post stuff
+		var data = {
+			action: 'wpsc_ie_save',
+			id: id,
+			title: title,
+			weight: weight,
+			stock: stock,
+			price: price,
+			special_price: special_price,
+			sku: sku
+		};
+	
+		jQuery.post(ajaxurl, data, function(response) {
+			response = eval(response);
+			if(response.error){
+				alert(response.error);
+			}
+			else{
+				jQuery('#post-' + response.id + ' .post-title a.row-title').text(response.title);
+				jQuery('#post-' + response.id + ' .column-weight span').text(response.weight);
+				jQuery('#post-' + response.id + ' .column-stock span').text(response.stock);
+				jQuery('#post-' + response.id + ' .column-SKU span').text(response.sku);
+				
+				jQuery('#post-' + response.id + ' .column-price .pricedisplay').html(jQuery(response.price).text());
+				jQuery('#post-' + response.id + ' .column-sale_price .pricedisplay').html(jQuery(response.special_price).text());
+				
+				jQuery('#post-' + response.id + ' a.row-title, #post-' + response.id + ' td > span').show();
+				jQuery('#post-' + response.id + ' td input.wpsc_ie_field, #post-' + response.id + ' td .wpsc_inline_actions').hide();
+				jQuery('#post-' + response.id + ' .loading_indicator').css('visibility', 'hidden');
+			}
+		});
+	});
 
     //As far as I can tell, WP provides no good way of unsetting elements in the bulk edit area...tricky jQuery action will do for now....not ideal whatsoever, nor eternally stable.
     //@todo If this is the best way to do this, we should really use wp_localize_script to localize the strings.
-    jQuery('fieldset.inline-edit-col-left .inline-edit-date').css('display','none');
-    jQuery('fieldset.inline-edit-col-center span.title:eq(1), ul.cat-checklist:eq(1)').css('display','none');
+    
+    //jQuery('fieldset.inline-edit-col-left .inline-edit-date').css('display','none');
+    //jQuery('fieldset.inline-edit-col-center span.title:eq(1), ul.cat-checklist:eq(1)').css('display','none');
     jQuery("label:contains('Date')").css('display', 'none');
     jQuery(".inline-edit-group:contains('Password')").css('display', 'none');
     jQuery('fieldset.inline-edit-col-left.wpsc-cols').css({'float': 'right', 'clear' : 'right'});

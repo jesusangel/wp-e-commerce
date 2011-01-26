@@ -740,9 +740,58 @@ function wpsc_update_permalinks($return = ''){
 wpsc_update_page_urls(true);
 return $return;
 }
+
+/**
+ * wpsc_ajax_ie_save save changes made using inline edit
+ * @public 
+ *
+ * @3.8 
+ * @returns nothing
+ */
+function wpsc_ajax_ie_save(){
+	global $wpdb;
+
+	$product = array(
+		'ID' => $_POST['id'],
+		'post_title' => $_POST['title']
+	);
+	
+	$id = wp_update_post($product);
+	if($id > 0){
+		$product_meta = get_product_meta($product['ID'], 'product_metadata', true);
+		if(is_numeric($_POST['weight']) || empty($_POST['weight']))
+			$product_meta['weight'] = $_POST['weight'];
+
+		update_product_meta($product['ID'], 'product_metadata', $product_meta);
+		update_product_meta($product['ID'], 'price', (float)$_POST['price']);
+		update_product_meta($product['ID'], 'special_price', (float)$_POST['special_price']);
+		update_product_meta($product['ID'], 'sku', $_POST['sku']);
+		if($_POST['stock'] === '')
+			update_product_meta($product['ID'], 'stock', '');
+		else
+			update_product_meta($product['ID'], 'stock', absint($_POST['stock']));
+		
+		$post = get_post($id);
+		$meta = get_product_meta($id, 'product_metadata', true);
+		$price = get_product_meta($id, 'price', true);
+		$special_price = get_product_meta($id, 'special_price', true);
+		$sku = get_product_meta($id, 'sku', true);
+			$sku = ($sku)?$sku:'N/A';
+		$stock = get_product_meta($id, 'stock', true);
+			$stock = ($stock === '')?'N/A':$stock;
+		$results = array('id' => $id, 'title' => $post->post_title, 'weight' => absint($meta['weight']), 'price' => wpsc_currency_display( $price ), 'special_price' => wpsc_currency_display( $special_price ), 'sku' => $sku, 'stock' => $stock);
+		echo '(' . json_encode($results) . ')';
+		die();
+	} else {
+		echo '({"error":"' . __('Error updating product', 'wpsc') . '", "id": "'. $_POST['id'] .'"})';
+	}
+	die();
+}
+
 add_action('permalink_structure_changed' ,'wpsc_update_permalinks');
 add_action('get_sample_permalink_html' ,'wpsc_update_permalinks');
 add_action('wp_ajax_category_sort_order', 'wpsc_ajax_set_category_order');
+add_action('wp_ajax_wpsc_ie_save', 'wpsc_ajax_ie_save');
 
 
 ?>
