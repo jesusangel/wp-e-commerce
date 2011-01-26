@@ -523,7 +523,7 @@ function wpsc_admin_category_forms_edit() {
                         }
                     ?>
 		</div>
-                <?
+                <?php
                     endif;
                 ?><br />
 		<span class="description"><?php _e( 'Select the markets you are selling this category to.', 'wpsc' ); ?></span>
