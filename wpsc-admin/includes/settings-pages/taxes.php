@@ -7,7 +7,7 @@ function wpec_options_taxes() {
 	//include standard shopping cart notifications
 	wpsc_settings_page_update_notification();
 ?>
-	<form name='wpec_taxes_options' id='wpec_taxes_options' method='post' action=''>
+	<form name='wpec_taxes_options' id='wpec_taxes_options' method='post' action='' class='wpsc_form_track'>
 		<div class="wrap">
 			<h3><?php _e( 'Tax Settings' ); ?></h3>
 			<p>

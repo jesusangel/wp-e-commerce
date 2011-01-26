@@ -48,7 +48,7 @@ function wpsc_options_gateway() {
 
 	<div class="wrap">
 	<div class='metabox-holder'>
-		<form name='gatewayopt' method='post' id='gateway_opt' action='' >
+		<form name='gatewayopt' method='post' id='gateway_opt' action='' class='wpsc_form_track'>
 			<input type='hidden' name='gateway_submits' value='true' />
 			<input type='hidden' name='wpsc_gateway_settings' value='gateway_settings' />
 			<?php

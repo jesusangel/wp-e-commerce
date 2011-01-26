@@ -2,7 +2,7 @@
 function wpsc_options_admin(){
 global $wpdb;
 ?>
-<form name='cart_options' id='cart_options' method='post' action=''>
+<form name='cart_options' id='cart_options' method='post' action='' class='wpsc_form_track'>
 	<div id="options_admin">
 	  <h3><?php _e('Admin Settings', 'wpsc'); ?></h3>
   		<?php 

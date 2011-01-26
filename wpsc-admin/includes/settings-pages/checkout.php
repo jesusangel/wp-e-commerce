@@ -18,13 +18,13 @@ function wpsc_options_checkout(){
 	
 	?>
 
-<form name='cart_options' id='cart_options' method='post' action=''>
+<form name='cart_options' id='cart_options' method='post' action='' class='wpsc_form_track'>
 	<div class="wrap">
 		<?php 
 		/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
 		wpsc_settings_page_update_notification(); ?>
 
-		<form method='post' action='' id='chekcout_options_tbl'>
+		<form method='post' action='' id='chekcout_options_tbl' class='wpsc_form_track'>
 		<div class='metabox-holder' style='width:95%;'>
 			<div class='postbox'>
 			<input type='hidden' name='checkout_submits' value='true' />

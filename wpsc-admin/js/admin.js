@@ -1,6 +1,6 @@
 // This is the wp-e-commerce front end javascript "library"
 
-jQuery(document).ready( function () {
+jQuery(document).ready(function(){
 
         jQuery('table.widefat tbody tr').each(function(){
             id = jQuery(this).attr("id");
@@ -372,7 +372,7 @@ jQuery(document).ready( function () {
     jQuery("label:contains('Parent')").css('display', 'none');
     jQuery("label:contains('Status')").css('display', 'none');
     
-        if( dragndrop.set == "true" && typenow == "wpsc-product" ) {
+        if( wpsc_adminL10n.dragndrop_set == "true" && typenow == "wpsc-product" ) {
             // this makes the product list table sortable
             jQuery('table.widefat').sortable({
 		update: function(event, ui) {
@@ -774,7 +774,29 @@ jQuery(document).ready( function () {
 			return false;
 		});
 	});
-
+	
+	// Form change tracking code.
+	jQuery('form.wpsc_form_track :input, form.wpsc_form_track :radio, form.wpsc_form_track :checkbox')
+	.live('change', function() {
+		jQuery(this).parents('form.wpsc_form_track:first').addClass('wpsc_form_changed');
+	});
+	
+	jQuery('form.wpsc_form_track').live('submit', function() {
+		jQuery(this).removeClass('wpsc_form_changed');
+		
+	});
+	
+	// We'd ideally want to be using window.onbeforeonload to toss in a prompt, but that event is too
+	// unreliable from a browser to the next. Hooking onto anchors is the next best thing.
+	jQuery('form.wpsc_form_track a').live('click', function() {
+		if (jQuery(this).attr('href') && jQuery(this).attr('href') != '#' && !jQuery(this).hasClass('wpsc_select_all') && !jQuery(this).hasClass('wpsc_select_none')) {
+			if (jQuery('form.wpsc_form_changed').size()) {
+				if (!confirm(wpsc_adminL10n.unsaved_changes_detected)) {
+					return false;
+				}
+			}
+		}
+	});
 });
 
 

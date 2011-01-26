@@ -210,7 +210,7 @@ function wpsc_options_presentation() {
 	
 ?>
 
-	<form name='cart_options' id='cart_options' method='post' action=''>
+	<form name='cart_options' id='cart_options' method='post' action='' class='wpsc_form_track'>
 		<div id="options_presentation">
 
 		<?php wpsc_settings_page_update_notification();	?>

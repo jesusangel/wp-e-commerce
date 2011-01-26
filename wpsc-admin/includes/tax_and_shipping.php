@@ -20,7 +20,7 @@ $base_region = get_option('base_region');
     echo "Thanks, your changes have been made<br />";
     }
   ?>
-  <form action='' method='post' name='regional_tax'>
+  <form action='' method='post' name='regional_tax' class='wpsc_form_track'>
   <?php
   $country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".$country_isocode."') LIMIT 1",ARRAY_A);
   if(($country_data['has_regions'] == 1))

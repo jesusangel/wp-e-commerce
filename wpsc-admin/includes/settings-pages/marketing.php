@@ -53,7 +53,7 @@ function wpsc_marketing_meta_box() {
 		$display_find_us1 = "checked ='checked'"; ?>
 		
 		
-		<form method='post' action='' id='cart_options' name='cart_options'>
+		<form method='post' action='' id='cart_options' name='cart_options' class='wpsc_form_track'>
 			<input type='hidden' name='change-settings' value='true' />
 			<p>
 				<span class='input_label'><?php _e( 'Display Cross Sales', 'wpsc' ); ?></span>

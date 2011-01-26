@@ -20,7 +20,7 @@ function wpsc_options_shipping() {
 	//get shipping options that are selected
 	$selected_shippings = get_option( 'custom_shipping_options' );
 ?>
-	<form name='cart_options' id='cart_options' method='post' action=''>
+	<form name='cart_options' id='cart_options' method='post' action='' class='wpsc_form_track'>
 
 	<script type='text/javascript'>
 		function selectgateway() {
@@ -29,7 +29,7 @@ function wpsc_options_shipping() {
 	</script>
 		<div class="wrap">
 			<div class="metabox-holder">
-				<form name='shippingopt' method='post' id='shipping_options' action=''>
+				<form name='shippingopt' method='post' id='shipping_options' action='' class='wpsc_form_track'>
 					<input type='hidden' name='shipping_submits' value='true' />
 <?php wp_nonce_field( 'update-options', 'wpsc-update-options' ); ?>
 					<input type='hidden' name='wpsc_admin_action' value='submit_options' />

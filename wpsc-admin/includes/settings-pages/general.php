@@ -3,7 +3,7 @@
 function wpsc_options_general() {
 	global $wpdb;
 ?>
-	<form method='post' action='' id='cart_options' name='cart_options'>
+	<form method='post' action='' id='cart_options' name='cart_options' class='wpsc_form_track'>
 		<div id="options_general">
 			<h3><?php _e( 'General Settings', 'wpsc' ); ?></h3>
 		<?php
