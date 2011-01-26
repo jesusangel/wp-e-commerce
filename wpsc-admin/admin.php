@@ -218,9 +218,11 @@ function wpsc_meta_boxes() {
         //if a variation page do not show these metaboxes
         if( $post->post_parent == 0 )
             add_meta_box( 'wpsc_product_variation_forms', 'Variations', 'wpsc_product_variation_forms', $pagename, 'normal', 'high' );
-        else
+        else{
+            remove_meta_box( 'tagsdiv-product_tag', 'wpsc-product', 'core' );
+            remove_meta_box( 'wpsc_product_external_link_forms', 'wpsc-product', 'core' );
             remove_meta_box( 'wpsc_product_categorydiv', 'wpsc-product', 'core' );
-
+		}
 
 	add_meta_box( 'wpsc_price_control_forms','Price Control','wpsc_price_control_forms',$pagename,'side','low' );
 	add_meta_box( 'wpsc_stock_control_forms','Stock Control','wpsc_stock_control_forms',$pagename,'side','low' );

@@ -57,6 +57,16 @@ $wpsc_product_defaults = array(
 );
 add_action('admin_head', 'wpsc_css_header');
 
+function wpsc_redirect_variation_update($location, $post_id){
+	global $post;
+	if($post->post_parent > 0)
+		wp_redirect(admin_url('post.php?post='.$post->post_parent.'&action=edit'));
+	else
+		return $location;	
+	
+}
+
+add_filter('redirect_post_location','wpsc_redirect_variation_update', 10, 2);
 function wpsc_css_header() {
         global $post_type;
 	?>
