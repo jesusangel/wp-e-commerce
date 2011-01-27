@@ -365,16 +365,15 @@ jQuery(document).ready(function(){
 	});
 
     //As far as I can tell, WP provides no good way of unsetting elements in the bulk edit area...tricky jQuery action will do for now....not ideal whatsoever, nor eternally stable.
-    //@todo If this is the best way to do this, we should really use wp_localize_script to localize the strings.
-    
-    //jQuery('fieldset.inline-edit-col-left .inline-edit-date').css('display','none');
-    //jQuery('fieldset.inline-edit-col-center span.title:eq(1), ul.cat-checklist:eq(1)').css('display','none');
-    jQuery("label:contains('Date')").css('display', 'none');
-    jQuery(".inline-edit-group:contains('Password')").css('display', 'none');
-    jQuery('fieldset.inline-edit-col-left.wpsc-cols').css({'float': 'right', 'clear' : 'right'});
-    //jQuery("label:contains('Parent')").css('display', 'none');
-    jQuery("label:contains('Status')").css('display', 'none');
-    
+     if( pagenow == 'edit-wpsc-product' ) {
+        //jQuery('fieldset.inline-edit-col-left .inline-edit-date').css('display','none');
+        //jQuery('fieldset.inline-edit-col-center span.title:eq(1), ul.cat-checklist:eq(1)').css('display','none');
+        jQuery("label:contains('Date')").css('display', 'none');
+        jQuery(".inline-edit-group:contains('Password')").css('display', 'none');
+        jQuery('fieldset.inline-edit-col-left.wpsc-cols').css({'float': 'right', 'clear' : 'right'});
+        jQuery("label:contains('Parent')").css('display', 'none');
+        jQuery("label:contains('Status')").css('display', 'none');
+    }
         if( wpsc_adminL10n.dragndrop_set == "true" && typenow == "wpsc-product" ) {
             // this makes the product list table sortable
             jQuery('table.widefat:not(.tags)').sortable({
