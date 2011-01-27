@@ -54,8 +54,10 @@ add_action( 'edited_wpsc_product_category', 'wpsc_save_category_set' ); //After 
 
 function wpsc_custom_category_columns( $columns ) {
     // Doing it this funny way to ensure that image stays in far left, even if other items are added via plugin.
-
+    unset( $columns["cb"] );
+    
     $custom_array = array(
+        'cb' => '<input type="checkbox">',
         'image' => __( 'Image' )
     );
     
@@ -591,6 +593,7 @@ function wpsc_admin_category_forms_edit() {
 function wpsc_save_category_set($term_id) {
 	global $wpdb;
 	if( !empty( $_POST ) ) {
+            print_r($_POST);
 		/* Image Processing Code*/
 		if(($_FILES['image'] != null) && preg_match("/\.(gif|jp(e)*g|png){1}$/i",$_FILES['image']['name'])) {
 			if(function_exists("getimagesize")) {

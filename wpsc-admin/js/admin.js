@@ -304,7 +304,6 @@ jQuery(document).ready(function(){
 
           jQuery('form#addtag').attr('enctype', 'multipart/form-data');
       }
-
 	//Added for inline editing capabilities
 	jQuery('#wpsc_product_list a.editinline').live('click', function() {
 		jQuery(this).parents('tr:first').find('a.row-title, td > span').hide();
@@ -377,7 +376,7 @@ jQuery(document).ready(function(){
     
         if( wpsc_adminL10n.dragndrop_set == "true" && typenow == "wpsc-product" ) {
             // this makes the product list table sortable
-            jQuery('table.widefat').sortable({
+            jQuery('table.widefat:not(.tags)').sortable({
 		update: function(event, ui) {
 			category_id = jQuery('select#wpsc_product_category option:selected').val();
 			product_order = jQuery('table.widefat').sortable( 'serialize' );
@@ -386,7 +385,7 @@ jQuery(document).ready(function(){
 		},
 		items: 'tr',
 		axis: 'y',
-		containment: 'table.widefat',
+		containment: 'table.widefat tbody',
 		placeholder: 'product-placeholder',
                 cursor: 'move',
                 cancel: 'tr.inline-edit-wpsc-product'
