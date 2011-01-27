@@ -1685,8 +1685,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 	add_action( 'admin_init', 'wpsc_settings_page_ajax' );
 
 function wpsc_update_variations() {
-	global $wpdb, $user_ID, $wp_query, $wpsc_products, $mode;
-
 	//Setup postdata
 	$post_data = array( );
 	$post_data['edit_var_val'] = $_POST["edit_var_val"];
@@ -1696,11 +1694,8 @@ function wpsc_update_variations() {
 	$product_id = absint( $_POST["product_id"] );
 
 	//Add or delete variations
-
 	wpsc_edit_product_variations( $product_id, $post_data );
-
-	// return admin table listing
-	return wpsc_admin_product_listing( $product_id );
+	die();
 }
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_update_variations') )
 	add_action( 'admin_init', 'wpsc_update_variations', 50 );
