@@ -375,7 +375,7 @@ jQuery(document).ready(function(){
         jQuery("label:contains('Parent')").css('display', 'none');
         jQuery("label:contains('Status')").css('display', 'none');
     }
-        if( wpsc_adminL10n.dragndrop_set == "true" && typenow == "wpsc-product" ) {
+        if( wpsc_adminL10n.dragndrop_set == "true" && typenow == "wpsc-product" && adminpage == "edit-php" ) {
             // this makes the product list table sortable
             jQuery('table.widefat:not(.tags)').sortable({
 		update: function(event, ui) {
