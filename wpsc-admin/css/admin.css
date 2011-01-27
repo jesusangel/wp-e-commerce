@@ -1691,7 +1691,7 @@ padding-right:10px;
 .row-title {
     margin-right:5px;
 }
-form#posts-filter {
+body.edit-php form#posts-filter {
     min-width:830px;
 }
 div#wpsc-variationdiv {

@@ -31,16 +31,25 @@ function wpsc_ajax_set_category_order(){
 }
 
 /**
- * wpsc_display_categories_page, assembles the category page
+ * Remove the AJAX response on the categories page.  Necessary for allowing for image upload.
  * @param nothing
  * @return nothing
  */
 
+function wpsc_cat_kill_ajax() {
+    global $current_screen;
+
+    if( $current_screen->id == 'edit-wpsc_product_category' ) {
+        wp_deregister_script( 'wp-ajax-response' );
+        wp_deregister_script( 'admin-tags' );
+    }
+}
+
+add_action( 'admin_head', 'wpsc_cat_kill_ajax' );
 add_filter( 'manage_edit-wpsc_product_category_columns', 'wpsc_custom_category_columns' );
 add_filter( 'manage_wpsc_product_category_custom_column', 'wpsc_custom_category_column_data', 10, 3);
 add_action( 'wpsc_product_category_add_form_fields', 'wpsc_admin_category_forms_add' ); // After left-col
 add_action( 'wpsc_product_category_edit_form_fields', 'wpsc_admin_category_forms_edit' ); // After left-col
-
 add_action( 'created_wpsc_product_category', 'wpsc_save_category_set' ); //After created
 add_action( 'edited_wpsc_product_category', 'wpsc_save_category_set' ); //After saved
 
