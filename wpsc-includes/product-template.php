@@ -158,7 +158,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	if($current_page < $totalpages){
 		while(($i) > $current_page){
 			if($count < $num_paged_links && ($count+$current_page) <= $totalpages){
-			$output .= " <a href=\"". $page_link .$separator. ($count+$current_page) .$additional_links . "\" title=\"Page ".($count+$current_page)." \">".($count+$current_page)."</a>";
+			$output .= " <a href=\"". $page_link .$separator. ($count+$current_page) .$additional_links . "\" title=\"" . sprintf( __('Page %s', 'wpsc'), ($count+$current_page) ) . "\">".($count+$current_page)."</a>";
 			$i++;
 			}else{
 			break;
