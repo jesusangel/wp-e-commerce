@@ -436,6 +436,20 @@ function wpsc_start_the_query() {
 		
 			add_filter( 'pre_get_posts', 'wpsc_generate_product_query', 11 );
 			$wpsc_query = new WP_Query( $wpsc_query_vars );
+			//for 3.1 :| 
+			if(empty($wpsc_query->posts) && isset($wpsc_query->tax_query) && isset($wp_query->query_vars['wpsc_product_category'])){
+				$wpsc_query_vars = array();
+				$wpsc_query_vars['wpsc_product_category'] = $wp_query->query_vars['wpsc_product_category'];
+				if(1 == get_option('use_pagination')){
+					$wpsc_query_vars['nopaging'] = false;
+					$wpsc_query_vars['posts_per_page'] = get_option('wpsc_products_per_page');
+					$wpsc_query_vars['paged'] = get_query_var('paged');
+					if(empty($wpsc_query_vars['paged']))
+						$wpsc_query_vars['paged'] = get_query_var('page');						
+				}
+
+				$wpsc_query = new WP_Query( $wpsc_query_vars );				
+			}
 		}
 	}
 	if($wp_query->is_404 && $wpsc_query->post_count > 0  )
