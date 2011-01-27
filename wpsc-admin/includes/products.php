@@ -162,7 +162,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			$actions = array();
 			if ( current_user_can('edit_post', $product->ID) && 'trash' != $product->post_status ) {
 				$actions['edit'] = '<a class="edit-product" href="'.$edit_link.'" title="' . esc_attr(__('Edit this product', 'wpsc')) . '">'. __('Edit', 'wpsc') . '</a>';
-				$actions['quick_edit'] = "<a class='editinline' title='".esc_attr(__('Quick Edit', 'wpsc'))."' href='#'>".__('Quick Edit')."</a>";
+				$actions['quick_edit'] = "<a class='wpsc_editinline' title='".esc_attr(__('Quick Edit', 'wpsc'))."' href='#'>".__('Quick Edit')."</a>";
 			}
 
 			if ( in_array($product->post_status, array('pending', 'draft')) ) {

@@ -306,12 +306,13 @@ jQuery(document).ready(function(){
 
       }
 	//Added for inline editing capabilities
-	jQuery('#wpsc_product_list a.editinline').live('click', function() {
+	jQuery('#wpsc_product_list a.wpsc_editinline').live('click', function() {
 		jQuery(this).parents('tr:first').find('a.row-title, td > span').hide();
 		jQuery('.wpsc_ie_field').each(function(){
 			jQuery(this).width( (jQuery(this).parents('td:first').innerWidth() - 14) + 'px' );
 		});
 		jQuery(this).parents('tr:first').find('td input.wpsc_ie_field, td .wpsc_inline_actions').show();
+		return false;
 	});
 	
 	jQuery('#wpsc_product_list .wpsc_ie_cancel').live('click', function(){
