@@ -3,7 +3,7 @@
  * This is the PayPal Certified 2.0 Gateway. 
  * It uses the wpsc_merchant class as a base class which is handy for collating user details and cart contents.
  */
- 
+
  /*
   * This is the gateway variable $nzshpcrt_gateways, it is used for displaying gateway information on the wp-admin pages and also
   * for internal operations.
@@ -105,7 +105,7 @@ class wpsc_merchant_paypal_express extends wpsc_merchant {
 	* @access public
 	*/
 	function submit() {
-		$_SESSION['paypalExpressMessage']= '<h4>Transaction Canceled</h4>';
+		//$_SESSION['paypalExpressMessage']= '<h4>Transaction Canceled</h4>';
 
 		// PayPal Express Checkout Module		
 		$paymentAmount = $this->cart_data['total_price'];
@@ -196,7 +196,9 @@ class wpsc_merchant_paypal_express extends wpsc_merchant {
 		global $PAYPAL_URL;
 		// Redirect to paypal.com here
 		$payPalURL = $PAYPAL_URL . $token;
+//		echo 'REDIRECT:'.$payPalURL;
 		wp_redirect($payPalURL);
+//		exit();
 	}
 
 	
@@ -366,7 +368,6 @@ function paypal_processingfunctions(){
 	$sessionid = '';
 	if (isset($_SESSION['paypalexpresssessionid']))
 	$sessionid = $_SESSION['paypalexpresssessionid'];
-	
 	if(isset($_REQUEST['act']) && ($_REQUEST['act']=='error')){
 		session_start();
 		$resArray=$_SESSION['reshash']; 
@@ -378,22 +379,17 @@ function paypal_processingfunctions(){
 		</tr>
 		';
 	    //it will print if any URL errors 
-		if(isset($_SESSION['curl_error_no'])) { 
-			$errorCode= $_SESSION['curl_error_no'] ;
+		if(isset($_SESSION['curl_error_msg'])) { 
 			$errorMessage=$_SESSION['curl_error_msg'] ;	
 			$response = $_SESSION['response'];
 			session_unset();	
-	
+			
 			$_SESSION['paypalExpressMessage'].='
 			<tr>
 				<td>response:</td>
 				<td>'.$response.'</td>
 			</tr>
 			   
-			<tr>
-				<td>Error Number:</td>
-				<td>'.$errorCode.'</td>
-			</tr>
 			<tr>
 				<td>Error Message:</td>
 				<td>'.$errorMessage.'</td>
@@ -477,7 +473,7 @@ function paypal_processingfunctions(){
 				break;
 		
 				case 'Pending': // need to wait for "Completed" before processing
-				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `transactid` = '".$transaction_id."', `date` = '".time()."'  WHERE `sessionid` = ".$sessionid." LIMIT 1");
+				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `transactid` = '".$transaction_id."',`processed` = '2', `date` = '".time()."'  WHERE `sessionid` = ".$sessionid." LIMIT 1");
 				break;
 			}
 			$location = add_query_arg('sessionid', $sessionid, get_option('transact_url'));
@@ -521,7 +517,7 @@ function paypal_processingfunctions(){
 		   $resArray=paypal_hash_call("SetExpressCheckout",$nvpstr);
 		   $_SESSION['reshash']=$resArray;
 		   $ack = strtoupper($resArray["ACK"]);
-	
+
 		   if($ack=="SUCCESS"){
 				// Redirect to paypal.com here
 				$token = urldecode($resArray["TOKEN"]);
@@ -554,7 +550,7 @@ function paypal_processingfunctions(){
 			an action to complete the payment.  If failed, show the error
 			*/
 		   $resArray=paypal_hash_call("GetExpressCheckoutDetails",$nvpstr);
-	
+
 		   $_SESSION['reshash']=$resArray;
 		   $ack = strtoupper($resArray["ACK"]);
 		   if($ack=="SUCCESS"){			
@@ -597,10 +593,9 @@ function paypal_processingfunctions(){
 				/* Display the  API response back to the browser .
 				If the response from PayPal was a success, display the response parameters
 				*/
-				if(isset($_REQUEST['token']) && !isset($_REQUEST['PayerID'])){
+				if(isset($_REQUEST['TOKEN']) && !isset($_REQUEST['PAYERID'])){
 					$_SESSION['paypalExpressMessage']= '<h4>TRANSACTION CANCELED</h4>';
 				}else{
-			
 					$output ="
 				       <table width='400' class='paypal_express_form'>
 				        <tr>
@@ -695,35 +690,32 @@ function paypal_hash_call($methodName,$nvpStr)	{
 	//NVPRequest for submitting to server
 	$nvpreq="METHOD=" . urlencode($methodName) . "&VERSION=" . urlencode($version) . "&PWD=" . urlencode($API_Password) . "&USER=" . urlencode($API_UserName) . "&SIGNATURE=" . urlencode($API_Signature) . $nvpStr . "&BUTTONSOURCE=" . urlencode($sBNCode);
 
-	//setting the curl parameters.
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL,$API_Endpoint);
-	curl_setopt($ch, CURLOPT_VERBOSE, 1);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-	curl_setopt($ch, CURLOPT_POST, 1);
+	// Configure WP_HTTP
+	if($USE_PROXY) {
+		if (!defined('WP_PROXY_HOST') && !defined('WP_PROXY_PORT')) {
+			define('WP_PROXY_HOST', $PROXY_HOST);
+			define('WP_PROXY_PORT', $PROXY_PORT);
+		}
+	}
+	add_filter('http_api_curl', 'wpsc_curl_ssl');
 	
-
-   //Set proxy name to PROXY_HOST and port number to PROXY_PORT
-	if($USE_PROXY)
-		curl_setopt ($ch, CURLOPT_PROXY, $PROXY_HOST. ":" . $PROXY_PORT); 
-
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $nvpreq);
-	$response = curl_exec($ch);
+	$options = array(
+		'timeout' => 5,
+		'body' => $nvpreq,
+	);
 	
-	$nvpResArray=paypal_deformatNVP($response);
-	$nvpReqArray=paypal_deformatNVP($nvpreq);
 	$_SESSION['nvpReqArray']=$nvpReqArray;
-
-	if (curl_errno($ch)) {
-		// moving to display page to display curl errors
-		$_SESSION['curl_error_no']=curl_errno($ch) ;
-		$_SESSION['curl_error_msg']=curl_error($ch);
-
+	$nvpReqArray=paypal_deformatNVP($nvpreq);
+	
+	$res = wp_remote_post($API_Endpoint, $options);
+	
+	if ( is_wp_error($res) ) {
+		$_SESSION['curl_error_msg'] = 'WP HTTP Error: ' . $res->get_error_message();
+		$nvpResArray=paypal_deformatNVP('');
 	} else {
-	  	curl_close($ch);
-	}	
+		$nvpResArray=paypal_deformatNVP($res['body']);
+	}
+
 	return $nvpResArray;
 }
 

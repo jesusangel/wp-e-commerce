@@ -1037,6 +1037,22 @@ function wpsc_force_ssl() {
 }
 add_action( 'get_header', 'wpsc_force_ssl' );
 
+
+/**
+ * Disable SSL validation for Curl. Added/removed on a per need basis, like so:
+ *
+ * add_filter('http_api_curl', 'wpsc_curl_ssl');
+ * remove_filter('http_api_curl', 'wpsc_curl_ssl');
+ *
+ * @param resource $ch
+ * @return resource $ch
+ **/
+function wpsc_curl_ssl($ch) {
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+	return $ch;
+}
+
 /**
  * wpsc_add_https_to_page_url_options( $url )
  *
