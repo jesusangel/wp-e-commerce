@@ -101,7 +101,7 @@ th#amount{
 	width:75px;
 }
 th#name{
-	width:220px;
+/* 	width:220px; */
 }
 th#track{
 	width:75px;
@@ -347,7 +347,7 @@ div.admin_product_shorttags {
 
 #description {
 	margin:0;
-	width:100%;
+/* 	width:100%; */
 }
 
 h4.product_action_link {
@@ -911,7 +911,8 @@ table.category_forms {
 	width: 100%;
 }
 table.category_forms tr td {
-	padding: 0px 8px ;
+	padding: 0px;
+	padding-right: 8px;
 }
 table.category_forms tr td textarea  {
 	width: 386px;

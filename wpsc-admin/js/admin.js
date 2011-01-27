@@ -301,8 +301,9 @@ jQuery(document).ready(function(){
             });
             return false;
        }
-
+		
           jQuery('form#addtag').attr('enctype', 'multipart/form-data');
+
       }
 	//Added for inline editing capabilities
 	jQuery('#wpsc_product_list a.editinline').live('click', function() {
@@ -371,7 +372,7 @@ jQuery(document).ready(function(){
     jQuery("label:contains('Date')").css('display', 'none');
     jQuery(".inline-edit-group:contains('Password')").css('display', 'none');
     jQuery('fieldset.inline-edit-col-left.wpsc-cols').css({'float': 'right', 'clear' : 'right'});
-    jQuery("label:contains('Parent')").css('display', 'none');
+    //jQuery("label:contains('Parent')").css('display', 'none');
     jQuery("label:contains('Status')").css('display', 'none');
     
         if( wpsc_adminL10n.dragndrop_set == "true" && typenow == "wpsc-product" ) {

@@ -37,7 +37,7 @@ function wpsc_ajax_set_category_order(){
  */
 
 add_filter( 'manage_edit-wpsc_product_category_columns', 'wpsc_custom_category_columns' );
-add_filter( 'manage_wpsc_product_category_custom_column', 'wpsc_custom_category_column_data', 10, 2);
+add_filter( 'manage_wpsc_product_category_custom_column', 'wpsc_custom_category_column_data', 10, 3);
 add_action( 'wpsc_product_category_add_form_fields', 'wpsc_admin_category_forms_add' ); // After left-col
 add_action( 'wpsc_product_category_edit_form_fields', 'wpsc_admin_category_forms_edit' ); // After left-col
 
@@ -72,11 +72,10 @@ function wpsc_custom_category_columns( $columns ) {
  * @return nada
  */
 
-function wpsc_custom_category_column_data( $column_name, $term_id ) {
+function wpsc_custom_category_column_data(  $something, $column_name, $tag ) {
    global $current_screen;
-
-   echo '<img title="Drag to a new position" src="http://wpec.zaowebdesign.com/wp-content/plugins/wp-e-commerce/wpsc-core/images/no-image-uploaded.gif" alt="" width="38" height="38">';
-
+	
+	return '<img title="Drag to a new position" src="http://wpec.zaowebdesign.com/wp-content/plugins/wp-e-commerce/wpsc-core/images/no-image-uploaded.gif" alt="" width="38" height="38">';
 }
 /**
  *  Create the actual drag and drop list used for the admin category view
@@ -86,6 +85,7 @@ function wpsc_custom_category_column_data( $column_name, $term_id ) {
  * @return string $output
  */
 function wpsc_admin_list_category_array($categories, $level = 0){
+
   $output = '';
   foreach($categories as $cat){
 
@@ -146,7 +146,6 @@ EOT;
  */
 function wpsc_admin_get_category_array($parent_id = null){
   global $wpdb;
-
   $orderedList = array();
   if(!isset($parent_id)) $parent_id = 0;
   $category_list = get_terms('wpsc_product_category','hide_empty=0&parent='.$parent_id);
@@ -221,7 +220,7 @@ function wpsc_admin_category_forms_add() {
 								$category_view0 = "selected ='selected'";
 							break;
 						}?>
-							<span class='small'><?php _e('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc'); ?></span><br /><br />
+							
 
 						<select name='display_type'>
 							<option value=''<?php echo $category_view0; ?> ><?php _e('Please select', 'wpsc'); ?></option>
@@ -240,7 +239,11 @@ function wpsc_admin_category_forms_add() {
 						</select><br /><br />
 					</td>
 				</tr>
-
+			<tr>
+				<td>
+				<span class='small'><?php _e('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc'); ?></span><br /><br />
+				</td>
+			</tr>
 
 			<?php	if(function_exists("getimagesize")) { ?>
 			<tr>
@@ -380,16 +383,6 @@ function wpsc_admin_category_forms_edit() {
                 <h3><?php _e( 'Advanced Settings', 'wpsc' ); ?></h3>
             </td>
         </tr>
-
-	<tr class="form-field">
-            <th scope="row" valign="top">
-		<label for="image"><?php _e( 'Category Image', 'wpsc' ); ?></label>
-            </th>
-            <td>
-		<input type='file' name='image' value='' /><br />
-		<span class="description"><?php _e( 'You can set an image for the category here.', 'wpsc' ); ?></span>
-            </td>
-	</tr>
 
 	<tr class="form-field">
             <th scope="row" valign="top">
@@ -593,7 +586,6 @@ function wpsc_admin_category_forms_edit() {
 function wpsc_save_category_set($term_id) {
 	global $wpdb;
 	if( !empty( $_POST ) ) {
-            print_r($_POST);
 		/* Image Processing Code*/
 		if(($_FILES['image'] != null) && preg_match("/\.(gif|jp(e)*g|png){1}$/i",$_FILES['image']['name'])) {
 			if(function_exists("getimagesize")) {
