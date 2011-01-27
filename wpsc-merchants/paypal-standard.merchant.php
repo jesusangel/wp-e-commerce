@@ -236,7 +236,7 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 					LIMIT 1
 				");
 				$local_currency_code = $currency_code;
-				$paypal_currency_code = get_option('paypal_curcode', 'US');
+				$paypal_currency_code = get_option('paypal_curcode', 'USD');
 
 				if ($paypal_currency_code != $local_currency_code) {
 					$curr = new CURRENCYCONVERTER();
