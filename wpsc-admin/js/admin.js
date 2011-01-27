@@ -16,10 +16,9 @@ jQuery(document).ready(function(){
 		name = jQuery('input#title').val();
 		product_id = jQuery('input#product_id').val();
 		post_values = edit_var_val+'&description='+description+'&additional_description='+additional_description+'&name='+name+'&product_id='+product_id;
-
+		
 		jQuery.post('index.php?wpsc_admin_action=wpsc_update_variations',post_values, function(returned_data){
-			var url = location.href;
-			jQuery('div#wpsc_product_variation_forms table.widefat').fadeOut(500).load(url +' div#wpsc_product_variation_forms table.widefat').fadeIn(500);
+			jQuery('div#wpsc_product_variation_forms table.widefat tbody').html(returned_data);
 			jQuery('img.loading').hide();
 		});
 		return false;

@@ -1695,6 +1695,7 @@ function wpsc_update_variations() {
 
 	//Add or delete variations
 	wpsc_edit_product_variations( $product_id, $post_data );
+	wpsc_admin_product_listing( $product_id );
 	die();
 }
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_update_variations') )

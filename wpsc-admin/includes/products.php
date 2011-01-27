@@ -18,14 +18,8 @@ function wpsc_admin_product_listing($parent_product = null) {
 
 	add_filter('the_title','esc_html');
 
-	// Create array of post IDs.
-	$product_ids = array();
-
 	if ( empty($wpsc_products) )
             $wpsc_products = &$wp_query->posts;
-
-	foreach ( (array)$wpsc_products as $product )
-            $product_ids[] = $product->ID;
 
 	foreach ( (array)$wpsc_products as $product ) {
 		wpsc_product_row($product, $parent_product);
@@ -56,9 +50,11 @@ add_filter('display_post_states','wpsc_trashed_post_status');
  * @param $product (Object), $parent_product (Int) Note: I believe parent_product is unused
  */
 function wpsc_product_row(&$product, $parent_product = null) {
-	global $wp_query, $wpsc_products, $mode, $current_user;
+	global $mode, $current_user;
+	
+	//is this good practice? <v.bakaitis@gmail.com>
 	static $rowclass;
-	//echo "<pre>".print_r($product, true)."</pre>";
+	
 	$global_product = $product;
 	setup_postdata($product);
 
@@ -76,6 +72,9 @@ function wpsc_product_row(&$product, $parent_product = null) {
 	<tr id='post-<?php echo $product->ID; ?>' class='<?php echo trim( $rowclass . ' author-' . $post_owner . ' status-' . $product->post_status ); ?> iedit <?php if ( get_option ( 'wpsc_sort_by' ) == 'dragndrop') { echo 'product-edit'; } ?>' valign="top">
 	<?php
 	$posts_columns = get_column_headers( 'wpsc-product_variants' );
+	
+	if(empty($posts_columns))
+		$posts_columns = array('image' => '', 'title' => 'Name', 'weight' => 'Weight', 'stock' => 'Stock', 'price' => 'Price', 'sale_price' => 'Sale Price', 'SKU' => 'SKU', 'hidden_alerts' => '');
 
 	foreach ( $posts_columns as $column_name=>$column_display_name ) {
 		$class = "class=\"$column_name column-$column_name\"";
