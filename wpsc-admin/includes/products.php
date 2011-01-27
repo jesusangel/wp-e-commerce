@@ -14,7 +14,7 @@
  *
  */
 function wpsc_admin_product_listing($parent_product = null) {
-	global $wp_query, $wpsc_products, $mode;
+	global $wp_query, $wpsc_products;
 
 	add_filter('the_title','esc_html');
 
