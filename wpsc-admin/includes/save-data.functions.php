@@ -81,10 +81,17 @@ function wpsc_custom_category_columns( $columns ) {
  * @return nada
  */
 
-function wpsc_custom_category_column_data(  $something, $column_name, $tag ) {
+function wpsc_custom_category_column_data( $string, $column_name, $tag ) {
    global $current_screen;
-	
-	return '<img title="Drag to a new position" src="http://wpec.zaowebdesign.com/wp-content/plugins/wp-e-commerce/wpsc-core/images/no-image-uploaded.gif" alt="" width="38" height="38">';
+
+   if(isset($cat['image'])){
+      $image = "<img src=\"".WPSC_CATEGORY_URL.stripslashes($cat['image'])."\" title='".$cat['name']."' alt='".$cat['name']."' width='30' height='30' />";
+    }else{
+      $image = "<img src='".WPSC_CORE_IMAGES_URL."/no-image-uploaded.gif' title='".$cat['name']."' alt='".$cat['name']."' width='30' height='30' />";
+    }
+
+    return $image;
+
 }
 /**
  *  Create the actual drag and drop list used for the admin category view
@@ -592,7 +599,7 @@ function wpsc_admin_category_forms_edit() {
  * @param nothing
  * @return nothing
  */
-function wpsc_save_category_set($term_id) {
+function wpsc_save_category_set( $term_id ) {
 	global $wpdb;
 	if( !empty( $_POST ) ) {
 		/* Image Processing Code*/
@@ -627,7 +634,7 @@ function wpsc_save_category_set($term_id) {
 		
 		  
 		/* add category code */
-		if($_POST['submit_action'] == "add") {
+		if($_POST['action'] == "add_tag") {
 			$name = $_POST['name'];			
 			$term = get_term_by('name', $name, 'wpsc_product_category', ARRAY_A);
 						
@@ -691,8 +698,8 @@ function wpsc_save_category_set($term_id) {
 		
 	    
 		/* edit category code */
-		if(($_POST['submit_action'] == "edit") && is_numeric($_POST['category_id'])) {
-			$category_id = absint($_POST['category_id']);
+		if( ( $_POST['action'] == "editedtag" ) && is_numeric( $_POST['tag_ID'] ) ) {
+			$category_id = absint($_POST['tag_ID']);
 			
 			$name = $_POST['name'];
 			
