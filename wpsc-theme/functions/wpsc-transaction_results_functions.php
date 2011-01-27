@@ -204,7 +204,7 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 				}// if
 
 				$report = get_option( 'wpsc_email_admin' );
-				$report_product_list.= " - " . $row['name'] . "  " . $message_price . "\n\r";
+				$report_product_list.= " - " . $row['quantity'] . " " . $row['name'] . "  " . $message_price . "\n\r";
 			} // closes foreach cart as row
 
 			// Decrement the stock here
