@@ -1719,3 +1719,8 @@ input.wpsc_cat_box {
 table.tags th#image {
     width:60px;
 }
+/* quick edit product */
+fieldset.wpsc-cols{
+width:30% !important;
+float:left !important;
+}
