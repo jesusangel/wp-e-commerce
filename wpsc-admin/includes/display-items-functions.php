@@ -503,7 +503,7 @@ function wpsc_product_shipping_forms() {
         if( !isset( $product_meta['weight'] ) )
            $product_meta['weight'] = "";
 
-        $product_data['transformed']['weight'] = wpsc_convert_weight( $product_meta['weight'], "gram", $product_meta['weight_unit'] );
+        $product_data['transformed']['weight'] = wpsc_convert_weight( $product_meta['weight'], "pound", $product_meta['weight_unit'] );
 
        ?>
 		<table>
