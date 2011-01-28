@@ -85,12 +85,14 @@ function wpsc_custom_category_columns( $columns ) {
 function wpsc_custom_category_column_data( $string, $column_name, $term_id ) {
    global $wpdb;
 
-//   $image = $wpdb->get_var()
+  $image = wpsc_get_categorymeta( $term_id, 'image' );
+  $name = get_term_by( 'id', $term_id, 'wpsc_product_category' );
+  $name = $name->name;
 
-   if( !empty( $image ) )
-      $image = "<img src=\"".WPSC_CATEGORY_URL.stripslashes($cat['image'])."\" title='".$cat['name']."' alt='".$cat['name']."' width='30' height='30' />";
+  if( !empty( $image ) )
+      $image = "<img src=\"".WPSC_CATEGORY_URL.stripslashes( $image )."\" title='".$name."' alt='".$name."' width='30' height='30' />";
    else
-      $image = "<img src='".WPSC_CORE_IMAGES_URL."/no-image-uploaded.gif' title='".$cat['name']."' alt='".$cat['name']."' width='30' height='30' />";
+      $image = "<img src='".WPSC_CORE_IMAGES_URL."/no-image-uploaded.gif' title='".$name."' alt='".$name."' width='30' height='30' />";
    
 
     return $image;
