@@ -600,8 +600,9 @@ function wpsc_admin_category_forms_edit() {
  * @param nothing
  * @return nothing
  */
-function wpsc_save_category_set( $term_id ) {
+function wpsc_save_category_set() {
 	global $wpdb;
+        
 	if( !empty( $_POST ) ) {
 		/* Image Processing Code*/
 		if( ( $_FILES['image'] != null ) && preg_match( "/\.(gif|jp(e)*g|png){1}$/i", $_FILES['image']['name'] ) ) {
@@ -629,43 +630,13 @@ function wpsc_save_category_set( $term_id ) {
 		  
                 $name = $_POST['name'];
 
-                if( get_term_by( 'name', $name, 'wpsc_product_category', ARRAY_A ) ) {
-
-                    $category_id= $term['term_id'];
-                    $category = get_term_by('id', $category_id, 'wpsc_product_category');
+                if( isset( $_POST['tag_ID'] ) ) {
+                    //Editing
+                    $category_id= $_POST['tag_ID'];
+                    $category = get_term_by( 'id', $category_id, 'wpsc_product_category' );
                     $url_name=$category->slug;
 
-                    //Term exists
-                    wp_update_term($category_id, 'wpsc_product_category', array(
-					'name' => $name , 'parent' => $parent_category
-				));
-                } else {
-                    //Term does not exist
-
-                    $term = wp_insert_term( $name, 'wpsc_product_category',array('parent' => $parent_category));
                 }
-
-                if (is_wp_error($term)) {
-                        $sendback = add_query_arg('message',$term->get_error_code());
-                        wp_redirect($sendback);
-                        return;
-                }
-		
-		/* edit category code */
-		if( ( $_POST['action'] == "editedtag" ) && is_numeric( $_POST['tag_ID'] ) ) {
-			$category_id = absint($_POST['tag_ID']);
-			
-			$name = $_POST['name'];
-			
-			$category = get_term_by('id', $category_id, 'wpsc_product_category');
-			if($category->name != $name || $category->parent != $parent_category) {
-				wp_update_term($category_id, 'wpsc_product_category', array(
-					'name' => $name , 'parent' => $parent_category
-				));
-				$category = get_term($category_id, 'wpsc_product_category');
-			}
-			
-			
 			$url_name=$category->slug;
 			wpsc_update_categorymeta($category_id, 'nice-name', $url_name);
 			wpsc_update_categorymeta($category_id, 'description', $wpdb->escape(stripslashes($_POST['description'])));
@@ -727,7 +698,7 @@ function wpsc_save_category_set( $term_id ) {
 	  			$AllSelected = true;
 			
 			}
-	}
+
 }
 }
 
