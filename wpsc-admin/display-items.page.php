@@ -37,8 +37,9 @@ function wpsc_is_admin() {
  *
  */
 function wpsc_additional_column_names( $columns ){
-	$columns = array();
-    
+    $columns = array();
+
+    $columns['cb'] = '<input type="checkbox">';
     $columns['image'] = __('');
     $columns['title'] = __('Name');
     $columns['weight'] = __('Weight');
@@ -324,7 +325,7 @@ add_filter( 'posts_orderby', 'wpsc_column_sql_orderby', 10, 2 );
  *
  * @access public
  * @todo Should be refactored to e
- * @return void
+ * @return void 
  */
 function wpsc_update_featured_products() {
 	global $wpdb;
