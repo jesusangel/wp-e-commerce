@@ -51,8 +51,8 @@ add_filter( 'manage_edit-wpsc_product_category_columns', 'wpsc_custom_category_c
 add_filter( 'manage_wpsc_product_category_custom_column', 'wpsc_custom_category_column_data', 10, 3);
 add_action( 'wpsc_product_category_add_form_fields', 'wpsc_admin_category_forms_add' ); // After left-col
 add_action( 'wpsc_product_category_edit_form_fields', 'wpsc_admin_category_forms_edit' ); // After left-col
-add_action( 'created_wpsc_product_category', 'wpsc_save_category_set' ); //After created
-add_action( 'edited_wpsc_product_category', 'wpsc_save_category_set' ); //After saved
+add_action( 'created_wpsc_product_category', 'wpsc_save_category_set', 10 , 2 ); //After created
+add_action( 'edited_wpsc_product_category', 'wpsc_save_category_set', 10 , 2 ); //After saved
 
 /**
  * wpsc_custom_category_columns
@@ -365,9 +365,7 @@ function wpsc_admin_category_forms_add() {
 
 <table class="category_forms">
 	<tr>
-		<td>
-			<input type='hidden' name='wpsc_admin_action' value='wpsc-category-set' />
-		</td>
+
 	</tr>
 </table>
   <?php
@@ -587,11 +585,7 @@ function wpsc_admin_category_forms_edit() {
                 <br />
 	  </td>
 	</tr>
-	<tr>
-		<td>
-			<input type='hidden' name='wpsc_admin_action' value='wpsc-category-set' />
-		</td>
-	</tr>
+
   <?php
 } 
 
@@ -600,12 +594,11 @@ function wpsc_admin_category_forms_edit() {
  * @param nothing
  * @return nothing
  */
-function wpsc_save_category_set() {
+function wpsc_save_category_set($category_id, $tt_id) {
 	global $wpdb;
-        
 	if( !empty( $_POST ) ) {
 		/* Image Processing Code*/
-		if( ( $_FILES['image'] != null ) && preg_match( "/\.(gif|jp(e)*g|png){1}$/i", $_FILES['image']['name'] ) ) {
+		if( ( empty( $_FILES['image'] ) && preg_match( "/\.(gif|jp(e)*g|png){1}$/i", $_FILES['image']['name'] ) ) {
 			if( function_exists( "getimagesize" ) ) {
 				if( ( (int) $_POST['width'] > 10 && (int) $_POST['width'] < 512 ) && ((int)$_POST['height'] > 10 && (int)$_POST['height'] < 512) ) {
 					$width = (int) $_POST['width'];
@@ -628,78 +621,72 @@ function wpsc_save_category_set() {
 		}
 		//Good to here		
 		  
-                $name = $_POST['name'];
+        $name = $_POST['name'];
 
-                if( isset( $_POST['tag_ID'] ) ) {
-                    //Editing
-                    $category_id= $_POST['tag_ID'];
-                    $category = get_term_by( 'id', $category_id, 'wpsc_product_category' );
-                    $url_name=$category->slug;
+        if( isset( $_POST['tag_ID'] ) ) {
+            //Editing
+            $category_id= $_POST['tag_ID'];
+            $category = get_term_by( 'id', $category_id, 'wpsc_product_category' );
+            $url_name=$category->slug;
 
-                }
-			$url_name=$category->slug;
-			wpsc_update_categorymeta($category_id, 'nice-name', $url_name);
-			wpsc_update_categorymeta($category_id, 'description', $wpdb->escape(stripslashes($_POST['description'])));
-			
-			
-			if(isset($_POST['deleteimage']) && $_POST['deleteimage'] == 1) {
-				wpsc_delete_categorymeta($category_id, 'image');
-			} else if($image != '') {
-				wpsc_update_categorymeta($category_id, 'image', $image);
+        }		
+		if(isset($_POST['deleteimage']) && $_POST['deleteimage'] == 1) {
+			wpsc_delete_categorymeta($category_id, 'image');
+		} else if($image != '') {
+			wpsc_update_categorymeta($category_id, 'image', $image);
+		}
+		
+		if(is_numeric($_POST['height']) && is_numeric($_POST['width']) && ($image == null)) {
+			$imagedata = wpsc_get_categorymeta($category_id, 'image');
+			if($imagedata != null) {
+				$height = $_POST['height'];
+				$width = $_POST['width'];
+				$imagepath = WPSC_CATEGORY_DIR . $imagedata;
+				$image_output = WPSC_CATEGORY_DIR . $imagedata;
+				image_processing($imagepath, $image_output, $width, $height);
 			}
-			
-			if(is_numeric($_POST['height']) && is_numeric($_POST['width']) && ($image == null)) {
-				$imagedata = wpsc_get_categorymeta($category_id, 'image');
-				if($imagedata != null) {
-					$height = $_POST['height'];
-					$width = $_POST['width'];
-					$imagepath = WPSC_CATEGORY_DIR . $imagedata;
-					$image_output = WPSC_CATEGORY_DIR . $imagedata;
-					image_processing($imagepath, $image_output, $width, $height);
-				}
-			}
-			
-			
-			wpsc_update_categorymeta($category_id, 'fee', '0');
-			wpsc_update_categorymeta($category_id, 'active', '1');
-			wpsc_update_categorymeta($category_id, 'order', '0');
-			
-			wpsc_update_categorymeta($category_id, 'display_type',$wpdb->escape(stripslashes($_POST['display_type'])));
-			wpsc_update_categorymeta($category_id, 'image_height', $wpdb->escape(stripslashes($_POST['image_height'])));
-			wpsc_update_categorymeta($category_id, 'image_width', $wpdb->escape(stripslashes($_POST['image_width'])));
-			
-			
-			if($_POST['use_additonal_form_set'] != '') {
-				wpsc_update_categorymeta($category_id, 'use_additonal_form_set', $_POST['use_additonal_form_set']);
-			} else {
-				wpsc_delete_categorymeta($category_id, 'use_additonal_form_set');
-			}
-	
-			if((bool)(int)$_POST['uses_billing_address'] == true) {
-				wpsc_update_categorymeta($category_id, 'uses_billing_address', 1);
-				$uses_additional_forms = true;
-			} else {
-				wpsc_update_categorymeta($category_id, 'uses_billing_address', 0);
-				$uses_additional_forms = false;
-			}	
-			
-		  	if(($_POST['countrylist2'] != null ) && ($category_id > 0)){
-		    	$AllSelected = false;
-				$countryList = $wpdb->get_col("SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`");
-		    			
-				if($AllSelected != true){
-					$unselectedCountries = array_diff($countryList, $_POST['countrylist2']);
-					//find the countries that are selected
-					$selectedCountries = array_intersect($countryList, $_POST['countrylist2']);
-					 wpsc_update_meta( $category_id,   'target_market',$selectedCountries, 'wpsc_category'); 
-				}
-			}elseif(!isset($_POST['countrylist2'])){
-				wpsc_update_meta( $category_id,   'target_market','', 'wpsc_category'); 
-	  			$AllSelected = true;
-			
-			}
+		}
+		
+		wpsc_update_categorymeta($category_id, 'fee', '0');
+		wpsc_update_categorymeta($category_id, 'active', '1');
+		wpsc_update_categorymeta($category_id, 'order', '0');
+		
+		wpsc_update_categorymeta($category_id, 'display_type',$wpdb->escape(stripslashes($_POST['display_type'])));
+		wpsc_update_categorymeta($category_id, 'image_height', $wpdb->escape(stripslashes($_POST['image_height'])));
+		wpsc_update_categorymeta($category_id, 'image_width', $wpdb->escape(stripslashes($_POST['image_width'])));
+		
+		
+		if($_POST['use_additonal_form_set'] != '') {
+			wpsc_update_categorymeta($category_id, 'use_additonal_form_set', $_POST['use_additonal_form_set']);
+		} else {
+			wpsc_delete_categorymeta($category_id, 'use_additonal_form_set');
+		}
 
-}
+		if((bool)(int)$_POST['uses_billing_address'] == true) {
+			wpsc_update_categorymeta($category_id, 'uses_billing_address', 1);
+			$uses_additional_forms = true;
+		} else {
+			wpsc_update_categorymeta($category_id, 'uses_billing_address', 0);
+			$uses_additional_forms = false;
+		}	
+		
+	  	if(($_POST['countrylist2'] != null ) && ($category_id > 0)){
+	    	$AllSelected = false;
+			$countryList = $wpdb->get_col("SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`");
+	    			
+			if($AllSelected != true){
+				$unselectedCountries = array_diff($countryList, $_POST['countrylist2']);
+				//find the countries that are selected
+				$selectedCountries = array_intersect($countryList, $_POST['countrylist2']);
+				 wpsc_update_categorymeta( $category_id,   'target_market', $selectedCountries); 
+			}
+			
+		}elseif(!isset($_POST['countrylist2'])){
+			wpsc_update_categorymeta( $category_id,   'target_market',''); 
+  			$AllSelected = true;
+		}
+
+	}
 }
 
 

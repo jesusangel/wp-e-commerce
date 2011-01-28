@@ -1841,9 +1841,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-delete-category' == $_RE
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-delete-coupon' == $_REQUEST['wpsc_admin_action'] ) )
 	add_action( 'admin_init', 'wpsc_delete_coupon' );
 
-// Category modification init code starts here
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-category-set' == $_REQUEST['wpsc_admin_action'] ) )
-	add_action( 'admin_init', 'wpsc_save_category_set' );
 
 function flat_price( $price ) {
 	if ( isset( $price ) && !empty( $price ) && strchr( $price, '-' ) === false && strchr( $price, '+' ) === false && strchr( $price, '%' ) === false )
