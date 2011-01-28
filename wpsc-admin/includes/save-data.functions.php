@@ -600,7 +600,6 @@ function wpsc_admin_category_forms_edit() {
  */
 function wpsc_save_category_set($category_id, $tt_id) {
 	global $wpdb;
-        exit(print_r(array_merge($_POST, $_FILES)));
 	if( !empty( $_POST ) ) {
 		/* Image Processing Code*/
 		if( !empty( $_FILES['image'] ) && preg_match( "/\.(gif|jp(e)*g|png){1}$/i", $_FILES['image']['name'] ) ) {
