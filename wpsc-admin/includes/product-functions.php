@@ -160,7 +160,7 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
 	wpsc_update_custom_meta($product_id, $post_data);
 
 	// sort out the variations
-	// wpsc_edit_product_variations( $product_id, $post_data );
+	wpsc_edit_product_variations( $product_id, $post_data );
 
 	//and the alt currency
 	foreach((array)$post_data['newCurrency'] as $key =>$value){
