@@ -598,7 +598,7 @@ function wpsc_save_category_set($category_id, $tt_id) {
 	global $wpdb;
 	if( !empty( $_POST ) ) {
 		/* Image Processing Code*/
-		if( ( empty( $_FILES['image'] ) && preg_match( "/\.(gif|jp(e)*g|png){1}$/i", $_FILES['image']['name'] ) ) {
+		if( empty( $_FILES['image'] ) && preg_match( "/\.(gif|jp(e)*g|png){1}$/i", $_FILES['image']['name'] ) ) {
 			if( function_exists( "getimagesize" ) ) {
 				if( ( (int) $_POST['width'] > 10 && (int) $_POST['width'] < 512 ) && ((int)$_POST['height'] > 10 && (int)$_POST['height'] < 512) ) {
 					$width = (int) $_POST['width'];
