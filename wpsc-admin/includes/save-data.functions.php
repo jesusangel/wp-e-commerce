@@ -82,14 +82,16 @@ function wpsc_custom_category_columns( $columns ) {
  * @return nada
  */
 
-function wpsc_custom_category_column_data( $string, $column_name, $tag ) {
-   global $current_screen;
+function wpsc_custom_category_column_data( $string, $column_name, $term_id ) {
+   global $wpdb;
 
-   if(isset($cat['image'])){
+//   $image = $wpdb->get_var()
+
+   if( !empty( $image ) )
       $image = "<img src=\"".WPSC_CATEGORY_URL.stripslashes($cat['image'])."\" title='".$cat['name']."' alt='".$cat['name']."' width='30' height='30' />";
-    }else{
+   else
       $image = "<img src='".WPSC_CORE_IMAGES_URL."/no-image-uploaded.gif' title='".$cat['name']."' alt='".$cat['name']."' width='30' height='30' />";
-    }
+   
 
     return $image;
 
@@ -598,7 +600,7 @@ function wpsc_save_category_set($category_id, $tt_id) {
 	global $wpdb;
 	if( !empty( $_POST ) ) {
 		/* Image Processing Code*/
-		if( empty( $_FILES['image'] ) && preg_match( "/\.(gif|jp(e)*g|png){1}$/i", $_FILES['image']['name'] ) ) {
+		if( !empty( $_FILES['image'] ) && preg_match( "/\.(gif|jp(e)*g|png){1}$/i", $_FILES['image']['name'] ) ) {
 			if( function_exists( "getimagesize" ) ) {
 				if( ( (int) $_POST['width'] > 10 && (int) $_POST['width'] < 512 ) && ((int)$_POST['height'] > 10 && (int)$_POST['height'] < 512) ) {
 					$width = (int) $_POST['width'];
