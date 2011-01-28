@@ -74,7 +74,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 	$posts_columns = get_column_headers( 'wpsc-product_variants' );
 	
 	if(empty($posts_columns))
-		$posts_columns = array('image' => '', 'title' => 'Name', 'weight' => 'Weight', 'stock' => 'Stock', 'price' => 'Price', 'sale_price' => 'Sale Price', 'SKU' => 'SKU', 'hidden_alerts' => '');
+		$posts_columns = array('image' => '', 'title' => __('Name', 'wpsc') , 'weight' => __('Weight', 'wpsc'), 'stock' => __('Stock', 'wpsc'), 'price' => __('Price', 'wpsc'), 'sale_price' => __('Sale Price', 'wpsc'), 'SKU' => __('SKU', 'wpsc'), 'hidden_alerts' => '');
 
 	foreach ( $posts_columns as $column_name=>$column_display_name ) {
 		$class = "class=\"$column_name column-$column_name\"";

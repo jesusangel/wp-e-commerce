@@ -40,26 +40,26 @@ function wpsc_additional_column_names( $columns ){
     $columns = array();
 
     $columns['cb'] = '<input type="checkbox">';
-    $columns['image'] = __('');
-    $columns['title'] = __('Name');
-    $columns['weight'] = __('Weight');
-    $columns['stock'] = __('Stock');
-    $columns['price'] = __('Price');
-    $columns['sale_price'] = __('Sale Price');
-    $columns['SKU'] = __('SKU');
-    $columns['cats'] = __('Categories');
-    $columns['featured'] = __('Featured');
-    $columns['hidden_alerts'] = __('');
-    $columns['date'] = __('Date');
+    $columns['image'] = '';
+    $columns['title'] = __('Name', 'wpsc');
+    $columns['weight'] = __('Weight', 'wpsc');
+    $columns['stock'] = __('Stock', 'wpsc');
+    $columns['price'] = __('Price', 'wpsc');
+    $columns['sale_price'] = __('Sale Price', 'wpsc');
+    $columns['SKU'] = __('SKU', 'wpsc');
+    $columns['cats'] = __('Categories', 'wpsc');
+    $columns['featured'] = __('Featured', 'wpsc');
+    $columns['hidden_alerts'] = '';
+    $columns['date'] = __('Date', 'wpsc');
 
     return $columns;
 }
 function wpsc_additional_sortable_column_names( $columns ){
 
-    $columns['stock'] = __('Stock');
-    $columns['price'] = __('Price');
-    $columns['sale_price'] = __('Sale Price');
-    $columns['SKU'] = __('SKU');
+    $columns['stock'] = __('Stock', 'wpsc');
+    $columns['price'] = __('Price', 'wpsc');
+    $columns['sale_price'] = __('Sale Price', 'wpsc');
+    $columns['SKU'] = __('SKU', 'wpsc');
 
     return $columns;
 }
@@ -68,14 +68,14 @@ function wpsc_additional_column_name_variations( $columns ){
     if( $post->post_parent != '0' )
        remove_meta_box( 'wpsc_product_variation_forms', 'wpsc-product', 'normal' );
 
-    $columns['image'] = __('');
-    $columns['title'] = __('Name');
-    $columns['weight'] = __('Weight');
-    $columns['stock'] = __('Stock');
-    $columns['price'] = __('Price');
-    $columns['sale_price'] = __('Sale Price');
-    $columns['SKU'] = __('SKU');
-    $columns['hidden_alerts'] = __('');
+    $columns['image'] = '';
+    $columns['title'] = __('Name', 'wpsc');
+    $columns['weight'] = __('Weight', 'wpsc');
+    $columns['stock'] = __('Stock', 'wpsc');
+    $columns['price'] = __('Price', 'wpsc');
+    $columns['sale_price'] = __('Sale Price', 'wpsc');
+    $columns['SKU'] = __('SKU', 'wpsc');
+    $columns['hidden_alerts'] = '';
 
     //For BC for 3.0 (hoping to remove for WPEC 3.9)
     register_column_headers( 'wpsc-product_variants', $columns );
