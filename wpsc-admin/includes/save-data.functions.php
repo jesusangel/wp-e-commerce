@@ -603,7 +603,6 @@ function wpsc_admin_category_forms_edit() {
 function wpsc_save_category_set( $term_id ) {
 	global $wpdb;
 	if( !empty( $_POST ) ) {
-
 		/* Image Processing Code*/
 		if( ( $_FILES['image'] != null ) && preg_match( "/\.(gif|jp(e)*g|png){1}$/i", $_FILES['image']['name'] ) ) {
 			if( function_exists( "getimagesize" ) ) {
@@ -630,21 +629,27 @@ function wpsc_save_category_set( $term_id ) {
 		  
                 $name = $_POST['name'];
 
-                if( get_term_by( 'name', $name, 'wpsc_product_category', ARRAY_A ) )
+                if( get_term_by( 'name', $name, 'wpsc_product_category', ARRAY_A ) ) {
+
+                    $category_id= $term['term_id'];
+                    $category = get_term_by('id', $category_id, 'wpsc_product_category');
+                    $url_name=$category->slug;
+
                     //Term exists
                     wp_update_term($category_id, 'wpsc_product_category', array(
 					'name' => $name , 'parent' => $parent_category
 				));
-                $term = wp_insert_term( $name, 'wpsc_product_category',array('parent' => $parent_category));
+                } else {
+                    //Term does not exist
+
+                    $term = wp_insert_term( $name, 'wpsc_product_category',array('parent' => $parent_category));
+                }
 
                 if (is_wp_error($term)) {
                         $sendback = add_query_arg('message',$term->get_error_code());
                         wp_redirect($sendback);
                         return;
                 }
-                $category_id= $term['term_id'];
-                $category = get_term_by('id', $category_id, 'wpsc_product_category');
-                $url_name=$category->slug;
 		
 		/* edit category code */
 		if( ( $_POST['action'] == "editedtag" ) && is_numeric( $_POST['tag_ID'] ) ) {
