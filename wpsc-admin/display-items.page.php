@@ -37,9 +37,7 @@ function wpsc_is_admin() {
  *
  */
 function wpsc_additional_column_names( $columns ){
-    unset( $columns['title'] );
-    unset( $columns['date'] );
-    unset( $columns['author'] );
+	$columns = array();
     
     $columns['image'] = __('');
     $columns['title'] = __('Name');
@@ -317,6 +315,7 @@ add_action( 'restrict_manage_posts', 'wpsc_cats_restrict_manage_posts' );
 add_action( 'manage_pages_custom_column', 'wpsc_additional_column_data', 10, 2 );
 add_filter( 'manage_edit-wpsc-product_sortable_columns', 'wpsc_additional_sortable_column_names' );
 add_filter( 'manage_edit-wpsc-product_columns', 'wpsc_additional_column_names' );
+add_filter( 'manage_wpsc-product_posts_columns', 'wpsc_additional_column_names' );
 add_filter( 'posts_orderby', 'wpsc_column_sql_orderby', 10, 2 );
 
 
