@@ -297,7 +297,7 @@ function wpsc_register_post_types() {
 
 	// Product categories, is heirarchical and can use permalinks
 	$labels = array(
-		'name' => _x( 'Product Categories', 'taxonomy general name' ),
+		'name' => _x( 'Categories', 'taxonomy general name' ),
 		'singular_name' => _x( 'Product Category', 'taxonomy singular name' ),
 		'search_items' => __( 'Search Product Categories' ),
 		'all_items' => __( 'All Product Categories' ),
