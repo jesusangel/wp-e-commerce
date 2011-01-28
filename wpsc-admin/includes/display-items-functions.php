@@ -1166,7 +1166,7 @@ function wpsc_quick_edit_boxes( $col_name ) {
                 case 'SKU' :
             ?>
             <label class="alignleft">
-                <span class="checkbox-title"><?php _e('SKU:', 'wpsc'); ?> </span>
+                <span class="checkbox-title wpsc-quick-edit"><?php _e('SKU:', 'wpsc'); ?> </span>
                 <input type="text" name="sku" id="wpsc_ie_sku">
             </label>
             <?php
@@ -1174,7 +1174,7 @@ function wpsc_quick_edit_boxes( $col_name ) {
                 case 'weight' :
             ?>
             <label class="alignleft">
-                <span class="checkbox-title"><?php _e('Weight:', 'wpsc'); ?> </span>
+                <span class="checkbox-title wpsc-quick-edit"><?php _e('Weight:', 'wpsc'); ?> </span>
                 <input type="text" name="weight" id="wpsc_ie_weight">
             </label>
             <?php
@@ -1182,7 +1182,7 @@ function wpsc_quick_edit_boxes( $col_name ) {
                 case 'stock' :
             ?>
             <label class="alignleft">
-                <span class="checkbox-title"><?php _e('Stock:', 'wpsc'); ?> </span>
+                <span class="checkbox-title wpsc-quick-edit"><?php _e('Stock:', 'wpsc'); ?> </span>
                 <input type="text" name="stock" id="wpsc_ie_stock">
             </label>
             <?php
@@ -1190,7 +1190,7 @@ function wpsc_quick_edit_boxes( $col_name ) {
                 case 'price' :
             ?>
             <label class="alignleft">
-                <span class="checkbox-title"><?php _e('Price:', 'wpsc'); ?> </span>
+                <span class="checkbox-title wpsc-quick-edit"><?php _e('Price:', 'wpsc'); ?> </span>
                 <input type="text" name="price" id="wpsc_ie_price">
             </label>
             <?php
@@ -1198,7 +1198,7 @@ function wpsc_quick_edit_boxes( $col_name ) {
                 case 'sale_price' :
             ?>
             <label class="alignleft">
-                <span class="checkbox-title"><?php _e('Sale Price:', 'wpsc'); ?> </span>
+                <span class="checkbox-title wpsc-quick-edit"><?php _e('Sale Price:', 'wpsc'); ?> </span>
                 <input type="text" name="sale_price" id="wpsc_ie_sale_price">
             </label>
             <?php

@@ -374,7 +374,6 @@ jQuery(document).ready(function(){
         jQuery('fieldset.inline-edit-col-left.wpsc-cols').css({'float': 'right', 'clear' : 'right'});
         jQuery("label:contains('Parent')").css('display', 'none');
         jQuery("label:contains('Status')").css('display', 'none');
-        jQuery("label:contains('Product Tags')").css('display', 'none');
         jQuery("span:contains('Variations')").css('display', 'none'); 
         jQuery("ul.wpsc-variation-checklist").css('display', 'none');
         jQuery("div.inline-edit-date").css('display', 'none');
