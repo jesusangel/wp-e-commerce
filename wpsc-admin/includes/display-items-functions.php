@@ -1155,8 +1155,7 @@ function wpsc_save_quickedit_box( $post_id ) {
  * @internal Tried accessing post_id in here to do the is_parent/variation thing - no luck :(
 */
 
-function wpsc_quick_edit_boxes( $col_name, $type ) {
- 
+function wpsc_quick_edit_boxes( $col_name ) {
     ?>
 
 <fieldset class="inline-edit-col-left wpsc-cols">
@@ -1212,7 +1211,8 @@ function wpsc_quick_edit_boxes( $col_name, $type ) {
 <?php
 }
 
-add_action( 'quick_edit_custom_box', 'wpsc_quick_edit_boxes', 10, 2 );
+add_action( 'bulk_edit_custom_box', 'wpsc_quick_edit_boxes', 10 );
+add_action( 'quick_edit_custom_box', 'wpsc_quick_edit_boxes', 10 );
 add_action( 'save_post', 'wpsc_save_quickedit_box' );
 
 ?>

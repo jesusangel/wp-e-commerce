@@ -157,7 +157,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			 ?>
 			</strong>
 			<?php
-
+ 
 			$actions = array();
 			if ( current_user_can('edit_post', $product->ID) && 'trash' != $product->post_status ) {
 				$actions['edit'] = '<a class="edit-product" href="'.$edit_link.'" title="' . esc_attr(__('Edit this product', 'wpsc')) . '">'. __('Edit', 'wpsc') . '</a>';

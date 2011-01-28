@@ -42,6 +42,7 @@ function wpsc_cat_kill_ajax() {
     if( $current_screen->id == 'edit-wpsc_product_category' ) {
         wp_deregister_script( 'wp-ajax-response' );
         wp_deregister_script( 'admin-tags' );
+        wp_deregister_script( 'inline-edit-post' );
     }
 }
 
@@ -602,101 +603,49 @@ function wpsc_admin_category_forms_edit() {
 function wpsc_save_category_set( $term_id ) {
 	global $wpdb;
 	if( !empty( $_POST ) ) {
+
 		/* Image Processing Code*/
-		if(($_FILES['image'] != null) && preg_match("/\.(gif|jp(e)*g|png){1}$/i",$_FILES['image']['name'])) {
-			if(function_exists("getimagesize")) {
-				if(((int)$_POST['width'] > 10 && (int)$_POST['width'] < 512) && ((int)$_POST['height'] > 10 && (int)$_POST['height'] < 512) ) {
-					$width = (int)$_POST['width'];
-					$height = (int)$_POST['height'];
-					image_processing($_FILES['image']['tmp_name'], (WPSC_CATEGORY_DIR.$_FILES['image']['name']), $width, $height);
+		if( ( $_FILES['image'] != null ) && preg_match( "/\.(gif|jp(e)*g|png){1}$/i", $_FILES['image']['name'] ) ) {
+			if( function_exists( "getimagesize" ) ) {
+				if( ( (int) $_POST['width'] > 10 && (int) $_POST['width'] < 512 ) && ((int)$_POST['height'] > 10 && (int)$_POST['height'] < 512) ) {
+					$width = (int) $_POST['width'];
+					$height = (int) $_POST['height'];
+					image_processing( $_FILES['image']['tmp_name'], ( WPSC_CATEGORY_DIR.$_FILES['image']['name'] ), $width, $height );
 				} else {
-					image_processing($_FILES['image']['tmp_name'], (WPSC_CATEGORY_DIR.$_FILES['image']['name']));
+					image_processing( $_FILES['image']['tmp_name'], ( WPSC_CATEGORY_DIR.$_FILES['image']['name'] ) );
 				}	
-				$image = $wpdb->escape($_FILES['image']['name']);
+				$image = $wpdb->escape( $_FILES['image']['name'] );
 			} else {
-				$new_image_path = (WPSC_CATEGORY_DIR.basename($_FILES['image']['name']));
-				move_uploaded_file($_FILES['image']['tmp_name'], $new_image_path);
-				$stat = stat( dirname( $new_image_path ));
+				$new_image_path = ( WPSC_CATEGORY_DIR.basename($_FILES['image']['name'] ) );
+				move_uploaded_file( $_FILES['image']['tmp_name'], $new_image_path );
+				$stat = stat( dirname( $new_image_path ) );
 				$perms = $stat['mode'] & 0000666;
 				@ chmod( $new_image_path, $perms );	
-				$image = $wpdb->escape($_FILES['image']['name']);
+				$image = $wpdb->escape( $_FILES['image']['name'] );
 			}
 		} else {
 			$image = '';
 		}
-		
-		/* Set the parent category ID variable*/
-		if(is_numeric($_POST['category_parent']) && absint($_POST['category_parent']) > 0) {
-			$parent_category = (int)$_POST['category_parent'];
-		} else {
-			$parent_category = 0;
-		}
-		
+		//Good to here		
 		  
-		/* add category code */
-		if($_POST['action'] == "add_tag") {
-			$name = $_POST['name'];			
-			$term = get_term_by('name', $name, 'wpsc_product_category', ARRAY_A);
-						
-			$term = wp_insert_term( $name, 'wpsc_product_category',array('parent' => $parent_category));
+                $name = $_POST['name'];
 
-			if (is_wp_error($term)) {
-				$sendback = add_query_arg('message',$term->get_error_code());
-				wp_redirect($sendback);
-				return;
-			}
-			
-			$category_id= $term['term_id'];
-			
-			$category = get_term_by('id', $category_id, 'wpsc_product_category');
-			$url_name=$category->slug;
-			
-			if($category_id > 0) {
-				wpsc_update_categorymeta($category_id, 'nice-name', $url_name);
-				wpsc_update_categorymeta($category_id, 'description', $wpdb->escape(stripslashes($_POST['description'])));
-				if($image != '') {
-					wpsc_update_categorymeta($category_id, 'image', $image);
-				}
-				wpsc_update_categorymeta($category_id, 'fee', '0');
-				wpsc_update_categorymeta($category_id, 'active', '1');
-				wpsc_update_categorymeta($category_id, 'order', '0');
-				wpsc_update_categorymeta($category_id, 'display_type',$wpdb->escape(stripslashes($_POST['display_type'])));
-				wpsc_update_categorymeta($category_id, 'image_height', $wpdb->escape(stripslashes($_POST['image_height'])));
-				wpsc_update_categorymeta($category_id, 'image_width', $wpdb->escape(stripslashes($_POST['image_width'])));
-				if($_POST['use_additonal_form_set'] != '') {
-					wpsc_update_categorymeta($category_id, 'use_additonal_form_set', $_POST['use_additonal_form_set']);
-				} else {
-					wpsc_delete_categorymeta($category_id, 'use_additonal_form_set');
-				}
-	
-				if((bool)(int)$_POST['uses_billing_address'] == true) {
-					wpsc_update_categorymeta($category_id, 'uses_billing_address', 1);
-					$uses_additional_forms = true;
-				} else {
-					wpsc_update_categorymeta($category_id, 'uses_billing_address', 0);
-					$uses_additional_forms = false;
-				}
-			}
+                if( get_term_by( 'name', $name, 'wpsc_product_category', ARRAY_A ) )
+                    //Term exists
+                    wp_update_term($category_id, 'wpsc_product_category', array(
+					'name' => $name , 'parent' => $parent_category
+				));
+                $term = wp_insert_term( $name, 'wpsc_product_category',array('parent' => $parent_category));
 
-			if(isset($_POST['countrylist2']) && ($_POST['countrylist2'] != null ) && ($category_id > 0)){
-		    	$AllSelected = false;
-				$countryList = $wpdb->get_col("SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`");
-		    			
-				if($AllSelected != true){
-					$unselectedCountries = array_diff($countryList, $_POST['countrylist2']);
-					//find the countries that are selected
-					$selectedCountries = array_intersect($countryList, $_POST['countrylist2']);
-					 wpsc_update_meta( $category_id,   'target_market',$selectedCountries, 'wpsc_category'); 
-				}
-			}elseif(!isset($_POST['countrylist2'])){
-				wpsc_update_meta( $category_id,   'target_market','', 'wpsc_category'); 
-	  			$AllSelected = true;
-			
-			}
+                if (is_wp_error($term)) {
+                        $sendback = add_query_arg('message',$term->get_error_code());
+                        wp_redirect($sendback);
+                        return;
+                }
+                $category_id= $term['term_id'];
+                $category = get_term_by('id', $category_id, 'wpsc_product_category');
+                $url_name=$category->slug;
 		
-	}
-		
-	    
 		/* edit category code */
 		if( ( $_POST['action'] == "editedtag" ) && is_numeric( $_POST['tag_ID'] ) ) {
 			$category_id = absint($_POST['tag_ID']);
