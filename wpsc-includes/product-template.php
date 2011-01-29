@@ -799,7 +799,7 @@ function wpsc_product_has_stock( $id = null ) {
 	$variations = get_children( array( "post_type" => "wpsc-product", "post_parent" => $id ) );
 	
 	if ( is_numeric( $stock ) ) {
-		if ( $stock > 0 && $variations == 0) {
+		if ( $stock > 0 && empty($variations)) {
 			$claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN($id)");
 			if($stock - $claimed_stock > 0)
 				return true;
