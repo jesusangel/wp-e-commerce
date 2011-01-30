@@ -176,7 +176,8 @@ class wpsc_theming {
 		do_action( 'wpsc_move_theme' );
 	}
 }
-if ( isset( $_REQUEST['wpsc_move_themes'] ) && ( $_REQUEST['wpsc_move_themes'] == 'Move Template Files' ) )
+
+if ( isset( $_REQUEST['wpsc_move_themes'] ) && !empty($_REQUEST['wpsc_move_themes']) )
 	add_action( 'admin_init', create_function( '', 'global $wpsc_theming; $wpsc_theming = new wpsc_theming();' ) );
 
 ?>
