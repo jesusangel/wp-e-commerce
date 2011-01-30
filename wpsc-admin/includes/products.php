@@ -258,7 +258,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		if(!isset($product_data['meta']['_wpsc_product_metadata']['weight'])) $product_data['meta']['_wpsc_product_metadata']['weight'] = "";
 		if(!isset($product_data['meta']['_wpsc_product_metadata']['weight_unit'])) $product_data['meta']['_wpsc_product_metadata']['weight_unit'] = "";
 
-		$product_data['transformed']['weight'] = wpsc_convert_weight($product_data['meta']['_wpsc_product_metadata']['weight'], "pounds", $product_data['meta']['_wpsc_product_metadata']['weight_unit']);
+		$product_data['transformed']['weight'] = wpsc_convert_weight($product_data['meta']['_wpsc_product_metadata']['weight'], "gram", $product_data['meta']['_wpsc_product_metadata']['weight_unit']);
 			$weight = $product_data['transformed']['weight'];
 			if($weight == ''){
 				$weight = '0';
@@ -272,13 +272,13 @@ function wpsc_product_row(&$product, $parent_product = null) {
 				case "ounce":
 					$unit = " oz.";
 					break;
-				case "gram":
-					$unit = " g";
-					break;
 				case "kilograms":
 				case "kilogram":
 					$unit = " kgs.";
 					break;
+				case "gram":
+				default:
+					$unit = " g";
 			}
 			?>
 				<td  <?php echo $attributes ?>>

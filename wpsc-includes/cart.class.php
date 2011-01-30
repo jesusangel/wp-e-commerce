@@ -1624,9 +1624,8 @@ class wpsc_cart_item {
 
 
       $priceandstock_id = 0;
-      $weight = wpsc_convert_weight($product_meta[0]["weight"], 'gram', 'pound');
 
-      $this->weight = $weight;
+      $this->weight = $product_meta[0]["weight"];
       // if we are using table rate price
       $levels = $product_meta[0]['table_rate_price'];
       if (isset($levels["quantity"]) && $levels["quantity"] != '') {

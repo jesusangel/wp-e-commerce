@@ -14,7 +14,7 @@ $wpsc_product_defaults = array(
 	'additional_description' => '',
 	'price' => '0.00',
 	'weight' => '0',
-	'weight_unit' => 'pound',
+	'weight_unit' => 'gram',
 	'pnp' => '0.00',
 	'international_pnp' => '0.00',
 	'file' => '0',
@@ -503,7 +503,7 @@ function wpsc_product_shipping_forms() {
         if( !isset( $product_meta['weight'] ) )
            $product_meta['weight'] = "";
 
-        $product_data['transformed']['weight'] = wpsc_convert_weight( $product_meta['weight'], "pound", $product_meta['weight_unit'] );
+        $product_data['transformed']['weight'] = wpsc_convert_weight( $product_meta['weight'], "gram", $product_meta['weight_unit'] );
 
        ?>
 		<table>

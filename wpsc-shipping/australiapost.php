@@ -179,9 +179,8 @@ class australiapost {
 		*/
 		
 
-		// Obtain the total combined weight for all items(s) in the cart (excluding items that have the "Disregard Shipping for this product" option ticked)
-		// Weight is in pounds but needs to be in grams
-		$weight = floatval($wpsc_cart->calculate_total_weight(true) * 453.59237);
+		// Weight is in grams
+		$weight = $wpsc_cart->calculate_total_weight(true);
  
 		// Calculate the total cart dimensions by adding the volume of each product then calculating the cubed root
 		$volume = 0;

@@ -46,7 +46,7 @@ class weightrate {
 	 */
 	function getForm() {
 
-		$output.="<tr><th>".__('Total weight <br />(<abbr alt="You must enter the weight here in pounds, regardless of what you used on your products" title="You must enter the weight here in pounds, regardless of what you used on your products">in Pounds</abbr>)', 'wpsc')."</th><th>".__('Shipping Price', 'wpsc')."</th></tr>";
+		$output.="<tr><th>".__('Total weight <br />(<abbr alt="You must enter the weight here in grams, regardless of what you used on your products" title="You must enter the weight here in grams, regardless of what you used on your products">in grams</abbr>)', 'wpsc')."</th><th>".__('Shipping Price', 'wpsc')."</th></tr>";
 
 		$layers = get_option("weight_rate_layers");
 
