@@ -158,7 +158,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			</strong>
 			<?php
  			$has_var = '';
- 			if(wpsc_product_has_variations($product->ID))
+ 			if(wpsc_product_has_children($product->ID))
  				$has_var = 'wpsc_has_variation';
 			$actions = array();
 			if ( current_user_can('edit_post', $product->ID) && 'trash' != $product->post_status ) {
