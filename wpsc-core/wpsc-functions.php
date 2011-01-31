@@ -16,7 +16,10 @@
  * Load up the WPEC textdomain
  */
 function wpsc_core_load_textdomain() {
-	load_plugin_textdomain( 'wpsc', false, dirname( plugin_basename( __FILE__ ) ) . '/../wpsc-languages/' );
+	//if there is a translation file in wp-content/langauges then load it, else load from default location
+	//this is to alow users modify translations and don't loose modifications when upgrading
+	if( !load_plugin_textdomain( 'wpsc', false, '../languages/' ) )
+		load_plugin_textdomain( 'wpsc', false, dirname( plugin_basename( __FILE__ ) ) . '/../wpsc-languages/' );
 }
 add_action( 'init', 'wpsc_core_load_textdomain' );
 
