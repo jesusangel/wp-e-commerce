@@ -69,6 +69,7 @@ class australiapost {
 			foreach ($this->services as $code => $value) {
 				$this->settings['services'][$code] = true;
 			}
+			update_option('wpsc_australiapost_settings', $this->settings);
 		}
 		
 		return true;
@@ -105,19 +106,23 @@ class australiapost {
 			$checked = $this->settings['services'][$code] ? "checked='checked'" : '';
 			$output .= "		<label style=\"margin-left: 50px;\"><input type='checkbox' {$checked} name='wpsc_australiapost_settings[services][{$code}]'/>{$this->services[$code]}</label><br />\n\r";
 		}
+		$output .= "<input type='hidden' name='{$this->internal_name}_updateoptions' value='true'>";
 		$output .= "</td></tr>";
 		$output .= "<tr><td><h4>" . __('Notes:', 'wpsc') . "</h4>";
 		$output .= __('1. The actual services quoted to the customer during checkout will depend on the destination country. Not all methods are available to all destinations.', 'wpsc') . "<br />";
 		$output .= __('2. Each product must have a valid weight configured. When editing a product, use the weight field.).', 'wpsc') . "<br />";
 		$output .= __('3. To ensure accurate quotes, each product must valid dimensions configured. When editing a product, use the height, width and length fields.', 'wpsc') . "<br />";
 		$output .= __('4. The combined dimensions are estimated by calculating the volume of each item, and then calculating the cubed root of the overall order volume which becomes width, length and height.', 'wpsc') . "<br />";
-		$output .= __('5. If no product volumes are defined, then default package dimensions of 100mm x 100mm x 100mm will be used.', 'wpsc') . "<br />";
+		$output .= __('5. If no product dimensions are defined, then default package dimensions of 100mm x 100mm x 100mm will be used.', 'wpsc') . "<br />";
 		$output .= "</tr></td>";
 		return $output;
 	}
 	
 	function submit_form() {
 		$this->settings['services'] = array();
+
+		// Only continue if this module's options were updated
+		if ( !isset($_POST["{$this->internal_name}_updateoptions"]) || !$_POST["{$this->internal_name}_updateoptions"] ) return;
 		
 		if (isset($_POST['wpsc_australiapost_settings'])) {
 			if (isset($_POST['wpsc_australiapost_settings']['services'])) {
@@ -126,10 +131,8 @@ class australiapost {
 				}
 			}
 		}
-		// Only save if this module's options were updated
-		if (isset($_POST['shippingname']) && $_POST['shippingname'] == $this->internal_name) {
-			update_option('wpsc_australiapost_settings', $this->settings);
-		}
+
+		update_option('wpsc_australiapost_settings', $this->settings);
 		return true;
 	}
 	
