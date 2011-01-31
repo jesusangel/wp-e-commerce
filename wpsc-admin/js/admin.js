@@ -1093,7 +1093,6 @@ function editinline_get_id(){
 	id = jQuery('.inline-edit-row').attr('id');
 	id = id.replace('edit-','');
 	has_var = jQuery('#inline_'+id+'_has_var').val();
-	alert('inline_'+id+'_has_var '+has_var);
 	if( has_var == '1'){
    		jQuery(".wpsc-cols").css('display', 'none');
 		jQuery(".wpsc-cols:first").text('Quick Edit options are limited when editing products that have variations. You will need to edit the variations themselves.')
