@@ -183,8 +183,8 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
 	return $product_id;
 }
 function wpsc_pre_update( $data , $postarr ) {
-    if( wp_is_post_autosave( $postarr["ID"] ) || wp_is_post_revision( $postarr["ID"] ) )
-        return;
+    if( $postarr["post_type"] != 'wpsc-product' || wp_is_post_autosave( $postarr["ID"] ) || wp_is_post_revision( $postarr["ID"] ))
+        return $data;
 
     if( isset( $postarr["additional_description"] ) && !empty( $postarr["additional_description"] ) )
         $data["post_excerpt"] = $postarr["additional_description"];
