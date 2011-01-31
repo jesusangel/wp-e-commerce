@@ -250,10 +250,10 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 				}
 
 				$paypal_vars['item_name_'.$i] = "Your Shopping Cart";
-				$paypal_vars['amount_'.$i] = $this->format_price(
+				$paypal_vars['amount_'.$i] = ($this->format_price(
 					$paypal_currency_productprice,
 					$local_currency_code
-				);
+				)-$this->cart_data['base_shipping']);
 				$paypal_vars['quantity_'.$i] = 1;
 				$paypal_vars['shipping_'.$i] = 0;
 				$paypal_vars['shipping2_'.$i] = 0;
@@ -288,7 +288,6 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 
 			$redirect = get_option('paypal_multiple_url')."?".$gateway_values;
 		}
-
 		if (defined('WPSC_ADD_DEBUG_PAGE') && WPSC_ADD_DEBUG_PAGE) {
 			echo "<a href='".esc_url($redirect)."'>Test the URL here</a>";
 			echo "<pre>".print_r($this->collected_gateway_data,true)."</pre>";
