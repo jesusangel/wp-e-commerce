@@ -42,13 +42,17 @@ function wpsc_product_has_children($id){
 */
 function wpsc_admin_submit_product( $post_ID, $post ) {
     global $current_screen, $wpdb;
+
+	if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
+        return $post_ID;
+	
     if( $current_screen->id != 'wpsc-product' )
        return;
-       //Type-casting ( not so much sanitization, which would be good to do )
-        $post_data = $_POST;
-        $product_id = $post_ID;
+    //Type-casting ( not so much sanitization, which would be good to do )
+    $post_data = $_POST;
+    $product_id = $post_ID;
 	$post_data['additional_description'] = isset($post_data['additional_description']) ? $post_data['additional_description'] : '';
-        $post_meta['meta'] = (array)$_POST['meta'];
+    $post_meta['meta'] = (array)$_POST['meta'];
 	$post_data['meta']['_wpsc_price'] = (float)str_replace( ',','',$post_data['meta']['_wpsc_price'] );
 	$post_data['meta']['_wpsc_special_price'] = (float)str_replace( ',','',$post_data['meta']['_wpsc_special_price'] );
 	$post_data['meta']['_wpsc_sku'] = $post_data['meta']['_wpsc_sku'];
@@ -153,7 +157,6 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
 	// if we succeed, we can do further editing (todo - if_wp_error)
 
 	// and the meta
-        
 	wpsc_update_product_meta($product_id, $post_data['meta']);
 
 	// and the custom meta
@@ -183,9 +186,8 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
 	return $product_id;
 }
 function wpsc_pre_update( $data , $postarr ) {
-    if( $postarr["post_type"] != 'wpsc-product' || wp_is_post_autosave( $postarr["ID"] ) || wp_is_post_revision( $postarr["ID"] ))
-        return $data;
-
+ 	if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
+        return $postarr['ID'];
     if( isset( $postarr["additional_description"] ) && !empty( $postarr["additional_description"] ) )
         $data["post_excerpt"] = $postarr["additional_description"];
 
