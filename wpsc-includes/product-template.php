@@ -889,9 +889,9 @@ function wpsc_product_is_donation( $id = null ) {
 function wpsc_product_on_special() {
 	global $wpsc_query;
 
-	$price = array_pop( get_post_meta( get_the_ID(), '_wpsc_price' ) );
-	$special_price = array_pop( get_post_meta( get_the_ID(), '_wpsc_special_price' ) );
-	if ( ($special_price > 0) && (($price - $special_price) >= 0) )
+	$price =  get_product_meta( get_the_ID(), 'price', true );
+	$special_price = get_product_meta( get_the_ID(), 'special_price', true );
+	if ( ($special_price > 0) && (($price - $special_price) > 0) )
 		return true;
 	else
 		return false;
@@ -1722,7 +1722,9 @@ function wpsc_you_save($args = null){
 	else
 		$regular_price = get_product_meta($product_id, 'price', true);
 	//if actual price is zero, false, or something similar, or is less than sale price - return false
-	if( !$regular_price || !( $sale_price < $regular_price ) )
+	
+	
+	if( !$regular_price || !( $sale_price < $regular_price) )
 		return 0;
 		
 	switch($type){
