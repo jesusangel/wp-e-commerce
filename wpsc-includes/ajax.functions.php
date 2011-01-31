@@ -1028,7 +1028,7 @@ function wpsc_download_file() {
 			}
 
 			if ( is_file( $file_path ) ) {
-				set_time_limit(0);		
+				if( !ini_get('safe_mode') ) set_time_limit(0);		
 				header( 'Content-Type: ' . $file_data->post_mime_type );
 				header( 'Content-Length: ' . filesize( $file_path ) );
 				header( 'Content-Transfer-Encoding: binary' );
