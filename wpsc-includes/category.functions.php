@@ -134,7 +134,7 @@ function wpsc_print_category_classes($category_to_print = false, $echo = true) {
 	if(isset($category_to_print[term_id]) && $curr_cat){
 		
 		//we will need a list of current category parents for the following if statement
-		$curr_cat_parents = get_term_parents($curr_cat->term_id, 'wpsc_product_category');
+		$curr_cat_parents = wpsc_get_term_parents($curr_cat->term_id, 'wpsc_product_category');
 		
 		//if current category is the same as the one we are printing - then add wpsc-current-cat class
 		if( $category_to_print[term_id] == $curr_cat->term_id )
@@ -151,12 +151,12 @@ function wpsc_print_category_classes($category_to_print = false, $echo = true) {
 
 
 /**
-* get_term_parents - get all parents of the term
+* wpsc_get_term_parents - get all parents of the term
 * 
 * @param int $id - id of the term 
 * @return array of term objects or empty array if anything went wrong or there were no parrents
 */
-function get_term_parents( $term_id, $taxonomy ) {
+function wpsc_get_term_parents( $term_id, $taxonomy ) {
 	$term = &get_term( $term_id, $taxonomy );
 
 	if(empty($term->parent))
@@ -168,7 +168,7 @@ function get_term_parents( $term_id, $taxonomy ) {
  	$parents = array( $parent->term_id );
  	
 	if ( $parent->parent && ( $parent->parent != $parent->term_id ) && !in_array( $parent->parent, $parents ) ) {
-		$parents = array_merge($parents, get_term_parents( $parent->term_id, $taxonomy ));
+		$parents = array_merge($parents, wpsc_get_term_parents( $parent->term_id, $taxonomy ));
 	}
 
 	return $parents;
