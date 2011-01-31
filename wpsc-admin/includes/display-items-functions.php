@@ -909,6 +909,8 @@ if( isset( $_REQUEST["save"] ) && isset($_REQUEST["attachments"]) && is_array($_
 function wpsc_filter_feature_image_text($translation, $text, $domain) {
 
 	if( 'Use as featured image' == $text && isset( $_REQUEST['post_id'] ) ){
+		$post = get_post($_REQUEST['post_id']);
+		if($post->post_type != 'wpsc-product') return $translation;
 		$translations = &get_translations_for_domain($domain);
 		return $translations->translate('Use as Product Thumbnail') ;
 	}
