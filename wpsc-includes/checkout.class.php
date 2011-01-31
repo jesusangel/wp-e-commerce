@@ -759,7 +759,7 @@ class wpsc_checkout {
 
 				$any_bad_inputs = true;
 				$bad_input = true;
-				$_SESSION['wpsc_gateway_error_messages']['card_number'] = __( 'Please enter a valid', 'wpsc' ) . " " . strtolower( 'card number' ) . ".";
+				$_SESSION['wpsc_gateway_error_messages']['card_number'] = __( 'Please enter a valid card number.', 'wpsc' );
 				$_SESSION['wpsc_checkout_saved_values']['card_number'] = '';
 			}
 		}
@@ -769,7 +769,7 @@ class wpsc_checkout {
 			} else {
 				$any_bad_inputs = true;
 				$bad_input = true;
-				$_SESSION['wpsc_gateway_error_messages']['expdate'] = __( 'Please enter a valid', 'wpsc' ) . " " . strtolower( 'Expiry Date' ) . ".";
+				$_SESSION['wpsc_gateway_error_messages']['expdate'] = __( 'Please enter a valid expiry date.', 'wpsc' );
 				$_SESSION['wpsc_checkout_saved_values']['expdate'] = '';
 			}
 		}
@@ -777,7 +777,7 @@ class wpsc_checkout {
 			if ( empty($_POST['card_code']) || (!is_numeric( $_POST['card_code'] )) ) {
 				$any_bad_inputs = true;
 				$bad_input = true;
-				$_SESSION['wpsc_gateway_error_messages']['card_code'] = __( 'Please enter a valid', 'wpsc' ) . " " . strtolower( 'CVV' ) . ".";
+				$_SESSION['wpsc_gateway_error_messages']['card_code'] = __( 'Please enter a valid CVV.', 'wpsc' );
 				$_SESSION['wpsc_checkout_saved_values']['card_code'] = '';
 			} else {
 				$_SESSION['wpsc_gateway_error_messages']['card_code'] = '';
@@ -787,7 +787,7 @@ class wpsc_checkout {
 			if ( $_POST['cctype'] == '' ) {
 				$any_bad_inputs = true;
 				$bad_input = true;
-				$_SESSION['wpsc_gateway_error_messages']['cctype'] = __( 'Please enter a valid', 'wpsc' ) . " " . strtolower( 'CVV' ) . ".";
+				$_SESSION['wpsc_gateway_error_messages']['cctype'] = __( 'Please enter a valid CVV.', 'wpsc' );
 				$_SESSION['wpsc_checkout_saved_values']['cctype'] = '';
 			} else {
 				$_SESSION['wpsc_gateway_error_messages']['cctype'] = '';
@@ -851,7 +851,7 @@ class wpsc_checkout {
 						break;
 				}
 				if ( $bad_input === true ) {
-					$_SESSION['wpsc_checkout_error_messages'][$form_data->id] = __( 'Please enter a valid', 'wpsc' ) . " " . strtolower( $form_data->name ) . ".";
+					$_SESSION['wpsc_checkout_error_messages'][$form_data->id] = sprintf(__( 'Please enter a valid %s.', 'wpsc' ), strtolower( $form_data->name ));
 					$_SESSION['wpsc_checkout_saved_values'][$form_data->id] = '';
 				}
 			}
