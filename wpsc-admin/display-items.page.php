@@ -193,7 +193,7 @@ function wpsc_additional_column_data( $column ) {
 						'display_as_html'         => false
 						);
                   	$price = wpsc_currency_display( $price, $args );
-                    echo '<div id="inline_' . $post->ID . '_price" class="hidden">' . $price . '</div>';
+                    echo '<div id="inline_' . $post->ID . '_price" class="hidden">' . trim($price) . '</div>';
 	                 $has_var = '0';
                 }
                 else
