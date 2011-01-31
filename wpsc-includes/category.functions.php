@@ -112,12 +112,66 @@ function wpsc_print_category_id() {
 /**
 * wpsc print category classes function
 * places classes for the category including selected state
+*
+* please note that "current category" means the category that we are in now,
+* and not the category that we are printing for
+*
+* @param $category_to_print - the category for which we should print classes
+* @param $echo - whether to echo the result (true) or return (false)
 */
-function wpsc_print_category_classes($currcat = '') {
-	global $wp_query;
-	if( is_array($currcat) && isset($currcat['slug']) && isset($wp_query->query_vars['wpsc_product_category']) && $currcat['slug'] == $wp_query->query_vars['wpsc_product_category']){
-		echo ' wpsc-current-cat ';
+function wpsc_print_category_classes($category_to_print = false, $echo = true) {
+	global $wp_query, $wpdb;
+	
+	//if we are in wpsc category page then get the current category
+	if(isset($wp_query->query_vars['wpsc_product_category']))
+		$curr_cat = get_term_by('slug',$wp_query->query_vars['wpsc_product_category'], 'wpsc_product_category');
+	else
+		$curr_cat = false;
+	
+	//check if we are in wpsc category page and that we have a term_id of the category to print
+	//this is done here because none of the following matters if we don't have one of those and we can
+	//safely return
+	if(isset($category_to_print[term_id]) && $curr_cat){
+		
+		//we will need a list of current category parents for the following if statement
+		$curr_cat_parents = get_term_parents($curr_cat->term_id, 'wpsc_product_category');
+		
+		//if current category is the same as the one we are printing - then add wpsc-current-cat class
+		if( $category_to_print[term_id] == $curr_cat->term_id )
+			$result = ' wpsc-current-cat ';
+		//else check if the category that we are printing is parent of current category
+		elseif ( in_array($category_to_print[term_id], $curr_cat_parents) )
+			$result = ' wpsc-cat-ancestor ';
 	}
+	if($echo)
+		echo $result;
+	else
+		return $result;
+}
+
+
+/**
+* get_term_parents - get all parents of the term
+* 
+* @param int $id - id of the term 
+* @return array of term objects or empty array if anything went wrong or there were no parrents
+*/
+function get_term_parents( $term_id, $taxonomy ) {
+	$term = &get_term( $term_id, $taxonomy );
+
+	if(empty($term->parent))
+		return array();
+	$parent = &get_term( $term->parent, $taxonomy );
+	if ( is_wp_error( $parent ) )
+		return array();
+ 	
+ 	$parents = array( $parent->term_id );
+ 	
+	if ( $parent->parent && ( $parent->parent != $parent->term_id ) && !in_array( $parent->parent, $parents ) ) {
+		$parents = array_merge($parents, get_term_parents( $parent->term_id, $taxonomy ));
+	}
+
+	return $parents;
 }
 
 
@@ -216,14 +270,7 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		
 		
 		// Creates the list of classes on the category item
-		$category_classes = 'wpsc-cat-item wpsc-cat-item-' . $category_row->term_id;
-		if(isset($wpsc_query->query_vars['wpsc_product_category'])){
-			$currcat = get_term_by('slug',$wpsc_query->query_vars['wpsc_product_category'], 'wpsc_product_category');
-			if ( $currcat->term_id == $category_row->term_id) {
-				$category_classes .= ' wpsc-current-cat';
-			}
-
-		}
+		$category_classes = wpsc_print_category_classes((array)$category_row, false);
 		
 		// Set the variables for this category
 		$category_branch[$category_row->term_id]['children'] = array();
