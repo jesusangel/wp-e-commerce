@@ -301,7 +301,7 @@ jQuery(document).ready(function(){
             });
             return false;
        }
-		
+
           jQuery('form#addtag, form#edittag').attr('enctype', 'multipart/form-data');
 
       }
@@ -314,7 +314,7 @@ jQuery(document).ready(function(){
 		jQuery(this).parents('tr:first').find('td input.wpsc_ie_field, td .wpsc_inline_actions').show();
 		return false;
 	});
-	
+
 	jQuery('#wpsc_product_list .wpsc_ie_cancel').live('click', function(){
 		jQuery(this).parents('tr:first').find('a.row-title, td > span').show();
 		jQuery(this).parents('tr:first').find('td input.wpsc_ie_field, td .wpsc_inline_actions').hide();
@@ -340,7 +340,7 @@ jQuery(document).ready(function(){
 			special_price: special_price,
 			sku: sku
 		};
-	
+
 		jQuery.post(ajaxurl, data, function(response) {
 			response = eval(response);
 			if(response.error){
@@ -354,10 +354,10 @@ jQuery(document).ready(function(){
 				jQuery('#post-' + response.id + ' .column-weight span').text(response.weight);
 				jQuery('#post-' + response.id + ' .column-stock span').text(response.stock);
 				jQuery('#post-' + response.id + ' .column-SKU span').text(response.sku);
-				
+
 				jQuery('#post-' + response.id + ' .column-price .pricedisplay').html(jQuery(response.price).text());
 				jQuery('#post-' + response.id + ' .column-sale_price .pricedisplay').html(jQuery(response.special_price).text());
-				
+
 				jQuery('#post-' + response.id + ' a.row-title, #post-' + response.id + ' td > span').show();
 				jQuery('#post-' + response.id + ' td input.wpsc_ie_field, #post-' + response.id + ' td .wpsc_inline_actions').hide();
 				jQuery('#post-' + response.id + ' .loading_indicator').css('visibility', 'hidden');
@@ -374,12 +374,12 @@ jQuery(document).ready(function(){
         jQuery('fieldset.inline-edit-col-left.wpsc-cols').css({'float': 'right', 'clear' : 'right'});
         jQuery("label:contains('Parent')").css('display', 'none');
         jQuery("label:contains('Status')").css('display', 'none');
-        jQuery("span:contains('Variations')").css('display', 'none'); 
+        jQuery("span:contains('Variations')").css('display', 'none');
         jQuery("ul.wpsc-variation-checklist").css('display', 'none');
         jQuery("div.inline-edit-date").css('display', 'none');
     }
         if( wpsc_adminL10n.dragndrop_set == "true" && typenow == "wpsc-product" && adminpage == "edit-php" ) {
-            // this makes the product list table sortable 
+            // this makes the product list table sortable
             jQuery('table.widefat:not(.tags)').sortable({
 		update: function(event, ui) {
 			category_id = jQuery('select#wpsc_product_category option:selected').val();
@@ -426,7 +426,7 @@ jQuery(document).ready(function(){
 			jQuery(".wpsc-row-actions", this).css("visibility", "hidden");
 		}
 		);
-	
+
 
 	jQuery('tr.wpsc_trackingid_row').hide();
 
@@ -477,6 +477,10 @@ jQuery(document).ready(function(){
 				return false;
 			}
 			);
+	});
+	jQuery('.editinline').live('click', function(){
+		setTimeout('editinline_get_id()',200);
+			
 	});
 
 	jQuery('a.add_variation_item_form').livequery(function(){
@@ -780,18 +784,40 @@ jQuery(document).ready(function(){
 			return false;
 		});
 	});
-	
+
+	// Fill in values when inline editor appears.
+	jQuery('.inline-editor').livequery(function() {
+		var id = jQuery(this).attr('id');
+		id = id.replace(/^edit-/, '');
+
+		if (!id || !parseInt(id)) {
+			return;
+		}
+
+		var weight = jQuery('#inline_' + id + '_weight').text(),
+			stock = jQuery('#inline_' + id + '_stock').text(),
+			price = jQuery('#inline_' + id + '_price').text(),
+			sale_price = jQuery('#inline_' + id + '_sale_price').text(),
+			sku = jQuery('#inline_' + id + '_sku').text();
+
+		jQuery(this).find('.wpsc_ie_weight').val(weight);
+		jQuery(this).find('.wpsc_ie_stock').val(stock);
+		jQuery(this).find('.wpsc_ie_price').val(price);
+		jQuery(this).find('.wpsc_ie_sale_price').val(sale_price);
+		jQuery(this).find('.wpsc_ie_sku').val(sku);
+	});
+
 	// Form change tracking code.
 	jQuery('form.wpsc_form_track :input, form.wpsc_form_track :radio, form.wpsc_form_track :checkbox')
 	.live('change', function() {
 		jQuery(this).parents('form.wpsc_form_track:first').addClass('wpsc_form_changed');
 	});
-	
+
 	jQuery('form.wpsc_form_track').live('submit', function() {
 		jQuery(this).removeClass('wpsc_form_changed');
-		
+
 	});
-	
+
 	// We'd ideally want to be using window.onbeforeonload to toss in a prompt, but that event is too
 	// unreliable from a browser to the next. Hooking onto anchors is the next best thing.
 	jQuery('form.wpsc_form_track a').live('click', function() {
@@ -804,8 +830,6 @@ jQuery(document).ready(function(){
 		}
 	});
 });
-
-
 
 // function for adding more custom meta
 function add_more_meta(e) {
@@ -1065,3 +1089,19 @@ function show_status_box(id,image_id) {
 	return false;
 }
 
+function editinline_get_id(){
+	id = jQuery('.inline-edit-row').attr('id');
+	id = id.replace('edit-','');
+	has_var = jQuery('#inline_'+id+'_has_var').val();
+	alert('inline_'+id+'_has_var '+has_var);
+	if( has_var == '1'){
+   		jQuery(".wpsc-cols").css('display', 'none');
+		jQuery(".wpsc-cols:first").text('Quick Edit options are limited when editing products that have variations. You will need to edit the variations themselves.')
+		.addClass('wpsc_var_description')
+		.css('display','block');
+	}else{
+  		jQuery(".wpsc-cols").css('display', 'block');
+	}
+		
+
+}

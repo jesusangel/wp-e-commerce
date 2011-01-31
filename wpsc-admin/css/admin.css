@@ -1726,7 +1726,7 @@ float:left !important;
 }
 
 .inline-edit-col-left {
-width:38% !important;
+width:35% !important;
 }
 
 .wpsc-quick-edit {
@@ -1747,4 +1747,10 @@ span.wpsc-quick-edit{
 width:75px;
 display: block;
 float: left;
+}
+.wpsc_var_description{
+	margin:20px 0 0 20px !important;
+	color:red;
+	
+	
 }

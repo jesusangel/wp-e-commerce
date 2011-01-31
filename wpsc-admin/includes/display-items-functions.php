@@ -1152,11 +1152,16 @@ function wpsc_save_quickedit_box( $post_id ) {
 * Creates inputs for the various meta in the quick edit boxes.
 *
  * @todo UI
- * @internal Tried accessing post_id in here to do the is_parent/variation thing - no luck :(
+ * @internal The post_id cannot be accessed here because this gets output at the very end
+ *           of the editor form, and injected within relevant rows using javascript.
 */
 
-function wpsc_quick_edit_boxes( $col_name ) {
-    ?>
+function wpsc_quick_edit_boxes( $col_name, $_screen_post_type = null ) {
+	// Avoid outputting this on term edit screens.
+	// See http://core.trac.wordpress.org/ticket/16392#comment:9
+	if ( current_filter() == 'quick_edit_custom_box' && $_screen_post_type == 'edit-tags' )
+		return;
+?>
 
 <fieldset class="inline-edit-col-left wpsc-cols">
     <div class="inline-edit-col">
@@ -1167,7 +1172,7 @@ function wpsc_quick_edit_boxes( $col_name ) {
             ?>
             <label class="alignleft">
                 <span class="checkbox-title wpsc-quick-edit"><?php _e('SKU:', 'wpsc'); ?> </span>
-                <input type="text" name="sku" id="wpsc_ie_sku">
+                <input type="text" name="sku" class="wpsc_ie_sku">
             </label>
             <?php
                 break;
@@ -1175,7 +1180,7 @@ function wpsc_quick_edit_boxes( $col_name ) {
             ?>
             <label class="alignleft">
                 <span class="checkbox-title wpsc-quick-edit"><?php _e('Weight:', 'wpsc'); ?> </span>
-                <input type="text" name="weight" id="wpsc_ie_weight">
+                <input type="text" name="weight" class="wpsc_ie_weight">
             </label>
             <?php
                 break;
@@ -1183,7 +1188,7 @@ function wpsc_quick_edit_boxes( $col_name ) {
             ?>
             <label class="alignleft">
                 <span class="checkbox-title wpsc-quick-edit"><?php _e('Stock:', 'wpsc'); ?> </span>
-                <input type="text" name="stock" id="wpsc_ie_stock">
+                <input type="text" name="stock" class="wpsc_ie_stock">
             </label>
             <?php
                 break;
@@ -1191,7 +1196,7 @@ function wpsc_quick_edit_boxes( $col_name ) {
             ?>
             <label class="alignleft">
                 <span class="checkbox-title wpsc-quick-edit"><?php _e('Price:', 'wpsc'); ?> </span>
-                <input type="text" name="price" id="wpsc_ie_price">
+                <input type="text" name="price" class="wpsc_ie_price">
             </label>
             <?php
                 break;
@@ -1199,7 +1204,7 @@ function wpsc_quick_edit_boxes( $col_name ) {
             ?>
             <label class="alignleft">
                 <span class="checkbox-title wpsc-quick-edit"><?php _e('Sale Price:', 'wpsc'); ?> </span>
-                <input type="text" name="sale_price" id="wpsc_ie_sale_price">
+                <input type="text" name="sale_price" class="wpsc_ie_sale_price">
             </label>
             <?php
                 break;
@@ -1212,7 +1217,7 @@ function wpsc_quick_edit_boxes( $col_name ) {
 }
 
 add_action( 'bulk_edit_custom_box', 'wpsc_quick_edit_boxes', 10 );
-add_action( 'quick_edit_custom_box', 'wpsc_quick_edit_boxes', 10 );
+add_action( 'quick_edit_custom_box', 'wpsc_quick_edit_boxes', 10, 2 );
 add_action( 'save_post', 'wpsc_save_quickedit_box' );
 
 ?>

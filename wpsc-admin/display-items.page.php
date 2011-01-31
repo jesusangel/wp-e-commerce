@@ -183,12 +183,23 @@ function wpsc_additional_column_data( $column ) {
                  break;
             case 'price' :
                 $price = get_post_meta( $post->ID, '_wpsc_price', true );
+				$has_var = '1';
                 if( !$is_parent ) {
-                    echo wpsc_currency_display( $price );
+                  	echo wpsc_currency_display( $price );
+     	          	$args = array(
+						'display_currency_symbol' => false,
+						'display_decimal_point'   => true,
+						'display_currency_code'   => false,
+						'display_as_html'         => false
+						);
+                  	$price = wpsc_currency_display( $price, $args );
                     echo '<div id="inline_' . $post->ID . '_price" class="hidden">' . $price . '</div>';
+	                 $has_var = '0';
                 }
                 else
                     echo wpsc_product_variation_price_available( $post->ID ).'+';
+                 echo '<input type="hidden" value="'.$has_var.'" name=""inline_' . $post->ID . '_has_var"" id="inline_' . $post->ID . '_has_var" />';
+
                 break;
             case 'sale_price' :
                 $price = get_post_meta( $post->ID, '_wpsc_special_price', true );
