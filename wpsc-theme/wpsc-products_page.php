@@ -174,7 +174,7 @@ global $wpsc_query, $wpdb, $wp_query;
 
 								<?php else : ?>
 									<?php if(wpsc_product_on_special()) : ?>
-										<p class="pricedisplay product_<?php echo wpsc_the_product_id(); ?>"><?php _e('Old price', 'wpsc'); ?>: <span class="oldprice" id="old_product_price_<?php echo wpsc_the_product_id(); ?>"><?php echo wpsc_product_normal_price(); ?></span></p>
+										<p class="pricedisplay product_<?php echo wpsc_the_product_id(); ?>"><?php _e('Old Price', 'wpsc'); ?>: <span class="oldprice" id="old_product_price_<?php echo wpsc_the_product_id(); ?>"><?php echo wpsc_product_normal_price(); ?></span></p>
 									<?php endif; ?>
 									<p class="pricedisplay product_<?php echo wpsc_the_product_id(); ?>"><?php _e('Price', 'wpsc'); ?>: <span id='product_price_<?php echo wpsc_the_product_id(); ?>' class="currentprice pricedisplay"><?php echo wpsc_the_product_price(); ?></span></p>
 									<?php if(wpsc_product_on_special()) : ?>
