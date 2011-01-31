@@ -52,7 +52,40 @@ function wpsc_install() {
 		update_option( 'wpsc_version', WPSC_VERSION );
 		update_option( 'wpsc_minor_version', WPSC_MINOR_VERSION );
 	}
+	if('' == get_option('show_subcatsprods_in_cat'))
+		update_option('show_subcatsprods_in_cat',0);
 
+	if('' == get_option('wpsc_share_this'))
+		update_option('wpsc_share_this',0);
+
+	if('' == get_option('wpsc_crop_thumbnails'))
+		update_option('wpsc_crop_thumbnails',0);
+
+	if('' == get_option('wpsc_products_per_page'))
+		update_option('wpsc_products_per_page',0);
+
+	if('' == get_option('wpsc_force_ssl'))
+		update_option('wpsc_force_ssl',0);
+
+	if('' == get_option('use_pagination'))
+		update_option('use_pagination',0);
+
+	if('' == get_option('hide_name_link'))
+		update_option('hide_name_link',0);
+
+	if('' == get_option('wpsc_enable_comments'))
+		update_option('wpsc_enable_comments',0);
+
+	if('' == get_option('multi_add'))
+		update_option('multi_add',0);
+
+	if('' == get_option('hide_addtocart_button'))
+		update_option('hide_addtocart_button',0);
+
+	if('' == get_option('wpsc_addtocart_or_buynow'))
+		update_option('wpsc_addtocart_or_buynow',0);
+
+	
 	add_option( 'show_thumbnails', 1, __( 'Show Thumbnails', 'wpsc' ), "yes" );
 	add_option( 'show_thumbnails_thickbox', 1, __( 'Use Thickbox Effect for product images', 'wpsc' ), "yes" );
 
