@@ -26,7 +26,7 @@
 		<div class="wpsc_categorisation_group" id="categorisation_group_<?php echo $category_id; ?>">
 			<ul class="wpsc_categories wpsc_top_level_categories <?php echo implode( ' ', (array)$provided_classes ); ?>">
 				<li class="wpsc_category_<?php echo $curr_cat['term_id']; wpsc_print_category_classes($curr_cat);  ?>">
-					<?php if(wpsc_parent_category_image( $show_thumbnails, $category_image , $width, $height, false, $show_name )){ ?>
+					<?php if(! ($category_image == WPSC_CATEGORY_URL) ){ ?>
 						<a href="<?php echo $link; ?>" class="wpsc_category_image_link"><?php 
 						wpsc_parent_category_image( $show_thumbnails, $category_image , $width, $height, false, $show_name ); ?></a>
 					<?php } ?>
