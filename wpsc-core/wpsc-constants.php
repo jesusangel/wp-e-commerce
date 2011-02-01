@@ -23,7 +23,8 @@ function wpsc_core_load_session() {
  * The core WPEC constants necessary to start loading
  */
 function wpsc_core_constants() {
-
+	if(!defined('WPSC_URL'))
+		define( 'WPSC_URL',       plugins_url( '', __FILE__ ) );
 	// Define Plugin version
 	define( 'WPSC_VERSION', '3.8' );
 	define( 'WPSC_MINOR_VERSION', ( '00000' . microtime( true ) ) );

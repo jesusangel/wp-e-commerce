@@ -224,7 +224,7 @@ function wpsc_meta_boxes() {
 	remove_meta_box( 'wpsc-variationdiv', 'wpsc-product', 'core' );
 
 	//if a variation page do not show these metaboxes
-	if ( $post->post_parent == 0 ) {
+	if (is_object($post) && $post->post_parent == 0 ) {
 		add_meta_box( 'wpsc_product_variation_forms', 'Variations', 'wpsc_product_variation_forms', $pagename, 'normal', 'high' );
 		add_meta_box( 'wpsc_product_external_link_forms', 'Off Site Product link', 'wpsc_product_external_link_forms', $pagename, 'normal', 'high' );
 	}else {

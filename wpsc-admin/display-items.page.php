@@ -65,7 +65,8 @@ function wpsc_additional_sortable_column_names( $columns ){
 }
 function wpsc_additional_column_name_variations( $columns ){
     global $post;
-    if( $post->post_parent != '0' )
+
+    if(isset($post) && $post->post_parent != '0' )
        remove_meta_box( 'wpsc_product_variation_forms', 'wpsc-product', 'normal' );
 
     $columns['image'] = '';

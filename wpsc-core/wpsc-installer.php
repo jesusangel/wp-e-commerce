@@ -35,7 +35,7 @@ function wpsc_install() {
 	if ( !$first_install )
 		wpsc_regenerate_thumbnails();
 
-	add_option( 'wpsc_version', WPSC_VERSION, 'wpsc_version', 'yes' );
+	add_option( 'wpsc_version', WPSC_VERSION, '', 'yes' );
 
 	// run the create or update code here.
 	wpsc_create_or_update_tables();
@@ -86,14 +86,14 @@ function wpsc_install() {
 		update_option('wpsc_addtocart_or_buynow',0);
 
 	
-	add_option( 'show_thumbnails', 1, __( 'Show Thumbnails', 'wpsc' ), "yes" );
-	add_option( 'show_thumbnails_thickbox', 1, __( 'Use Thickbox Effect for product images', 'wpsc' ), "yes" );
+	add_option( 'show_thumbnails', 1, '', "yes" );
+	add_option( 'show_thumbnails_thickbox', 1, '', "yes" );
 
-	add_option( 'product_list_url', '', __( 'The location of the product list', 'wpsc' ), 'yes' );
-	add_option( 'shopping_cart_url', '', __( 'The location of the shopping cart', 'wpsc' ), 'yes' );
-	add_option( 'checkout_url', '', __( 'The location of the checkout page', 'wpsc' ), 'yes' );
-	add_option( 'transact_url', '', __( 'The location of the transaction detail page', 'wpsc' ), 'yes' );
-	add_option( 'payment_gateway', '', __( 'The payment gateway to use', 'wpsc' ), 'yes' );
+	add_option( 'product_list_url', '', '', 'yes' );
+	add_option( 'shopping_cart_url', '', '', 'yes' );
+	add_option( 'checkout_url', '', '', 'yes' );
+	add_option( 'transact_url', '', '', 'yes' );
+	add_option( 'payment_gateway', '','', 'yes' );
 	
 	$default_payment_gateways_names = array(
 		'chronopay'						=> '',
@@ -108,38 +108,33 @@ function wpsc_install() {
 
 
 	if ( function_exists( 'register_sidebar' ) )
-		add_option( 'cart_location', '4', __( 'Cart Location', 'wpsc' ), 'yes' );
+		add_option( 'cart_location', '4','', 'yes' );
 	else
-		add_option( 'cart_location', '1', __( 'Cart Location', 'wpsc' ), 'yes' );
+		add_option( 'cart_location', '1', '', 'yes' );
 
-	if ( function_exists( 'register_sidebar' ) )
-		add_option( 'cart_location', '4', __( 'Cart Location', 'wpsc' ), 'yes' );
-	else
-		add_option( 'cart_location', '1', __( 'Cart Location', 'wpsc' ), 'yes' );
+	add_option( 'currency_type', '156','', 'yes' );
+	add_option( 'currency_sign_location', '3', '', 'yes' );
 
-	add_option( 'currency_type', '156', __( 'Currency type', 'wpsc' ), 'yes' );
-	add_option( 'currency_sign_location', '3', __( 'Currency sign location', 'wpsc' ), 'yes' );
+	add_option( 'gst_rate', '1','', 'yes' );
 
-	add_option( 'gst_rate', '1', __( 'the GST rate', 'wpsc' ), 'yes' );
+	add_option( 'max_downloads', '1','', 'yes' );
 
-	add_option( 'max_downloads', '1', __( 'the download limit', 'wpsc' ), 'yes' );
+	add_option( 'display_pnp', '1', '', 'yes' );
 
-	add_option( 'display_pnp', '1', __( 'Display or hide postage and packaging', 'wpsc' ), 'yes' );
+	add_option( 'display_specials', '1', '', 'yes' );
+	add_option( 'do_not_use_shipping', '1', '', 'yes' );
 
-	add_option( 'display_specials', '1', __( 'Display or hide specials on the sidebar', 'wpsc' ), 'yes' );
-	add_option( 'do_not_use_shipping', '1', 'do_not_use_shipping', 'yes' );
+	add_option( 'postage_and_packaging', '0','', 'yes' );
 
-	add_option( 'postage_and_packaging', '0', __( 'Default postage and packaging', 'wpsc' ), 'yes' );
+	add_option( 'purch_log_email', '', '', 'yes' );
+	add_option( 'return_email', '', '', 'yes' );
+	add_option( 'terms_and_conditions', '', '', 'yes' );
 
-	add_option( 'purch_log_email', '', __( 'Email address that purchase log is sent to', 'wpsc' ), 'yes' );
-	add_option( 'return_email', '', __( 'Email address that purchase reports are sent from', 'wpsc' ), 'yes' );
-	add_option( 'terms_and_conditions', '', __( 'Checkout terms and conditions', 'wpsc' ), 'yes' );
+	add_option( 'google_key', 'none', '', 'yes' );
+	add_option( 'google_id', 'none', '', 'yes' );
 
-	add_option( 'google_key', 'none', __( 'Google Merchant Key', 'wpsc' ), 'yes' );
-	add_option( 'google_id', 'none', __( 'Google Merchant ID', 'wpsc' ), 'yes' );
-
-	add_option( 'default_brand', 'none', __( 'Default Brand', 'wpsc' ), 'yes' );
-	add_option( 'wpsc_default_category', 'all', __( 'Select what product group you want to display on the products page', 'wpsc' ), 'yes' );
+	add_option( 'default_brand', 'none', '', 'yes' );
+	add_option( 'wpsc_default_category', 'all', '', 'yes' );
 
 	add_option( 'product_view', 'default', "", 'yes' );
 	add_option( 'add_plustax', 'default', "", '1' );
@@ -151,20 +146,20 @@ function wpsc_install() {
 		update_option( 'show_categorybrands', 2 );
 
 	// PayPal options
-	add_option( 'paypal_business', '', __( 'paypal business', 'wpsc' ), 'yes' );
-	add_option( 'paypal_url', '', __( 'paypal url', 'wpsc' ), 'yes' );
-	add_option( 'paypal_ipn', '1', __( 'paypal url', 'wpsc' ), 'yes' );
+	add_option( 'paypal_business', '', '', 'yes' );
+	add_option( 'paypal_url', '', '', 'yes' );
+	add_option( 'paypal_ipn', '1', '', 'yes' );
 
 
-	add_option( 'paypal_multiple_business', '', __( 'paypal business', 'wpsc' ), 'yes' );
+	add_option( 'paypal_multiple_business', '', '', 'yes' );
 
 	add_option( 'paypal_multiple_url', "https://www.paypal.com/cgi-bin/webscr" );
 
-	add_option( 'product_ratings', '0', __( 'Show Product Ratings', 'wpsc' ), 'yes' );
+	add_option( 'product_ratings', '0', '', 'yes' );
 	add_option( 'wpsc_email_receipt', __( 'Thank you for purchasing with %shop_name%, any items to be shipped will be processed as soon as possible, any items that can be downloaded can be downloaded using the links on this page.All prices include tax and postage and packaging where applicable.
 	You ordered these items: 
-	%product_list%%total_shipping%%total_price%', 'wpsc' ), 'yes' );
-	add_option( 'wpsc_email_admin', __( '%product_list%%total_shipping%%total_price%', 'wpsc' ), 'yes' );
+	%product_list%%total_shipping%%total_price%', 'wpsc' ), '', 'yes' );
+	add_option( 'wpsc_email_admin', __( '%product_list%%total_shipping%%total_price%', 'wpsc' ), '','yes' );
 
 	add_option( 'wpsc_selected_theme', 'default', '', 'yes' );
 	
@@ -765,8 +760,12 @@ function wpsc_add_checkout_fields() {
 }
 function wpsc_rename_checkout_column(){
 	global $wpdb;
-	$sql = "ALTER TABLE  `" . WPSC_TABLE_CHECKOUT_FORMS . "` CHANGE  `order`  `checkout_order` INT( 10 ) UNSIGNED NOT NULL DEFAULT  '0'";
-	$wpdb->query($sql);
+	$sql = "SELECT `checkout_order` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "`";
+	$col = $wpdb->get_col($sql);
+	if(empty($col)){
+		$sql = "ALTER TABLE  `" . WPSC_TABLE_CHECKOUT_FORMS . "` CHANGE  `order`  `checkout_order` INT( 10 ) UNSIGNED NOT NULL DEFAULT  '0'";
+		$wpdb->query($sql);
+	}
 
 }
 ?>
