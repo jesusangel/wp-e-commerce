@@ -14,7 +14,7 @@ $wpsc_product_defaults = array(
 	'additional_description' => '',
 	'price' => '0.00',
 	'weight' => '0',
-	'weight_unit' => 'gram',
+	'weight_unit' => 'pound',
 	'pnp' => '0.00',
 	'international_pnp' => '0.00',
 	'file' => '0',
@@ -503,7 +503,7 @@ function wpsc_product_shipping_forms() {
         if( !isset( $product_meta['weight'] ) )
            $product_meta['weight'] = "";
 
-        $product_data['transformed']['weight'] = wpsc_convert_weight( $product_meta['weight'], "gram", $product_meta['weight_unit'] );
+        $product_data['transformed']['weight'] = wpsc_convert_weight( $product_meta['weight'], "pound", $product_meta['weight_unit'] );
 
        ?>
 		<table>
@@ -1131,7 +1131,7 @@ function wpsc_save_quickedit_box( $post_id ) {
     $is_parent = ( bool )wpsc_product_has_children( $post_id );
     $product_meta = get_post_meta( $post_id, '_wpsc_product_metadata', true );
     $weight_unit = $product_meta["weight_unit"];
-    $weight = wpsc_convert_weight( $_POST["weight"], $weight_unit, "gram" );
+    $weight = wpsc_convert_weight( $_POST["weight"], $weight_unit, "pound" );
 
     if( isset( $product_meta["weight"] ) )
         unset($product_meta["weight"]);

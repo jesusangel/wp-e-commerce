@@ -148,7 +148,6 @@ class usps {
         }
         $dest = $_SESSION['wpsc_delivery_country'];
         $weight = wpsc_cart_weight_total();
-        $weight = wpsc_convert_weight($weight, 'gram', 'pound');
         $pound = floor($weight);
         $ounce = ($weight-$pound)*16;
         $machinable = 'true';

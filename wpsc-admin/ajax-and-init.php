@@ -219,7 +219,7 @@ function wpsc_modify_weight() {
 		$old_array = get_product_meta( $product_id, 'product_metadata' );
 		$old_array = array_pop( $old_array );
 
-		$weight = wpsc_convert_weight( $product_data['weight'], $old_array["weight_unit"], "gram" );
+		$weight = wpsc_convert_weight( $product_data['weight'], $old_array["weight_unit"], "pound" );
 
 		foreach ( $old_array as $key => $value ) {
 			if ( $key == 'weight' ) {
@@ -229,7 +229,7 @@ function wpsc_modify_weight() {
 
 		if ( update_product_meta( $product_id, 'product_metadata', $old_array ) ) {
 			echo "success = 1;\n\r";
-			echo "new_price = '" . wpsc_convert_weight( $weight, "gram", $old_array["weight_unit"] ) . "';\n\r";
+			echo "new_price = '" . wpsc_convert_weight( $weight, "pound", $old_array["weight_unit"] ) . "';\n\r";
 		} else {
 			echo "success = 0;\n\r";
 		}

@@ -183,7 +183,7 @@ class australiapost {
 		
 
 		// Weight is in grams
-		$weight = $wpsc_cart->calculate_total_weight(true);
+		$weight = wpsc_convert_weight($wpsc_cart->calculate_total_weight(true), 'pound', 'gram');
  
 		// Calculate the total cart dimensions by adding the volume of each product then calculating the cubed root
 		$volume = 0;
