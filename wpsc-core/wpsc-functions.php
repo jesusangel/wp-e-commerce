@@ -385,7 +385,7 @@ function wpsc_start_the_query() {
 		if ( count( $wpsc_query_vars ) <= 1 ) {
 			$wpsc_query_vars = array(
 				'post_parent' => 0,
-				'order'       => 'ASC'
+				'order'       => apply_filters('wpsc_product_order','ASC')
 			);
 			
 			if( isset( $_GET['product_order'] ) )
