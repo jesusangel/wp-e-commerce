@@ -1,7 +1,7 @@
 <?php
 	// Setup globals
 	// @todo: Get these out of template
-	global $wpsc_query, $wpdb, $wpsc_custom_meta, $wp_query;
+	global $wp_query;
 
 	// Setup image width and height variables
 	// @todo: Investigate if these are still needed here

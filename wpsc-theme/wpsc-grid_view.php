@@ -1,5 +1,5 @@
 <?php
-global $wpsc_query, $wpdb, $wp_query;
+global $wp_query;
 $image_width = get_option('product_image_width');
 $image_height = get_option('product_image_height');
 ?>

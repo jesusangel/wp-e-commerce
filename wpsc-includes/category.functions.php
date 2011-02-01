@@ -236,7 +236,6 @@ function wpsc_end_category_query() {
 */
 function wpsc_display_category_loop($query, $category_html, &$category_branch = null){
 	static $category_count_data = array(); // the array tree is stored in this
-	global $wpdb, $wpsc_query;
 	
 	if( isset($query['parent_category_id']) )		
 		$category_id = absint($query['parent_category_id']);
@@ -369,7 +368,6 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 */
 function wpsc_place_category_image($category_id, $query) {
 	// show the full sized image for the product, if supplied with dimensions, will resize image to those.
-		global $wpsc_query, $wpdb;
 		$width = (isset($query['image_size']['width'])) ? ($query['image_size']['width']) : get_option('category_image_width');
 		$height = (isset($query['image_size']['height'])) ? ($query['image_size']['height']) : get_option('category_image_height');
 		$image_url = "index.php?wpsc_request_image=true&category_id=".$category_id."&width=".$width."&height=".$height;

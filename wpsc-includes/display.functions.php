@@ -15,7 +15,6 @@
  * @return string - html displaying one or more products
  */
 function wpsc_buy_now_button( $product_id, $replaced_shortcode = false ) {
-	global $wpdb, $wpsc_query, $wpsc_cart, $wp_query;
 	$product = get_post( $product_id );
 	$supported_gateways = array('wpsc_merchant_paypal_standard','paypal_multiple');
 	$selected_gateways = get_option( 'custom_gateway_options' );

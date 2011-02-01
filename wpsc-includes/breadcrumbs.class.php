@@ -19,7 +19,7 @@ function wpsc_has_breadcrumbs() {
 * @return boolean - true if we have breadcrumbs to loop through
 */
 function wpsc_have_breadcrumbs() {
-	global $wpsc_query, $wpsc_breadcrumbs;	
+	global $wpsc_breadcrumbs;	
 
 	return $wpsc_breadcrumbs->have_breadcrumbs();
 }
@@ -29,7 +29,7 @@ function wpsc_have_breadcrumbs() {
 * @return nothing - iterate through the breadcrumbs
 */
 function wpsc_the_breadcrumb() {
-	global $wpsc_query, $wpsc_breadcrumbs;	
+	global $wpsc_breadcrumbs;	
 
 	$wpsc_breadcrumbs->the_breadcrumb();
 }
@@ -39,7 +39,7 @@ function wpsc_the_breadcrumb() {
 * @return string - the breadcrumb name 
 */
 function wpsc_breadcrumb_name() {
-	global $wpsc_query, $wpsc_breadcrumbs;	
+	global $wpsc_breadcrumbs;	
 
 	return $wpsc_breadcrumbs->breadcrumb['name'];
 }
@@ -49,7 +49,7 @@ function wpsc_breadcrumb_name() {
 * @return string - the breadcrumb slug - for use in the CSS ID 
 */
 function wpsc_breadcrumb_slug() {
-	global $wpsc_query, $wpsc_breadcrumbs;	
+	global $wpsc_breadcrumbs;	
 
 	return (isset($wpsc_breadcrumbs->breadcrumb['slug']) ? $wpsc_breadcrumbs->breadcrumb['slug'] : '');
 }
@@ -59,7 +59,7 @@ function wpsc_breadcrumb_slug() {
 * @return string - the breadcrumb URL
 */
 function wpsc_breadcrumb_url() {
-	global $wpsc_query, $wpsc_breadcrumbs;	
+	global $wpsc_breadcrumbs;	
 
 	if($wpsc_breadcrumbs->breadcrumb['url'] == '') {
 		return false;
@@ -73,7 +73,6 @@ function wpsc_breadcrumb_url() {
 * @return None - outputs breadcrumb HTML
 */
 function wpsc_output_breadcrumbs($options = Array()) {
-	global $wpsc_query;
 	$products_page_id = wpec_get_the_post_id_by_shortcode('[productspage]');
 	$products_page = get_post($products_page_id);
 	if(!wpsc_has_breadcrumbs()){	

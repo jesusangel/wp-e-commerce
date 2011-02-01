@@ -8,7 +8,7 @@
 	 * @since WPSC 3.8
 	 */
 
-	global $wpsc_query, $purchase_log, $wpdb, $errorcode, $sessionid, $echo_to_screen, $cart, $message_html,$wpsc_purchlog_statuses;
+	global $purchase_log, $errorcode, $sessionid, $echo_to_screen, $cart, $message_html;
 ?>
 <div class="wrap">
 
