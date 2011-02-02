@@ -51,6 +51,7 @@ function wpsc_currency_display( $price_in, $args = null ) {
 		$currency_code = $wpsc_currency_data['code'];
 
 	// Figure out the currency sign
+	$currency_sign = '';
 	if ( $query['display_currency_symbol'] ) {
 		if ( !empty( $wpsc_currency_data['symbol'] ) ) {
 			if ( $query['display_as_html'] ) {
