@@ -1497,36 +1497,6 @@ function wpsc_has_pages() {
 }
 
 /**
- * wpsc have pages function
- * @return boolean - true while we have pages to loop through
- */
-function wpsc_have_pages() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated ' . __FUNCTION__ . '' );
-	global $wpsc_query;
-	return $wpsc_query->have_pages();
-}
-
-/**
- * wpsc the page function
- * @return nothing - iterate through the pages
- */
-function wpsc_the_page() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated ' . __FUNCTION__ . '' );
-	global $wpsc_query;
-	$wpsc_query->the_page();
-}
-
-/**
- * wpsc page number function
- * @return integer - the page number
- */
-function wpsc_page_number() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated ' . __FUNCTION__ . '' );
-	global $wpsc_query;
-	return $wpsc_query->page['number'];
-}
-
-/**
  * this is for the multi adding property, it checks to see whether multi adding is enabled;
  *
  */

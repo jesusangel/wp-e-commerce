@@ -86,6 +86,7 @@ function nzshpcrt_donations($args){
  * 5. Function now expects two arrays as per the standard Widget API.
  */
 function nzshpcrt_latest_product( $args = null, $instance ) {
+	_deprecated_function( __FUNCTION__, '3.8', 'wpsc_latest_product');
 	echo wpsc_latest_product( $args, $instance );
 }
 
@@ -235,28 +236,8 @@ function wpsc_product_search_url( $url ) {
  */
 function wpsc_adjacent_products_url( $n ) {
 	
-	global $wpsc_query;
-	
-	$current_page = wpsc_current_page();
-	
-	$n = $current_page + $n;
-	
-	if ( $n < 1 || $n > $wpsc_query->page_count ) {
-		return;
-	}
-	
-	while ( wpsc_have_pages() ) : wpsc_the_page();
-		if ( wpsc_page_number() == $n ) {
-			$url = wpsc_page_url();
-			$url = wpsc_product_search_url( $url );
-			$wpsc_query->rewind_pages();
-			return $url;
-		}
-	endwhile;
-	
-	$wpsc_query->rewind_pages();
-	
-	return;
+	_deprecated_function( __FUNCTION__, '3.8', 'wpsc_pagination');
+	return false;
 	
 }
 
@@ -269,17 +250,8 @@ function wpsc_adjacent_products_url( $n ) {
  */
 function wpsc_next_products_link( $text = 'Next', $show_disabled = false ) {
 	
-	$page_url = wpsc_adjacent_products_url( 1 );
-	
-	if ( $page_url ) {
-		return '<a href="' . $page_url . '">' . $text . '</a>';
-	}
-	
-	if ( $show_disabled ) {
-		return '<span>' . $text . '</span>';
-	}
-	
-	return;
+	_deprecated_function( __FUNCTION__, '3.8', 'wpsc_pagination');
+	return false;
 	
 }
 
@@ -292,17 +264,8 @@ function wpsc_next_products_link( $text = 'Next', $show_disabled = false ) {
  */
 function wpsc_previous_products_link( $text = 'Previous', $show_disabled = false ) {
 	
-	$page_url = wpsc_adjacent_products_url( -1 );
-	
-	if ( $page_url ) {
-		return '<a href="' . $page_url . '">' . $text . '</a>';
-	}
-	
-	if ( $show_disabled ) {
-		return '<span>' . $text . '</span>';
-	}
-	
-	return;
+	_deprecated_function( __FUNCTION__, '3.8', 'wpsc_pagination');
+	return false;;
 	
 }
 
@@ -315,28 +278,8 @@ function wpsc_previous_products_link( $text = 'Previous', $show_disabled = false
  */
 function wpsc_first_products_link( $text = 'First', $show_disabled = false ) {
 	
-	global $wpsc_query;
-	
-	$page_url = '';
-	
-	while ( wpsc_have_pages() ) : wpsc_the_page();
-		$page_url = wpsc_page_url();
-		break;
-	endwhile;
-	
-	$wpsc_query->rewind_pages();
-	
-	$page_url = wpsc_product_search_url( $page_url );
-	
-	if ( $page_url && wpsc_current_page() > 1 ) {
-		return '<a href="' . $page_url . '">' . $text . '</a>';
-	}
-	
-	if ( $show_disabled ) {
-		return '<span>' . $text . '</span>';
-	}
-	
-	return;
+	_deprecated_function( __FUNCTION__, '3.8', 'wpsc_pagination');
+	return false;
 	
 }
 
@@ -349,27 +292,8 @@ function wpsc_first_products_link( $text = 'First', $show_disabled = false ) {
  */
 function wpsc_last_products_link( $text = 'Last', $show_disabled = false ) {
 	
-	global $wpsc_query;
-	
-	$page_url = '';
-	
-	while ( wpsc_have_pages() ) : wpsc_the_page();
-		$page_url = wpsc_page_url();
-	endwhile;
-	
-	$wpsc_query->rewind_pages();
-	
-	$page_url = wpsc_product_search_url( $page_url );
-	
-	if ( $page_url && wpsc_current_page() < $wpsc_query->page_count ) {
-		return '<a href="' . $page_url . '">' . $text . '</a>';
-	}
-	
-	if ( $show_disabled ) {
-		return '<span>' . $text . '</span>';
-	}
-	
-	return;
+	_deprecated_function( __FUNCTION__, '3.8', 'wpsc_pagination');
+	return false;
 	
 }
 
@@ -469,6 +393,33 @@ function wpsc_save_variation_set() {
 	}
 	$sendback = add_query_arg('message', 1, $sendback);
 	wp_redirect($sendback);
+}
+
+/**
+ * wpsc have pages function
+ * @return boolean - true while we have pages to loop through
+ */
+function wpsc_have_pages() {
+	_deprecated_function( __FUNCTION__, '3.8', 'wpsc_pagination');
+	return false;
+}
+
+/**
+ * wpsc the page function
+ * @return nothing - iterate through the pages
+ */
+function wpsc_the_page() {
+	_deprecated_function( __FUNCTION__, '3.8', 'wpsc_pagination');
+	return false;
+}
+
+/**
+ * wpsc page number function
+ * @return integer - the page number
+ */
+function wpsc_page_number() {
+	_deprecated_function( __FUNCTION__, '3.8', 'wpsc_pagination');
+	return false;
 }
 
 ?>
