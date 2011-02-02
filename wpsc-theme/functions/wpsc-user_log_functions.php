@@ -314,20 +314,8 @@ function wpsc_has_purchases() {
 	 * this finds the earliest timedit-profile in the shopping cart and sorts out the timestamp system for the month by month display
 	 */
 
-	/* $sql = "SELECT COUNT(*) AS `count` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `date`!='' ORDER BY `date` DESC";
-	$purchase_count = $wpdb->get_results( $sql, ARRAY_A );*/
-
 	$earliest_record_sql = "SELECT MIN(`date`) AS `date` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `date`!=''";
 	$earliest_record = $wpdb->get_results( $earliest_record_sql, ARRAY_A );
-
-	/*$current_timestamp = time();
-	$earliest_timestamp = $earliest_record[0]['date'];
-
-	$current_year = date( "Y" );
-	$earliest_year = date( "Y", $earliest_timestamp );
-
-	$date_list[0]['start'] = $start_timestamp;
-	$date_list[0]['end'] = $end_timestamp;*/
 
 	if ( $earliest_record[0]['date'] != null ) {
 		$form_sql = "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1' AND `display_log` = '1';";
@@ -541,8 +529,7 @@ function wpsc_user_details() {
 				$gst = $cart_row['tax_charged'];
 				if($gst > 0)
 					$endtotal += $gst * $cart_row['quantity'];
-				else
-					$endtotal += $cart_row['quantity'];
+
 				echo wpsc_currency_display( $gst , array('display_as_html' => false) );
 				echo " </td>";
 
