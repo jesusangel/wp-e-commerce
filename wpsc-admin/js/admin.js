@@ -119,20 +119,7 @@ jQuery(document).ready(function(){
 
 	});
 	//checkboxes on checkout page
-	/*
-  jQuery('.wpsc_checkout_selectboxes').livequery(function(){
-   	jQuery(this).change(function(){
-			if(jQuery(this).val() == 'checkbox' || jQuery(this).val() == 'radio' ||
-			jQuery(this).val() == 'select'){
-				id = jQuery(this).attr('name');
-				id = id.replace('form_type', '');
-				output =  "<tr class='wpsc_grey'><td></td><td colspan='5'>Please save your changes to add options to this "+jQuery(this).val()+" form field.</td></tr>\r\n";
-				jQuery(this).parent().parent('tr').after(output);
-			}
 
-	});
-  });
-*/
 	jQuery('.wpsc_add_new_checkout_option').livequery(function(){
 		jQuery(this).click(function(event){
 			form_id = jQuery(this).attr('title');
@@ -157,7 +144,7 @@ jQuery(document).ready(function(){
 					if(returned_data != ''){
 						jQuery('#checkout_'+id).after(returned_data);
 					}else{
-						output =  "<tr class='wpsc_grey'><td></td><td colspan='5'>Please Save your changes before trying to Order your Checkout Forms again.</td></tr>\r\n<tr  class='wpsc_grey'><td></td><th>Label</th><th >Value</th><td colspan='3'><a href=''  class='wpsc_add_new_checkout_option'  title='form_options["+id+"]'>+ New Layer</a></td></tr>";
+						output =  "<tr class='wpsc_grey'><td></td><td colspan='5'>Please Save your changes before trying to Order your Checkout Forms again.</td></tr>\r\n<tr  class='wpsc_grey'><td></td><th>Label</th><th >Value</th><td colspan='3'><a href=''  class='wpsc_add_new_checkout_option'  title='form_options["+id+"]'>+ New Option</a></td></tr>";
 						output += "<tr class='wpsc_grey'><td></td><td><input type='text' value='' name='wpsc_checkout_option_label["+id+"][]' /></td><td colspan='4'><input type='text' value='' name='wpsc_checkout_option_value["+id+"][]' /><a class='wpsc_delete_option' href='' ><img src='" + WPSC_CORE_IMAGES_URL + "trash.gif' alt='Delete' title='delete' /></a></td></tr>";
 						jQuery('#checkout_'+id).after(output);
 
