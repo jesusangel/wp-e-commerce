@@ -484,20 +484,20 @@ function wpsc_is_viewable_taxonomy(){
 function wpsc_the_category_title($title='', $id=''){
 	global $wp_query;
 	$post = get_post($id);
-	
-	//If its the category page
-	if( wpsc_is_viewable_taxonomy() && 'wpsc-product' == $post->post_type && $wp_query->posts[0]->post_title == $post->post_title && $wp_query->post_count != 1){
+
+	// If its the category page
+	if( wpsc_is_viewable_taxonomy() && 'wpsc-product' == $post->post_type && $wp_query->posts[0]->post_title == $post->post_title && $wp_query->is_archive){
 		$category = get_term_by('slug',$wp_query->query_vars['term'],'wpsc_product_category');
 		remove_filter('the_title','wpsc_the_category_title');
 	}
 	
-	//
+	// If its the product_tag page
 	if( isset($wp_query->query_vars['taxonomy']) && 'product_tag' == $wp_query->query_vars['taxonomy'] && $wp_query->posts[0]->post_title == $post->post_title ){
 		$category = get_term_by('slug',$wp_query->query_vars['term'],'product_tag');
 		remove_filter('the_title','wpsc_the_category_title');
 	}
 
-	if(!empty($category->name))	
+	if(!empty($category->name))
 		return $category->name;
 	else
 		return $title;
