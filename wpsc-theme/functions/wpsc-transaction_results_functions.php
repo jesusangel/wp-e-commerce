@@ -236,7 +236,7 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 				$discount_email .=$purchase_log['discount_data'] . ' : ' . wpsc_currency_display( $purchase_log['discount_value'], array( 'display_as_html' => false ) ) . "\n\r"; 
 				
 				$report.= $discount_email . "\n\r";
-				$message .= $discount_email;
+				$total_shipping_email .= $discount_email;
 				$total_shipping_html.= __( 'Discount', 'wpsc' ) . ": " . wpsc_currency_display( $purchase_log['discount_value'] ) . "\n\r";
 			}
 
