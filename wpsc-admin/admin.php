@@ -34,7 +34,23 @@ if ( !get_option( 'wpsc_checkout_form_sets' ) ) {
 	$form_sets = array( 'Default Checkout Forms' );
 	update_option( 'wpsc_checkout_form_sets', $form_sets );
 }
+/**
+ * wpsc_query_vars_product_list sets the ordering for the edit-products page list
+ * @access public 
+ *
+ * @since 3.8
+ * @param $vars (array) - default query arguments
+ * @return  $vars (array) - modified query arguments
+ */
+function wpsc_query_vars_product_list($vars){
+	if(is_admin() && isset($vars['post_type']) && 'wpsc-product' == $vars['post_type'] && isset($vars['orderby'])){
+		$vars['orderby'] = 'date';
+		$vars['order'] = 'desc';
+	}
+	return $vars;
+}
 
+add_filter( 'request', 'wpsc_query_vars_product_list' );
 /**
  * Checks whether to display or hide the update wp-e-commerce link
  *
