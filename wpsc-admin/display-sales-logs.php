@@ -395,17 +395,20 @@ function wpsc_display_sales_logs() {
       <label for='view_purchlogs_by'><?php _e('View:'); ?></label>
 
       <select id='view_purchlogs_by' name='view_purchlogs_by'>
-        <?php
-            $date_is_selected['3mnths'] = '';
-            $date_is_selected['all'] = '';
+<?php
+       $date_is_selected['3mnths'] = '';
+       $date_is_selected['all'] = '';
+		if( !isset($_GET['view_purchlogs_by']) )
+			 $_GET['view_purchlogs_by'] = '';           
         switch($_GET['view_purchlogs_by']) {
-               case '3mnths':
-                  $date_is_selected['3mnths'] = 'selected="selected"';
-               break;
-
-               case '':
                case 'all':
                   $date_is_selected['all'] = 'selected="selected"';
+               break;
+              
+               default:
+               case '3mnths':
+               case '':
+                  $date_is_selected['3mnths'] = 'selected="selected"';
                break;
         }
 
@@ -567,19 +570,19 @@ function wpsc_purchlogs_custom_fields(){
    if(wpsc_purchlogs_has_customfields()){?>
    <div class='metabox-holder'>
       <div id='purchlogs_customfields' class='postbox'>
-      <h3 class='hndle'>Users Custom Fields</h3>
+      <h3 class='hndle'><?php _e( 'Users Custom Fields' , 'wpsc' ); ?></h3>
       <div class='inside'>
       <?php $messages = wpsc_purchlogs_custommessages(); ?>
       <?php $files = wpsc_purchlogs_customfiles(); ?>
       <?php if(count($files) > 0){ ?>
-      <h4>Cart Items with Custom Files:</h4>
+      <h4><?php _e( 'Cart Items with Custom Files' , 'wpsc' ); ?>:</h4>
       <?php
          foreach($files as $file){
             echo $file;
          }
       }?>
       <?php if(count($messages) > 0){ ?>
-      <h4>Cart Items with Custom Messages:</h4>
+      <h4><?php _e( 'Cart Items with Custom Messages' , 'wpsc' ); ?>:</h4>
       <?php
          foreach($messages as $message){
             echo $message;
@@ -599,7 +602,7 @@ function wpsc_purchlogs_notes() {
    if ( true ) { // Need to check if notes column exists in DB and plugin version? ?>
    <div class="metabox-holder">
       <div id="purchlogs_notes" class="postbox">
-      <h3 class='hndle'>Order Notes</h3>
+      <h3 class='hndle'><?php _e( 'Order Notes' , 'wpsc' ); ?></h3>
       <div class='inside'>
          <form method="post" action="">
             <input type='hidden' name='wpsc_admin_action' value='purchlogs_update_notes' />
@@ -621,7 +624,7 @@ function wpsc_custom_checkout_fields(){
    ?>
       <div class="metabox-holder">
          <div id="custom_checkout_fields" class="postbox">
-            <h3 class='hndle'>Additional Checkout Fields</h3>
+            <h3 class='hndle'><?php _e( 'Additional Checkout Fields' , 'wpsc' ); ?></h3>
             <div class='inside'>
             <?php
             foreach((array)$purchlogitem->customcheckoutfields as $key=>$value){
