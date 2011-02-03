@@ -86,14 +86,19 @@ function wpsc_price_control_forms(){
             $product_data['meta'][$meta_key] = $meta_value[0];
 
         $product_meta = maybe_unserialize( $product_data["_wpsc_product_metadata"][0] );
-
 	if( isset( $product_data['meta']['_wpsc_currency']))
 		$product_alt_currency = maybe_unserialize( $product_data['meta']['_wpsc_currency'] );
 		
-	if ( !isset( $product_data['meta']['_wpsc_table_rate_price'] ) )
+	if ( !isset( $product_data['meta']['_wpsc_table_rate_price'] ) ){
 		$product_data['meta']['_wpsc_table_rate_price'] = $wpsc_product_defaults['meta']['table_rate_price'];
-	$table_rate_price = $product_data['meta']['_wpsc_table_rate_price'];
-	
+	}
+	if( isset( $product_meta['_wpsc_table_rate_price'] ) ){
+		$product_meta['table_rate_price']['state'] = 1;
+		$product_meta['table_rate_price'] += $product_meta['_wpsc_table_rate_price'];
+		$product_data['meta']['_wpsc_table_rate_price'] = $product_meta['_wpsc_table_rate_price'];
+	}
+
+
 	if ( !isset( $product_data['meta']['_wpsc_is_donation'] ) )
 		$product_data['meta']['_wpsc_is_donation'] = $wpsc_product_defaults['donation'];
 	
