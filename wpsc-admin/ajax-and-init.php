@@ -1690,15 +1690,19 @@ function wpsc_update_variations() {
 	$post_data['edit_var_val'] = $_POST["edit_var_val"];
 	$post_data['description'] = $_POST["description"];
 	$post_data['additional_description'] = $_POST['additional_description'];
-	$post_data['name'] = $_POST["name"];
+	$post_data['name'] = (!empty($_POST['name']))?$_POST['name']:$_POST["post_title"];
 	$product_id = absint( $_POST["product_id"] );
 
 	//Add or delete variations
 	wpsc_edit_product_variations( $product_id, $post_data );
-	wpsc_admin_product_listing( $product_id );
-	die();
+	if(isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_update_variations')){
+		wpsc_admin_product_listing( $product_id );
+		die();
+	}
 }
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_update_variations') )
+
+$product_type_object = $obj = get_post_type_object('post');
+if ( isset($_POST["edit_var_val"]) && current_user_can($product_type_object->cap->edit_post) )
 	add_action( 'admin_init', 'wpsc_update_variations', 50 );
 
 function wpsc_delete_variation_set() {
