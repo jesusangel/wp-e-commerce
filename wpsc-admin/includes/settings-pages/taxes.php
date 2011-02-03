@@ -161,7 +161,7 @@ function wpec_options_taxes() {
 					$tax_bands = $wpec_taxes_controller->wpec_taxes->wpec_taxes_get_bands();
 					$tax_band_count = 0;
 					if ( !empty( $tax_bands ) ) {
-						foreach ( $tax_bands as $tax_band ) {
+						foreach ( $tax_bands as $tax_band ) {						
 							echo $wpec_taxes_controller->wpec_taxes_build_form( $tax_band_count, $tax_band, 'bands' );
 							$tax_band_count++;
 						}// foreach

@@ -148,23 +148,47 @@ class wpec_taxes {
 
 		return $returnable;
 	} // wpec_taxes_get_band_from_name
+	
+	/**
+	 * @author: Jeremy Smith
+	 * @description: wpec_taxes_get_band_from_index - retrieves the tax band for the given name
+	 *
+	 * @param: index - the index of the tax band you wish to retrieve.
+	 * @return: array or false
+	 * */
+	function wpec_taxes_get_band_from_index( $index ) {
+		//initialize return value
+		$returnable = false;
+
+		//search bands for index
+		if ( !empty( $this->taxes_options['wpec_taxes_bands'] ) ) {
+			foreach ( $this->taxes_options['wpec_taxes_bands'] as $tax_band ) {
+				if ( $tax_band['index'] == $index ) {
+					$returnable = $tax_band;
+					break;
+				}// if
+			}// foreach
+		}// if
+
+		return $returnable;
+	} // wpec_taxes_get_band_from_index
 
 	/**
-	 * @description: wpec_taxes_get_included_rate - returns the precentage rate for the given tax band name,
+	 * @description: wpec_taxes_get_included_rate - returns the precentage rate for the given tax band index,
 	 *               country code and region code. This retrieves the rate based on the current
 	 *               tax settings.
 	 *
-	 * @param: taxes_band_name - the name of the tax band you wish to retrieve a percentage rate for
+	 * @param: taxes_band_index - the index of the tax band you wish to retrieve a percentage rate for
 	 * @param: country_code - isocode of the country that you wish to retrieve a percentage rate for
 	 * @param: region_code(optional) - the code code for the region that you wish to retrieve a
 	 *         percentage rate for
 	 * */
-	function wpec_taxes_get_included_rate( $taxes_band_name, $country_code, $region_code='' ) {
+	function wpec_taxes_get_included_rate( $taxes_band_index, $country_code, $region_code='' ) {
 		//set the tax_rate
 		$tax_rate = 0;
 
 		//get the tax band
-		$tax_band = $this->wpec_taxes_get_band_from_name( $taxes_band_name );
+		$tax_band = $this->wpec_taxes_get_band_from_index( $taxes_band_index );
 
 		//set the tax rate depending on product rate settings
 		switch ( $this->wpec_taxes_get_product() ) {

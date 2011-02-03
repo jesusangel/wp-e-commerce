@@ -52,6 +52,11 @@ function wpec_taxes_ajax_controller() {
 			break;
 		case 'wpec_taxes_build_band_form':
 			$key = $_REQUEST['current_key'];
+			//get a new key if a band is already defined for this key
+			while($wpec_taxes_controller->wpec_taxes->wpec_taxes_get_band_from_index($key))
+			{
+				$key++;
+			}
 			$returnable = $wpec_taxes_controller->wpec_taxes_build_form( $key, false, 'bands' );
 			break;
 	}// switch

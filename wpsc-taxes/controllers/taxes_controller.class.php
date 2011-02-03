@@ -288,8 +288,8 @@ class wpec_taxes_controller {
     * @param: input_settings (optional) - Expects an array of settings for the
     *                                     select menu generated.
     *                                     See: wpec_taxes_build_select_options()
-    * @param: custom_tax_band (optional) - Expects a string. If this is set then the
-    *             default option for the generated select menu will be set to this.
+    * @param: custom_tax_band (optional) - Expects an array. If this is set then the
+    *             default option for the generated select menu will be set to this band.
     * @return: string containing html select menu
     * */
    function wpec_taxes_display_tax_bands( $input_settings=array( ), $custom_tax_band=false ) {
@@ -312,7 +312,7 @@ class wpec_taxes_controller {
             $default_option = (isset( $custom_tax_band )) ? $custom_tax_band : __( 'Disabled' );
 
             //echo select
-            $returnable = $this->wpec_taxes_build_select_options( $tax_bands, 'name', 'name', $default_option, $band_select_settings );
+            $returnable = $this->wpec_taxes_build_select_options( $tax_bands, 'index', 'name', $default_option, $band_select_settings );
          } else {
             $returnable = '<p>' . __( 'No Tax Bands Setup. Set Tax Bands up in <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>' ) . '</p>';
          }// if
@@ -328,7 +328,7 @@ class wpec_taxes_controller {
    /**
     * @description: wpec_taxes_product_rate_percentage - returns the percentage for the specified tax band.
     *
-    * @param: tax_band - the name of the band you wish to retrieve a percentage for
+    * @param: tax_band - the index of the band you wish to retrieve a percentage for
     * @return: percentage rate
     * */
    function wpec_taxes_product_rate_percentage( $tax_band ) {
@@ -518,6 +518,12 @@ class wpec_taxes_controller {
             'class' => 'taxes-band',
             'label' => __( 'Name' )
          );
+			$bands_hidden_index = array(
+				'type' => 'hidden',
+            'id' => "band-index-{$key}",
+            'name' => "wpsc_options[wpec_taxes_{$type}][{$key}][index]",
+				'value' => $key
+			);
       } elseif ( $type == 'rates' ) {
          $shipping_input_settings = array(
             'type' => 'checkbox',
@@ -574,6 +580,11 @@ class wpec_taxes_controller {
             'isocode' => $country_code,
             'country' => $this->wpec_taxes->wpec_taxes_get_country_information( 'country', array( 'isocode' => $country_code ) )
          );
+			
+			if(isset($tax_rate['index']))
+			{
+				$bands_hidden_index['value'] = $tax_rate['index'];
+			}
       } else {
          //select All Markets by default
          $selected_country = array(
@@ -587,6 +598,7 @@ class wpec_taxes_controller {
       //build the rate form based on the information gathered
       if ( $type == 'bands' ) {
          $returnable[] = $this->wpec_taxes_build_input( $bands_input_settings ) . '<br />'; //add a break for the html formatting
+			$returnable[] = $this->wpec_taxes_build_input( $bands_hidden_index );
       }// if
       $returnable[] = $this->wpec_taxes_build_input( $rate_input_settings );
       $returnable[] = $this->wpec_taxes_build_select_options( $countries, 'isocode', 'country', $selected_country, $country_select_settings );

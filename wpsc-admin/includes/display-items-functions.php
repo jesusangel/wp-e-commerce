@@ -310,7 +310,8 @@ function wpsc_product_taxes_forms(){
 	);
 	$wpec_taxes_band = '';
 	if(isset($product_meta['wpec_taxes_band'])){
-      $wpec_taxes_band = $product_meta['wpec_taxes_band'];
+      $band = $wpec_taxes_controller->wpec_taxes->wpec_taxes_get_band_from_index($product_meta['wpec_taxes_band']);
+		$wpec_taxes_band = array('index'=>$band['index'], 'name'=>$band['name']);
    }
    
    $taxable_checkbox_settings = array(
