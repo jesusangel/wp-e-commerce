@@ -1,4 +1,16 @@
 <?php
+/**
+ * wpsc_cart_item_custom_message()
+ *
+ * Deprecated function for checking whether a cart item has a custom message or not
+ *
+ * @return false
+ * @todo Actually correctly deprecate this
+ */
+
+function wpsc_cart_item_custom_message(){
+	return false;
+}
 
 /**
  * nzshpcrt_get_gateways()
