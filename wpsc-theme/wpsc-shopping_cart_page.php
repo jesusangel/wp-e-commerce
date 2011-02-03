@@ -232,7 +232,7 @@ endif;
 				</fieldset>
 			</div>
 	<?php endif; ?>	
-	<form class='wpsc_checkout_forms' action='' method='post' enctype="multipart/form-data">
+	<form class='wpsc_checkout_forms' action='<?php echo get_option('checkout_url'); ?>' method='post' enctype="multipart/form-data">
 				
       <?php
       /**
@@ -275,7 +275,7 @@ endif;
       <?php
       endif;
        $_SESSION['wpsc_checkout_misc_error_messages'] = array(); ?>
-
+<?php ob_start(); ?>
    <table class='wpsc_checkout_table table-1'>
       <?php $i = 0;
       while (wpsc_have_checkout_items()) : wpsc_the_checkout_item(); ?>
@@ -297,7 +297,7 @@ endif;
                <tr class='same_as_shipping_row'>
                   <td colspan ='2'>
                   <input type='checkbox' value='true' name='shippingSameBilling' id='shippingSameBilling' />
-                     <label for='billing_same_as_shipping'><?php _e('Shipping address the same as Billing address?','wpsc'); ?></label>
+                     <label for='shippingSameBilling'><?php _e('Shipping address the same as Billing address?','wpsc'); ?></label>
                   </td>
                </tr>
                <?php endif;
@@ -336,20 +336,21 @@ endif;
                </tr>
             <?php
             }elseif( $wpsc_checkout->checkout_item->unique_name == 'billingemail'){ ?>
-               <div class='wpsc_email_address'>
+               <?php $email_markup =
+               "<div class='wpsc_email_address'>
                   <p class='<?php echo wpsc_checkout_form_element_id(); ?>'>
-                     <label class='wpsc_email_address' for='<?php echo wpsc_checkout_form_element_id(); ?>'>
-                     <?php _e('Enter your email address'); ?>
+                     <label class='wpsc_email_address' for='" . wpsc_checkout_form_element_id() . "'>
+                     " . __('Enter your email address', 'wpsc') . "
                      </label>
-                  <p class="wpsc_email_address_p">
-                  <img src="https://secure.gravatar.com/avatar/empty?s=60&d=mm" id="wpsc_checkout_gravatar" />
-                  <?php echo wpsc_checkout_form_field();?>
-                   <?php if(wpsc_the_checkout_item_error() != ''): ?>
-                      <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
-                  <?php endif; ?>
-               </div>   <?php
+                  <p class='wpsc_email_address_p'>
+                  <img src='https://secure.gravatar.com/avatar/empty?s=60&amp;d=mm' id='wpsc_checkout_gravatar' />
+                  " . wpsc_checkout_form_field();
+                  
+                   if(wpsc_the_checkout_item_error() != '')
+                      $email_markup .= "<p class='validation-error'>" . wpsc_the_checkout_item_error() . "</p>";
+               $email_markup .= "</div>";
              }else{ ?>
-
+			<tr>
                <td class='<?php echo wpsc_checkout_form_element_id(); ?>'>
                   <label for='<?php echo wpsc_checkout_form_element_id(); ?>'>
                   <?php echo wpsc_checkout_form_name();?>
@@ -366,6 +367,14 @@ endif;
          <?php }//endif; ?>
 
       <?php endwhile; ?>
+ 
+<?php 
+	$buffer_contents = ob_get_contents();
+	ob_end_clean();
+	if(isset($email_markup))
+		echo $email_markup;
+	echo $buffer_contents;
+?>
 
       <?php if (wpsc_show_find_us()) : ?>
       <tr>
@@ -402,7 +411,9 @@ endif;
                   <?php endif; ?>
                </div>
             <?php endwhile; ?>
+            </tr></td>
          <?php else: // otherwise, there is no choice, stick in a hidden form ?>
+            <tr><td colspan="2" class='wpsc_gateway_container'>
             <?php while (wpsc_have_gateways()) : wpsc_the_gateway(); ?>
                <input name='custom_gateway' value='<?php echo wpsc_gateway_internal_name();?>' type='hidden' />
 
