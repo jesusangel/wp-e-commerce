@@ -53,7 +53,8 @@ function wpsc_register_core_theme_files() {
 	wpsc_register_theme_file( 'wpsc-user_log.php' );
 	wpsc_register_theme_file( 'wpsc-cart_widget.php' );
 	wpsc_register_theme_file( 'wpsc-featured_product.php' );
-
+	wpsc_register_theme_file( 'wpsc-category-list.php' );
+	
 	// Let other plugins register their theme files
 	do_action( 'wpsc_register_core_theme_files' );
 }
@@ -1148,15 +1149,18 @@ function wpsc_user_log( $content = '' ) {
 }
 
 //displays a list of categories when the code [showcategories] is present in a post or page.
-function wpsc_show_categories( $content = '' ) {
-	if ( preg_match( "/\[showcategories\]/", $content ) ) {
-		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
-		$output = nzshpcrt_display_categories_groups();
-		return preg_replace( "/(<p>)*\[showcategories\](<\/p>)*/", $output, $content );
-	} else {
-		return $content;
-	}
+function wpsc_show_categories( $content ) {
+		
+	ob_start();
+	include( wpsc_get_template_file_path( 'wpsc-category-list.php' ) );
+	$output = ob_get_contents();
+
+	ob_end_clean();
+	return $output;
+
 }
+
+add_shortcode('showcategories', 'wpsc_show_categories');
 function wpec_get_the_post_id_by_shortcode($shortcode){
 	global $wpdb;
 	$sql = "SELECT `ID` FROM `{$wpdb->posts}` WHERE `post_type` IN('page','post') AND `post_content` LIKE '%$shortcode%' LIMIT 1";
@@ -1241,7 +1245,6 @@ function wpsc_enable_page_filters( $excerpt = '' ) {
 	add_filter( 'the_content', 'wpsc_place_shopping_cart', 12 );
 	add_filter( 'the_content', 'wpsc_transaction_results', 12 );
 	add_filter( 'the_content', 'wpsc_user_log', 12 );
-	add_filter( 'the_content', 'wpsc_show_categories', 12 );
 	return $excerpt;
 }
 
@@ -1252,7 +1255,6 @@ function wpsc_disable_page_filters( $excerpt = '' ) {
 	remove_filter( 'the_content', 'wpsc_place_shopping_cart' );
 	remove_filter( 'the_content', 'wpsc_transaction_results' );
 	remove_filter( 'the_content', 'wpsc_user_log' );
-	remove_filter( 'the_content', 'wpsc_show_categories' );
 	remove_filter( 'the_content', 'wpsc_substitute_buy_now_button' );
 	return $excerpt;
 }
