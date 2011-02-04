@@ -6,6 +6,7 @@ Version: 3.5
 Author: Roy Ho
 Author URI: http://instinct.co.nz
 */
+
 /*
  * If you delete this file, you can expect your WP e-Commerce installation to break in some manner
  * to create your own theme copy, and paste this file, change the names and alter to your tastes
@@ -135,7 +136,7 @@ Author URI: http://instinct.co.nz
 .default_product_display h2.prodtitle a,
 #content .default_product_display h2.prodtitle a{
 	text-decoration:none;
-	color:#000;
+
 	font-family: Arial, sans-serif;
 	font-weight: bold;
 }
@@ -289,14 +290,6 @@ Author URI: http://instinct.co.nz
 	color:#666;
 }
 
-.default_product_display .wpsc_product_price span.currentprice {
-	color:#000;
-}
-
-.default_product_display .wpsc_product_price span.pp_price {
-	color:#000;
-}
-
 .default_product_display p.soldout, #content .default_product_display p.soldout {
 	font-weight:bold;
 	font-size:14px;
@@ -378,7 +371,7 @@ Author URI: http://instinct.co.nz
 
 /*-----LIST VIEW PRODUCT DISPLAY-----*/
 #list_view_products_page_container {
-	width:650px;	
+/* 	width:650px;	 */
 	position:relative;
 	line-height:1.2em;
 }
@@ -507,36 +500,9 @@ table.list_productdisplay .oldprice {
 }
 
 #list_view_products_page_container table.list_productdisplay input.wpsc_buy_button, #content #list_view_products_page_container table.list_productdisplay input.wpsc_buy_button {
-	background-color:#006699;
-	background:-webkit-gradient(
-    linear,
-    left bottom,
-    left top,
-    color-stop(0.76, rgb(73,166,192)),
-    color-stop(1, rgb(125,195,215))
-	);
-	background:-moz-linear-gradient(
-    center bottom,
-    rgb(73,166,192) 76%,
-    rgb(125,195,215) 100%
-	);
-	color:#ffffff;
-	font-size:12px;
-	border-radius:3px;
-	-moz-border-radius:3px;
-	-webkit-border-radius:3px;
-	border:1px solid #29bade;
-	text-shadow:1px 1px 1px rgba(0,0,0,0.8);
 	padding:5px;
-	*padding:1px;
-	cursor:pointer;
-	line-height:1.2em;
-}
 
-#list_view_products_page_container table.list_productdisplay input.wpsc_buy_button, #content #list_view_products_page_container table.list_productdisplay input.wpsc_buy_button:hover {
-	background:#369;
 }
-
 
 table.list_productdisplay h2.prodtitle, #content table.list_productdisplay h2.prodtitle {
 	font-size:15px;
@@ -850,9 +816,9 @@ span.rating_saved{
 
 /*-----SHOPPING CART-----*/
 .shopping-cart-wrapper {
-	font-size:12px;
+/* 	font-size:12px; */
 	line-height:1.2em;
-	color:#000000;
+/* 	color:#000000; */
 	position:relative;
 }
 
@@ -877,8 +843,10 @@ span.rating_saved{
 }
 
 .shopping-cart-wrapper .shoppingcart table th {
+/*
 	background-color:#F5F5F5;
 	color:#737373;
+*/
 	font-family: Arial, sans-serif;
 	padding:2px;
 }
@@ -897,7 +865,7 @@ span.rating_saved{
 }
 
 .shopping-cart-wrapper .shoppingcart table tbody td, .shopping-cart-wrapper .shoppingcart table tbody td a {
-	color:#0066CC;
+/* 	color:#0066CC; */
 	text-decoration: none;
 }
 
@@ -944,7 +912,7 @@ span.rating_saved{
 
 .widget_wpsc_shopping_cart .cart-widget-total td {
 	border-top:solid 2px #000;
-	background-color: #F5F5F5;
+/* 	background-color: #F5F5F5; */
 	padding: 5px 6px 5px 5px;
 }
 
@@ -984,6 +952,7 @@ span.rating_saved{
 .shopping-cart-wrapper .empty {
 	margin-top:10px;	
 }
+/*
 
 .shopping-cart-wrapper a.visitshop:link, .shopping-cart-wrapper a.visitshop:visited {
 	text-decoration:underline;
@@ -994,6 +963,7 @@ span.rating_saved{
 .shopping-cart-wrapper .empty {
 	margin-bottom:5px;
 }
+*/
 
 .shopping-cart-wrapper a.visitshop:hover, .shopping-cart-wrapper a.visitshop:active {
 	text-decoration:none;
@@ -1162,10 +1132,6 @@ background-color: #f5f5f5;
 #checkout_page_container table.checkout_cart tr, #content #checkout_page_container table.checkout_cart tr {
 	margin:0;
 	padding:0;
-}
-
-#checkout_page_container table.checkout_cart tr.alt, #content #checkout_page_container table.checkout_cart tr.alt {
-	background-color:#f8f8f8;
 }
 
 #content #checkout_page_container table.checkout_cart tr.wpsc_coupon_row td{
