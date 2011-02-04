@@ -236,6 +236,7 @@ function wpsc_user_dynamic_js() {
 	var WPSC_URL = "<?php echo WPSC_URL; ?>";
 	var WPSC_IMAGE_URL = "<?php echo WPSC_IMAGE_URL; ?>";
 	var WPSC_DIR_NAME = "<?php echo WPSC_DIR_NAME; ?>";
+	var WPSC_LOADING_ANIMATION_URL = "<?php echo wpsc_loading_animation_url(); ?>";
 	/* LightBox Configuration start*/
 	var fileLoadingImage = "<?php echo WPSC_URL; ?>/images/loading.gif";
 	var fileBottomNavCloseImage = "<?php echo WPSC_URL; ?>/images/closelabel.gif";

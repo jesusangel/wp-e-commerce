@@ -234,7 +234,7 @@ global $wpsc_query, $wpdb;
 										<input type="submit" value="<?php echo __('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 											<?php endif; ?>
 										<div class='wpsc_loading_animation'>
-											<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" class="loadingimage"/>
+											<img title="Loading" alt="Loading" src="<?php echo wpsc_loading_animation_url(); ?>" class="loadingimage"/>
 											<?php echo __('Updating cart...', 'wpsc'); ?>
 										</div>
 									</div>

@@ -332,6 +332,7 @@ function wpsc_admin_dynamic_js() {
 	echo "var WPSC_IMAGE_URL = '".WPSC_IMAGE_URL."';\n\r";
 	echo "var WPSC_DIR_NAME = '".WPSC_DIR_NAME."';\n\r";
 	echo "var WPSC_IMAGE_URL = '".WPSC_IMAGE_URL."';\n\r";
+	echo "var WPSC_LOADING_ANIMATION_URL = '" . wpsc_loading_animation_url() . "';\n\r";
 	
 	// LightBox Configuration start
 	echo "var fileLoadingImage = '".WPSC_URL."/images/loading.gif';\n\r";

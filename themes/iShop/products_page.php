@@ -232,7 +232,7 @@ global $wpsc_query, $wpdb;
 										<input type='image' src='<?php echo WPSC_URL; ?>/themes/iShop/images/buy_button.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo __('Add To Cart', 'wpsc'); ?>" />
 										<?php endif; ?>
 										<div class='wpsc_loading_animation'>
-										<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" class="loadingimage"/>
+										<img title="Loading" alt="Loading" src="<?php echo wpsc_loading_animation_url(); ?>" class="loadingimage"/>
 										<?php echo __('Updating cart...', 'wpsc'); ?>
 									</div>
 								</div>

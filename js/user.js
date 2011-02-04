@@ -58,12 +58,12 @@ function submitform(frm, show_notification)
   ajax.post("index.php?ajax=true&user=true",getresults,ajax.serialize(frm));
   if(document.getElementById('loadingimage') != null)
     {
-    document.getElementById('loadingimage').src = WPSC_URL+'/images/indicator.gif';
+    document.getElementById('loadingimage').src = WPSC_LOADING_ANIMATION_URL;
     document.getElementById('loadingindicator').style.visibility = 'visible';
     } 
     else if(document.getElementById('alt_loadingimage') != null)
     {
-    document.getElementById('alt_loadingimage').src = WPSC_URL+'/images/indicator.gif';
+    document.getElementById('alt_loadingimage').src = WPSC_LOADING_ANIMATION_URL;
     document.getElementById('alt_loadingindicator').style.visibility = 'visible';
     }     
   if((show_notification == true) && (document.getElementById('fancy_notification') != null))

@@ -159,7 +159,7 @@ global $wpsc_query, $wpdb;
 
 											
 											<div class='wpsc_loading_animation'>
-												<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" class="loadingimage"/>
+												<img title="Loading" alt="Loading" src="<?php echo wpsc_loading_animation_url(); ?>" class="loadingimage"/>
 												<?php echo __('Updating cart...', 'wpsc'); ?>
 											</div>
 									</div>

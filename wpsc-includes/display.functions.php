@@ -126,8 +126,17 @@ function wpsc_also_bought($product_id) {
     $output .= "<br clear='all' />";
 	}
   return $output;
-}  
+}
 
+/**
+ * Get the URL of the loading animation image.
+ * Can be filtered using the wpsc_loading_animation_url filter.
+ */
+function wpsc_loading_animation_url() {
+	
+	return apply_filters( 'wpsc_loading_animation_url', WPSC_URL . '/images/indicator.gif' );
+
+}
 
 function fancy_notifications() {
   global $wpdb;
@@ -135,7 +144,7 @@ function fancy_notifications() {
     $output = "";
     $output .= "<div id='fancy_notification'>\n\r";
     $output .= "  <div id='loading_animation'>\n\r";
-    $output .= '<img id="fancy_notificationimage" title="Loading" alt="Loading" src="'.WPSC_URL.'/images/indicator.gif" />'.__('Updating', 'wpsc')."...\n\r";
+    $output .= '<img id="fancy_notificationimage" title="Loading" alt="Loading" src="' . wpsc_loading_animation_url() . '" />'.__('Updating', 'wpsc')."...\n\r";
     $output .= "  </div>\n\r";
     $output .= "  <div id='fancy_notification_content'>\n\r";
     $output .= "  </div>\n\r";
