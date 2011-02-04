@@ -232,7 +232,7 @@ endif;
 				</fieldset>
 			</div>
 	<?php endif; ?>	
-	<form class='wpsc_checkout_forms' action='<?php echo get_option('checkout_url'); ?>' method='post' enctype="multipart/form-data">
+	<form class='wpsc_checkout_forms' action='<?php echo get_option('shopping_cart_url'); ?>' method='post' enctype="multipart/form-data">
 				
       <?php
       /**
