@@ -200,7 +200,7 @@ global $wp_query;
 								<?php if(wpsc_product_has_stock()) : ?>
 									<div class="wpsc_buy_button_container">
 										<div class="wpsc_loading_animation">
-											<img title="Loading" alt="Loading" src="<?php echo WPSC_CORE_THEME_URL; ?>wpsc-images/indicator.gif" />
+											<img title="Loading" alt="Loading" src="<?php echo wpsc_loading_animation_url(); ?>" />
 											<?php _e('Updating cart...', 'wpsc'); ?>
 										</div><!--close wpsc_loading_animation-->
 											<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
