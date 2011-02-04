@@ -123,16 +123,16 @@ function wpsc_print_category_classes($category_to_print = false, $echo = true) {
 	global $wp_query, $wpdb;
 	
 	//if we are in wpsc category page then get the current category
-	if(isset($wp_query->query_vars['wpsc_product_category']))
-		$curr_cat = get_term_by('slug',$wp_query->query_vars['wpsc_product_category'], 'wpsc_product_category');
+	if(isset($wp_query->query_vars['wpsc_product_category']) || (isset($wp_query->query_vars['taxonomy']) && 'wpsc_product_category' == $wp_query->query_vars['taxonomy']))
+		$curr_cat = get_term_by('slug',$wp_query->query_vars['term'], 'wpsc_product_category');
 	else
 		$curr_cat = false;
 	
 	//check if we are in wpsc category page and that we have a term_id of the category to print
 	//this is done here because none of the following matters if we don't have one of those and we can
 	//safely return
-	if(isset($category_to_print[term_id]) && $curr_cat){
-		
+	if(isset($category_to_print['term_id']) && $curr_cat){
+
 		//we will need a list of current category parents for the following if statement
 		$curr_cat_parents = wpsc_get_term_parents($curr_cat->term_id, 'wpsc_product_category');
 		
