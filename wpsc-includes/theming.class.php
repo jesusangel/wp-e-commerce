@@ -48,6 +48,7 @@ class wpsc_theming {
 		if ( $this->files_exist() ) {
 			return;
 		} else {
+			$_SESSION['wpsc_themes_copied_results'] = array();
 			// WP-WPSC theme doesn't exist, so let's figure out where we're porting from, either the plugin directory or the wpsc-themes directory
 			$theme_location        = $this->theme_location();
 			$this->active_wp_theme = trailingslashit( get_stylesheet_directory() );
@@ -133,7 +134,7 @@ class wpsc_theming {
 				if ( is_dir( $src . '/' . $file ) )
 					$this->recursive_copy( $src . '/' . $file, $dst . '/' . $file );
 				else
-					@ copy( $src . '/' . $file, $dst . '/' . $theme_file_prefix . $file );
+					$_SESSION['wpsc_themes_copied_results'][] = @ copy( $src . '/' . $file, $dst . '/' . $theme_file_prefix . $file );
 			}
 		}
 		closedir( $dir );
@@ -165,7 +166,7 @@ class wpsc_theming {
 				if ( in_array( $file, $this->templates_to_move ) ) {
 					if ( !strstr( $file, "functions" ) && !strstr( $file, "widget" ) ) {
 						$file_data = file_get_contents( $old . "/" . $file );
-						@file_put_contents( $path . "/" . $file, $file_data );
+						$_SESSION['wpsc_themes_copied_results'][] = @file_put_contents( $path . "/" . $file, $file_data );
 						rename( $path . "/" . $file, $path . "/" . $theme_file_prefix . $file );
 					}
 				}

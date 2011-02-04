@@ -62,10 +62,15 @@ function wpsc_theme_presentation_page_metabox(){
 				if ( isset( $_SESSION['wpsc_themes_copied'] ) && ($_SESSION['wpsc_themes_copied'] == true) ) {
 					?>
 						<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
-							<p><?php _e( "Thanks, the themes have been copied." ); ?></p>
+							<?php if(in_array(false, $_SESSION['wpsc_themes_copied_results'], true)): ?>
+								<p style="color:red;"><?php _e( "Error: some files could not be copied. Please make sure that theme folder is writable.", 'wpsc' ); ?></p>
+							<?php else: ?>
+								<p><?php _e( "Thanks, the themes have been copied.", 'wpsc' ); ?></p>
+							<?php endif; ?>
 						</div>
 					<?php
-						$_SESSION['wpsc_themes_copied'] = false;
+						unset($_SESSION['wpsc_themes_copied']);
+						unset($_SESSION['wpsc_themes_copied_results']);
 					}
 					if ( isset( $_SESSION['wpsc_themes_backup'] ) && ($_SESSION['wpsc_themes_backup'] == true) ) {
 					?>
