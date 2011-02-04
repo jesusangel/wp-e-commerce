@@ -121,9 +121,9 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 		$cart = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CART_CONTENTS . "` WHERE `purchaseid` = '{$purchase_log['id']}'" , ARRAY_A );
 		//echo '<pre>'.print_r($wpsc_cart,1).'</pre>';
 		if ( ($cart != null) && ($errorcode == 0) ) {
-			$link = array( );
 			$total_shipping = '';
 			foreach ( $cart as $row ) {
+				$link = array( );
 				if ( $purchase_log['email_sent'] != 1 )
 					$wpdb->update(WPSC_TABLE_DOWNLOAD_STATUS, array('active' => '1'), array('cartid' => $row['id'], 'purchid'=>$purchase_log['id']) );
 				do_action( 'wpsc_transaction_result_cart_item', array( "purchase_id" => $purchase_log['id'], "cart_item" => $row, "purchase_log" => $purchase_log ) );

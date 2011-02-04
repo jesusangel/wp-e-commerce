@@ -88,7 +88,7 @@ global $wp_query, $wpdb;
 					<td>
  						<?php do_action('wpsc_product_before_description', wpsc_the_product_id(), $wp_query->post); ?>
 					</td>
-					<td>
+					<td class='wpsc_price_td'>
                   			<?php if(wpsc_product_on_special()) : ?>
 						<p class="oldprice"><?php echo wpsc_product_normal_price(); ?></p>
 					<?php endif; ?>
