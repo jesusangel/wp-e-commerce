@@ -863,8 +863,7 @@ function wpsc_save_product_order() {
 	global $wpdb;
 
 	$products = array( );
-
-	foreach ( $_POST['post'] as $product ) {
+	foreach ( $_POST['page'] as $product ) {
 		$products[] = absint( $product );
 	}
 

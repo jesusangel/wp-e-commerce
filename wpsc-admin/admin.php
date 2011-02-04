@@ -43,14 +43,30 @@ if ( !get_option( 'wpsc_checkout_form_sets' ) ) {
  * @return  $vars (array) - modified query arguments
  */
 function wpsc_query_vars_product_list($vars){
+
 	if(is_admin() && isset($vars['post_type']) && 'wpsc-product' == $vars['post_type'] && isset($vars['orderby'])){
 		$vars['orderby'] = 'date';
 		$vars['order'] = 'desc';
 	}
+	if( 'dragndrop' == get_option('wpsc_sort_by') ){
+		$vars['orderby'] = 'menu_order title';
+		$vars['order'] = 'desc';
+		$vars['nopaging'] = true;
+	}
 	return $vars;
 }
+function wpsc_drag_and_drop_ordering($per_page, $post_type){
+	global $wpdb;
+	if('wpsc-product' == $post_type && 'dragndrop' == get_option('wpsc_sort_by') ){
+		$per_page = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->posts} WHERE `post_type`='wpsc-product' AND `post_parent`=0");
+		return $per_page;
+	}else{
+		return $per_page;
+	}
 
+}
 add_filter( 'request', 'wpsc_query_vars_product_list' );
+add_filter('edit_posts_per_page' , 'wpsc_drag_and_drop_ordering', 10, 2 );
 /**
  * Checks whether to display or hide the update wp-e-commerce link
  *
