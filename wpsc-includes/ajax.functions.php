@@ -806,8 +806,8 @@ function wpsc_change_tax() {
 	if ( ($form_selected_country != null) && ($onchange_function != null) ) {
 		$region_list = $wpdb->get_results( "SELECT `" . WPSC_TABLE_REGION_TAX . "`.* FROM `" . WPSC_TABLE_REGION_TAX . "`, `" . WPSC_TABLE_CURRENCY_LIST . "`  WHERE `" . WPSC_TABLE_CURRENCY_LIST . "`.`isocode` IN('" . $form_selected_country . "') AND `" . WPSC_TABLE_CURRENCY_LIST . "`.`id` = `" . WPSC_TABLE_REGION_TAX . "`.`country_id`", ARRAY_A );
 		if ( $region_list != null ) {
-
-			$output = "<select name='collected_data[" . $form_id . "][1]' class='current_region' onchange='$onchange_function(\"region_country_form_$form_id\", \"$form_id\");'>\n\r";
+			$title = (empty($_POST['billing_country']))?'shippingstate':'billingstate';
+			$output = "<select name='collected_data[" . $form_id . "][1]' class='current_region' onchange='$onchange_function(\"region_country_form_$form_id\", \"$form_id\");' title='" . $title . "'>\n\r";
 
 			foreach ( $region_list as $region ) {
 				if ( $form_selected_region == $region['id'] ) {

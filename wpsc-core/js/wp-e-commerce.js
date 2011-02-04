@@ -62,6 +62,73 @@
 		}
 	}
 	//End Share this JS
+	
+	function wpsc_shipping_same_as_billing(){
+		jQuery("input[title='billingfirstname'], input[title='billinglastname'], textarea[title='billingaddress'], input[title='billingcity'], input[title='billingpostcode'], input[title='billingphone'], input[title='billingfirstname'], input[title='billingstate']").unbind('change', wpsc_shipping_same_as_billing).unbind('keyup', wpsc_shipping_same_as_billing).keyup(wpsc_shipping_same_as_billing).change(wpsc_shipping_same_as_billing);
+		
+		jQuery("select[title='billingregion'], select[title='billingstate'], select[title='billingcountry'], input[title='billingstate']").die( 'change', wpsc_shipping_same_as_billing ).live( 'change', wpsc_shipping_same_as_billing );
+		
+		var fields = new Array(
+			Array(
+				"input[title='billingfirstname']",
+				"input[title='shippingfirstname']"
+			),
+			Array(
+				"input[title='billinglastname']",
+				"input[title='shippinglastname']"
+			), 
+			Array(
+				"textarea[title='billingaddress']",
+				"textarea[title='shippingaddress']"
+			), 
+			Array(
+				"input[title='billingcity']",
+				"input[title='shippingcity']"
+			), 
+			Array(
+				"input[title='billingpostcode']",
+				"input[title='shippingpostcode']"
+			), 
+			Array(
+				"input[title='billingphone']",
+				"input[title='shippingphone']"
+			), 
+			Array(
+				"input[title='billingemail']",
+				"input[title='shippingemail']"
+			), 
+			Array(
+				"input[title='billingstate']",
+				"input[title='shippingstate']"
+			) 
+		);
+		
+		for(var i in fields) {
+			jQuery(fields[i][1]).val(jQuery(fields[i][0]).val());
+			if(!jQuery(fields[i][0]).hasClass('intra-field-label'))
+				jQuery(fields[i][1]).removeClass('intra-field-label');
+			else
+				jQuery(fields[i][1]).addClass('intra-field-label');
+		}
+		
+		//state
+		
+		jQuery("input.shipping_country").val(
+			jQuery("select[title='billingcountry'] :selected").text()
+		).removeClass('intra-field-label');
+		
+		jQuery("span.shipping_country_name").html(
+			jQuery("select[title='billingcountry'] :selected").text()
+		);
+		
+		jQuery('select[title="shippingcountry"] option').removeAttr('selected');
+		jQuery('select[title="shippingcountry"] option[value="' + jQuery('select[title="billingcountry"] option:selected').attr('value') + '"]').attr('selected', 'selected');
+				
+		jQuery('select[title="shippingstate"] option').removeAttr('selected');
+		jQuery('select[title="shippingstate"] option[value="' + jQuery('select[title="billingstate"] option:selected').attr('value') + '"]').attr('selected', 'selected');
+		jQuery('select[title="shippingcountry"]').change();
+		jQuery('select[title="shippingstate"]').change();
+	}
 
 // this function is for binding actions to events and rebinding them after they are replaced by AJAX
 // these functions are bound to events on elements when the page is fully loaded.
@@ -71,66 +138,18 @@ jQuery(document).ready(function () {
 	jQuery('#checkout_page_container .wpsc_email_address input').keyup(function(){
 		jQuery('#wpsc_checkout_gravatar').attr('src', 'https://secure.gravatar.com/avatar/'+MD5(jQuery(this).val().split(' ').join(''))+'?s=60&d=mm');
 	});
-
+	
 	//this bit of code runs on the checkout page. If the checkbox is selected it copies the valus in the billing country and puts it in the shipping country form fields. 23.07.09
-	//jQuery('.wpsc_shipping_forms').hide();
-	jQuery("#shippingSameBilling").click(function(){
-
-		// If checked
-		jQuery("#shippingSameBilling").livequery(function(){
-
-			if(jQuery(this).is(":checked")){
-				var fname = jQuery("input[title='billingfirstname']").val();
-				var lname = jQuery("input[title='billinglastname']").val();
-				var addr = jQuery("textarea[title='billingaddress']").val();
-				var city = jQuery("input[title='billingcity']").val();
-				var pcode = jQuery("input[title='billingpostcode']").val();
-				var phone = jQuery("input[title='billingphone']").val();
-				var email = jQuery("input[title='billingfirstname']").val();
-				var state = jQuery("select[title='billingregion'] :selected").text();
-				if( jQuery("select[title='billingstate']").val() ){
-					var state = jQuery("select[title='billingstate'] :selected").text();
-				}
-				if( jQuery("input[title='billingstate']").val()){
-					var state = jQuery("input[title='billingstate']").val();
-				}
-				var country = jQuery("select[title='billingcountry'] :selected").text();
-				var countryID = jQuery("select[title='billingcountry'] :selected").val();
-
-				jQuery("input[title='shippingfirstname']").val(fname).removeClass('intra-field-label');
-				jQuery("input[title='shippinglastname']").val(lname).removeClass('intra-field-label');
-				jQuery("textarea[title='shippingaddress']").val(addr).removeClass('intra-field-label');
-				jQuery("input[title='shippingcity']").val(city).removeClass('intra-field-label');
-				jQuery("input[title='shippingpostcode']").val(pcode).removeClass('intra-field-label');
-				jQuery("input[title='shippingphone']").val(phone).removeClass('intra-field-label');
-				jQuery("input[title='shippingemail']").val(email).removeClass('intra-field-label');
-				jQuery("input[title='shippingstate']").val(state).removeClass('intra-field-label');
-				jQuery("input.shipping_country").val(countryID).removeClass('intra-field-label');
-				jQuery("span.shipping_country_name").html(country).removeClass('intra-field-label');
-				jQuery("select#current_country").val(countryID).removeClass('intra-field-label');
-
-				jQuery("input[title='shippingcountry']").val(countryID).removeClass('intra-field-label');
-				var html_form_id = jQuery("input[title='shippingcountry']").attr('id');
-				var form_id =  jQuery("input[title='shippingcountry']").attr('name');
-				form_id = form_id.replace("collected_data[", "");
-				form_id = form_id.replace("]", "");
-				form_id = form_id.replace("[0]", "");
-				set_shipping_country(html_form_id, form_id)
-				if(jQuery("select[title='billingcountry'] :selected").val() != jQuery("select[name='country'] :selected").val()){
-					id = jQuery("select[name='country'] :selected").val();
-					if(id == 'undefined'){
-						jQuery("select[name='country']").val(countryID);
-						submit_change_country();
-					}
-				}
-
-			} else {
-
-			}
-
-			//otherwise, hide it
-			//jQuery("#extra").hide("fast");
-		});
+	if(jQuery("#shippingSameBilling").is(":checked"))
+		wpsc_shipping_same_as_billing();
+		
+	jQuery("#shippingSameBilling").change(function(){
+		if(jQuery(this).is(":checked")){
+			wpsc_shipping_same_as_billing();
+		} else {
+			jQuery("select[title='billingregion'], select[title='billingstate'], select[title='billingcountry'], input[title='billingstate']").die( 'change', wpsc_shipping_same_as_billing );
+			jQuery("input[title='billingfirstname'], input[title='billinglastname'], textarea[title='billingaddress'], input[title='billingcity'], input[title='billingpostcode'], input[title='billingphone'], input[title='billingfirstname'], select[title='billingregion'], select[title='billingstate'], select[title='billingcountry']").unbind('change', 'wpsc_shipping_same_as_billing')
+		}
 	});
 
 	// Submit the product form using AJAX
