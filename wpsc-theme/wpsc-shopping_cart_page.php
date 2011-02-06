@@ -296,7 +296,11 @@ endif;
                <?php if(wpsc_is_shipping_details()):?>
                <tr class='same_as_shipping_row'>
                   <td colspan ='2'>
-                  <input type='checkbox' value='true' name='shippingSameBilling' id='shippingSameBilling' />
+                  <?php $checked = '';
+                  if(isset($_POST['shippingSameBilling']) && $_POST['shippingSameBilling'])
+                  	$checked = 'checked="checked"';
+                   ?>
+                  <input type='checkbox' value='true' name='shippingSameBilling' id='shippingSameBilling' <?php echo $checked; ?> />
                      <label for='shippingSameBilling'><?php _e('Shipping address the same as Billing address?','wpsc'); ?></label>
                   </td>
                </tr>

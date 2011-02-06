@@ -64,6 +64,7 @@
 	//End Share this JS
 	
 	function wpsc_shipping_same_as_billing(){
+		jQuery('.same_as_shipping_row').parents('table:first').find('tr:not(.same_as_shipping_row)').hide();
 		jQuery("input[title='billingfirstname'], input[title='billinglastname'], textarea[title='billingaddress'], input[title='billingcity'], input[title='billingpostcode'], input[title='billingphone'], input[title='billingfirstname'], input[title='billingstate']").unbind('change', wpsc_shipping_same_as_billing).unbind('keyup', wpsc_shipping_same_as_billing).keyup(wpsc_shipping_same_as_billing).change(wpsc_shipping_same_as_billing);
 		
 		jQuery("select[title='billingregion'], select[title='billingstate'], select[title='billingcountry'], input[title='billingstate']").die( 'change', wpsc_shipping_same_as_billing ).live( 'change', wpsc_shipping_same_as_billing );
@@ -159,6 +160,7 @@ jQuery(document).ready(function () {
 		if(jQuery(this).is(":checked")){
 			wpsc_shipping_same_as_billing();
 		} else {
+			jQuery(this).parents('table:first').find('tr').show();
 			jQuery("select[title='billingregion'], select[title='billingstate'], select[title='billingcountry'], input[title='billingstate']").die( 'change', wpsc_shipping_same_as_billing );
 			jQuery("input[title='billingfirstname'], input[title='billinglastname'], textarea[title='billingaddress'], input[title='billingcity'], input[title='billingpostcode'], input[title='billingphone'], input[title='billingfirstname'], select[title='billingregion'], select[title='billingstate'], select[title='billingcountry']").unbind('change', 'wpsc_shipping_same_as_billing')
 		}
