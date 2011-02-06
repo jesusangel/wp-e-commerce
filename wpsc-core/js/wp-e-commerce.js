@@ -122,12 +122,24 @@
 		);
 		
 		jQuery('select[title="shippingcountry"] option').removeAttr('selected');
-		jQuery('select[title="shippingcountry"] option[value="' + jQuery('select[title="billingcountry"] option:selected').attr('value') + '"]').attr('selected', 'selected');
+		jQuery('select[title="shippingcountry"] option[value="' + jQuery('select[title="billingcountry"] option:selected').val() + '"]').attr('selected', 'selected');
 				
 		jQuery('select[title="shippingstate"] option').removeAttr('selected');
-		jQuery('select[title="shippingstate"] option[value="' + jQuery('select[title="billingstate"] option:selected').attr('value') + '"]').attr('selected', 'selected');
+		jQuery('select[title="shippingstate"] option[value="' + jQuery('select[title="billingstate"] option:selected').val() + '"]').attr('selected', 'selected');
+
 		jQuery('select[title="shippingcountry"]').change();
 		jQuery('select[title="shippingstate"]').change();
+
+		if( (jQuery('#change_country #current_country').val() && jQuery('select[title="billingcountry"]').val() && jQuery('#change_country #current_country').val() != jQuery('select[title="billingcountry"]').val() ) || (jQuery('select[title="billingstate"]').val() && jQuery('select[title="billingstate"]').val() != jQuery('#change_country #region').val()) ){
+			jQuery.post(document.location.href, {
+				wpsc_ajax_actions:'update_location',
+				country:jQuery('select[title="billingcountry"]').val(),
+				region:jQuery('select[title="billingstate"]').val(),
+				wpsc_update_location:'true',
+				wpsc_submit_zipcode:'Calculate'
+			}, function(result){ document.location.href = document.location.href});
+		}
+		
 	}
 
 // this function is for binding actions to events and rebinding them after they are replaced by AJAX
