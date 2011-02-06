@@ -306,7 +306,7 @@ function wpsc_product_taxes_forms(){
 	$band_select_settings = array(
 		'id' => 'wpec_taxes_band',
 		'name' => 'meta[_wpsc_product_metadata][wpec_taxes_band]',
-		'label' => __( 'Custom Tax Band' )
+		'label' => __( 'Custom Tax Band', 'wpsc' )
 	);
 	$wpec_taxes_band = '';
 	if(isset($product_meta['wpec_taxes_band'])){
@@ -318,7 +318,7 @@ function wpsc_product_taxes_forms(){
       'type' => 'checkbox',
       'id' => 'wpec_taxes_taxable',
       'name' => 'meta[_wpsc_product_metadata][wpec_taxes_taxable]',
-      'label' => __( 'This product is not taxable.' )
+      'label' => __( 'This product is not taxable.', 'wpsc' )
    );
    
    if(isset($product_meta['wpec_taxes_taxable']) && 'on' == $product_meta['wpec_taxes_taxable']){
@@ -331,7 +331,7 @@ function wpsc_product_taxes_forms(){
 		$taxable_amount_input_settings = array(
 			'id' => 'wpec_taxes_taxable_amount',
 			'name' => 'meta[_wpsc_product_metadata][wpec_taxes_taxable_amount]',
-			'label' => __( 'Taxable Amount' )
+			'label' => __( 'Taxable Amount', 'wpsc' )
 		);
 		
 		if(isset($product_meta['wpec_taxes_taxable_amount'])){
@@ -458,7 +458,7 @@ function wpsc_product_variation_forms() {
 			$parent_product_data = null;
 	?>
 
-			<p><a name='variation_control'>&nbsp;</a><?php _e( 'Check or uncheck variation boxes and then click Update Variations to add or remove variations.' ) ?></p>
+			<p><a name='variation_control'>&nbsp;</a><?php _e( 'Check or uncheck variation boxes and then click Update Variations to add or remove variations.', 'wpsc' ) ?></p>
 
                         <table class="widefat page" id='wpsc_product_list' cellspacing="0">
 				<thead>
@@ -639,7 +639,7 @@ function wpsc_product_advanced_forms() {
                                     <input type='text' class='text'  value='<?php echo $custom_field['meta_key']; ?>' name='custom_meta[<?php echo $i; ?>][name]' id='custom_meta_name_<?php echo $i; ?>'>
                                     <?php _e( 'Value', 'wpsc' ); ?>
                                     <textarea class='text' name='custom_meta[<?php echo $i; ?>][value]' id='custom_meta_value_<?php echo $i; ?>'><?php echo $custom_field['meta_value']; ?></textarea>
-                                    <a href='#' class='remove_meta' onclick='return remove_meta(this, <?php echo $i; ?>)'><?php _e( 'Delete' ); ?></a>
+                                    <a href='#' class='remove_meta' onclick='return remove_meta(this, <?php echo $i; ?>)'><?php _e( 'Delete', 'wpsc' ); ?></a>
                                     <br />
                             </div>
                     <?php
@@ -785,12 +785,12 @@ function wpsc_product_download_forms() {
 	<?php echo wpsc_select_product_file( $post->ID ); ?>
 	<h4><?php _e( 'Upload New File', 'wpsc' ); ?>:</h4>
 	<input type='file' name='file' value='' /><br /><?php _e( 'Max Upload Size', 'wpsc' ); ?>:<span><?php echo $upload_max; ?></span><br /><br />
-	<h4><a href="admin.php?wpsc_admin_action=product_files_existing&product_id=<?php echo $post->ID; ?>" class="thickbox" title="<?php _e( 'Select all downloadable files for ' . $post->post_title, 'wpsc' ); ?>"><?php _e( 'Select from existing files', 'wpsc' ); ?></a></h4>
+	<h4><a href="admin.php?wpsc_admin_action=product_files_existing&product_id=<?php echo $post->ID; ?>" class="thickbox" title="<?php printf(__( 'Select all downloadable files for %s', 'wpsc' ), $post->post_title ); ?>"><?php _e( 'Select from existing files', 'wpsc' ); ?></a></h4>
         <?php
             if ( function_exists( "make_mp3_preview" ) || function_exists( "wpsc_media_player" ) ) {
         ?>
             <br />
-            <h4>" . __( "Select an MP3 file to upload as a preview" ) . "</h4>";
+            <h4><?php _e( "Select an MP3 file to upload as a preview", 'wpsc' ) ?></h4>
             <input type='file' name='preview_file' value='' /><br />";
             <br />
         <?php
@@ -864,7 +864,7 @@ function change_context( $context ) {
 
     if( $current_screen->id != 'wpsc-product' )
         return $context;
-    return __( 'Upload Image%s' );
+    return __( 'Upload Image%s', 'wpsc' );
 }
 function change_link( $link ) {
     global $post_ID, $current_screen;
@@ -918,7 +918,7 @@ function wpsc_filter_feature_image_text($translation, $text, $domain) {
 		$post = get_post($_REQUEST['post_id']);
 		if($post->post_type != 'wpsc-product') return $translation;
 		$translations = &get_translations_for_domain($domain);
-		return $translations->translate('Use as Product Thumbnail') ;
+		return $translations->translate('Use as Product Thumbnail', 'wpsc') ;
 	}
 	return $translation;
 }
@@ -951,7 +951,7 @@ function wpsc_attachment_fields($form_fields, $post) {
 		});
 	
 </script>';
-        $size_names = array('small-product-thumbnail' => __('Small Product Thumbnail'), 'medium-single-product' => __('Medium Single Product'), 'full' => __('Full Size'));
+        $size_names = array('small-product-thumbnail' => __('Small Product Thumbnail', 'wpsc'), 'medium-single-product' => __('Medium Single Product', 'wpsc'), 'full' => __('Full Size', 'wpsc'));
 			
 		$check = get_post_meta( $post->ID, '_wpsc_selected_image_size', true );
 
@@ -966,10 +966,10 @@ function wpsc_attachment_fields($form_fields, $post) {
 	
             $html = "<div class='image-size-item'><input type='radio' " . disabled( $enabled, false, false ) . "name='attachments[$post->ID][image-size]' id='{$css_id}' value='{$size}' ".checked($size, $check, false)." />";
 
-            $html .= "<label for='{$css_id}'>" . __($name). "</label>";
+            $html .= "<label for='{$css_id}'>$name</label>";
             // only show the dimensions if that choice is available
             if ( $enabled )
-                $html .= " <label for='{$css_id}' class='help'>" . sprintf( __("(%d&nbsp;&times;&nbsp;%d)"), $downsize[1], $downsize[2] ). "</label>";
+                $html .= " <label for='{$css_id}' class='help'>" . sprintf( __("(%d&nbsp;&times;&nbsp;%d)", 'wpsc'), $downsize[1], $downsize[2] ). "</label>";
 
             $html .= '</div>';
 
@@ -977,13 +977,13 @@ function wpsc_attachment_fields($form_fields, $post) {
 	}
 		
 		unset($form_fields['post_excerpt'],$form_fields['image_url'], $form_fields['post_content'], $form_fields['post_title'], $form_fields['url'], $form_fields['align'], $form_fields['image_alt']['helps'], $form_fields["image-size"]);
-		$form_fields['image_alt']['helps'] =  __('Alt text for the product image, e.g. &#8220;Rockstar T-Shirt&#8221;');
+		$form_fields['image_alt']['helps'] =  __('Alt text for the product image, e.g. &#8220;Rockstar T-Shirt&#8221;', 'wpsc');
 
 		$form_fields["image-size"] = array(
-				 'label' => __('Size'),
+				 'label' => __('Size', 'wpsc'),
 				 'input' => 'html',
 				 'html'  => $out,
-				 'helps' => "<span style='text-align:left; clear:both; display:block; padding-top:3px;'>Thumbnail size for this image on the single product page</span>"
+				 'helps' => "<span style='text-align:left; clear:both; display:block; padding-top:3px;'>" . __('Thumbnail size for this image on the single product page', 'wpsc') . "</span>"
 		);
 		
 	//This is for the custom thumbnail size.	
@@ -996,7 +996,7 @@ function wpsc_attachment_fields($form_fields, $post) {
 		
 		";
 		$form_fields["wpsc_custom_thumb"] = array(
-		"label" => __("Custom Thumbnail Size"),
+		"label" => __("Custom Thumbnail Size", 'wpsc'),
 		"input" => "html", // this is default if "input" is omitted
 		"helps" => "<span style='text-align:left; clear:both; display:block; padding-top:3px;'>Custom thumbnail size for this image on the main Product Page</span>",
 		"html" => $custom_thumb_html
@@ -1077,7 +1077,7 @@ function wpsc_gallery_css_mods() {
 function wpsc_media_upload_tab_gallery($tabs) {
 	
 		unset($tabs['gallery']);
-		$tabs['gallery'] = __('Product Image Gallery');
+		$tabs['gallery'] = __('Product Image Gallery', 'wpsc');
 
 	return $tabs;
 }
