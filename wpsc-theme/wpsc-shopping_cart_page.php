@@ -302,6 +302,7 @@ endif;
                    ?>
 					<label for='shippingSameBilling'><?php _e('Same as billing address:','wpsc'); ?></label>
 					<input type='checkbox' value='true' name='shippingSameBilling' id='shippingSameBilling' <?php echo $checked; ?> />
+					<br/><span id="shippingsameasbillingmessage"><?php _e('Your order will be shipped to the billing address', 'wpsc'); ?></span>
                   </td>
                </tr>
                <?php endif;

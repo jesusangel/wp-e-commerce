@@ -1230,6 +1230,10 @@ background-color: #f5f5f5;
 	right:10px;
 }
 
+#shippingsameasbillingmessage{
+	display:none;
+}
+
 .clear{
 	clear:both;
 }
