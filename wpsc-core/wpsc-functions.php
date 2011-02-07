@@ -36,6 +36,26 @@ function wpsc_intermediate_image_sizes_advanced($sizes){
 		"height" => get_option( 'single_view_image_height' ),
 		"crop" => get_option( 'wpsc_crop_thumbnails', false )
 	);
+	$sizes['featured-product-thumbnails']=array(
+		"width" => 425,
+		"height" => 215,
+		"crop" => get_option( 'wpsc_crop_thumbnails', true )
+	);
+	$sizes['admin-product-thumbnails']=array(
+		"width" => 38,
+		"height" => 38,
+		"crop" => get_option( 'wpsc_crop_thumbnails', true )
+	);
+	$sizes['product-thumbnails']=array(
+		"width" => get_option( 'product_image_width' ),
+		"height" => get_option( 'product_image_height' ),
+		"crop" => get_option( 'wpsc_crop_thumbnails', false )
+	);
+	$sizes['gold-thumbnails']=array(
+		"width" => get_option( 'wpsc_gallery_image_width' ),
+		"height" => get_option( 'wpsc_gallery_image_height' ),
+		"crop" => get_option( 'wpsc_crop_thumbnails', false )
+	);
 	return $sizes;
 }
 
@@ -49,7 +69,7 @@ function wpsc_intermediate_image_sizes_advanced($sizes){
 function wpsc_core_load_thumbnail_sizes() {
 	// Add image sizes for products
 	add_image_size( 'product-thumbnails', get_option( 'product_image_width' ), get_option( 'product_image_height' ), get_option( 'wpsc_crop_thumbnails', false )  );
-	add_image_size( 'gold-thumbnails', get_option( 'wpsc_gallery_image_height' ), get_option( 'wpsc_gallery_image_width' ), get_option( 'wpsc_crop_thumbnails', false ) );
+	add_image_size( 'gold-thumbnails',  get_option( 'wpsc_gallery_image_width' ), get_option( 'wpsc_gallery_image_height' ), get_option( 'wpsc_crop_thumbnails', false ) );
 	add_image_size( 'admin-product-thumbnails', 38, 38, get_option( 'wpsc_crop_thumbnails', true )  );
 	add_image_size( 'featured-product-thumbnails', 425, 215, get_option( 'wpsc_crop_thumbnails', true )  );
 	add_image_size( 'small-product-thumbnail', get_option( 'product_image_width' ), get_option( 'product_image_height' ), get_option( 'wpsc_crop_thumbnails', false ) );
