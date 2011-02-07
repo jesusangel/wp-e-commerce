@@ -41,6 +41,7 @@ function wpsc_product_has_children($id){
 * @return nothing
 */
 function wpsc_admin_submit_product( $post_ID, $post ) {
+	
     global $current_screen, $wpdb;
 
 	if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
@@ -532,7 +533,8 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 	global $wpdb, $user_ID;
 	$variations = array();
 	$product_children = array();
-	if (!isset($post_data['edit_var_val'])) $post_data['edit_var_val'] = '';
+	if (!isset($post_data['edit_var_val']))
+		$post_data['edit_var_val'] = '';
 	
 	$variations = (array)$post_data['edit_var_val'];
 
