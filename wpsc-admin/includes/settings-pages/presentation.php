@@ -827,7 +827,7 @@ function wpsc_options_presentation() {
 						}
 ?>
 						<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='3' name='wpsc_options[cart_location]' id='cart3' <?php if ( isset( $cart3 ) )
-							echo $cart3; ?> /> <label for='cart3'><?php _e( 'Manual', 'wpsc' ); ?> <span style='font-size: 7pt;'>(PHP code: &lt;?php echo nzshpcrt_shopping_basket(); ?&gt; )</span></label>
+							echo $cart3; ?> /> <label for='cart3'><?php _e( 'Manual', 'wpsc' ); ?> <span style='font-size: 7pt;'>(PHP code: &lt;?php echo wpsc_shopping_cart(); ?&gt; )</span></label>
 						<div  style='display: <?php if ( !empty( $cart5 ) ) {
 							echo "block";
 						} else {

@@ -59,6 +59,7 @@ function nzshpcrt_price_range($args){
 
 // preserved for backwards compatibility
 function nzshpcrt_shopping_basket( $input = null, $override_state = null ) {
+	_deprecated_function( __FUNCTION__, '3.8', 'wpsc_shopping_cart');
 	return wpsc_shopping_cart( $input, $override_state );
 }
 
