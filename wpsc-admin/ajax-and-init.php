@@ -1701,7 +1701,7 @@ function wpsc_update_variations() {
 }
 
 $product_type_object = $obj = get_post_type_object('post');
-if ( isset($_POST["edit_var_val"]) && current_user_can($product_type_object->cap->edit_post) )
+if ( ( isset($_POST["edit_var_val"]) || isset( $_REQUEST['wpsc_admin_action'] ) ) && current_user_can($product_type_object->cap->edit_post) )
 	add_action( 'admin_init', 'wpsc_update_variations', 50 );
 
 function wpsc_delete_variation_set() {
