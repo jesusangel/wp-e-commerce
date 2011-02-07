@@ -257,18 +257,18 @@ add_action( 'rdf_item', 'wpsc_add_product_price_to_rss' );
 function wpsc_register_post_types() {
 	global $wpsc_page_titles, $wp_rewrite;
         $labels = array(
-            'name' => _x( 'Products', 'wpsc-product' ),
-            'singular_name' => _x( 'Product', 'wpsc-product' ),
-            'add_new' => _x( 'Add New', 'wpsc-product' ),
-            'add_new_item' => __('Add New Product', 'wpsc-product' ),
-            'edit_item' => __('Edit Product', 'wpsc-product' ),
-            'new_item' => __('New Product', 'wpsc-product' ),
-            'view_item' => __('View Product', 'wpsc-product' ),
-            'search_items' => __('Search Products', 'wpsc-product' ),
-            'not_found' =>  __('No products found', 'wpsc-product' ),
-            'not_found_in_trash' => __( 'No products found in Trash', 'wpsc-product' ),
+            'name' => _x( 'Products', 'wpsc' ),
+            'singular_name' => _x( 'Product', 'wpsc' ),
+            'add_new' => _x( 'Add New', 'wpsc' ),
+            'add_new_item' => __('Add New Product', 'wpsc' ),
+            'edit_item' => __('Edit Product', 'wpsc' ),
+            'new_item' => __('New Product', 'wpsc' ),
+            'view_item' => __('View Product', 'wpsc' ),
+            'search_items' => __('Search Products', 'wpsc' ),
+            'not_found' =>  __('No products found', 'wpsc' ),
+            'not_found_in_trash' => __( 'No products found in Trash', 'wpsc' ),
             'parent_item_colon' => '',
-            'menu_name' => __( 'Products', 'wpsc-product' )
+            'menu_name' => __( 'Products', 'wpsc' )
           );
 	// Products
 	register_post_type( 'wpsc-product', array(
@@ -316,16 +316,16 @@ function wpsc_register_post_types() {
 
 	// Product categories, is heirarchical and can use permalinks
 	$labels = array(
-		'name' => _x( 'Categories', 'taxonomy general name' ),
-		'singular_name' => _x( 'Product Category', 'taxonomy singular name' ),
-		'search_items' => __( 'Search Product Categories' ),
-		'all_items' => __( 'All Product Categories' ),
-		'parent_item' => __( 'Parent Product Category' ),
-		'parent_item_colon' => __( 'Parent Product Category:' ),
-		'edit_item' => __( 'Edit Product Category' ),
-		'update_item' => __( 'Update Product Category' ),
-		'add_new_item' => __( 'Add New Product Category' ),
-		'new_item_name' => __( 'New Product Category Name' )
+		'name' => _x( 'Categories', 'taxonomy general name', 'wpsc' ),
+		'singular_name' => _x( 'Product Category', 'taxonomy singular name', 'wpsc' ),
+		'search_items' => __( 'Search Product Categories', 'wpsc' ),
+		'all_items' => __( 'All Product Categories', 'wpsc' ),
+		'parent_item' => __( 'Parent Product Category', 'wpsc' ),
+		'parent_item_colon' => __( 'Parent Product Category:', 'wpsc' ),
+		'edit_item' => __( 'Edit Product Category', 'wpsc' ),
+		'update_item' => __( 'Update Product Category', 'wpsc' ),
+		'add_new_item' => __( 'Add New Product Category', 'wpsc' ),
+		'new_item_name' => __( 'New Product Category Name', 'wpsc' )
 	);
 	register_taxonomy( 'wpsc_product_category', 'wpsc-product', array(
 		'hierarchical' => true,
@@ -336,16 +336,16 @@ function wpsc_register_post_types() {
             'labels' => $labels
 	) );
 	$labels = array(
-		'name' => _x( 'Variations', 'taxonomy general name' ),
-		'singular_name' => _x( 'Variation', 'taxonomy singular name' ),
-		'search_items' => __( 'Search Variations' ),
-		'all_items' => __( 'All Variations' ),
-		'parent_item' => __( 'Parent Variation' ),
-		'parent_item_colon' => __( 'Parent Variations:' ),
-		'edit_item' => __( 'Edit Variation' ),
-		'update_item' => __( 'Update Variation' ),
-		'add_new_item' => __( 'Add New Variation' ),
-		'new_item_name' => __( 'New Variation Name' ),
+		'name' => _x( 'Variations', 'taxonomy general name', 'wpsc' ),
+		'singular_name' => _x( 'Variation', 'taxonomy singular name', 'wpsc' ),
+		'search_items' => __( 'Search Variations', 'wpsc' ),
+		'all_items' => __( 'All Variations', 'wpsc' ),
+		'parent_item' => __( 'Parent Variation', 'wpsc' ),
+		'parent_item_colon' => __( 'Parent Variations:', 'wpsc' ),
+		'edit_item' => __( 'Edit Variation', 'wpsc' ),
+		'update_item' => __( 'Update Variation', 'wpsc' ),
+		'add_new_item' => __( 'Add New Variation', 'wpsc' ),
+		'new_item_name' => __( 'New Variation Name', 'wpsc' ),
 	);
 
 	// Product Variations, is internally heirarchical, externally, two separate types of items, one containing the other
