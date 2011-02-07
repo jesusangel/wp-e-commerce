@@ -23,6 +23,22 @@ function wpsc_core_load_textdomain() {
 }
 add_action( 'init', 'wpsc_core_load_textdomain' );
 
+add_filter( 'intermediate_image_sizes_advanced', 'wpsc_intermediate_image_sizes_advanced', 10, 1 );
+
+function wpsc_intermediate_image_sizes_advanced($sizes){
+	$sizes['small-product-thumbnail']=array(
+		"width" => get_option( 'product_image_width' ),
+		"height" => get_option( 'product_image_height' ),
+		"crop" => get_option( 'wpsc_crop_thumbnails', false )
+	);
+	$sizes['medium-single-product']=array(
+		"width" => get_option( 'single_view_image_width' ),
+		"height" => get_option( 'single_view_image_height' ),
+		"crop" => get_option( 'wpsc_crop_thumbnails', false )
+	);
+	return $sizes;
+}
+
 /**
  * 
  * wpsc_core_load_thumbnail_sizes()
