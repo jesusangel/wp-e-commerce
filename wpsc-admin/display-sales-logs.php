@@ -150,7 +150,7 @@ function wpsc_display_sales_logs() {
          <div id='post-body' class='has-sidebar' style='width:95%;'>
             <?php if(wpsc_has_purchlog_shipping()) { ?>
             <div id='wpsc_shipping_details_box'>
-               <h3><?php _e('Shipping Details','wpsc'); ?></h3>
+               <h3><?php _e('Shipping Address','wpsc'); ?></h3>
                <p><strong><?php echo wpsc_display_purchlog_shipping_name(); ?></strong></p>
                <p>
                <?php echo wpsc_display_purchlog_shipping_address(); ?><br />

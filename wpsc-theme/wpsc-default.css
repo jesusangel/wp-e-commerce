@@ -1225,6 +1225,11 @@ background-color: #f5f5f5;
 
 }
 
+#shippingSameBilling{
+	position:relative;
+	right:10px;
+}
+
 .clear{
 	clear:both;
 }

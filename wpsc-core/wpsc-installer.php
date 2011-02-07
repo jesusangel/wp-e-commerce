@@ -743,7 +743,7 @@ function wpsc_add_checkout_fields() {
 	( '" . __( 'Country', 'wpsc' ) . "', 'country', '1', '0', '', '1', 7,'billingcountry'),
 	( '" . __( 'Postal Code', 'wpsc' ) . "', 'text', '0', '0', '', '1', 8,'billingpostcode'),
 	( '" . __( 'Email', 'wpsc' ) . "', 'email', '1', '1', '', '1', 9,'billingemail'),
-	( '" . __( 'Shipping details', 'wpsc' ) . "', 'heading', '0', '0', '', '1', 10,'delivertoafriend'),
+	( '" . __( 'Shipping Address', 'wpsc' ) . "', 'heading', '0', '0', '', '1', 10,'delivertoafriend'),
 	( '" . __( 'First Name', 'wpsc' ) . "', 'text', '0', '0', '', '1', 11,'shippingfirstname'),
 	( '" . __( 'Last Name', 'wpsc' ) . "', 'text', '0', '0', '', '1', 12,'shippinglastname'),
 	( '" . __( 'Address', 'wpsc' ) . "', 'address', '0', '0', '', '1', 13,'shippingaddress'),

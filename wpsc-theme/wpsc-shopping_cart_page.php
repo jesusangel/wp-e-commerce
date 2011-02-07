@@ -300,8 +300,8 @@ endif;
                   if(isset($_POST['shippingSameBilling']) && $_POST['shippingSameBilling'])
                   	$checked = 'checked="checked"';
                    ?>
-                  <input type='checkbox' value='true' name='shippingSameBilling' id='shippingSameBilling' <?php echo $checked; ?> />
-                     <label for='shippingSameBilling'><?php _e('Shipping address the same as Billing address?','wpsc'); ?></label>
+					<label for='shippingSameBilling'><?php _e('Same as billing address:','wpsc'); ?></label>
+					<input type='checkbox' value='true' name='shippingSameBilling' id='shippingSameBilling' <?php echo $checked; ?> />
                   </td>
                </tr>
                <?php endif;

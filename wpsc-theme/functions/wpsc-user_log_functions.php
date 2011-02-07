@@ -437,7 +437,7 @@ function wpsc_user_details() {
 			$parsed = $parsed[0]['children'][0]['children'];
 			if ( $purchase['track_id'] != null ) {
 				echo "<br /><br />";
-				echo " <strong class='form_group'>" . __( 'Shipping Details', 'wpsc' ) . "</strong>\n\r";
+				echo " <strong class='form_group'>" . __( 'Shipping Address', 'wpsc' ) . "</strong>\n\r";
 				echo "<table>";
 				foreach ( (array)$parsed as $parse ) {
 					if ( $parse['name'] == "TRACKSUMMARY" )
