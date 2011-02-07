@@ -342,10 +342,10 @@ function wpsc_cart_item_url() {
 * @param integer height
 * @return string url to the to the cart item thumbnail image
 */
-function wpsc_cart_item_image() {
+function wpsc_cart_item_image( $width = 31, $height = 31 ) {
    global $wpsc_cart;
 
-   $cart_image = wpsc_the_product_thumbnail( 31, 31,$wpsc_cart->cart_item->product_id, "shopping_cart");
+   $cart_image = wpsc_the_product_thumbnail( $width, $height, $wpsc_cart->cart_item->product_id, "shopping_cart");
     
     if( is_ssl() && !strstr( $cart_image, 'https' ) ) str_replace( 'http', 'https', $cart_image );
 
