@@ -531,6 +531,9 @@ function term_id_price($term_id, $parent_price) {
  */
 function wpsc_edit_product_variations($product_id, $post_data) {
 	global $wpdb, $user_ID;
+	$parent = $wpdb->get_var('SELECT post_parent FROM ' . $wpdb->posts . ' WHERE ID = '.$product_id);
+	if(!empty($parent))
+		return;
 	$variations = array();
 	$product_children = array();
 	if (!isset($post_data['edit_var_val']))
