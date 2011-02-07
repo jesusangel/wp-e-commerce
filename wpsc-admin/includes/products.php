@@ -241,7 +241,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		case 'price':  /* !price case */
 
-			$price = get_post_meta($product->ID, '_wpsc_price', true);
+			$price = get_product_meta($product->ID, 'price', true);
 			?>
 				<td  <?php echo $attributes ?>>
 					<?php echo wpsc_currency_display( $price ); ?>
