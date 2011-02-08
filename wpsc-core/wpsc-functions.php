@@ -278,7 +278,7 @@ function wpsc_register_post_types() {
 	global $wpsc_page_titles, $wp_rewrite;
         $labels = array(
             'name' => _x( 'Products', 'post type', 'wpsc' ),
-            'singular_name' => _x( 'Product', 'post type' 'wpsc' ),
+            'singular_name' => _x( 'Product', 'post type', 'wpsc' ),
             'add_new' => _x( 'Add New', 'wpsc' ),
             'add_new_item' => __('Add New Product', 'wpsc' ),
             'edit_item' => __('Edit Product', 'wpsc' ),
