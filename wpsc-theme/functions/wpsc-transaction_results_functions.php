@@ -189,10 +189,10 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 				
 					$product_list.= " - " . $row['quantity'] . " " . $row['name'] . "  " . $message_price . "\n\r";
 					if ( $shipping > 0 )
-						$product_list .= " - " . __( 'Shipping', 'wpsc' ) . ":" . $shipping_price . "\n\r";
+						$product_list .= sprintf(__( ' - Shipping: %s\n\r', 'wpsc' ), $shipping_price);
 					$product_list_html.= "\n\r - " . $row['quantity'] . " " . $row['name'] . "  " . $message_price_html . "\n\r";
 					if ( $shipping > 0 )
-						$product_list_html .= " &nbsp; " . __( 'Shipping', 'wpsc' ) . ":" . $shipping_price . "\n\r";
+						$product_list_html .=  sprintf(__( ' &nbsp; Shipping: %s\n\r', 'wpsc' ), $shipping_price);
 				}
 
 				//add tax if included
@@ -229,8 +229,10 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 			$total_tax = '';
 			$total_shipping_html = '';
 			$total_shipping_email = '';
-			$total_shipping_email.= __( 'Total Shipping', 'wpsc' ) . ": " . wpsc_currency_display( $total_shipping, array( 'display_as_html' => false ) ) . "\n\r";
-			$total_price_email.= __( 'Total', 'wpsc' ) . ": " . wpsc_currency_display( $total, array( 'display_as_html' => false ) ) . "\n\r";
+			$total_shipping_email.= sprintf(__( 'Total Shipping: %s
+			', 'wpsc' ), wpsc_currency_display( $total_shipping, array( 'display_as_html' => false ) ) );
+			$total_price_email.= sprintf(__( 'Total: %s
+			', 'wpsc' ), wpsc_currency_display( $total, array( 'display_as_html' => false ) ));
 			if ( $purchase_log['discount_value'] > 0 ) {
 				$discount_email.= __( 'Discount', 'wpsc' ) . "\n\r: ";
 				$discount_email .=$purchase_log['discount_data'] . ' : ' . wpsc_currency_display( $purchase_log['discount_value'], array( 'display_as_html' => false ) ) . "\n\r"; 
@@ -245,9 +247,11 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 				$total_tax_html .= __('Total Tax', 'wpsc').': '. wpsc_currency_display( $purchase_log['wpec_taxes_total'] )."\n\r";
 				$total_tax .= __('Total Tax', 'wpsc').': '. wpsc_currency_display( $purchase_log['wpec_taxes_total'] , array( 'display_as_html' => false ) )."\n\r"; 		
 			}
-			$total_shipping_html.= __( 'Total Shipping', 'wpsc' ) . ": " . wpsc_currency_display( $total_shipping ) . "\n\r";
-			$total_price_html.= __( 'Total', 'wpsc' ) . ": " . wpsc_currency_display( $total ) . "\n\r";
-			$report_id = "Purchase # " . $purchase_log['id'] . "\n\r";
+			$total_shipping_html.= sprintf(__( 'Total Shipping: %s
+			', 'wpsc' ), wpsc_currency_display( $total_shipping ));
+			$total_price_html.= sprintf(__( 'Total: %s
+			', 'wpsc' ), wpsc_currency_display( $total ) );
+			$report_id = sprintf(__("Purchase # %s\n\r"), $purchase_log['id']);
 			
 			if ( isset( $_GET['ti'] ) ) {
 				$message.= "\n\r" . __( 'Your Transaction ID', 'wpsc' ) . ": " . $_GET['ti'];
