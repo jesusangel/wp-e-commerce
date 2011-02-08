@@ -44,11 +44,9 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
 	
     global $current_screen, $wpdb;
 
-	if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
-        return $post_ID;
+	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || $current_screen->id != 'wpsc-product' )
+            return $post_ID;
 	
-    if( $current_screen->id != 'wpsc-product' )
-       return;
     //Type-casting ( not so much sanitization, which would be good to do )
     $post_data = $_POST;
     $product_id = $post_ID;
