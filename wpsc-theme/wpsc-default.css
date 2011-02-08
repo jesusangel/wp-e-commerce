@@ -88,7 +88,6 @@ Author URI: http://instinct.co.nz
 
 .default_product_display {
 	margin-bottom:20px;
-	border: 10px solid #efefef;
 	padding:10px;
 	position:relative;
 }
@@ -540,7 +539,6 @@ table.list_productdisplay p.soldout {
 
 .single_product_display {
 	margin-bottom:20px;
-	border:10px solid #efefef;
 	padding:10px;
 	position:relative;	
 }
