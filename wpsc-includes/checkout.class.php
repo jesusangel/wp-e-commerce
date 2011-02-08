@@ -644,7 +644,7 @@ class wpsc_checkout {
 				}
      		}
 		}
-		$saved_form_data = @htmlentities( stripslashes( (string)$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id] ), ENT_QUOTES );
+		$saved_form_data = @htmlentities( stripslashes( (string)$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id] ), ENT_QUOTES, 'UTF-8' );
 		$an_array = '';
 		if ( function_exists( 'wpsc_get_ticket_checkout_set' ) ) {
 			if ( $this->checkout_item->checkout_set == wpsc_get_ticket_checkout_set() )
