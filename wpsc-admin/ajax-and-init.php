@@ -1684,8 +1684,9 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 	add_action( 'admin_init', 'wpsc_settings_page_ajax' );
 
 function wpsc_update_variations() {
+	$product_id = absint( $_POST["product_id"] );
 	$product_type_object = get_post_type_object('wpsc-product');
-	if (!current_user_can($product_type_object->cap->edit_post))
+	if (!current_user_can($product_type_object->cap->edit_post, $product_id))
 		return;
 	
 	//Setup postdata
@@ -1694,7 +1695,6 @@ function wpsc_update_variations() {
 	$post_data['description'] = $_POST["description"];
 	$post_data['additional_description'] = $_POST['additional_description'];
 	$post_data['name'] = (!empty($_POST['name']))?$_POST['name']:$_POST["post_title"];
-	$product_id = absint( $_POST["product_id"] );
 
 	//Add or delete variations
 	wpsc_edit_product_variations( $product_id, $post_data );
