@@ -21,7 +21,7 @@ function wpsc_core_load_textdomain() {
 	if( !load_plugin_textdomain( 'wpsc', false, '../languages/' ) )
 		load_plugin_textdomain( 'wpsc', false, dirname( plugin_basename( __FILE__ ) ) . '/../wpsc-languages/' );
 }
-add_action( 'init', 'wpsc_core_load_textdomain' );
+add_action( 'plugins_loaded', 'wpsc_core_load_textdomain' );
 
 add_filter( 'intermediate_image_sizes_advanced', 'wpsc_intermediate_image_sizes_advanced', 10, 1 );
 
