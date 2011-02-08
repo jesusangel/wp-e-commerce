@@ -195,7 +195,11 @@ function wpsc_pre_update( $data , $postarr ) {
 	 if( isset( $postarr["parent_post"] ) && !empty( $postarr["parent_post"] ) )
         $data["post_parent"] = $postarr["parent_post"];
 
-	
+	// Sanitize status for variations (see #324)
+	if ($data['post_parent'] && $data['post_parent'] != $data['ID']) {
+		$data['post_status'] = 'inherit';
+	}
+
     if ( $postarr['meta']['_wpsc_product_metadata']['enable_comments'] == 0 || empty( $postarr['meta']['_wpsc_product_metadata']['enable_comments'] ) )
         $data["comment_status"] = "closed";
     else

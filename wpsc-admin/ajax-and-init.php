@@ -1684,6 +1684,10 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 	add_action( 'admin_init', 'wpsc_settings_page_ajax' );
 
 function wpsc_update_variations() {
+	$product_type_object = get_post_type_object('wpsc-product');
+	if (!current_user_can($product_type_object->cap->edit_post))
+		return;
+	
 	//Setup postdata
 	$post_data = array( );
 	$post_data['edit_var_val'] = $_POST["edit_var_val"];
@@ -1694,15 +1698,15 @@ function wpsc_update_variations() {
 
 	//Add or delete variations
 	wpsc_edit_product_variations( $product_id, $post_data );
-	if(isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_update_variations')){
+	if (defined('DOING_AJAX') && DOING_AJAX) {
 		wpsc_admin_product_listing( $product_id );
 		die();
 	}
 }
 
-$product_type_object = $obj = get_post_type_object('post');
-if ( ( isset($_POST["edit_var_val"]) || isset( $_REQUEST['wpsc_admin_action'] ) ) && current_user_can($product_type_object->cap->edit_post) )
+if ( isset($_POST["edit_var_val"]) )
 	add_action( 'admin_init', 'wpsc_update_variations', 50 );
+add_action('wp_ajax_wpsc_update_variations', 'wpsc_update_variations', 50 );
 
 function wpsc_delete_variation_set() {
 	global $wpdb;
