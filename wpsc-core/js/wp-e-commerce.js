@@ -132,14 +132,9 @@
 		jQuery('select[title="shippingcountry"]').change();
 		jQuery('select[title="shippingstate"]').change();
 
-		if( (jQuery('#change_country #current_country').val() && jQuery('select[title="billingcountry"]').val() && jQuery('#change_country #current_country').val() != jQuery('select[title="billingcountry"]').val() ) || (jQuery('select[title="billingstate"]').val() && jQuery('select[title="billingstate"]').val() != jQuery('#change_country #region').val()) ){
-			jQuery.post(document.location.href, {
-				wpsc_ajax_actions:'update_location',
-				country:jQuery('select[title="billingcountry"]').val(),
-				region:jQuery('select[title="billingstate"]').val(),
-				wpsc_update_location:'true',
-				wpsc_submit_zipcode:'Calculate'
-			}, function(result){ document.location.href = document.location.href});
+		if( jQuery('#change_country #current_country').val() && ( (jQuery('select[title="billingcountry"]').val() && jQuery('#change_country #current_country').val() != jQuery('select[title="billingcountry"]').val() ) || (jQuery('select[title="billingstate"]').val() && jQuery('select[title="billingstate"]').val() != jQuery('#change_country #region').val()) ) ){
+			jQuery('#change_country select').remove();
+			jQuery('#change_country').append('<input type="hidden" name="country" value="'+jQuery('select[title="billingcountry"]').val()+'" /><input type="hidden" name="region" value="'+jQuery('select[title="billingstate"]').val()+'" /><input type="hidden" name="shippingSameBilling" value="true" />').submit();
 		}
 		
 	}
@@ -422,8 +417,11 @@ function set_shipping_country(html_form_id, form_id){
 	
 	jQuery.post( 'index.php', form_values, function(returned_data) {
 		eval(returned_data);
+		if(jQuery("#shippingSameBilling").is(':checked')){
+			jQuery('.shipping_region').parent().parent().hide();
+		}
 	});
-//ajax.post("index.php",changetaxntotal,("ajax=true&form_id="+form_id+"&billing_country="+country+billing_region));
+	
 }
 
 jQuery(document).ready(function(){
