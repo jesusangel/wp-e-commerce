@@ -408,9 +408,9 @@ function wpsc_single_template( $content ) {
 	if((!isset($wp_query->is_product)) && !isset($wp_query->query_vars['wpsc_product_category']))return $content;
 
 	if(isset($wpsc_query->query['paged']) && $wpsc_query->post_count <= 1){ 
+		remove_filter( "the_content", "wpsc_single_template" );
 		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
-
 		// get the display type for the productspage		
 		$display_type = get_option('product_view');
 		if ( isset( $_SESSION['wpsc_display_type'] ) ) {
@@ -431,6 +431,7 @@ function wpsc_single_template( $content ) {
 		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query objects back
 		if ( ($is_single == false) || ($product_meta['enable_comments'] == '0') )
 			$GLOBALS['post'] = $wp_query->post;
+		$wp_query->current_post = $wp_query->post_count;
 		return $output;
 	}
 	if ( 'wpsc-product' == $wp_query->post->post_type && !is_archive() && $wp_query->post_count <= 1 ) {
