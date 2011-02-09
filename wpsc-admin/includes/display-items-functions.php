@@ -951,7 +951,7 @@ function wpsc_attachment_fields($form_fields, $post) {
 		});
 	
 </script>';
-        $size_names = array('small-product-thumbnail' => __('Small Product Thumbnail', 'wpsc'), 'medium-single-product' => __('Medium Single Product', 'wpsc'), 'full' => __('Full Size', 'wpsc'));
+        $size_names = array('small-product-thumbnail' => __('Default Product Thumbnail Size', 'wpsc'), 'medium-single-product' => __('Single Product Image Size', 'wpsc'), 'full' => __('Full Size', 'wpsc'));
 			
 		$check = get_post_meta( $post->ID, '_wpsc_selected_image_size', true );
 
@@ -980,10 +980,10 @@ function wpsc_attachment_fields($form_fields, $post) {
 		$form_fields['image_alt']['helps'] =  __('Alt text for the product image, e.g. &#8220;Rockstar T-Shirt&#8221;', 'wpsc');
 
 		$form_fields["image-size"] = array(
-				 'label' => __('Size', 'wpsc'),
+				 'label' => __('Single Product Page Thumbnail:', 'wpsc'),
 				 'input' => 'html',
 				 'html'  => $out,
-				 'helps' => "<span style='text-align:left; clear:both; display:block; padding-top:3px;'>" . __('Thumbnail size for this image on the single product page', 'wpsc') . "</span>"
+				 'helps' => "<span style='text-align:left; clear:both; display:block; padding-top:3px;'>" . __('This is the Thumbnail size that will be displayed on the Single Product page. You can change the default sizes under your store settings', 'wpsc') . "</span>"
 		);
 		
 	//This is for the custom thumbnail size.	
@@ -996,7 +996,7 @@ function wpsc_attachment_fields($form_fields, $post) {
 		
 		";
 		$form_fields["wpsc_custom_thumb"] = array(
-		"label" => __("Custom Thumbnail Size", 'wpsc'),
+		"label" => __("Products Page Thumbnail Size:", 'wpsc'),
 		"input" => "html", // this is default if "input" is omitted
 		"helps" => "<span style='text-align:left; clear:both; display:block; padding-top:3px;'>Custom thumbnail size for this image on the main Product Page</span>",
 		"html" => $custom_thumb_html
