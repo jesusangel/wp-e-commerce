@@ -15,6 +15,8 @@ function wpsc_has_pages_top(){
 	else
 		return false;
 }
+
+
 function wpsc_has_pages_bottom(){
 	if(wpsc_has_pages() &&  ((get_option('wpsc_page_number_position') == 2) || (get_option('wpsc_page_number_position') == 3)))
 		return true;
@@ -86,10 +88,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	//end of additional links
 	
 	if(empty($totalpages)){
-		if(!isset($wpsc_query->query_vars['taxonomy']) && 'wpsc-product' == $wp_query->query_vars['post_type'])
-			$totalpages = $wp_query->max_num_pages;			
-		else
-			$totalpages = $wpsc_query->max_num_pages;	
+			$totalpages = $wp_query->max_num_pages;	
 	}
 	if(empty($per_page))	
 		$per_page = get_option('wpsc_products_per_page');
@@ -115,8 +114,8 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 		$separator = '=';
 	}else{
 		// This will need changing when we get product categories sorted
-		if(isset($wpsc_query->query_vars['term']))
-			$page_link = trailingslashit(get_option('product_list_url')).$wpsc_query->query_vars['term'].'/';
+		if(isset($wpsc_query->query_vars['wpsc_product_category']))
+			$page_link = trailingslashit(get_option('product_list_url')).$wpsc_query->query_vars['wpsc_product_category'].'/';
 		else
 			$page_link = trailingslashit(get_option('product_list_url'));
 		
@@ -143,7 +142,10 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	if($i <= 0) $i =1;
 	while($i < $current_page){
 		if($count <= $num_paged_links){
-			$output .= " <a href=\"". $page_link .$separator. $i . $additional_links . "\" title=\"" . sprintf( __('Page %s', 'wpsc'), $i ) . " \">".$i."</a>";
+			if($count == 1)
+				$output .= " <a href=\"". $page_link . $additional_links . "\" title=\"" . sprintf( __('Page %s', 'wpsc'), $i ) . " \">".$i."</a>";
+			else
+				$output .= " <a href=\"". $page_link .$separator. $i . $additional_links . "\" title=\"" . sprintf( __('Page %s', 'wpsc'), $i ) . " \">".$i."</a>";
 		}
 		$i++;
 		$count++;
@@ -155,10 +157,12 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	//Links after Current Page
 	$i = $current_page + $num_paged_links;
 	$count = 1;
+
 	if($current_page < $totalpages){
 		while(($i) > $current_page){
+	
 			if($count < $num_paged_links && ($count+$current_page) <= $totalpages){
-			$output .= " <a href=\"". $page_link .$separator. ($count+$current_page) .$additional_links . "\" title=\"" . sprintf( __('Page %s', 'wpsc'), ($count+$current_page) ) . "\">".($count+$current_page)."</a>";
+					$output .= " <a href=\"". $page_link .$separator. ($count+$current_page) .$additional_links . "\" title=\"" . sprintf( __('Page %s', 'wpsc'), ($count+$current_page) ) . "\">".($count+$current_page)."</a>";		
 			$i++;
 			}else{
 			break;

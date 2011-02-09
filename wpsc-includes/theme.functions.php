@@ -403,11 +403,11 @@ function wpsc_single_template( $content ) {
 
 	global $wpdb, $post, $wp_query, $wpsc_query;
 
-
 	$single_theme_path = wpsc_get_template_file_path( 'wpsc-single_product.php' );
 	if((!isset($wp_query->is_product)) && !isset($wp_query->query_vars['wpsc_product_category']))return $content;
 
 	if(isset($wpsc_query->query['paged']) && $wpsc_query->post_count <= 1){ 
+
 		remove_filter( "the_content", "wpsc_single_template" );
 		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
@@ -444,7 +444,7 @@ function wpsc_single_template( $content ) {
 		ob_end_clean();
 		list( $wp_query, $wpsc_temp_query ) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query objects back
 		
-	}elseif(  is_archive() && wpsc_is_viewable_taxonomy() || ($wp_query->post_count > 1 && 1 == $wp_query->is_product)){
+	}elseif( is_archive() && wpsc_is_viewable_taxonomy() || ($wp_query->post_count > 1 && 1 == $wp_query->is_product)){
 		remove_filter( "the_content", "wpsc_single_template" );		
 		list( $wp_query, $wpsc_query ) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
 		if(isset($wp_query->query['pagename']))
@@ -469,7 +469,7 @@ function wpsc_single_template( $content ) {
 
 function wpsc_is_viewable_taxonomy(){
 	global $wp_query;
-	if(isset($wp_query->query_vars['taxonomy']) && ('wpsc_product_category' == $wp_query->query_vars['taxonomy'] ||  'product_tag' == $wp_query->query_vars['taxonomy'] ))
+	if(isset($wp_query->query_vars['taxonomy']) && ('wpsc_product_category' == $wp_query->query_vars['taxonomy'] ||  'product_tag' == $wp_query->query_vars['taxonomy'] ) || isset($wp_query->query_vars['wpsc_product_category']))
 		return true;
 	else
 		return false;
@@ -488,8 +488,8 @@ function wpsc_the_category_title($title='', $id=''){
 	$post = get_post($id);
 
 	// If its the category page
-	if( wpsc_is_viewable_taxonomy() && 'wpsc-product' == $post->post_type && $wp_query->posts[0]->post_title == $post->post_title && $wp_query->is_archive){
-		$category = get_term_by('slug',$wp_query->query_vars['term'],'wpsc_product_category');
+	if( wpsc_is_viewable_taxonomy() && $wp_query->posts[0]->post_title == $post->post_title && $wp_query->is_archive){
+		$category = get_term_by('slug',$wp_query->query_vars['wpsc_product_category'],'wpsc_product_category');
 		remove_filter('the_title','wpsc_the_category_title');
 	}
 	
@@ -522,9 +522,6 @@ function wpsc_the_category_title($title='', $id=''){
  */
 function wpsc_the_category_template($template){
 	global $wp_query;
-	//this little bit of code makes sure we dont get an empty content section if no posts are found for a wpec category
-	if(wpsc_is_viewable_taxonomy() && 0 == $wp_query->post_count)
-		$wp_query->post_count += 1;
 	//this bit of code makes sure we use a nice standard page template for our products
 	if(wpsc_is_viewable_taxonomy() && false !== strpos($template,'archive'))
 		return str_ireplace('archive', 'page',$template);
@@ -1068,7 +1065,7 @@ function wpsc_products_page( $content = '' ) {
 function wpsc_all_products_on_page(){
 	global $wp_query,$wpsc_query;
 	do_action('wpsc_swap_the_template');
-	if($wp_query->query_vars['post_type'] == 'wpsc-product'){
+	if($wp_query->query_vars['post_type'] == 'wpsc-product' || isset($wp_query->query_vars['wpsc_product_category']) ){
 		if (isset($wp_query->post_count) && 1 == $wp_query->post_count && file_exists(STYLESHEETPATH.'/single-wpsc-product.php')){
 			include(STYLESHEETPATH. '/single-wpsc-product.php');
 			exit();
