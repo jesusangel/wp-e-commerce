@@ -36,16 +36,16 @@ function wpsc_options_import() {
 				$categories = get_terms( 'wpsc_product_category', 'hide_empty=0&parent=' . $category_id );
 ?>
 
-				<p>For each column, select the field it corresponds to in 'Belongs to'. You can upload as many products as you like.</p>
+				<p><?php _e( 'For each column, select the field it corresponds to in \'Belongs to\'. You can upload as many products as you like.', 'wpsc' ); ?></p>
 				<div class='metabox-holder' style='width:90%'>
 					<input type='hidden' name='csv_action' value='import'>
 					
 					<div style='width:100%;' class='postbox'>
-						<h3 class='hndle'>Product Status</h3>
+						<h3 class='hndle'><?php _e('Product Status' , 'wpsc' ); ?></h3>
 						<div class='inside'>
 							<table>
 								<tr><td style='width:80%;'>
-							Select if you would like to import your products in as Drafts or Publish them right away.
+							<?php _e( 'Select if you would like to import your products in as Drafts or Publish them right away.' , 'wpsc' ); ?>
 								<br />
 								</td><td>
 									<select name='post_status'>
@@ -90,7 +90,7 @@ function wpsc_options_import() {
 				</div>
 			</div>
 <?php } ?>
-			<label for='category'>Please select a category you would like to place all products from this CSV into:</label>
+			<label for='category'><?php _e('Please select a category you would like to place all products from this CSV into' , 'wpsc' ); ?>:</label>
 			<select id='category' name='category'>
 <?php
 			foreach ( $categories as $category ) {
@@ -163,7 +163,7 @@ function wpsc_options_import() {
 			$product_columns = wpsc_sanitise_product_forms( $product_columns );
 			wpsc_insert_product( $product_columns );
 		}
-		echo "<br /><br />Success, your <a href='?page=wpsc-edit-products'>products</a> have been upload.";
+		echo "<br /><br />Success, your <a href='".admin_url('edit.php?post_type=wpsc-product')."'>products</a> have been upload.";
 	}
 ?>
 		</div>
