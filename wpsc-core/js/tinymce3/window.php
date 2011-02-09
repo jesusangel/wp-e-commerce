@@ -2,7 +2,7 @@
 
 require_once( dirname( dirname( dirname(__FILE__) ) ) . '/wpsc-config.php');
 $categorylist = get_terms('wpsc_product_category',array('hide_empty'=> 0));
-$allProducts = get_posts('post_type=wpsc-product');
+$allProducts = get_posts('post_type=wpsc-product&nopaging=true');
 
 //Check capabilities
 if ( !current_user_can('edit_pages') && !current_user_can('edit_posts') ) 
