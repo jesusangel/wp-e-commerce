@@ -882,11 +882,11 @@ function wpsc_options_presentation() {
 				</tr>
 			</table>
 
-			<h3 class="form_group"><?php _e( 'Product Group Settings', 'wpsc' ); ?></h3>
+			<h3 class="form_group"><?php _e( 'Product Category Settings', 'wpsc' ); ?></h3>
 			<table class='wpsc_options form-table'>
 
 				<tr>
-					<th scope="row"><?php _e( 'Show Product Group Description', 'wpsc' ); ?>:</th>
+					<th scope="row"><?php _e( 'Show Product Category Description', 'wpsc' ); ?>:</th>
 					<td>
 <?php
 						$wpsc_category_description = get_option( 'wpsc_category_description' );
@@ -910,7 +910,7 @@ function wpsc_options_presentation() {
 
 				<tr>
 					<th scope="row">
-						<?php _e( 'Show Product Group Thumbnails', 'wpsc' ); ?>:
+						<?php _e( 'Show Product Category Thumbnails', 'wpsc' ); ?>:
 					</th>
 					<td>
 <?php
@@ -936,7 +936,7 @@ function wpsc_options_presentation() {
 
 				<tr>
 					<th scope="row">
-						<?php _e( 'Show Product Count per Product Group', 'wpsc' ); ?>:
+						<?php _e( 'Show Product Count per Product Category', 'wpsc' ); ?>:
 					</th>
 					<td>
 <?php
