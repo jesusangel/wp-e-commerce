@@ -971,8 +971,10 @@ function wpsc_product_link( $permalink, $post, $leavename ) {
 		}
 
 		$post_name = $post->post_name;
-		if ( in_array( $post_name, $product_category_slugs ) )
+	/*
+	if ( in_array( $post_name, $product_category_slugs ) )
 			$post_name = "product/{$post_name}";
+	*/
 
 		if(isset($category_slug) && empty($category_slug)) $category_slug = 'product';
 
