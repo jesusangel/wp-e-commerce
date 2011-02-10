@@ -298,7 +298,7 @@ class wpec_taxes_controller {
          //retrieve the bands and add the disabled value
          $tax_bands = $this->wpec_taxes->wpec_taxes_get_bands();
          if ( !empty( $tax_bands ) ) {
-            array_unshift( $tax_bands, __( 'Disabled' ) );
+            array_unshift( $tax_bands, __( 'Disabled', 'wpsc' ) );
 
             //set select settings
             $default_select_settings = array(
@@ -309,16 +309,16 @@ class wpec_taxes_controller {
             $band_select_settings = wp_parse_args( $input_settings, $default_select_settings );
 
             //set the default option
-            $default_option = (isset( $custom_tax_band )) ? $custom_tax_band : __( 'Disabled' );
+            $default_option = (isset( $custom_tax_band )) ? $custom_tax_band : __( 'Disabled', 'wpsc' );
 
             //echo select
             $returnable = $this->wpec_taxes_build_select_options( $tax_bands, 'index', 'name', $default_option, $band_select_settings );
          } else {
-            $returnable = '<p>' . __( 'No Tax Bands Setup. Set Tax Bands up in <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>' ) . '</p>';
+            $returnable = '<p>' . __( 'No Tax Bands Setup. Set Tax Bands up in <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>', 'wpsc' ) . '</p>';
          }// if
       } elseif(!$this->wpec_taxes->wpec_taxes_get_enabled()) {
          $returnable = '<p>';
-         $returnable .= __( 'Taxes are not enabled. See <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>' );
+         $returnable .= __( 'Taxes are not enabled. See <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>', 'wpsc' );
          $returnable .= '</p>';
       }// if
 
@@ -589,7 +589,7 @@ class wpec_taxes_controller {
          //select All Markets by default
          $selected_country = array(
             'isocode' => 'all-markets',
-            'country' => 'All Markets'
+            'country' => __('All Markets', 'wpsc')
          );
       }// if
       //get countries
@@ -608,7 +608,7 @@ class wpec_taxes_controller {
       if ( $type == 'rates' ) {
          $returnable[] = $this->wpec_taxes_build_input( $shipping_input_settings );
       }// if
-      $returnable[] = "<a class='taxes-{$type}-delete' id='delete-{$key}' href='#'>" . __( 'Delete' ) . "</a>";
+      $returnable[] = "<a class='taxes-{$type}-delete' id='delete-{$key}' href='#'>" . __( 'Delete', 'wpsc' ) . "</a>";
 
       $returnable = "<p id='{$type}-row-{$key}' class='wpec-tax-{$type}'>" . implode( "\n", $returnable ) . '</p>';
 

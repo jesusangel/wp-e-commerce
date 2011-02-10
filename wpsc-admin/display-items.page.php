@@ -153,17 +153,17 @@ function wpsc_additional_column_data( $column ) {
 
 			switch( $unit ) {
 				case "pound":
-					$unit = " lbs.";
+					$unit = __(" lbs.", "wpsc");
 					break;
 				case "ounce":
-					$unit = " oz.";
+					$unit = __(" oz.", "wpsc");
 					break;
 				case "gram":
-					$unit = " g";
+					$unit = __(" g", "wpsc");
 					break;
 				case "kilograms":
 				case "kilogram":
-					$unit = " kgs.";
+					$unit = __(" kgs.", "wpsc");
 					break;
 			}
                         echo $weight.$unit;
@@ -226,7 +226,7 @@ function wpsc_additional_column_data( $column ) {
                             $out[] = "<a href='?post_type=wpsc-product&amp;wpsc_product_category={$c->slug}'> " . esc_html( sanitize_term_field( 'name', $c->name, $c->term_id, 'category', 'display' ) ) . "</a>";
                             echo join( ', ', $out );
 			} else {
-                            _e('Uncategorized');
+                            _e('Uncategorized', 'wpsc');
 			}
                 break;
             case 'featured' :
@@ -298,7 +298,7 @@ function wpsc_cats_restrict_manage_posts() {
 
             // output html for taxonomy dropdown filter
             echo "<select name='$tax_slug' id='$tax_slug' class='postform'>";
-            echo "<option value=''>Show All $tax_name</option>";
+            echo "<option value=''>" . sprintf(_x('Show All %s', 'Show all [category name]', 'wpsc'), $tax_name) . "</option>";
             foreach ( $terms as $term ) 
                 echo '<option value='. $term->slug, $_GET[$tax_slug] == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
             echo "</select>";
