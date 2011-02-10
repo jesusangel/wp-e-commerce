@@ -68,6 +68,10 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 	function _construct_value_array($aggregate = false) {
 		global $wpdb;
 		$paypal_vars = array();
+		$add_tax = true;
+		if(get_option('wpec_taxes_inprice') == 'inclusive')
+			$add_tax = false;
+			
 
 		// Store settings to be sent to paypal
 		$paypal_vars += array(
@@ -202,10 +206,13 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 				'cmd' => '_ext-enter',
 				'redirect_cmd' => '_cart',
 			);
-
+			$handling = $this->cart_data['base_shipping'];
+			if($add_tax)
+				$handling += $this->cart_data['cart_tax'];
+			
 			// Set base shipping
 			$paypal_vars += array(
-				'handling_cart' => $this->cart_data['base_shipping']
+				'handling_cart' => $handling
 			);
 			
 			// Stick the cart item values together here
@@ -216,7 +223,7 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 					$paypal_vars += array(
 						"item_name_$i" => $cart_row['name'],
 						"amount_$i" => $this->format_price($cart_row['price']),
-						"tax_$i" => $this->format_price($cart_row['tax']),
+						"tax_$i" => ($add_tax) ? $this->format_price($cart_row['tax']) : 0,
 						"quantity_$i" => $cart_row['quantity'],
 						"item_number_$i" => $cart_row['product_id'],
 						// additional shipping for the the (first item / total of the items)
@@ -248,12 +255,12 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 				} else {
 					$paypal_currency_productprice =  $this->cart_data['total_price'];
 				}
-
+				
 				$paypal_vars['item_name_'.$i] = "Your Shopping Cart";
 				$paypal_vars['amount_'.$i] = ($this->format_price(
 					$paypal_currency_productprice,
 					$local_currency_code
-				)-$this->cart_data['base_shipping']);
+				)-$paypal_vars['handling_cart']);
 				$paypal_vars['quantity_'.$i] = 1;
 				$paypal_vars['shipping_'.$i] = 0;
 				$paypal_vars['shipping2_'.$i] = 0;
