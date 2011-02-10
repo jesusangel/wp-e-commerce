@@ -126,7 +126,7 @@ function wpsc_price_control_forms(){
     	<?php /* Check product if a product has variations (Wording doesn't make sense.  If Variations box is closed, you don't go there, and it's not necessarily "below") */ ?>
     	<?php if( wpsc_product_has_children( $post->ID ) ) : ?>
     		<?php $price = wpsc_product_variation_price_available( $post->ID ); ?>
-			<p><?php printf( __( 'This Product has variations, to edit the price please use the %1s Variation Controls%2s below.' , 'wpsc' ), '<a href="#variation_control">','</a>' ); ?></p>
+			<p><?php _e( 'This Product has variations, to edit the price please use the <a href="#variation_control">Variation Controls</a> below.' , 'wpsc'  ); ?></p>
 			<p><?php printf( __( 'Price: %s and above.' ,'wpsc' ) , $price ); ?></p>
 		<?php else: ?>
 		
@@ -143,7 +143,7 @@ function wpsc_price_control_forms(){
 		</div>
 		<br style="clear:both" />
 		<br style="clear:both" />
-		<a href='#' class='wpsc_add_new_currency'>+ <?php _e( 'New Currency', 'wpsc' ); ?></a>
+		<a href='#' class='wpsc_add_new_currency'><?php _e( '+ New Currency', 'wpsc' ); ?></a>
 		<br />
 		<!-- add new currency layer -->
 		<div class='new_layer'>
@@ -179,7 +179,7 @@ function wpsc_price_control_forms(){
 					</option> <?php
 				} ?>
 			</select>
-			<?php _e( 'Price', 'wpsc' ); ?>:  <input type='text' class='text' size='8' name='newCurrPrice[]' value='<?php echo $alt_price; ?>' style=' display:inline' />
+			<?php _e( 'Price:', 'wpsc' ); ?> <input type='text' class='text' size='8' name='newCurrPrice[]' value='<?php echo $alt_price; ?>' style=' display:inline' />
 			<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $iso; ?>'><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/cross.png' /></a></div>
 <?php	}
 		
@@ -191,7 +191,7 @@ function wpsc_price_control_forms(){
 				<br /><br /> <input type='checkbox' value='1' name='table_rate_price[state]' id='table_rate_price'  <?php echo (((bool)$product_meta['table_rate_price']['state'] == true) ? 'checked=\'checked\'' : ''); ?> />
 				<label for='table_rate_price'><?php _e( 'Table Rate Price', 'wpsc' ); ?></label>
 				<div id='table_rate'>
-					<a class='add_level' style='cursor:pointer;'>+ Add level</a><br />
+					<a class='add_level' style='cursor:pointer;'><?php _e('+ Add level', 'wpsc'); ?></a><br />
 					<br style='clear:both' />
 					<table>
 						<tr>
@@ -241,7 +241,7 @@ function wpsc_stock_control_forms() {
 	if ( !isset( $product_meta['unpublish_when_none_left'] ) )
 		$product_meta['unpublish_when_none_left'] = ''; ?>
 		
-        <label for="wpsc_sku"><abbr title="<?php _e( 'Stock Keeping Unit', 'wpsc' ); ?>">SKU:</abbr></label>
+        <label for="wpsc_sku"><abbr title="<?php _e( 'Stock Keeping Unit', 'wpsc' ); ?>"><?php _e('SKU:', 'wpsc'); ?></abbr></label>
 <?php
 		if ( !isset( $product_data['meta']['_wpsc_sku'] ) )
 			$product_data['meta']['_wpsc_sku'] = $wpsc_product_defaults['meta']['sku']; ?><br />
@@ -522,10 +522,10 @@ function wpsc_product_shipping_forms() {
 			  <td>
 				 <input type='text' size='5' name='meta[_wpsc_product_metadata][weight]' value='<?php echo $product_data['transformed']['weight']; ?>' />
 				 <select name='meta[_wpsc_product_metadata][weight_unit]'>
-					<option value='pound' <?php echo (($product_meta['display_weight_as'] == 'pound') ? 'selected="selected"' : ''); ?> >Pounds</option>
-					<option value='ounce' <?php echo ((preg_match( "/o(u)?nce/", $product_meta['display_weight_as'] )) ? 'selected="selected"' : ''); ?> >Ounces</option>
-					<option value='gram' <?php echo (($product_meta['display_weight_as'] == 'gram') ? 'selected="selected"' : ''); ?> >Grams</option>
-					<option value='kilogram' <?php echo (($product_meta['display_weight_as'] == 'kilogram' || $product_meta['display_weight_as'] == 'kilograms') ? 'selected="selected"' : ''); ?> >Kilograms</option>
+					<option value='pound' <?php echo (($product_meta['display_weight_as'] == 'pound') ? 'selected="selected"' : ''); ?> ><?php _e('Pounds', 'wpsc'); ?></option>
+					<option value='ounce' <?php echo ((preg_match( "/o(u)?nce/", $product_meta['display_weight_as'] )) ? 'selected="selected"' : ''); ?> ><?php _e('Ounces', 'wpsc'); ?></option>
+					<option value='gram' <?php echo (($product_meta['display_weight_as'] == 'gram') ? 'selected="selected"' : ''); ?> ><?php _e('Grams', 'wpsc'); ?></option>
+					<option value='kilogram' <?php echo (($product_meta['display_weight_as'] == 'kilogram' || $product_meta['display_weight_as'] == 'kilograms') ? 'selected="selected"' : ''); ?> ><?php _e('Kilograms', 'wpsc'); ?></option>
 				 </select>
 			  </td>
                     </tr>
@@ -537,9 +537,9 @@ function wpsc_product_shipping_forms() {
 			  <td>
                              <input type='text' size='5' name='meta[_wpsc_product_metadata][dimensions][height]' value= '<?php echo $product_meta['dimensions']['height']; ?>'>
                              <select name='meta[_wpsc_product_metadata][dimensions][height_unit]'>
-                                    <option value='in' <?php echo (($product_meta['dimensions']['height_unit'] == 'in') ? 'selected' : ''); ?> >inches</option>
-                                    <option value='cm' <?php echo (($product_meta['dimensions']['height_unit'] == 'cm') ? 'selected' : ''); ?> >cm</option>
-                                    <option value='meter' <?php echo (($product_meta['dimensions']['height_unit'] == 'meter') ? 'selected' : ''); ?> >meter</option>
+                                    <option value='in' <?php echo (($product_meta['dimensions']['height_unit'] == 'in') ? 'selected' : ''); ?> ><?php _e('inches', 'wpsc'); ?></option>
+                                    <option value='cm' <?php echo (($product_meta['dimensions']['height_unit'] == 'cm') ? 'selected' : ''); ?> ><?php _e('cm', 'wpsc'); ?></option>
+                                    <option value='meter' <?php echo (($product_meta['dimensions']['height_unit'] == 'meter') ? 'selected' : ''); ?> ><?php _e('meter', 'wpsc'); ?></option>
                              </select>
                              </td>
                          </tr>
@@ -550,9 +550,9 @@ function wpsc_product_shipping_forms() {
 			  <td>
 				 <input type='text' size='5' name='meta[_wpsc_product_metadata][dimensions][width]' value='<?php echo $product_meta['dimensions']['width']; ?> '>
 				 <select name='meta[_wpsc_product_metadata][dimensions][width_unit]'>
-					<option value='in' <?php echo(($product_meta['dimensions']['width_unit'] == 'in') ? 'selected' : ''); ?> >inches</option>
-					<option value='cm' <?php echo (($product_meta['dimensions']['width_unit'] == 'cm') ? 'selected' : ''); ?> >cm</option>
-					<option value='meter' <?php echo (($product_meta['dimensions']['width_unit'] == 'meter') ? 'selected' : ''); ?> >meter</option>
+					<option value='in' <?php echo(($product_meta['dimensions']['width_unit'] == 'in') ? 'selected' : ''); ?> ><?php _e('inches', 'wpsc'); ?></option>
+					<option value='cm' <?php echo (($product_meta['dimensions']['width_unit'] == 'cm') ? 'selected' : ''); ?> ><?php _e('cm', 'wpsc'); ?></option>
+					<option value='meter' <?php echo (($product_meta['dimensions']['width_unit'] == 'meter') ? 'selected' : ''); ?> ><?php _e('meter', 'wpsc'); ?></option>
 				 </select>
 				 </td>
 				 </tr>
@@ -563,9 +563,9 @@ function wpsc_product_shipping_forms() {
 			  <td>
 				 <input type='text' size='5' name='meta[_wpsc_product_metadata][dimensions][length]' value='<?php echo $product_meta['dimensions']['length']; ?>'>
 				 <select name='meta[_wpsc_product_metadata][dimensions][length_unit]'>
-					<option value='in' <?php echo(($product_meta['dimensions']['length_unit'] == 'in') ? 'selected' : ''); ?> >inches</option>
-					<option value='cm' <?php echo(($product_meta['dimensions']['length_unit'] == 'cm') ? 'selected' : ''); ?> >cm</option>
-					<option value='meter' <?php echo (($product_meta['dimensions']['length_unit'] == 'meter') ? 'selected' : ''); ?> >meter</option>
+					<option value='in' <?php echo(($product_meta['dimensions']['length_unit'] == 'in') ? 'selected' : ''); ?> ><?php _e('inches', 'wpsc'); ?></option>
+					<option value='cm' <?php echo(($product_meta['dimensions']['length_unit'] == 'cm') ? 'selected' : ''); ?> ><?php _e('cm', 'wpsc'); ?></option>
+					<option value='meter' <?php echo (($product_meta['dimensions']['length_unit'] == 'meter') ? 'selected' : ''); ?> ><?php _e('meter', 'wpsc'); ?></option>
 				 </select>
 				 </td>
 			 </tr>
@@ -704,9 +704,9 @@ function wpsc_product_advanced_forms() {
 		<td class='itemfirstcol' colspan='2'><br />
 			<strong><?php _e( 'Enable Comments', 'wpsc' ); ?>:</strong><br />
 			<select name='meta[_wpsc_product_metadata][enable_comments]'>
-				<option value='' <?php echo ((isset( $product_meta['enable_comments'] ) && $product_meta['enable_comments'] == '' ) ? 'selected' : ''); ?> >Use Default</option>
-				<option value='1' <?php echo ((isset( $product_meta['enable_comments'] ) && $product_meta['enable_comments'] == '1') ? 'selected' : ''); ?> >Yes</option>
-				<option value='0' <?php echo ((isset( $product_meta['enable_comments'] ) && $product_meta['enable_comments'] == '0') ? 'selected' : ''); ?> >No</option>
+				<option value='' <?php echo ((isset( $product_meta['enable_comments'] ) && $product_meta['enable_comments'] == '' ) ? 'selected' : ''); ?> ><?php _e('Use Default', 'wpsc'); ?></option>
+				<option value='1' <?php echo ((isset( $product_meta['enable_comments'] ) && $product_meta['enable_comments'] == '1') ? 'selected' : ''); ?> ><?php _e('Yes', 'wpsc'); ?></option>
+				<option value='0' <?php echo ((isset( $product_meta['enable_comments'] ) && $product_meta['enable_comments'] == '0') ? 'selected' : ''); ?> ><?php _e('No', 'wpsc'); ?></option>
 			</select>
 			<br/><?php _e( 'Allow users to comment on this Product.', 'wpsc' ); ?>
 		</td>
@@ -745,9 +745,9 @@ function wpsc_product_external_link_forms() {
                      <th valign="top" scope="row"><label for="external_link_target"><?php _e( 'External Link Target', 'wpsc' ); ?></label></th>
                     <td>
                         <select id="external_link_target" name="meta[_wpsc_product_metadata][external_link_target]">
-                            <option value="">Default (set by theme)</option>
-                            <option value="_self" <?php echo $external_link_target_value_selected['_self']; ?>>Open link in the same window</option>
-                            <option value="_blank" <?php echo $external_link_target_value_selected['_blank']; ?>>Open link in a new window</option>
+                            <option value=""><?php _ex('Default (set by theme)', 'External product link target', 'wpsc'); ?></option>
+                            <option value="_self" <?php echo $external_link_target_value_selected['_self']; ?>><?php _e('Open link in the same window', 'wpsc'); ?></option>
+                            <option value="_blank" <?php echo $external_link_target_value_selected['_blank']; ?>><?php _e('Open link in a new window', 'wpsc'); ?></option>
                         </select>
                     </td>
                 </tr>
@@ -800,7 +800,7 @@ function wpsc_product_download_forms() {
 function wpsc_product_label_forms() {
     //This is new to me...not sure why this is even here
 ?>
-	<div id='wpsc_product_label_forms' class='postbox <?php echo ((array_search( 'wpsc_product_label_forms', $product_data['closed_postboxes'] ) !== false) ? 'closed' : ''); ?>'><div class="handlediv" title="Click to toggle"><br></div>
+	<div id='wpsc_product_label_forms' class='postbox <?php echo ((array_search( 'wpsc_product_label_forms', $product_data['closed_postboxes'] ) !== false) ? 'closed' : ''); ?>'><div class="handlediv" title="<?php _e('Click to toggle', 'wpsc'); ?>"><br></div>
 		<h3 class="<?php if ( function_exists( 'add_object_page' ) ) : ?>hndle<?php endif; ?>">
 			<?php if ( !function_exists( 'add_object_page' ) ) : ?>
 
