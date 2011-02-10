@@ -142,12 +142,12 @@ function wpec_options_taxes() {
 ?>
 					<!--End Taxes Output-->
 					<p>
-						<a id="add_taxes_rate" href="#"><?php _e( 'Add New Tax Rate' ); ?></a>
+						<a id="add_taxes_rate" href="#"><?php _e( 'Add New Tax Rate', 'wpsc' ); ?></a>
 					</p>
 				</div>
 			</div>
 			<div id='wpec-taxes-bands-container' class='postbox'>
-				<h3 class='hndle' style='cursor: default'><?php _e( 'Tax Bands' ); ?></h3>
+				<h3 class='hndle' style='cursor: default'><?php _e( 'Tax Bands', 'wpsc' ); ?></h3>
 				<div id='wpec-taxes-bands' class='inside'>
 
 <?php
@@ -168,7 +168,7 @@ function wpec_options_taxes() {
 					}// if
 ?>
 					<p>
-						<a id="add_taxes_band" href="#"><?php _e( 'Add New Tax Band' ); ?></a>
+						<a id="add_taxes_band" href="#"><?php _e( 'Add New Tax Band', 'wpsc' ); ?></a>
 								</p>
 							</div>
 						</div><!--wpec-taxes-bands-container-->

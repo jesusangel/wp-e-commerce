@@ -153,7 +153,7 @@ function wpsc_admin_variation_forms($variation_id =  null) {
 	}
 	if($variation_name != '') {
 		?>
-		<h3><?php _e('Edit Variation Set', 'wpsc'); ?><span> (<a href="admin.php?page=wpsc-edit-variations">Add new Variation Set</a>)</span></h3>
+		<h3><?php _e('Edit Variation Set', 'wpsc'); ?><span> (<a href="admin.php?page=wpsc-edit-variations"><?php _e('Add new Variation Set', 'wpsc'); ?></a>)</span></h3>
 		<?php
 	} else {
 		?>

@@ -277,9 +277,9 @@ add_action( 'rdf_item', 'wpsc_add_product_price_to_rss' );
 function wpsc_register_post_types() {
 	global $wpsc_page_titles, $wp_rewrite;
         $labels = array(
-            'name' => _x( 'Products', 'post type', 'wpsc' ),
-            'singular_name' => _x( 'Product', 'post type', 'wpsc' ),
-            'add_new' => _x( 'Add New', 'wpsc' ),
+            'name' => _x( 'Products', 'post type name', 'wpsc' ),
+            'singular_name' => _x( 'Product', 'post type singular name', 'wpsc' ),
+            'add_new' => _x( 'Add New', 'admin menu: add new product' 'wpsc' ),
             'add_new_item' => __('Add New Product', 'wpsc' ),
             'edit_item' => __('Edit Product', 'wpsc' ),
             'new_item' => __('New Product', 'wpsc' ),
@@ -317,14 +317,14 @@ function wpsc_register_post_types() {
 	) );
 
 	// Product tags
-	$labels = array( 'name' => _x( 'Product Tags', 'taxonomy general name' ),
-		'singular_name' => _x( 'Product Tag', 'taxonomy singular name' ),
-		'search_items' => __( 'Product Search Tags' ),
-		'all_items' => __( 'All Product Tags' ),
-		'edit_item' => __( 'Edit Tag' ),
-		'update_item' => __( 'Update Tag' ),
-		'add_new_item' => __( 'Add new Product Tag' ),
-		'new_item_name' => __( 'New Product Tag Name' ) );
+	$labels = array( 'name' => _x( 'Product Tags', 'taxonomy general name', 'wpsc' ),
+		'singular_name' => _x( 'Product Tag', 'taxonomy singular name', 'wpsc' ),
+		'search_items' => __( 'Product Search Tags', 'wpsc' ),
+		'all_items' => __( 'All Product Tags' , 'wpsc'),
+		'edit_item' => __( 'Edit Tag', 'wpsc' ),
+		'update_item' => __( 'Update Tag', 'wpsc' ),
+		'add_new_item' => __( 'Add new Product Tag', 'wpsc' ),
+		'new_item_name' => __( 'New Product Tag Name', 'wpsc' ) );
 
 	register_taxonomy( 'product_tag', 'wpsc-product', array(
 		'hierarchical' => false,

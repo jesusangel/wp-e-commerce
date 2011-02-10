@@ -81,9 +81,9 @@ function wpsc_add_to_cart() {
 		if ( $parameters['quantity'] <= 0 ) {
 			$cart_messages[] = __( 'Sorry, but you cannot add zero items to your cart', 'wpsc' );
 		} else if ( $wpsc_cart->get_remaining_quantity( $product_id, $parameters['variation_values'], $parameters['quantity'] ) > 0 ) {
-			$cart_messages[] = str_replace( "[number]", $wpsc_cart->get_remaining_quantity( $product_id, $parameters['variation_values'], $parameters['quantity'] ), __( 'Sorry, but there are only [number] of this item in stock.', 'wpsc' ) );
+			$cart_messages[] = sprintf( __( 'Sorry, but there are only %s of this item in stock.', 'wpsc' ), $wpsc_cart->get_remaining_quantity( $product_id, $parameters['variation_values'], $parameters['quantity'] ) );
 		} else {
-			$cart_messages[] = str_replace( "[product_name]", $product->post_title, __( 'Sorry, but the item "[product_name]" is out of stock.', 'wpsc' ) );
+			$cart_messages[] = sprintf( __( 'Sorry, but the item "%s" is out of stock.', 'wpsc' ), $product->post_title,  );
 		}
 	}
 
