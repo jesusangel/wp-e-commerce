@@ -1028,6 +1028,8 @@ function wpsc_products_page( $content = '' ) {
 	global $wpdb, $wp_query, $wpsc_query, $wpsc_query_vars;
 	$output = '';
 	if ( preg_match( "/\[productspage\]/", $content ) ) {
+		 global $more;
+		$more = 0; 
 		remove_filter( 'the_content', 'wpautop' );
 
 		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
@@ -1248,17 +1250,6 @@ function wpsc_enable_page_filters( $excerpt = '' ) {
 	add_filter( 'the_content', 'wpsc_place_shopping_cart', 12 );
 	add_filter( 'the_content', 'wpsc_transaction_results', 12 );
 	add_filter( 'the_content', 'wpsc_user_log', 12 );
-	return $excerpt;
-}
-
-function wpsc_disable_page_filters( $excerpt = '' ) {
-	remove_filter( 'the_content', 'add_to_cart_shortcode' ); //Used for add_to_cart_button shortcode
-	remove_filter( 'the_content', 'wpsc_products_page' );
-	remove_filter( 'the_content', 'wpsc_single_template' );
-	remove_filter( 'the_content', 'wpsc_place_shopping_cart' );
-	remove_filter( 'the_content', 'wpsc_transaction_results' );
-	remove_filter( 'the_content', 'wpsc_user_log' );
-	remove_filter( 'the_content', 'wpsc_substitute_buy_now_button' );
 	return $excerpt;
 }
 
