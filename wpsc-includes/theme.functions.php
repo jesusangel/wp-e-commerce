@@ -1449,9 +1449,9 @@ class WPSC_Hide_subcatsprods_in_cat {
 		global $wpdb;
 		remove_action( 'posts_where', array( &$this, 'where' ) );
 		remove_action( 'posts_join', array( &$this, 'join' ) );
-		if(strpos($join, "JOIN $wpdb->term_relationships ON $wpdb->posts.id =  $wpdb->term_relationships.object_id"))
+		if(strpos($join, "JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id"))
 			return $join;
-		$join .= " JOIN $wpdb->term_relationships ON $wpdb->posts.id =  $wpdb->term_relationships.object_id ";
+		$join .= " JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id ";
 		return $join;
 	}
 }
