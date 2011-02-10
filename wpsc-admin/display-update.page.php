@@ -57,20 +57,20 @@ function wpsc_display_update_page() { ?>
 
 	<?php
 		if ( isset( $_POST['run_updates'] ) ) :
-			echo 'Updating Categories...';
+			echo __('Updating Categories...', 'wpsc');
 			wpsc_convert_category_groups();
-			echo '<br />Updating Variations...';
+			echo '<br />' . __('Updating Variations...', 'wpsc');
 			wpsc_convert_variation_sets();
-			echo '<br />Updating Products...';
+			echo '<br />' . __('Updating Products...', 'wpsc');
 			wpsc_convert_products_to_posts();
-			echo '<br />Updating Child Products...';
+			echo '<br />' . __('Updating Child Products...', 'wpsc');
 			wpsc_convert_variation_combinations();
-			echo '<br />Updating Product Files...';
+			echo '<br />' . __('Updating Product Files...', 'wpsc');
 			wpsc_update_files();
-			echo '<br />Updating Database...';
+			echo '<br />' . __('Updating Database...', 'wpsc');
 			wpsc_create_or_update_tables();
 			wpsc_update_database();
-			echo '<br /><br /><strong>WP e-Commerce updated successfully!</strong>';
+			echo '<br /><br /><strong>' . __('WP e-Commerce updated successfully!', 'wpsc') . '</strong>';
 			update_option('wpsc_version', 3.8);
 			update_option('wpsc_hide_update', true);
 		else:
