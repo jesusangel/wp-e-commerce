@@ -332,8 +332,8 @@ function wpsc_obtain_the_title() {
 		$wp_query->query_vars['wpsc_product_category'] = 0;
 
 
-	if ( isset( $wp_query->query_vars['taxonomy'] ) && 'wpsc_product_category' ==  $wp_query->query_vars['taxonomy']) 
-		$category_id = wpsc_get_the_category_id($wp_query->query_vars['term'],'slug');
+	if ( isset( $wp_query->query_vars['taxonomy'] ) && 'wpsc_product_category' ==  $wp_query->query_vars['taxonomy'] || isset($wp_query->query_vars['wpsc_product_category'])) 
+		$category_id = wpsc_get_the_category_id($wp_query->query_vars['wpsc_product_category'],'slug');
 
 	if ( $category_id > 0 ) {
 
