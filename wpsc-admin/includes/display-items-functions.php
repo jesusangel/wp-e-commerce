@@ -791,7 +791,7 @@ function wpsc_product_download_forms() {
         ?>
             <br />
             <h4><?php _e( "Select an MP3 file to upload as a preview", 'wpsc' ) ?></h4>
-            <input type='file' name='preview_file' value='' /><br />";
+            <input type='file' name='preview_file' value='' /><br />
             <br />
         <?php
 	}
