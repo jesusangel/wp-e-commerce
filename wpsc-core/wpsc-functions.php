@@ -279,7 +279,7 @@ function wpsc_register_post_types() {
         $labels = array(
             'name' => _x( 'Products', 'post type name', 'wpsc' ),
             'singular_name' => _x( 'Product', 'post type singular name', 'wpsc' ),
-            'add_new' => _x( 'Add New', 'admin menu: add new product' 'wpsc' ),
+            'add_new' => _x( 'Add New', 'admin menu: add new product', 'wpsc' ),
             'add_new_item' => __('Add New Product', 'wpsc' ),
             'edit_item' => __('Edit Product', 'wpsc' ),
             'new_item' => __('New Product', 'wpsc' ),
