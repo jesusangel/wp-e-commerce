@@ -70,13 +70,12 @@ global $wp_query;
 			<?php endif; ?>
 		
 			<div class="default_product_display product_view_<?php echo wpsc_the_product_id(); ?> <?php echo wpsc_category_class(); ?> group">   
-				<h2 class="prodtitle">
+				<h2 class="prodtitle entry-title">
 							<?php if(get_option('hide_name_link') == 1) : ?>
 								<?php echo wpsc_the_product_title(); ?>
 							<?php else: ?> 
 								<a class="wpsc_product_title" href="<?php echo wpsc_the_product_permalink(); ?>"><?php echo wpsc_the_product_title(); ?></a>
 							<?php endif; ?>
-							<?php echo wpsc_edit_the_product_link(); ?>
 						</h2>   
 				<?php if(wpsc_show_thumbnails()) :?>
 					<div class="imagecol" id="imagecol_<?php echo wpsc_the_product_id(); ?>">
@@ -213,6 +212,9 @@ global $wp_query;
 									</div><!--close wpsc_buy_button_container-->
 								<?php endif ; ?>
 							<?php endif ; ?>
+							<div class="entry-utility wpsc_product_utility">
+								<?php edit_post_link( __( 'Edit', 'wpsc' ), '<span class="edit-link">', '</span>' ); ?>
+							</div>
 						</form><!--close product_form-->
 						
 						<?php if((get_option('hide_addtocart_button') == 0) && (get_option('addtocart_or_buynow')=='1')) : ?>

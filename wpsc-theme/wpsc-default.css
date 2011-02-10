@@ -114,41 +114,18 @@ Author URI: http://instinct.co.nz
 }
 
 .default_product_display h2.prodtitle, #content .default_product_display h2.prodtitle {
-	font-size:20px;
 	margin:0 0 5px 0;
 	line-height:1;
 	clear:none;
 }
 
 .default_product_display span.sale {
-	background:url(wpsc-images/sale.png) no-repeat scroll 0 0 transparent;
 	position:absolute;
 	top:-10px;
 	left:-10px;
 	text-indent:-9999px;
 	display:block;
-	width:72px;
-	height:72px;
 }
-
-.default_product_display h2.prodtitle a,
-#content .default_product_display h2.prodtitle a{
-	text-decoration:none;
-
-	font-family: Arial, sans-serif;
-	font-weight: bold;
-}
-
-.default_product_display h2.prodtitle a.wpsc_edit_product,
-#content .default_product_display h2.prodtitle a.wpsc_edit_product {
-	color:#069;
-}
-
-
-.default_product_display h2.prodtitle a:hover, #content .default_product_display h2.prodtitle a:hover, .default_product_display h2.prodtitle a:active, #content .default_product_display h2.prodtitle a:active {
-	text-decoration:none;
-}
-
 
 .default_product_display .wpsc_description, #content .default_product_display .wpsc_description {
 	font-size:13px;	
@@ -336,37 +313,7 @@ Author URI: http://instinct.co.nz
 #content .default_product_display .wpsc_buy_button_container,
 .single_product_display form.product_form .wpsc_buy_button_container,
 #content .single_product_display form.product_form .wpsc_buy_button_container{
-/*
-	position:absolute;
-	bottom:0px;
-	right:0px;
-*/
 	text-align: right;
-}
-
-.default_product_display .wpsc_buy_button,
-#content .default_product_display .wpsc_buy_button,
-.single_product_display form.product_form input.wpsc_buy_button,
-#content .single_product_display form.product_form input.wpsc_buy_button {
-	cursor: pointer;
-	font-size:12px;
-	line-height: 1.5;
-	border:1px solid #777;
-	border-radius:50px;
-	-moz-border-radius:50px;
-	-webkit-border-radius:50px;
-	color:#333;
-	text-decoration:none;
-	background-color: #fff;
-	margin:10px 0px;
-	padding: 2px 6px 3px;
-}
-
-.default_product_display .wpsc_buy_button:active,
-#content .default_product_display .wpsc_buy_button:active,
-.single_product_display form.product_form input.wpsc_buy_button:active,
-#content .single_product_display form.product_form input.wpsc_buy_button:active {
-	border:1px solid #bbb;
 }
 
 /*-----LIST VIEW PRODUCT DISPLAY-----*/
@@ -472,6 +419,10 @@ table.list_productdisplay .quantity_container {
 	display:inline;	
 }
 
+#content, #content input.wpsc_buy_button{
+	font-size: 12px;
+}
+
 table.list_productdisplay .wpsc_buy_button_container {
 	display:inline;
 	position:relative;
@@ -544,9 +495,9 @@ table.list_productdisplay p.soldout {
 	position:relative;	
 }
 
-.single_product_display .imagecol {
+.imagecol {
 	margin-right:5px;
-	width:160px;
+	width:25%;
 	float:left;	
 	position:relative;
 }
@@ -561,7 +512,7 @@ table.list_productdisplay p.soldout {
 	display:block;
 }
 
-.single_product_display .productcol {
+.productcol {
 	float:left;
 	width:70%;
 	position:relative;
@@ -629,12 +580,6 @@ table.list_productdisplay p.soldout {
 	padding:2px;
 }
 
-.single_product_display .wpsc_variation_forms label {
-	color: black;
-	font-family: Georgia, 'Bitstream Charter', serif;
-	font-size: 14px;
-}
-
 .single_product_display .wpsc_variation_forms select {
 	margin:0;
 	min-width:100px;	
@@ -675,15 +620,6 @@ table.list_productdisplay p.soldout {
 
 .single_product_display .wpsc_product_price span.oldprice {
 	text-decoration:line-through;
-	color:#666;
-}
-
-.single_product_display .wpsc_product_price span.currentprice {
-	color:#000;
-}
-
-.single_product_display .wpsc_product_price span.pp_price {
-	color:#000;
 }
 
 .single_product_display p.soldout {
@@ -929,17 +865,6 @@ span.rating_saved{
 	font-size:11px;
 }
 
-.shopping-cart-wrapper .gocheckout:link, .shopping-cart-wrapper .gocheckout:visited {
-	border:1px solid #aaa;
-	border-radius:20px;
-	-moz-border-radius:20px;
-	-webkit-border-radius:20px;
-	color:#333;
-	padding:2px 5px;
-	text-decoration:none;
-	line-height: 2;
-}
-
 .emptycart{
 	padding-right:5px;
 }
@@ -983,17 +908,14 @@ span.rating_saved{
 
 #checkout_page_container table.checkout_cart tr.header th{
 	text-align: center;
-	color: #000;
-	font-weight: bold;
-	font-size: 16px;
-	background-color: #f5f5f5;
+}
+
+#checkout_page_container table.checkout_cart tr.header th:first-child{
+	text-align: left;
 }
 
 #checkout_page_container table.checkout_cart tr.wpsc_total_before_shipping td {
-	background-color: #f5f5f5;
-	border-top:4px solid #000;
-	border-bottom: 0px;
-	font-weight: bold;
+
 }
 
 #checkout_page_container table.checkout_cart tr.wpsc_coupon_row td.coupon_code form{
@@ -1025,15 +947,6 @@ span.rating_saved{
 	margin-bottom: 0px;
 }
 
-#checkout_page_container h3, 
-#checkout_page_container h2,
-#checkout_page_container label.wpsc_email_address,
-#checkout_page_container h4 {
-	margin: 0px 0px 10px 0px;
-	font-size: 1.17em;
-	color:#000;
-}
-
 .wpsc_checkout_table input.text{
 	width:255px;
 }
@@ -1047,14 +960,8 @@ span.rating_saved{
 background-color: #f5f5f5;
 }
 
-#checkout_page_container .total_price.total_shipping, 
-#checkout_page_container .total_price {
-	background-color: #f5f5f5;
-}
-
 #checkout_page_container .total_price td.wpsc_totals{
-	border-bottom: 4px solid #000;
-	font-weight: bold;
+
 }
 
 #checkout_page_container .wpsc_make_purchase{
@@ -1092,11 +999,6 @@ background-color: #f5f5f5;
 
 #content #checkout_page_container table.productcart {
 	border: none;
-}
-
-#checkout_page_container table.checkout_cart tr td {
-	border-top:0px;
-	border-bottom: 1px solid #e1e1e1;
 }
 
 #checkout_page_container table.checkout_cart tr.wpsc_coupon_row tr {
@@ -1231,6 +1133,10 @@ background-color: #f5f5f5;
 
 #shippingsameasbillingmessage{
 	display:none;
+}
+
+.wpsc_no_image{
+	display: none;
 }
 
 .clear{
