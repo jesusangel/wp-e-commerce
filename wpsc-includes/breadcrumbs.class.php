@@ -78,7 +78,11 @@ function wpsc_output_breadcrumbs($options = Array()) {
 	if(!wpsc_has_breadcrumbs()){	
 		return;
 	}
-	
+	$filtered_products_page = array(
+			'url' => get_option('product_list_url'),
+			'name' => $products_page->post_title
+		);
+	$filtered_products_page = apply_filters('wpsc_change_pp_breadcrumb', $filtered_products_page);
 	// If home if the same as products apge only show the products-page link and not the home link
 	if(get_option('page_on_front') != $products_page_id){
 		echo isset($options['before-breadcrumbs']) ? $options['before-breadcrumbs'] : '<div class="wpsc-breadcrumbs">';
@@ -89,7 +93,7 @@ function wpsc_output_breadcrumbs($options = Array()) {
 		echo isset($options['crumb-separator']) ? $options['crumb-separator'] : ' &raquo; ';
 	}	
 	echo isset($options['before-crumb']) ? $options['before-crumb'] : '';
-	echo '<a class="wpsc-crumb" id="wpsc-crumb-'.$products_page_id.'" href="'.get_option('product_list_url').'">'.$products_page->post_title.'</a>';
+	echo '<a class="wpsc-crumb" id="wpsc-crumb-'.$products_page_id.'" href="'.$filtered_products_page['url'].'">'.$filtered_products_page['name'].'</a>';
 	echo isset($options['after-crumb']) ? $options['after-crumb'] : '';
 
 
