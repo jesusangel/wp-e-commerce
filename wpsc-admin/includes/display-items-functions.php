@@ -954,6 +954,8 @@ function wpsc_attachment_fields($form_fields, $post) {
         $size_names = array('small-product-thumbnail' => __('Default Product Thumbnail Size', 'wpsc'), 'medium-single-product' => __('Single Product Image Size', 'wpsc'), 'full' => __('Full Size', 'wpsc'));
 			
 		$check = get_post_meta( $post->ID, '_wpsc_selected_image_size', true );
+		if(!$check)
+			$check = 'small-product-thumbnail';
 
 	//This loop attaches the custom thumbnail/single image sizes to this page
         foreach ( $size_names as $size => $name ) {
@@ -964,7 +966,7 @@ function wpsc_attachment_fields($form_fields, $post) {
 			$css_id = "image-size-{$size}-{$post->ID}";
 			// if this size is the default but that's not available, don't select it
 	
-            $html = "<div class='image-size-item'><input type='radio' " . disabled( $enabled, false, false ) . "name='attachments[$post->ID][image-size]' id='{$css_id}' value='{$size}' ".checked($size, $check, false)." />";
+            $html = "<div class='image-size-item'><input type='radio' " . disabled( $enabled, false, false ) . "name='attachments[$post->ID][image-size]' id='{$css_id}' value='{$size}' " . checked($size, $check, false) . " />";
 
             $html .= "<label for='{$css_id}'>$name</label>";
             // only show the dimensions if that choice is available
