@@ -185,7 +185,7 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
 	return $product_id;
 }
 function wpsc_pre_update( $data , $postarr ) {
- 	if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
+ 	if ( (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || $postarr["post_type"] != 'wpsc-product' )
         return $data;
     if( isset( $postarr["additional_description"] ) && !empty( $postarr["additional_description"] ) )
         $data["post_excerpt"] = $postarr["additional_description"];
