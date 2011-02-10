@@ -141,11 +141,11 @@ function wpsc_display_form_fields() {
 		if ( !empty( $form_field['unique_name'] ) ) {
 			$ff_tag = $form_field['unique_name'];
 		} else {
-			$ff_tag = htmlentities( stripslashes( strtolower( str_replace( ' ', '-', $form_field['name'] ) ) ) );
+			$ff_tag = htmlentities( stripslashes( strtolower( str_replace( ' ', '-', $form_field['name'] ) ) ), ENT_QUOTES, 'UTF-8' );
 		}
 		
 		if(!empty($meta_data[$form_field['id']]) && !is_array($meta_data[$form_field['id']]))
-			$meta_data[$form_field['id']] = htmlentities( stripslashes( $meta_data[$form_field['id']] ), ENT_QUOTES );
+			$meta_data[$form_field['id']] = htmlentities( stripslashes( $meta_data[$form_field['id']] ), ENT_QUOTES, 'UTF-8' );
 		
 		if ( $form_field['type'] == 'heading' ) {
 			echo "

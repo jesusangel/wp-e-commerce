@@ -473,7 +473,7 @@ function wpsc_display_sales_logs() {
                          'end_timestamp'  => $purchlogs->current_end_timestamp);
       ?>
       <br />
-      <p><a class='admin_download' href='<?php echo htmlentities(add_query_arg($arr_params)) ; ?>' ><img class='wpsc_pushdown_img' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/download.gif' alt='' title='' /> <span> <?php _e('Download CSV', 'wpsc'); ?></span></a></p>
+      <p><a class='admin_download' href='<?php echo htmlentities(add_query_arg($arr_params), ENT_QUOTES, 'UTF-8') ; ?>' ><img class='wpsc_pushdown_img' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/download.gif' alt='' title='' /> <span> <?php _e('Download CSV', 'wpsc'); ?></span></a></p>
    </form>
    <br />
    <script type="text/javascript">
@@ -506,7 +506,7 @@ function wpsc_display_sales_logs() {
       <td><?php echo wpsc_the_purch_item_date(); ?></td> <!--Date -->
       <td><?php echo wpsc_the_purch_item_name(); ?></td> <!--Name/email -->
       <td><?php echo wpsc_currency_display( wpsc_the_purch_item_price() ); ?></td><!-- Amount -->
-      <td><a href='<?php echo htmlentities(add_query_arg('purchaselog_id', wpsc_the_purch_item_id())) ; ?>'><?php echo wpsc_the_purch_item_details();?> Items</a></td><!-- Details -->
+      <td><a href='<?php echo htmlentities(add_query_arg('purchaselog_id', wpsc_the_purch_item_id()), ENT_QUOTES, 'UTF-8') ; ?>'><?php echo wpsc_the_purch_item_details();?> Items</a></td><!-- Details -->
       <td>
       <?php if(!wpsc_purchlogs_is_google_checkout()){ ?>
          <select class='selector' name='<?php echo wpsc_the_purch_item_id(); ?>' title='<?php echo wpsc_the_purch_item_id(); ?>' >

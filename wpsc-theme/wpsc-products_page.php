@@ -125,7 +125,7 @@ global $wp_query;
 						<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
 							<?php $action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
 						<?php else: ?>
-						<?php $action = htmlentities(wpsc_this_page_url(),ENT_QUOTES); ?>					
+						<?php $action = htmlentities(wpsc_this_page_url(), ENT_QUOTES, 'UTF-8' ); ?>					
 						<?php endif; ?>					
 						<form class="product_form"  enctype="multipart/form-data" action="<?php echo $action; ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >
 						<?php /** the variation group HTML and loop */?>

@@ -327,7 +327,7 @@ function wpsc_packing_slip($purchase_id) {
 							if(is_numeric($purch_data['billing_region']) && ($delivery_region_count > 0)) 
 								echo "	<tr><td>".__('State', 'wpsc').":</td><td>".wpsc_get_region($purch_data['billing_region'])."</td></tr>\n\r";
 							
-							 echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
+							 echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES, 'UTF-8')."</td></tr>\n\r";
 						break;
 								
 						case 'delivery_country':
@@ -335,7 +335,7 @@ function wpsc_packing_slip($purchase_id) {
 							if(is_numeric($purch_data['shipping_region']) && ($delivery_region_count > 0)) 
 								echo "	<tr><td>".__('State', 'wpsc').":</td><td>".wpsc_get_region($purch_data['shipping_region'])."</td></tr>\n\r";
 							
-							 echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
+							 echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES, 'UTF-8')."</td></tr>\n\r";
 						break;
 
 						case 'heading':
@@ -358,14 +358,14 @@ function wpsc_packing_slip($purchase_id) {
 	                        	
 	                        }
 	                        $string = rtrim($string, ", ");
-	                        echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($string), ENT_QUOTES)."</td></tr>\n\r";
+	                        echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($string), ENT_QUOTES, 'UTF-8')."</td></tr>\n\r";
 
                         } else {
                         
                         	if ($form_field['name']=="State" && !empty($purch_data['billing_region']) || $form_field['name']=="State" && !empty($purch_data['billing_region']))
                       echo "";
                      		 else
-                            	echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
+                            	echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value'], 'UTF-8'), ENT_QUOTES)."</td></tr>\n\r";
                         
                         }
 

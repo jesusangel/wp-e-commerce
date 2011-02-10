@@ -47,7 +47,7 @@
       $this->_indent();
       $this->xml .= '<'.$element;
       foreach ($attributes as $key => $value) {
-        $this->xml .= ' '.$key.'="'.htmlentities($value).'"';
+        $this->xml .= ' '.$key.'="'.htmlentities($value, ENT_QUOTES, 'UTF-8').'"';
       }
       $this->xml .= ">\n";
       $this->stack[] = $element;
@@ -60,16 +60,16 @@
       $this->_indent();
       $this->xml .= '<'.$element;
       foreach ($attributes as $key => $value) {
-        $this->xml .= ' '.$key.'="'.htmlentities($value).'"';
+        $this->xml .= ' '.$key.'="'.htmlentities($value, ENT_QUOTES, 'UTF-8').'"';
       }
-      $this->xml .= '>'.htmlentities($content).'</'.$element.'>'."\n";
+      $this->xml .= '>'.htmlentities($content, ENT_QUOTES, 'UTF-8').'</'.$element.'>'."\n";
     }
 
     function EmptyElement($element, $attributes = array()) {
       $this->_indent();
       $this->xml .= '<'.$element;
       foreach ($attributes as $key => $value) {
-        $this->xml .= ' '.$key.'="'.htmlentities($value).'"';
+        $this->xml .= ' '.$key.'="'.htmlentities($value, ENT_QUOTES, 'UTF-8').'"';
       }
       $this->xml .= " />\n";
     }

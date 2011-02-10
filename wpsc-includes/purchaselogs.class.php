@@ -448,12 +448,12 @@ function wpsc_display_purchlog_totalprice() {
 
 function wpsc_display_purchlog_buyers_name() {
    global $purchlogitem;
-   return htmlentities( stripslashes( $purchlogitem->userinfo['billingfirstname']['value'] ), ENT_QUOTES ) . ' ' . htmlentities( stripslashes( $purchlogitem->userinfo['billinglastname']['value'] ), ENT_QUOTES );
+   return htmlentities( stripslashes( $purchlogitem->userinfo['billingfirstname']['value'] ), ENT_QUOTES, 'UTF-8') . ' ' . htmlentities( stripslashes( $purchlogitem->userinfo['billinglastname']['value'] ), ENT_QUOTES, 'UTF-8');
 }
 
 function wpsc_display_purchlog_buyers_email() {
    global $purchlogitem;
-   return htmlentities( stripslashes( $purchlogitem->userinfo['billingemail']['value'] ), ENT_QUOTES );
+   return htmlentities( stripslashes( $purchlogitem->userinfo['billingemail']['value'] ), ENT_QUOTES, 'UTF-8');
 }
 
 function wpsc_display_purchlog_buyers_address() {
@@ -464,27 +464,27 @@ function wpsc_display_purchlog_buyers_address() {
    else 
    		$state = $purchlogitem->userinfo['billingstate']['value'];
 
-   return nl2br(trim(htmlentities( stripslashes( $purchlogitem->userinfo['billingaddress']['value'] ), ENT_QUOTES ), "\n\r")).'<br />'.htmlentities( stripslashes( $state ), ENT_QUOTES ) .', '.htmlentities( stripslashes( $purchlogitem->userinfo['billingpostcode']['value'] ), ENT_QUOTES ).'<br />'.htmlentities( stripslashes( $purchlogitem->extrainfo->billing_country ), ENT_QUOTES );
+   return nl2br(trim(htmlentities( stripslashes( $purchlogitem->userinfo['billingaddress']['value'] ), ENT_QUOTES, 'UTF-8'), "\n\r")).'<br />'.htmlentities( stripslashes( $state ), ENT_QUOTES, 'UTF-8') .', '.htmlentities( stripslashes( $purchlogitem->userinfo['billingpostcode']['value'] ), ENT_QUOTES, 'UTF-8').'<br />'.htmlentities( stripslashes( $purchlogitem->extrainfo->billing_country ), ENT_QUOTES, 'UTF-8');
 }
 
 function wpsc_display_purchlog_buyers_phone() {
    global $purchlogitem;
-   return htmlentities( stripslashes( $purchlogitem->userinfo['billingphone']['value'] ), ENT_QUOTES );
+   return htmlentities( stripslashes( $purchlogitem->userinfo['billingphone']['value'] ), ENT_QUOTES, 'UTF-8');
 }
 
 function wpsc_display_purchlog_shipping_name() {
    global $purchlogitem;
-   return htmlentities( stripslashes( $purchlogitem->shippinginfo['shippingfirstname']['value'] ), ENT_QUOTES ) . ' ' . htmlentities( stripslashes( $purchlogitem->shippinginfo['shippinglastname']['value'] ), ENT_QUOTES );
+   return htmlentities( stripslashes( $purchlogitem->shippinginfo['shippingfirstname']['value'] ), ENT_QUOTES, 'UTF-8') . ' ' . htmlentities( stripslashes( $purchlogitem->shippinginfo['shippinglastname']['value'] ), ENT_QUOTES, 'UTF-8');
 }
 
 function wpsc_display_purchlog_shipping_address() {
    global $purchlogitem;
-   return nl2br(trim(htmlentities( stripslashes( $purchlogitem->shippinginfo['shippingaddress']['value'] ), ENT_QUOTES ), "\n\r"));
+   return nl2br(trim(htmlentities( stripslashes( $purchlogitem->shippinginfo['shippingaddress']['value'] ), ENT_QUOTES, 'UTF-8'), "\n\r"));
 }
 
 function wpsc_display_purchlog_shipping_city() {
    global $purchlogitem;
-   return htmlentities( stripslashes( $purchlogitem->shippinginfo['shippingcity']['value'] ), ENT_QUOTES );
+   return htmlentities( stripslashes( $purchlogitem->shippinginfo['shippingcity']['value'] ), ENT_QUOTES, 'UTF-8' );
 }
 
 function wpsc_display_purchlog_shipping_state_and_postcode() {
@@ -502,7 +502,7 @@ function wpsc_display_purchlog_shipping_state_and_postcode() {
 
 function wpsc_display_purchlog_shipping_country() {
    global $purchlogitem;
-   return htmlentities( stripslashes( $purchlogitem->shippinginfo['shippingcountry']['value'] ), ENT_QUOTES );
+   return htmlentities( stripslashes( $purchlogitem->shippinginfo['shippingcountry']['value'] ), ENT_QUOTES, 'UTF-8' );
 }
 
 function wpsc_display_purchlog_shipping_method() {

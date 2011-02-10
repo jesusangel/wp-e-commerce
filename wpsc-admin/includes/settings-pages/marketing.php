@@ -100,7 +100,7 @@ function wpsc_google_merch_center_meta_box() { ?>
 
 	<?php $google_feed_url = get_bloginfo( 'url' ) . "/index.php?rss=true&action=product_list&xmlformat=google"; ?>
 
-	<a href="<?php echo htmlentities( $google_feed_url ); ?>"><?php echo htmlentities( $google_feed_url ); ?></a>
+	<a href="<?php echo htmlentities( $google_feed_url, ENT_QUOTES, 'UTF-8' ); ?>"><?php echo htmlentities( $google_feed_url, ENT_QUOTES, 'UTF-8' ); ?></a>
 
 <?php
 }

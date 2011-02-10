@@ -187,9 +187,9 @@
                   "<reason>". $reason . "</reason>";
       if($amount!=0) {
         $postargs .= "<amount currency=\"" . $this->currency . "\">";
-	$postargs .= htmlentities($amount)."</amount>";
+	$postargs .= htmlentities($amount, ENT_QUOTES, 'UTF-8')."</amount>";
       }
-      $postargs .= "<comment>". htmlentities($comment) . "</comment>
+      $postargs .= "<comment>". htmlentities($comment, ENT_QUOTES, 'UTF-8') . "</comment>
                   </refund-order>";
       return $this->SendReq($this->request_url, 
                    $this->GetAuthenticationHeaders(), $postargs);
@@ -211,10 +211,10 @@
                   <cancel-order xmlns=\"".$this->schema_url.
                   "\" google-order-number=\"". $google_order. "\">
                   <reason>".
-                    (substr(htmlentities(strip_tags($reason)),0,GOOGLE_REASON_LENGTH)) .
+                    (substr(htmlentities(strip_tags($reason), ENT_QUOTES, 'UTF-8'),0,GOOGLE_REASON_LENGTH)) .
                   "</reason>
                   <comment>".
-                    (substr(htmlentities(strip_tags($comment)),0,GOOGLE_REASON_LENGTH)) .                   
+                    (substr(htmlentities(strip_tags($comment), ENT_QUOTES, 'UTF-8'),0,GOOGLE_REASON_LENGTH)) .                   
                   "</comment>
                   </cancel-order>";
       return $this->SendReq($this->request_url, 
@@ -240,7 +240,7 @@
                   <add-tracking-data xmlns=\"". $this->schema_url . 
                   "\" google-order-number=\"". $google_order . "\">
                   <tracking-data>
-                  <carrier>". htmlentities($carrier) . "</carrier>
+                  <carrier>". htmlentities($carrier, ENT_QUOTES, 'UTF-8') . "</carrier>
                   <tracking-number>". $tracking_no . "</tracking-number>
                   </tracking-data>
                   </add-tracking-data>";
@@ -292,7 +292,7 @@
                   <send-buyer-message xmlns=\"". $this->schema_url . 
                   "\" google-order-number=\"". $google_order . "\">
                   <message>" . 
-            (substr(htmlentities(strip_tags($message)),0,GOOGLE_MESSAGE_LENGTH)) 
+            (substr(htmlentities(strip_tags($message), ENT_QUOTES, 'UTF-8'),0,GOOGLE_MESSAGE_LENGTH)) 
                . "</message>
                   <send-email>" . strtolower($send_mail) . "</send-email>
                   </send-buyer-message>";     
@@ -343,8 +343,8 @@
                   "\" google-order-number=\"". $google_order . "\">";
       if($carrier != "" && $tracking_no != "") {
          $postargs .= "<tracking-data>
-                  <carrier>". htmlentities($carrier) . "</carrier>
-            <tracking-number>". htmlentities($tracking_no) . "</tracking-number>
+                  <carrier>". htmlentities($carrier, ENT_QUOTES, 'UTF-8') . "</carrier>
+            <tracking-number>". htmlentities($tracking_no, ENT_QUOTES, 'UTF-8') . "</tracking-number>
                   </tracking-data>";
       }
       $postargs .= "<send-email>". strtolower($send_mail) . "</send-email>
@@ -428,7 +428,7 @@
           $postargs .= "<tracking-data-list>\n";
           foreach($item->tracking_data_list as $tracking_data) {
             $postargs .= "<tracking-data>
-                            <carrier>". htmlentities($tracking_data['carrier']) . "</carrier>
+                            <carrier>". htmlentities($tracking_data['carrier'], ENT_QUOTES, 'UTF-8') . "</carrier>
                             <tracking-number>". $tracking_data['tracking-number'] . "</tracking-number>
                           </tracking-data>\n";
           }
@@ -505,10 +505,10 @@
       $postargs .= "</item-ids>";
       $postargs .= "<send-email>". strtolower($send_mail) . "</send-email>
                   <reason>".
-                    (substr(htmlentities(strip_tags($reason)),0,GOOGLE_REASON_LENGTH)) .
+                    (substr(htmlentities(strip_tags($reason), ENT_QUOTES, 'UTF-8'),0,GOOGLE_REASON_LENGTH)) .
                   "</reason>
                   <comment>".
-                    (substr(htmlentities(strip_tags($comment)),0,GOOGLE_REASON_LENGTH)) .                   
+                    (substr(htmlentities(strip_tags($comment), ENT_QUOTES, 'UTF-8'),0,GOOGLE_REASON_LENGTH)) .                   
                   "</comment>
                   </cancel-items>";
       return $this->SendReq($this->request_url, 
@@ -656,19 +656,19 @@
           break;
         case 503:
             $this->log->LogError($response);
-            return array(503, htmlentities($body));
+            return array(503, htmlentities($body, ENT_QUOTES, 'UTF-8'));
           break;
         case 403:
             $this->log->LogError($response);
-            return array(403, htmlentities($body));
+            return array(403, htmlentities($body, ENT_QUOTES, 'UTF-8'));
           break;
         case 400:
             $this->log->LogError($response);
-            return array(400, htmlentities($body));
+            return array(400, htmlentities($body, ENT_QUOTES, 'UTF-8'));
           break;
         default:
             $this->log->LogError($response);
-            return array("ERR", htmlentities($body));
+            return array("ERR", htmlentities($body, ENT_QUOTES, 'UTF-8'));
           break;
       }
     }

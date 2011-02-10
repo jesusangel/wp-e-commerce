@@ -168,7 +168,7 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 
 					case 'LONGMESSAGE':
 						// Oddly, this comes with two levels of slashes, so strip them twice
-						$error_data[$error_number]['error_message'] = htmlentities( stripslashes( stripslashes( $response_value ) ) );
+						$error_data[$error_number]['error_message'] = htmlentities( stripslashes( stripslashes( $response_value ) ), ENT_QUOTES, 'UTF-8' );
 						break;
 				}
 			}
