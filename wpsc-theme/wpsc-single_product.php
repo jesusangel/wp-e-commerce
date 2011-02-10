@@ -51,23 +51,7 @@
 						<?php do_action( 'wpsc_product_addons', wpsc_the_product_id() ); ?>		
 						<?php if ( wpsc_the_product_additional_description() ) : ?>
 							<div class="single_additional_description">
-								<?php
-									$value = '';
-									$the_addl_desc = wpsc_the_product_additional_description();
-
-									if ( is_serialized( $the_addl_desc ) )
-										$addl_descriptions = @unserialize( $the_addl_desc );
-									else
-										$addl_descriptions = array( 'addl_desc', $the_addl_desc );
-
-									if ( isset( $addl_descriptions['addl_desc'] ) )
-										$value = $addl_descriptions['addl_desc'];
-
-									if( function_exists( 'wpsc_addl_desc_show' ) )
-										echo wpsc_addl_desc_show( $addl_descriptions );
-									else
-										echo stripslashes( wpautop( $the_addl_desc, $br = 1) );
-								?>
+								<p><?php echo wpsc_the_product_additional_description(); ?></p>
 							</div><!--close single_additional_description-->
 						<?php endif; ?>		
 						<?php do_action( 'wpsc_product_addon_after_descr', wpsc_the_product_id() ); ?>

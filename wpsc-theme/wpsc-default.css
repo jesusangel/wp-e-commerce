@@ -497,7 +497,7 @@ table.list_productdisplay p.soldout {
 
 .imagecol {
 	margin-right:5px;
-	width:25%;
+/* 	width:25%; */
 	float:left;	
 	position:relative;
 }
@@ -514,7 +514,7 @@ table.list_productdisplay p.soldout {
 
 .productcol {
 	float:left;
-	width:70%;
+/* 	width:70%; */
 	position:relative;
 }
 
