@@ -751,9 +751,7 @@ span.rating_saved{
 
 /*-----SHOPPING CART-----*/
 .shopping-cart-wrapper {
-/* 	font-size:12px; */
 	line-height:1.2em;
-/* 	color:#000000; */
 	position:relative;
 }
 
@@ -778,10 +776,6 @@ span.rating_saved{
 }
 
 .shopping-cart-wrapper .shoppingcart table th {
-/*
-	background-color:#F5F5F5;
-	color:#737373;
-*/
 	font-family: Arial, sans-serif;
 	padding:2px;
 }
@@ -800,7 +794,6 @@ span.rating_saved{
 }
 
 .shopping-cart-wrapper .shoppingcart table tbody td, .shopping-cart-wrapper .shoppingcart table tbody td a {
-/* 	color:#0066CC; */
 	text-decoration: none;
 }
 
@@ -835,10 +828,6 @@ span.rating_saved{
 }
 
 .shopping-cart-wrapper .shoppingcart table tbody td.product-name{
-	padding-left:10px;
-	background-image: url(wpsc-images/bulletpoint.gif);
-	background-repeat: no-repeat;
-	background-position: 0 12px;
 	text-align: left;
 	max-width: 90px;
 	word-wrap: break-word;
@@ -847,7 +836,6 @@ span.rating_saved{
 
 .widget_wpsc_shopping_cart .cart-widget-total td {
 	border-top:solid 2px #000;
-/* 	background-color: #F5F5F5; */
 	padding: 5px 6px 5px 5px;
 }
 
@@ -863,10 +851,6 @@ span.rating_saved{
 	text-decoration:none;
 	color:#666;
 	font-size:11px;
-}
-
-.emptycart{
-	padding-right:5px;
 }
 
 .shopping-cart-wrapper .gocheckout:active {
