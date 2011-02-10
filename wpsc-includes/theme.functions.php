@@ -405,8 +405,7 @@ function wpsc_single_template( $content ) {
 
 	$single_theme_path = wpsc_get_template_file_path( 'wpsc-single_product.php' );
 	if((!isset($wp_query->is_product)) && !isset($wp_query->query_vars['wpsc_product_category']))return $content;
-
-	if(isset($wpsc_query->query['paged']) && $wpsc_query->post_count <= 1){ 
+	if(isset($wpsc_query->query['paged']) && $wpsc_query->post_count <= 1 && $wp_query->is_single != 1){ 
 
 		remove_filter( "the_content", "wpsc_single_template" );
 		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
@@ -499,7 +498,7 @@ function wpsc_the_category_title($title='', $id=''){
 		remove_filter('the_title','wpsc_the_category_title');
 	}
 	// if its product-page but paginated
-	if(empty($category->name) && $wp_query->query_vars['paged'] && $wp_query->posts[0]->post_title == $post->post_title && 'wpsc-product' == $wp_query->query_vars['post_type']){
+	if(empty($category->name) && $wp_query->query_vars['paged'] && $wp_query->posts[0]->post_title == $post->post_title && 'wpsc-product' == $wp_query->query_vars['post_type'] ){
 		$post_id = wpec_get_the_post_id_by_shortcode('[productspage]');
 		$post = get_post($post_id);
 		$title = $post->post_title;
