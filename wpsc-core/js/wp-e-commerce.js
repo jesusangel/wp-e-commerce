@@ -65,7 +65,6 @@
 	
 	function wpsc_shipping_same_as_billing(){
 		jQuery('#shippingsameasbillingmessage').slideDown('slow');
-		jQuery('.same_as_shipping_row').parents('table:first').find('tr:not(.same_as_shipping_row, tr:first)').hide();
 		jQuery("input[title='billingfirstname'], input[title='billinglastname'], textarea[title='billingaddress'], input[title='billingcity'], input[title='billingpostcode'], input[title='billingphone'], input[title='billingfirstname'], input[title='billingstate']").unbind('change', wpsc_shipping_same_as_billing).unbind('keyup', wpsc_shipping_same_as_billing).keyup(wpsc_shipping_same_as_billing).change(wpsc_shipping_same_as_billing);
 		
 		jQuery("select[title='billingregion'], select[title='billingstate'], select[title='billingcountry'], input[title='billingstate']").die( 'change', wpsc_shipping_same_as_billing ).live( 'change', wpsc_shipping_same_as_billing );
@@ -106,7 +105,7 @@
 		);
 		
 		for(var i in fields) {
-			jQuery(fields[i][1]).val(jQuery(fields[i][0]).val());
+			jQuery(fields[i][1]).val(jQuery(fields[i][0]).val()).parents('tr:first').hide();;
 			if(!jQuery(fields[i][0]).hasClass('intra-field-label'))
 				jQuery(fields[i][1]).removeClass('intra-field-label');
 			else
@@ -117,16 +116,16 @@
 		
 		jQuery("input.shipping_country").val(
 			jQuery("select[title='billingcountry'] :selected").text()
-		).removeClass('intra-field-label');
+		).removeClass('intra-field-label').parents('tr:first').hide();
 		
 		jQuery("span.shipping_country_name").html(
 			jQuery("select[title='billingcountry'] :selected").text()
-		);
+		).hide();
 		
-		jQuery('select[title="shippingcountry"] option').removeAttr('selected');
+		jQuery('select[title="shippingcountry"] option').removeAttr('selected').parents('tr:first').hide();
 		jQuery('select[title="shippingcountry"] option[value="' + jQuery('select[title="billingcountry"] option:selected').val() + '"]').attr('selected', 'selected');
 				
-		jQuery('select[title="shippingstate"] option').removeAttr('selected');
+		jQuery('select[title="shippingstate"] option').removeAttr('selected').parents('tr:first').hide();
 		jQuery('select[title="shippingstate"] option[value="' + jQuery('select[title="billingstate"] option:selected').val() + '"]').attr('selected', 'selected');
 
 		jQuery('select[title="shippingcountry"]').change();
@@ -159,7 +158,7 @@ jQuery(document).ready(function () {
 			jQuery(this).parents('table:first').find('tr').show();
 			jQuery('#shippingsameasbillingmessage').hide();
 			jQuery("select[title='billingregion'], select[title='billingstate'], select[title='billingcountry'], input[title='billingstate']").die( 'change', wpsc_shipping_same_as_billing );
-			jQuery("input[title='billingfirstname'], input[title='billinglastname'], textarea[title='billingaddress'], input[title='billingcity'], input[title='billingpostcode'], input[title='billingphone'], input[title='billingfirstname'], select[title='billingregion'], select[title='billingstate'], select[title='billingcountry']").unbind('change', 'wpsc_shipping_same_as_billing')
+			jQuery("input[title='billingfirstname'], input[title='billinglastname'], textarea[title='billingaddress'], input[title='billingcity'], input[title='billingpostcode'], input[title='billingphone'], input[title='billingfirstname'], input[title='billingstate']").unbind('change', wpsc_shipping_same_as_billing).unbind('keyup', wpsc_shipping_same_as_billing);
 		}
 	});
 
