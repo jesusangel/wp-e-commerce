@@ -83,7 +83,7 @@ function wpsc_currency_display( $price_in, $args = null ) {
 		
 		case 3:
 		default:
-			$format_string = '%1$s %2$s %3$s';
+			$format_string = '%1$s %2$s%3$s';
 			break;
 	}
 	// Compile the output
