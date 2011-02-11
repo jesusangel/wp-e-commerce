@@ -336,18 +336,18 @@ if ( !function_exists( 'wp_generate_attachment_metadata' ) ) {
 			$post_parent_type = get_post_type( $image->post_parent );
 			
 			if ("wpsc-product" == $post_parent_type) {
-			
-			$fullsizepath = get_attached_file( $id );
-			
-			if ( false === $fullsizepath || !file_exists($fullsizepath) )
-			die ("Could not find path specified!");
-
-			if ( wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $fullsizepath ) ) ) {
-				$success = true;
-				} else {
-				$success = false;
+				
+				$fullsizepath = get_attached_file( $id );
+				
+				if ( false === $fullsizepath || !file_exists($fullsizepath) )
+					die ("Could not find path specified!");
+	
+				if ( wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $fullsizepath ) ) ) {
+					$success = true;
+					} else {
+					$success = false;
+				}
 			}
-		}
 	}	
 }
 

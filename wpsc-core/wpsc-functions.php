@@ -724,7 +724,7 @@ function wpsc_generate_product_query( $query ) {
 	} else {
 		$query->query_vars['posts_per_page'] = '-1';
 	}
-	if ( $query->is_tax == true && !isset($query->query_vars['meta_key']))
+	if ( $query->is_tax == true )
 		new wpsc_products_by_category( $query );
 
 	return $query;
@@ -759,24 +759,27 @@ class wpsc_products_by_category {
 		global $wpdb;
 		$q = $query->query_vars;
 
-		
+
 		// Category stuff for nice URLs
-		if ( ('' != $q['taxonomy']) && ('' != $q['term']) && !$query->is_singular ) {
+		if ( ('' != $q['wpsc_product_category']) && !$query->is_singular ) {
+			$q['taxonomy'] = 'wpsc_product_category';
+			$q['term'] = $q['wpsc_product_category'];
+
 			$join = " INNER JOIN $wpdb->term_relationships
 				ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id)
 			INNER JOIN $wpdb->term_taxonomy
 				ON ($wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id)
 			";
-
+			if(isset($q['meta_key']))
+				$join .= " INNER JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id) ";
 			$whichcat = " AND $wpdb->term_taxonomy.taxonomy = '{$q['taxonomy']}' ";
 
 			$term_data = get_term_by( 'slug', $q['term'], $q['taxonomy'] );
-
-			$term_children_data = get_term_children( $term_data->term_id, $q['taxonomy'] );
-
 			$in_cats = array( $term_data->term_id );
-			$in_cats = array_reverse( array_merge( $in_cats, $term_children_data ) );
-
+			if('0' != get_option('show_subcatsprods_in_cat')){
+				$term_children_data = get_term_children( $term_data->term_id, $q['taxonomy'] );
+				$in_cats = array_reverse( array_merge( $in_cats, $term_children_data ) );
+			}
 			$in_cats = "'" . implode( "', '", $in_cats ) . "'";
 			$whichcat .= "AND $wpdb->term_taxonomy.term_id IN ($in_cats)";
 			$groupby = "{$wpdb->posts}.ID";
