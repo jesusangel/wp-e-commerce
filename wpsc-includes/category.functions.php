@@ -389,17 +389,16 @@ function wpsc_category_url($category_id, $permalink_compatibility = false) {
 
 function wpsc_is_in_category() {
   global $wpdb, $wp_query;
-  $category_id = null;
-  if(isset($wp_query->query_vars['category_id'] ) && $wp_query->query_vars['category_id'] > 0) {
-    $category_id = absint($wp_query->query_vars['category_id']);
-  } else if(isset($_GET['category']) && ($_GET['category'] > 0)) {
-    $category_id = absint($_GET['category']);
+  $is_in_category = false;
+  if(isset($wp_query->query_vars['wpsc_product_category'] ) && !empty($wp_query->query_vars['wpsc_product_category'])) {
+    $is_in_category = true;
+  } else if(isset($_GET['wpsc_product_category']) && !empty($_GET['wpsc_product_category'])) {
+    $is_in_category = true;
   }
-  if($category_id > 0) {
-    return true;
-  }
-  return false;
+  
+  return $is_in_category;
 }
+
 
 /**
 * wpsc_category_image function, Gets the category image or returns false

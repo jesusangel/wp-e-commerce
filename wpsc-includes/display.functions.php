@@ -426,8 +426,8 @@ function wpsc_replace_bloginfo_title( $input, $show ) {
 	return $input;
 }
 
-if ( get_option( 'wpsc_replace_page_title' ) == 1 ) {
+//if ( get_option( 'wpsc_replace_page_title' ) == 1 ) {
 
 	add_filter( 'wp_title', 'wpsc_replace_wp_title', 10, 2 );
-}
+//}
 ?>
