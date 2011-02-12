@@ -254,7 +254,7 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 			$total_price_html.= sprintf(__( 'Total: %s
 ', 'wpsc' ), wpsc_currency_display( $total ) );
 			$report_id = sprintf(__("Purchase # %s
-"), $purchase_log['id']);
+", 'wpsc'), $purchase_log['id']);
 			
 			if ( isset( $_GET['ti'] ) ) {
 				$message.= "\n\r" . __( 'Your Transaction ID', 'wpsc' ) . ": " . $_GET['ti'];
