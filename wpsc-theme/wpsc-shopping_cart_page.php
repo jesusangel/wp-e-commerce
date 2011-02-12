@@ -441,9 +441,7 @@ endif;
       <?php if(wpsc_has_tnc()) : ?>
          <tr>
             <td colspan='2'>
-                <input type='checkbox' value='yes' name='agree' /> <?php _e('I agree to The ', 'wpsc');?>
-                <a class='thickbox' target='_blank' href='<?php
-         echo site_url("?termsandconds=true&amp;width=360&amp;height=400'"); ?>' class='termsandconds'> <?php _e('Terms and Conditions', 'wpsc');?></a>
+                <label for="agree"><input id="agree" type='checkbox' value='yes' name='agree' /> <?php printf(__("I agree to The <a class='thickbox' target='_blank' href='%s' class='termsandconds'>Terms and Conditions</a>", "wpsc"), site_url("?termsandconds=true&amp;width=360&amp;height=400'")); ?></label>
                </td>
          </tr>
       <?php endif; ?>
