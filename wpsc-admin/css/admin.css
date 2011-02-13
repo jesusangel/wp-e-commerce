@@ -95,7 +95,7 @@ th#purchid{
 	width:60px;
 }
 th#details{
-	width:55px;
+	width:100px;
 }
 th#amount{
 	width:75px;
@@ -107,10 +107,10 @@ th#track{
 	width:75px;
 }
 th#delete{
-	width:55px;
+	width:60px;
 }
 th#status{
-	width:120px;
+	width:150px;
 }
 .google_checkout_logo{
 	padding-right:10px;
