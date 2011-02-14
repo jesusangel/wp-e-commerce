@@ -42,7 +42,7 @@ padding-left:5px;
 }
 .pricedisplay, .salespricedisplay{
 	/* width:40%; */
-	float:left;
+	/*float:left;*/
 }
 .dashboardWidgetSpecial{
 	font-family:Georgia,"Times New Roman","Bitstream Charter",Times,serif;

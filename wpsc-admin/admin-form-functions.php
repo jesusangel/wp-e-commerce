@@ -177,7 +177,7 @@ function setting_button(){
 }
 
 function wpsc_right_now() {
-	global $wpdb,$nzshpcrt_imagesize_info;
+	global $wpdb;
 	$year = date("Y");
 	$month = date("m");
 	$start_timestamp = mktime(0, 0, 0, $month, 1, $year);
@@ -185,104 +185,96 @@ function wpsc_right_now() {
 	$product_count = $wpdb->get_var("SELECT COUNT(*)
 		FROM `".$wpdb->posts."` 
 		WHERE `post_status` = 'publish'
-		AND `post_type` IN ('wpsc-product')"
+		AND `post_type` = 'wpsc-product'"
 	);
-	$replace_values[":productcount:"] = $product_count;
-	$replace_values[":productcount:"] .= " ".(($replace_values[":productcount:"] == 1) ? __('product', 'wpsc') : __('products', 'wpsc'));
-	$product_unit = (($replace_values[":productcount:"] == 1) ? __('product', 'wpsc') : __('products', 'wpsc'));
 	$group_count = count(get_terms("wpsc_product_category"));
-	$replace_values[":groupcount:"] = $group_count;
-	$replace_values[":groupcount:"] .= " ".(($replace_values[":groupcount:"] == 1) ? __('group', 'wpsc') : __('groups', 'wpsc'));
-	$group_unit = (($replace_values[":groupcount:"] == 1) ? __('group', 'wpsc') : __('groups', 'wpsc'));
 	$sales_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
-	$replace_values[":salecount:"] = $sales_count. " ".((isset($replace_values[":salecount:"]) && ($replace_values[":salecount:"] == 1)) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
-	$sales_unit = (($replace_values[":salecount:"] == 1) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
-	$replace_values[":monthtotal:"] = wpsc_currency_display( admin_display_total_price( $start_timestamp,$end_timestamp ) );
-	$replace_values[":overaltotal:"] = wpsc_currency_display( admin_display_total_price() );
+	$monthtotal = wpsc_currency_display( admin_display_total_price( $start_timestamp,$end_timestamp ) );
+	$overaltotal = wpsc_currency_display( admin_display_total_price() );
 	$variation_count = count(get_terms("wpsc-variation", array('parent' => 0)));
-	$variation_unit = (($variation_count == 1) ? __('variation', 'wpsc') : __('variations', 'wpsc'));
-	$replace_values[":pendingcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
 	$pending_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
-	$replace_values[":pendingcount:"] .= " " . (($replace_values[":pendingcount:"] == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
-	$pending_sales_unit = (($replace_values[":pendingcount:"] == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
 	$accept_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('2' ,'3', '4')");
-	$accept_sales_unit = (($accept_sales == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
-	$replace_values[":theme:"] = get_option('wpsc_selected_theme');
-	$replace_values[":versionnumber:"] = WPSC_PRESENTABLE_VERSION;
-	if (function_exists('add_object_page')) {
-		$output="";	
-		$output.="<div id='dashboard_right_now' class='postbox'>";
-		$output.="	<h3 class='hndle'>";
-		$output.="		<span>".__('Current Month', 'wpsc')."</span>";
-		$output.="		<br class='clear'/>";
-		$output.="	</h3>";
-		$output .= "<div class='inside'>";
-		$output .= "<div class='table'>";
-		$output .= "<p class='sub'>".__('At a Glance', 'wpsc')."</p>";
-		$output .= "<table style='border-top:1px solid #ececec;'>";
-		$output .= "<tr class='first'>";
-		$output .= "<td class='first b'>";
-		$output .= "<a href='?page=wpsc-edit-products'>".$product_count."</a>";
-		$output .= "</td>";
-		$output .= "<td class='t'>";
-		$output .= ucfirst($product_unit);
-		$output .= "</td>";
-		$output .= "<td class='b'>";
-		$output .= "<a href='?page=wpsc-sales-logs'>".$sales_count."</a>";
-		$output .= "</td>";
-		$output .= "<td class='last'>";
-		$output .= ucfirst($sales_unit);
-		$output .= "</td>";
-		$output .= "</tr>";
-		$output .= "<tr>";
-		$output .= "<td class='first b'>";
-		$output .= "<a href='?page=wpsc-edit-groups'>".$group_count."</a>";
-		$output .= "</td>";
-		$output .= "<td class='t'>";
-		$output .= ucfirst($group_unit);
-		$output .= "</td>";
-		$output .= "<td class='b'>";
-		$output .= "<a href='?page=wpsc-sales-logs'>".$pending_sales."</a>";
-		$output .= "</td>";
-		$output .= "<td class='last t waiting'>".__('Pending', 'wpsc')." ";
-		$output .= ucfirst($pending_sales_unit);
-		$output .= "</td>";
-		$output .= "</tr>";
-		$output .= "<tr>";
-		$output .= "<td class='first b'>";
-		$output .= "<a href='?page=wpsc-edit-variations'>".$variation_count."</a>";
-		$output .= "</td>";
-		$output .= "<td class='t'>";
-		$output .= ucfirst($variation_unit);
-		$output .= "</td>";
-		$output .= "<td class='b'>";
-		$output .= "<a href='?page=wpsc-sales-logs'>".$accept_sales."</a>";
-		$output .= "</td>";
-		$output .= "<td class='last t approved'>".__('Closed', 'wpsc')." ";
-		$output .= ucfirst($accept_sales_unit);
-		$output .= "</td>";
-		$output .= "</tr>";
-		$output .= "</table>";
-		$output .= "</div>";
-		$output .= "<div class='versions'>";
-		$output .= "<p><a class='button rbutton' href='admin.php?page=wpsc-edit-products'><strong>".__('Add New Product', 'wpsc')."</strong></a>".__('Here you can add products, groups or variations', 'wpsc')."</p>";
-		$output .= "</div>";
-		$output .= "</div>";
-		$output.="</div>";
-	} else {	
-		$output="";	
-		$output.="<div id='rightnow'>\n\r";
-		$output.="	<h3 class='reallynow'>\n\r";
-		$output.="		<a class='rbutton' href='admin.php?page=wpsc-edit-products'><strong>".__('Add New Product', 'wpsc')."</strong></a>\n\r";
-		$output.="		<span>"._('Right Now')."</span>\n\r";
-		$output.="	</h3>\n\r";
-		$output.="<p class='youhave'>".__('You have <a href="admin.php?page=wpsc-edit-products">:productcount:</a>, contained within <a href="admin.php?page=wpsc-edit-groups">:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.', 'wpsc')."</p>\n\r";
-		$output.="	<p class='youare'>\n\r";
-		$output.="		".__('You are using the :theme: style. This is WP e-Commerce :versionnumber:.', 'wpsc')."\n\r";
-		$output.="		</p>\n\r";
-		$output.="</div>\n\r";
-		$output.="<br />\n\r";
-		$output = str_replace(array_keys($replace_values), array_values($replace_values),$output);
+	$theme = get_option('wpsc_selected_theme');
+	if (function_exists('add_object_page')) { 
+	ob_start();
+	?>
+		<div id='dashboard_right_now' class='postbox'>
+			<h3 class='hndle'>
+				<span><?php _e('Current Month', 'wpsc'); ?></span>
+				<br class='clear'/>
+			</h3>
+			<div class='inside'>
+				<div class='table'>
+					<p class='sub'><?php _e('At a Glance', 'wpsc'); ?></p>
+					<table style='border-top:1px solid #ececec;'>
+						<tr class='first'>
+							<td class='first b'>
+								<?php echo $product_count; ?>
+							</td>
+							<td class='t'>
+								<?php echo _n('Product', 'Products', $product_count, 'wpsc'); ?>
+							</td>
+							<td class='b'>
+								<?php echo $sales_count; ?>
+							</td>
+							<td class='last'>
+								<?php echo _n('Sale', 'Sales', $sales_count, 'wpsc'); ?>
+							</td>
+						</tr>
+						<tr>
+							<td class='first b'>
+								<?php echo $group_count; ?>
+							</td>
+							<td class='t'>
+								<?php echo _n('Group', 'Groups', $group_count, 'wpsc'); ?>
+							</td>
+							<td class='b'>
+								<?php echo $pending_sales; ?>
+							</td>
+							<td class='last t waiting'>
+								<?php echo _n('Pending sale', 'Pending sales', $pending_sales, 'wpsc'); ?>
+							</td>
+						</tr>
+						<tr>
+							<td class='first b'>
+								<?php echo $variation_count; ?>
+							</td>
+							<td class='t'>
+								<?php echo _n('Variation', 'Variations', $variation_count, 'wpsc'); ?>
+							</td>
+							<td class='b'>
+								<?php echo $accept_sales; ?>
+							</td>
+							<td class='last t approved'>
+								<?php echo _n('Closed sale', 'Closed sales', $accept_sales, 'wpsc'); ?>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		<?php
+		$output = ob_get_clean();
+	} else {
+		ob_start();
+		?>	
+		<div id='rightnow'>
+			<h3 class='reallynow'>
+				<span><?php _e('Right Now', 'wpsc'); ?></span>
+			</h3>
+			<p class='youhave'>
+				<?php printf(_n('You have %s product,', 'You have %s products,', $product_count, 'wpsc'), $product_count); ?>
+				<?php printf(_n(' contained within %s category.', ' contained within %s categories.', $group_count, 'wpsc' ), $group_count); ?>
+				<?php printf(_n('This month you made %1$s sale and generated a total of %2$s and your total sales ever is %3$s', 'This month you made %1$s sales and generated a total of %2$s and your total sales ever is %3$s.', $sales_count, 'wpsc'), $sales_count, $monthtotal, $overaltotal ); ?> 
+				<?php printf(_n('You have %s sale awaiting approval.', 'You have %s sales awaiting approval.', $pending_sales, 'wpsc'), $pending_sales); ?>
+			</p>
+			<p class='youare'>
+				<?php printf(__('You are using the %1$s style. This is WP e-Commerce %2$s.', 'wpsc'), $theme, WPSC_PRESENTABLE_VERSION ); ?>
+			</p>
+		</div>
+		<br />
+		<?php
+		$output = ob_get_clean();
 	}
 	return $output;
 }
