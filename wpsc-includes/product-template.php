@@ -982,7 +982,7 @@ function wpsc_product_postage_and_packaging() {
  */
 function wpsc_product_normal_price($forRSS = false) {
 	global $wpsc_query, $wpdb, $wpsc_variations;
-	if ( count( $wpsc_variations->first_variations ) > 0 ) {
+	if ( is_object($wpsc_variations) && count( $wpsc_variations->first_variations ) > 0 ) {
 		//select the variation ID with lovest price
 		$product_id = $wpdb->get_var('SELECT `posts`.`id` FROM ' . $wpdb->posts . ' `posts` JOIN ' . $wpdb->postmeta . ' `postmeta` ON `posts`.`id` = `postmeta`.`post_id` WHERE `posts`.`post_parent` = ' . get_the_ID() . ' AND `posts`.`post_type` = "wpsc-product" AND `posts`.`post_status` = "inherit" AND `postmeta`.`meta_key`="_wpsc_price" ORDER BY (`postmeta`.`meta_value`)+0 ASC LIMIT 1');
 		$from = ' from ';
