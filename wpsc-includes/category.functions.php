@@ -382,7 +382,6 @@ function wpsc_place_category_image($category_id, $query) {
 * @param boolean permalink compatibility, adds a prefix to prevent permalink namespace conflicts
 */
 function wpsc_category_url($category_id, $permalink_compatibility = false) {
-  global $wpdb, $wp_rewrite;
   return get_term_link( $category_id, 'wpsc_product_category');
 }
 
@@ -401,66 +400,73 @@ function wpsc_is_in_category() {
 
 
 /**
+ * Uses a category's, (in the wpsc_product_category taxonomy), slug to find its
+ * ID, then returns it.
+ * 
+ * @param string $category_slug The slug of the category who's ID we want.
+ * @return (int | bool) Returns the integer ID of the category if found, or a
+ * boolean false if the category is not found.
+ *
+ * @todo Cache the results of this somewhere.  It could save quite a few trips
+ * to the MySQL server.
+ *
+ * @author John Beales ( johnbeales.com )
+ */
+function wpsc_category_id($category_slug = '') {
+	if(empty($category_slug)) {
+		$query_vars = get_query_var('query_vars');
+		$category_slug = $query_vars['wpsc_product_category'];
+	} elseif(array_key_exists('wpsc_product_category', $_GET)) {
+		$category_slug = $_GET['wpsc_product_category'];
+	}
+
+	if(!empty($category_slug)) {
+		$category = get_term_by('slug', $category_slug, 'wpsc_product_category');
+		if(!empty($category->term_id)){
+			return $category->term_id;
+		} else {
+			return false;
+		}
+	} else {
+		return false;
+	}
+}
+
+
+/**
 * wpsc_category_image function, Gets the category image or returns false
 * @param integer category ID, can be 0
-* @param string url to the category image
+* @return string url to the category image
 */
 function wpsc_category_image($category_id = null) {
-  global $wpdb, $wp_query;
-  if($category_id < 1) {
-		if($wp_query->query_vars['category_id'] > 0) {
-			$category_id = $wp_query->query_vars['category_id'];
-		} else if(isset($_GET['category']) && ($_GET['category'] > 0)) {
-			$category_id = $_GET['category'];
-		}
-  }
-  $category_id = absint($category_id);
-  $category_image = wpsc_get_categorymeta($category_id, 'image');
-  
-  $category_path = WPSC_CATEGORY_DIR.basename($category_image);
-  $category_url = WPSC_CATEGORY_URL.basename($category_image);
-  if(file_exists($category_path) && is_file($category_path)) {
-    return $category_url;
-  } else {
-    return false;
-  }
+	if($category_id < 1)
+		$category_id = wpsc_category_id();
+	$category_image = wpsc_get_categorymeta($category_id, 'image');
+	$category_path = WPSC_CATEGORY_DIR.basename($category_image);
+	$category_url = WPSC_CATEGORY_URL.basename($category_image);
+	if(file_exists($category_path) && is_file($category_path))
+		return $category_url;
+	return false;
 }
 
 
 /**
 * wpsc_category_description function, Gets the category description
 * @param integer category ID, can be 0
-* @param string category description
+* @return string category description
 */
 function wpsc_category_description($category_id = null) {
-  global $wpdb, $wp_query;
-  if($category_id < 1) {
-		if($wp_query->query_vars['category_id'] > 0) {
-			$category_id = $wp_query->query_vars['category_id'];
-		} else if(isset($_GET['category']) && ($_GET['category'] > 0)) {
-			$category_id = $_GET['category'];
-		}
-  }
-  $category_id = absint($category_id);
-  $category_description = wpsc_get_categorymeta($category_id, 'description');
-  return $category_description;
+  if($category_id < 1)
+	$category_id = wpsc_category_id();
+  $category = get_term_by('id', $category_id, 'wpsc_product_category');
+  return  $category->description;
 }
 
 function wpsc_category_name($category_id = null) {
-  global $wpdb, $wp_query;
-  if($category_id < 1) {
-		if($wp_query->query_vars['category_id'] > 0) {
-			$category_id = $wp_query->query_vars['category_id'];
-		} else if(isset($_GET['category']) && ($_GET['category'] > 0)) {
-			$category_id = $_GET['category'];
-		}
-  }
-  $category_id = absint($category_id);
-  
-  $category_data = get_term_by('id', $category_id, 'wpsc_product_category', ARRAY_A);
-  
-  $category_name = $category_data['name'];
-  return $category_name;
+	if($category_id < 1) 
+		$category_id = wpsc_category_id();
+	$category = get_term_by('id', $category_id, 'wpsc_product_category');
+	return $category->name;
 }
 
 function nzshpcrt_display_categories_groups() {
