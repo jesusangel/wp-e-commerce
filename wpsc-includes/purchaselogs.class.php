@@ -607,22 +607,17 @@ class wpsc_purchaselogs {
    var $current_start_timestamp;
    var $current_end_timestamp;
 
-   /* Constructor function */
-   function wpsc_purchaselogs() {
-
-      $this->getall_formdata();
-      if ( !isset( $_GET['view_purchlogs_by'] ) && !isset( $_GET['purchlogs_searchbox'] ) ) {
-         $dates = $this->getdates();
-         if ( isset( $_SESSION['newlogs'] ) ) {
-            $purchaselogs = $_SESSION['newlogs'];
-         } else {
-	           $dates = array_slice( $dates, 0, 3 );
-               $this->current_start_timestamp = $dates[2]['start'];
-               $this->current_end_timestamp = $dates[0]['end'];
-               $newlogs = $this->get_purchlogs( $dates, $status );
-               $_SESSION['newlogs'] = $newlogs;
-               $this->allpurchaselogs = $newlogs;
-         }
+	/* Constructor function */
+	function wpsc_purchaselogs() {
+		$this->getall_formdata();
+		if ( !isset( $_GET['view_purchlogs_by'] ) && !isset( $_GET['purchlogs_searchbox'] ) ) {
+			$dates = $this->getdates();
+			$dates = array_slice( $dates, 0, 3 );
+			$this->current_start_timestamp = $dates[2]['start'];
+			$this->current_end_timestamp = $dates[0]['end'];
+			$newlogs = $this->get_purchlogs( $dates, $status );
+			$_SESSION['newlogs'] = $newlogs;
+			$this->allpurchaselogs = $newlogs;
 
          $this->allpurchaselogs = $purchaselogs;
       } else {
@@ -645,7 +640,6 @@ class wpsc_purchaselogs {
                $_SESSION['newlogs'] = $newlogs;
                $this->allpurchaselogs = $newlogs;
             } else {
-
                $dates = explode( '_', $viewby );
                $date[0]['start'] = $dates[0];
                $date[0]['end'] = $dates[1];
