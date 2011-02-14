@@ -105,7 +105,8 @@
 		);
 		
 		for(var i in fields) {
-			jQuery(fields[i][1]).val(jQuery(fields[i][0]).val()).parents('tr:first').hide();;
+			jQuery(fields[i][1]).val(jQuery(fields[i][0]).val());
+			jQuery(fields[i][1]).parents('tr:first').hide();
 			if(!jQuery(fields[i][0]).hasClass('intra-field-label'))
 				jQuery(fields[i][1]).removeClass('intra-field-label');
 			else
@@ -130,7 +131,7 @@
 
 		jQuery('select[title="shippingcountry"]').change();
 		jQuery('select[title="shippingstate"]').change();
-
+		
 		if( jQuery('#change_country #current_country').val() && ( (jQuery('select[title="billingcountry"]').val() && jQuery('#change_country #current_country').val() != jQuery('select[title="billingcountry"]').val() ) || (jQuery('select[title="billingstate"]').val() && jQuery('select[title="billingstate"]').val() != jQuery('#change_country #region').val()) ) ){
 			jQuery('#change_country select').remove();
 			jQuery('#change_country').append('<input type="hidden" name="country" value="'+jQuery('select[title="billingcountry"]').val()+'" /><input type="hidden" name="region" value="'+jQuery('select[title="billingstate"]').val()+'" /><input type="hidden" name="shippingSameBilling" value="true" />').submit();
@@ -392,6 +393,10 @@ function set_billing_country(html_form_id, form_id){
 	form_values = "wpsc_ajax_action=change_tax&form_id="+form_id+"&billing_country="+country+billing_region;
 	jQuery.post( 'index.php', form_values, function(returned_data) {
 		eval(returned_data);
+		if(jQuery("#shippingSameBilling").is(':checked')){
+			jQuery('.shipping_region').parent().parent().hide();
+			jQuery('.shipping_country_name').parent().parent().hide();
+		}
 	});
 }
 function set_shipping_country(html_form_id, form_id){
@@ -418,6 +423,7 @@ function set_shipping_country(html_form_id, form_id){
 		eval(returned_data);
 		if(jQuery("#shippingSameBilling").is(':checked')){
 			jQuery('.shipping_region').parent().parent().hide();
+			jQuery('.shipping_country_name').parent().parent().hide();
 		}
 	});
 	
