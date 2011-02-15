@@ -54,7 +54,8 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
     $post_meta['meta'] = (array)$_POST['meta'];
 	$post_data['meta']['_wpsc_price'] = abs((float)str_replace( ',','',$post_data['meta']['_wpsc_price'] ));
 	$post_data['meta']['_wpsc_special_price'] = abs((float)str_replace( ',','',$post_data['meta']['_wpsc_special_price'] ));
-	$post_data['meta']['_wpsc_sku'] = $post_data['meta']['_wpsc_sku'];
+	if($post_data['meta']['_wpsc_sku'] == 'N/A')
+		$post_data['meta']['_wpsc_sku'] = '';
 	if (!isset($post_data['meta']['_wpsc_is_donation'])) $post_data['meta']['_wpsc_is_donation'] = '';
 	$post_data['meta']['_wpsc_is_donation'] = (int)(bool)$post_data['meta']['_wpsc_is_donation'];
 	if (!isset($post_data['meta']['_wpsc_limited_stock'])){
