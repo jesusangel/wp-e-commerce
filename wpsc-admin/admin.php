@@ -731,28 +731,30 @@ function wpsc_dashboard_4months_widget() {
 	}
 
 	$tablerow = 1;
-	$output = '';
-	$output.='<div style="padding-bottom:15px; ">Last four months of sales on a per product basis:</div>
+	ob_start();
+	?>
+	<div style="padding-bottom:15px; "><?php _e('Last four months of sales on a per product basis:', 'wpsc'); ?></div>
     <table style="width:100%" border="0" cellspacing="0">
     	<tr style="font-style:italic; color:#666;" height="20">
-    		<td colspan="2" style=" font-family:\'Times New Roman\', Times, serif; font-size:15px; border-bottom:solid 1px #000;">At a Glance</td>';
-	foreach ( $months as $mnth ) {
-		$output.='<td align="center" style=" font-family:\'Times New Roman\'; font-size:15px; border-bottom:solid 1px #000;">' . date( "M", $mnth ) . '</td>';
-	}
-	$output.='</tr>';
-	foreach ( (array)$prod_data as $sales_data ) {
-		$output.='<tr height="20">
-				<td width="20" style="font-weight:bold; color:#008080; border-bottom:solid 1px #000;">' . $tablerow . '</td>
-				<td style="border-bottom:solid 1px #000;width:60px">' . $sales_data['product_name'] . '</td>';
-		$currsymbol = wpsc_get_currency_symbol();
+    		<td colspan="2" style=" font-family:\'Times New Roman\', Times, serif; font-size:15px; border-bottom:solid 1px #000;"><?php _e('At a Glance', 'wpsc'); ?></td>
+			<?php foreach ( $months as $mnth ): ?>
+			<td align="center" style=" font-family:\'Times New Roman\'; font-size:15px; border-bottom:solid 1px #000;"><?php echo date( "M", $mnth ); ?></td>
+			<?php endforeach; ?>
+		</tr>
+	<?php foreach ( (array)$prod_data as $sales_data ): ?>
+		<tr height="20">
+			<td width="20" style="font-weight:bold; color:#008080; border-bottom:solid 1px #000;"><?php echo $tablerow; ?></td>
+			<td style="border-bottom:solid 1px #000;width:60px"><?php echo $sales_data['product_name']; ?></td>
+			<?php foreach ( $sales_data['sale_totals'] as $amount ): ?>
+				<td align="center" style="border-bottom:solid 1px #000;"><?php echo wpsc_currency_display($amount); ?></td>
+			<?php endforeach; ?>
+		</tr>
+		<?php 
 		$tablerow++;
-		foreach ( $sales_data['sale_totals'] as $amount ) {
-			$output.= '<td align="center" style="border-bottom:solid 1px #000;">' . $currsymbol . number_format( absint( $amount ), 2 ) . '</td>';
-		}
-		$output.='</tr>';
-	}
-	$output.='</table>';
-	echo $output;
+		endforeach; ?>
+	</table>
+	<?php
+	ob_end_flush();
 }
 
 
