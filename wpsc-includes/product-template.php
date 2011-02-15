@@ -397,8 +397,10 @@ function wpsc_display_categories() {
 		// if we have no categories, and no search, show the group list
 		if ( is_numeric( get_option( 'wpsc_default_category' ) ) || (isset( $product_id ) && is_numeric( $product_id )) || (isset( $_GET['product_search'] ) && $_GET['product_search'] != '') )
 			$output = true;
-
-		if ( (get_option( 'wpsc_default_category' ) == 'all+list') || (get_option( 'wpsc_default_category' ) == 'list') )
+		if ( (get_option( 'wpsc_default_category' ) == 'all+list'))
+			$output = true;
+	
+		if (get_option( 'wpsc_default_category' ) == 'list' && (!isset($wp_query->query_vars['wpsc_product_category']) || !isset($wp_query->query_vars['product_tag']) && get_option('wpsc_display_categories'))) 
 			$output = true;
 
 	}
@@ -407,6 +409,7 @@ function wpsc_display_categories() {
 		$output = false;
 	if ( get_option( 'wpsc_display_categories' ))
 		$output = true;
+
 	return $output;
 }
 
