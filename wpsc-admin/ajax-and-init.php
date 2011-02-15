@@ -1653,38 +1653,6 @@ function wpsc_delete_coupon(){
 	exit();		
 }
 
-
-function wpsc_delete_category() {
-	global $wpdb, $wp_rewrite;
-
-	check_admin_referer( 'delete-category' );
-
-	if ( is_numeric( $_GET['deleteid'] ) ) {
-		$category_id = absint( $_GET['deleteid'] );
-		$taxonomy = 'wpsc_product_category';
-		if ( $category_id > 0 ) {
-			wp_delete_term( $category_id, $taxonomy );
-			$wpdb->query( "DELETE FROM `" . WPSC_TABLE_META . "` WHERE object_id = '" . $category_id . "' AND object_type = 'wpsc_category'" );
-		}
-
-		$wp_rewrite->flush_rules();
-
-		$deleted = 1;
-	}
-
-	$sendback = wp_get_referer();
-	if ( isset( $deleted ) ) {
-		$sendback = add_query_arg( 'deleted', $deleted, $sendback );
-	}
-	$sendback = remove_query_arg( array(
-				'deleteid',
-				'category_id'
-					), $sendback );
-
-	wp_redirect( $sendback );
-	exit();
-}
-
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc_add_image' == $_REQUEST['wpsc_admin_action'] ) )
 	add_action( 'admin_init', 'wpsc_swfupload_images' );
 
@@ -1700,10 +1668,6 @@ if ( isset( $_REQUEST['ajax'] ) && isset( $_REQUEST['admin'] ) && ($_REQUEST['aj
 // Variation set deleting init code starts here
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-delete-variation-set' == $_REQUEST['wpsc_admin_action'] ) )
 	add_action( 'admin_init', 'wpsc_delete_variation_set' );
-
-// Variation set deleting init code starts here
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-delete-category' == $_REQUEST['wpsc_admin_action'] ) )
-	add_action( 'admin_init', 'wpsc_delete_category' );
 	
 //Delete Coupon	
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-delete-coupon' == $_REQUEST['wpsc_admin_action'] ) )

@@ -98,66 +98,6 @@ function wpsc_custom_category_column_data( $string, $column_name, $term_id ) {
     return $image;
 
 }
-/**
- *  Create the actual drag and drop list used for the admin category view
- *
- * @param array $categories
- * @param int $level
- * @return string $output
- */
-function wpsc_admin_list_category_array($categories, $level = 0){
-
-  $output = '';
-  foreach($categories as $cat){
-
-    $output .= "<li id='".$cat['id']."'>";
-    $output .= "<div id='category-".$cat['id']."-container'>";
-
-    $output .= "<div class='category_admin_list_img' id='category-".$cat['id']."-imgs'>";
-    $output .= "<span title='click and drag to move' class='handle'>↕</span>";
-    if($level > 0){
-      $output .= "<img class='category_indenter' src='".WPSC_CORE_IMAGES_URL."/indenter.gif' alt='' title='' />";
-    }
-    $output .= "<a class='row-title' href='".add_query_arg('category_id', $cat['id'])."'>";
-    if(isset($cat['image'])){
-      $output .= "<img src=\"".WPSC_CATEGORY_URL.stripslashes($cat['image'])."\" title='".$cat['name']."' alt='".$cat['name']."' width='30' height='30' />";
-    }else{
-      $output .= "<img src='".WPSC_CORE_IMAGES_URL."/no-image-uploaded.gif' title='".$cat['name']."' alt='".$cat['name']."' width='30' height='30' />";
-    }
-    $output .= stripslashes($cat['name'])."</a>";
-
-    $output .= "<div class='row-actions'><span class='edit'><a class='edit-product' style='cursor:pointer;' title='Edit This Category' href='".add_query_arg('category_id', $cat['id'])."'>". __('Edit', 'wpsc')."</a>";
-    $output .= "</span> | <span class='edit'>";
-    $nonced_url = wp_nonce_url("admin.php?wpsc_admin_action=wpsc-delete-category&amp;deleteid={$cat['id']}", 'delete-category');
-    $output .=  "<a class='delete_button' style='text-decoration:none;' href='".$nonced_url."' onclick=\"return conf();\" >". __('Delete', 'wpsc')."</a>";
-    $output .=  "</span></div>";
-    $output .= "</div>";
-    if(is_array($cat['children'])){
-      $newhandle = "category-".$cat['id']."-children";
-      $output .= <<<EOT
-  <script type="text/javascript">
-    jQuery(document).ready(function(){
-      jQuery('#{$newhandle}').sortable({
-        axis: 'y',
-        containment: 'parent',
-        handle: '.handle',
-        tolerance: 'pointer',
-        update: function(event, ui){
-          categorySort(jQuery('#{$newhandle}').sortable('toArray'), 0);
-        }
-      });
-    });
-  </script>
-EOT;
-      $output .= "<ul id='{$newhandle}' class='ui-sortable'>";
-      $output .= wpsc_admin_list_category_array($cat['children'], ($level + 1));
-      $output .= "</ul>";
-    }
-    $output .= "</div></li>";
-
-  }
-  return $output;
-}
 
 /**
  * wpsc_admin_get_category_array
