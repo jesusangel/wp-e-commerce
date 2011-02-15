@@ -387,7 +387,7 @@ function wpsc_user_details() {
 			$billing_country = $country_data[0]['value'];
 			$shipping_country = $country_data[0]['value'];
 		}
-		echo wpsc_currency_display( $purchase['totalprice'], array('display_as_html' => false) );
+		echo wpsc_currency_display( $purchase['totalprice'], array('display_as_html' => true) );
 		$subtotal += $purchase['totalprice'];
 		echo " </td>\n\r";
 
