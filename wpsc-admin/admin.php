@@ -12,7 +12,6 @@
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-update.page.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-items.page.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-groups.page.php' );
-require_once( WPSC_FILE_PATH . '/wpsc-admin/display-variations.page.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-upgrades.page.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/display-items-functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/product-functions.php' );
