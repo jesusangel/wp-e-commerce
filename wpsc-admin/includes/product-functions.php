@@ -739,11 +739,7 @@ function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
 function wpsc_update_product_meta($product_id, $product_meta) {
     if($product_meta != null) {
 		foreach((array)$product_meta as $key => $value) {
-		    if(get_post_meta($product_id, $key) != false) {
-		      update_post_meta($product_id, $key, $value);
-			} else {
-		      add_post_meta($product_id, $key, $value);
-			}
+			update_post_meta($product_id, $key, $value);
 		}
 	}
 }
