@@ -1154,7 +1154,10 @@ function wpsc_save_quickedit_box( $post_id ) {
 		update_post_meta( $post_id, '_wpsc_price', $_POST['price'] );
 		update_post_meta( $post_id, '_wpsc_special_price', $_POST['sale_price'] );
 	}
-	update_post_meta( $post_id, '_wpsc_sku', $_POST['sku'] );
+	if($_POST['sku'] == 'N/A')
+		update_post_meta( $post_id, '_wpsc_sku', '' );
+	else
+		update_post_meta( $post_id, '_wpsc_sku', $_POST['sku'] );
 
 	return $post_id;
 }
