@@ -826,7 +826,8 @@ function wpsc_ajax_ie_save() {
 		update_product_meta( $product['ID'], 'price', (float)$_POST['price'] );
 		update_product_meta( $product['ID'], 'special_price', (float)$_POST['special_price'] );
 		update_product_meta( $product['ID'], 'sku', $_POST['sku'] );
-		if ( $_POST['stock'] === '' )
+		var_dump(!is_numeric($_POST['stock']));
+		if ( !is_numeric($_POST['stock']) )
 			update_product_meta( $product['ID'], 'stock', '' );
 		else
 			update_product_meta( $product['ID'], 'stock', absint( $_POST['stock'] ) );
