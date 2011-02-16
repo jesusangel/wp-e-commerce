@@ -106,15 +106,15 @@ function wpsc_display_settings_page() { ?>
 
 function wpsc_settings_tabs() {
 	$_default_tabs = array(
-		'general'      => __( 'General', 'wpsc' ),
-		'presentation' => __( 'Presentation', 'wpsc' ),
-		'admin'        => __( 'Admin', 'wpsc' ),
-		'taxes'        => __( 'Taxes', 'wpsc' ),
-		'shipping'     => __( 'Shipping', 'wpsc' ),
-		'gateway'      => __( 'Payments', 'wpsc' ),
-		'checkout'     => __( 'Checkout', 'wpsc' ),
-		'marketing'    => __( 'Marketing', 'wpsc' ),
-		'import'       => __( 'Import', 'wpsc' )
+		'general'      => _x( 'General', 'General settings tab in Settings->Store page', 'wpsc' ),
+		'presentation' => _x( 'Presentation', 'Presentation settings tab in Settings->Store page', 'wpsc' ),
+		'admin'        => _x( 'Admin', 'Admin settings tab in Settings->Store page', 'wpsc' ),
+		'taxes'        => _x( 'Taxes', 'Taxes settings tab in Settings->Store page', 'wpsc' ),
+		'shipping'     => _x( 'Shipping', 'Shipping settings tab in Settings->Store page', 'wpsc' ),
+		'gateway'      => _x( 'Payments', 'Payments settings tab in Settings->Store page', 'wpsc' ),
+		'checkout'     => _x( 'Checkout', 'Checkout settings tab in Settings->Store page', 'wpsc' ),
+		'marketing'    => _x( 'Marketing', 'Marketing settings tab in Settings->Store page', 'wpsc' ),
+		'import'       => _x( 'Import', 'Import settings tab in Settings->Store page', 'wpsc' )
 	);
 
 	return apply_filters( 'wpsc_settings_tabs', $_default_tabs );
