@@ -491,8 +491,16 @@ function wpsc_start_the_query() {
 			}
 		}
 	}
-	if($wp_query->is_404 && $wpsc_query->post_count > 0  )
-		$wp_query = $wpsc_query;
+
+	if( $wpsc_query->post_count == 0  && isset($wpsc_query_vars['wpsc_product_category'])){
+		$products_page_id = wpec_get_the_post_id_by_shortcode('[productspage]');
+		$args = array(
+			'post_type' => 'page',
+			'post__in' => array($products_page_id)
+		);
+		$wp_query = new WP_Query($args);
+	}
+
 	if ( isset( $wp_query->post->ID ) )
 		$post_id = $wp_query->post->ID;
 	else
