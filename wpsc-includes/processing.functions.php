@@ -64,6 +64,10 @@ function wpsc_currency_display( $price_in, $args = null ) {
 			$currency_code = '';
 		}
 	}
+	
+	//dollar sign is reserved - need to escape
+	if($currency_sign == '$')
+		$currency_sign = '\$';
 
 	$currency_sign_location = get_option( 'currency_sign_location' );
 
