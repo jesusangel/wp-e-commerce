@@ -529,7 +529,7 @@ function wpsc_update_files() {
 		
 		$file_id = wpsc_get_meta($product_file->id, '_new_file_id', 'wpsc_files');
 		
-		if($file_id == null) {
+		if($file_id == null && count($variation_post_ids) == 0) {
 			$file_data = $attachment_template;
 			$file_data['post_parent'] = $product_post_id;
 			$new_file_id = wp_insert_post($file_data);
