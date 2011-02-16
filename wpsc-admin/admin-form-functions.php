@@ -226,7 +226,7 @@ function wpsc_right_now() {
 								<?php echo $group_count; ?>
 							</td>
 							<td class='t'>
-								<?php echo _n('Group', 'Groups', $group_count, 'wpsc'); ?>
+								<?php echo _n('Category', 'Categories', $group_count, 'wpsc'); ?>
 							</td>
 							<td class='b'>
 								<?php echo $pending_sales; ?>
@@ -265,7 +265,7 @@ function wpsc_right_now() {
 			<p class='youhave'>
 				<?php printf(_n('You have %s product,', 'You have %s products,', $product_count, 'wpsc'), $product_count); ?>
 				<?php printf(_n(' contained within %s category.', ' contained within %s categories.', $group_count, 'wpsc' ), $group_count); ?>
-				<?php printf(_n('This month you made %1$s sale and generated a total of %2$s and your total sales ever is %3$s', 'This month you made %1$s sales and generated a total of %2$s and your total sales ever is %3$s.', $sales_count, 'wpsc'), $sales_count, $monthtotal, $overaltotal ); ?> 
+				<?php printf(_n('This month you made %1$s sale and generated a total of %2$s and your total sales ever is %3$s.', 'This month you made %1$s sales and generated a total of %2$s and your total sales ever is %3$s.', $sales_count, 'wpsc'), $sales_count, $monthtotal, $overaltotal ); ?> 
 				<?php printf(_n('You have %s sale awaiting approval.', 'You have %s sales awaiting approval.', $pending_sales, 'wpsc'), $pending_sales); ?>
 			</p>
 			<p class='youare'>
