@@ -435,4 +435,20 @@ function wpsc_page_number() {
 	return false;
 }
 
+function wpsc_ordersummary() {
+	_deprecated_function( __FUNCTION__, '3.8');
+	return false;
+}
+
+function display_ecomm_rss_feed() {
+	_deprecated_function( __FUNCTION__, '3.8');
+	return false;
+}
+
+function display_ecomm_admin_menu() {
+	_deprecated_function( __FUNCTION__, '3.8');
+	return false;
+}
+
+
 ?>
