@@ -357,7 +357,7 @@ function wpsc_packing_slip($purchase_id) {
                         	if ($form_field['name']=="State" && !empty($purch_data['billing_region']) || $form_field['name']=="State" && !empty($purch_data['billing_region']))
                       echo "";
                      		 else
-                            	echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value'], 'UTF-8'), ENT_QUOTES)."</td></tr>\n\r";
+                            	echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES, 'UTF-8')."</td></tr>\n\r";
                         
                         }
 
