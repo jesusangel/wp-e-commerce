@@ -631,7 +631,7 @@ function wpsc_the_product_title() {
  * @return string - the product description
  */
 function wpsc_the_product_description() {
-	$content = get_the_content( 'Read the rest of this entry &raquo;' );
+	$content = get_the_content( __( 'Read the rest of this entry &raquo;', 'wpsc' ) );
 	return wpautop($content,1);
 }
 
