@@ -791,6 +791,24 @@ function wpsc_product_download_forms() {
             <br />
             <h4><?php _e( "Select an MP3 file to upload as a preview", 'wpsc' ) ?></h4>
             <input type='file' name='preview_file' value='' /><br />
+            
+            <h4><?php _e( "Your preview for this product:", 'wpsc' ) ?></h4>
+         
+	         <?php 
+	         $args = array(
+			'post_type' => 'wpsc-preview-file',
+			'post_parent' => $post->ID,
+			'numberposts' => -1,
+			'post_status' => 'all'
+			);
+		
+			$preview_files = (array)get_posts( $args );
+			
+			foreach ($preview_files as $preview)
+				echo $preview->post_title . '<br />';
+			
+			?>
+	
             <br />
         <?php
 	}

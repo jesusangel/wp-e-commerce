@@ -928,6 +928,30 @@ function wpsc_item_reassign_file($product_id, $selected_files) {
 }
 
  /**
+ * wpsc_delete_preview_file 
+ *
+ * @param integer product ID
+ */
+ 
+function wpsc_delete_preview_file($product_id) {
+
+	$args = array(
+	'post_type' => 'wpsc-preview-file',
+	'post_parent' => $product_id,
+	'numberposts' => -1,
+	'post_status' => 'all'
+	);
+	
+	$preview_files = (array)get_posts( $args );
+	
+	foreach( $preview_files as $preview ) {
+		$preview_id = $preview->ID;
+		wp_delete_post($preview_id);
+	}
+	return true;
+}
+
+ /**
  * wpsc_item_add_preview_file function 
  *
  * @param integer product ID
@@ -935,6 +959,8 @@ function wpsc_item_reassign_file($product_id, $selected_files) {
  */
 function wpsc_item_add_preview_file($product_id, $preview_file) {
   global $wpdb;
+  
+  wpsc_delete_preview_file($product_id);
   
   add_filter('upload_dir', 'wpsc_modify_preview_directory');
 	$overrides = array('test_form'=>false);
