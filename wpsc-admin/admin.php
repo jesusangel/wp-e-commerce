@@ -92,7 +92,7 @@ function wpsc_drag_and_drop_ordering($per_page, $post_type){
 		}else{
 		$_post_type = str_replace('-', '_', $post_type);
 		$edit_per_page = 'edit_' . $_post_type . '_per_page';
-		$per_page = (int) get_user_option( $edit_per_page );
+		$per_page = ((int) get_user_option( $edit_per_page ))?(int) get_user_option( $edit_per_page ):$per_page;
 		}
 		
 		return $per_page;
