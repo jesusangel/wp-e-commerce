@@ -941,12 +941,16 @@ function wpsc_display_products_page( $query ) {
 		if(!empty($query['order'])){
 			$args['order'] = $query['order'];
 		}
-		if(!empty($query['limit_of_items'])){
+		if(!empty($query['limit_of_items']) && '1' == get_option('use_pagination')){
 			$args['posts_per_page'] = $query['limit_of_items'];
 		}	
-		if(!empty($query['number_per_page'])){
+		if(!empty($query['number_per_page']) && '1' == get_option('use_pagination')){
 			$args['posts_per_page'] = $query['number_per_page'];
-		}	
+		}
+		if( '0' == get_option('use_pagination') ){
+			$args['nopaging'] = false;
+			$args['posts_per_page'] = '-1';
+		}
 		if(!empty($query['tag'])){
 			$args['product_tag'] = $query['tag'];
 		}

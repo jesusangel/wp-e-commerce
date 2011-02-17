@@ -59,7 +59,7 @@ add_action( 'admin_head', 'wpsc_css_header' );
 
 function wpsc_redirect_variation_update( $location, $post_id ) {
 	global $post;
-	if ( $post->post_parent > 0 )
+	if ( $post->post_parent > 0 && 'wpsc-product' == $post->post_type )
 		wp_redirect( admin_url( 'post.php?post='.$post->post_parent.'&action=edit' ) );
 	else
 		return $location;
