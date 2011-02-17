@@ -26,6 +26,7 @@ function wpsc_admin_product_listing($parent_product = null) {
 		wpsc_product_row($product, $parent_product);
 	}
 }
+
 /**
  * Adds the -trash status in the product row of manage products page
  * @access public

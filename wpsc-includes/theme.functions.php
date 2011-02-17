@@ -1338,7 +1338,6 @@ add_filter( 'body_class', 'wpsc_body_class' );
  * @since 3.8
  */
 function wpsc_the_sticky_image( $product_id ) {
-	global $wpdb;
 	$attached_images = (array)get_posts( array(
 				'post_type' => 'attachment',
 				'numberposts' => 1,
@@ -1359,8 +1358,10 @@ function wpsc_the_sticky_image( $product_id ) {
 		return false;
 	}
 }
+
+
 function is_products_page(){
-	global $wpdb, $post;
+	global $post;
 	$product_page_id = wpec_get_the_post_id_by_shortcode('[productspage]');
 	if($post->ID == $product_page_id) 
 		return true;
@@ -1375,7 +1376,7 @@ function is_products_page(){
  * @return void
  */
 function wpsc_display_featured_products_page() {
-	global $wpdb,$post, $wpsc_query,$wp_query;
+	global $post, $wpsc_query,$wp_query;
 	$sticky_array = get_option( 'sticky_products' );
 	if ( (is_front_page() || is_home() || is_products_page() ) && !empty( $sticky_array ) && $wp_query->post_count > 1) {
 		$query = get_posts( array(
