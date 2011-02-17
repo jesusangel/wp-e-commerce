@@ -1,32 +1,42 @@
 <?php
-/* Author : Greg Gullett and Instinct.co.nz
- * SVN : UPS Trunk : Revision 15 : July 31, 2010
+/* Author : Greg Gullett and Instinct.co.uk
+ * SVN : UPS Trunk :
+ * Version : 1.1.0 : December 21, 2010
  */
-class ups {
+class ash_ups {
     var $internal_name, $name;
-        public $service_url = "";
-        private $Services = "";
+    var $service_url = "";
+    var $Services = "";
+    var $singular_shipping = FALSE;
+    var $shipment;
 
-    function ups() {
-            $this->internal_name = "ups";
-            $this->name="UPS";
-            $this->is_external=true;
-            $this->requires_curl=true;
-            $this->requires_weight=true;
-            $this->needs_zipcode=true;
+    function ash_ups() {
+        global $wpec_ash;
+        $this->internal_name = "ups 2.0";
+        $this->name="UPS 2.0";
+        $this->is_external=true;
+        $this->requires_curl=true;
+        $this->requires_weight=true;
+        $this->needs_zipcode=true;
+        $this->_setServiceURL();
+        $this->_includeUPSData();
+        $this->shipment = $wpec_ash->get_shipment();
+        return true;
+    }
 
-            //$this->_includeUPSData();
-            //$this->_setServiceURL();
+    function getId() {
+//         return $this->usps_id;
+    }
 
-            return true;
+    function setId($id) {
+//         $usps_id = $id;
+//         return true;
     }
 
     private function _setServiceURL(){
         global $wpdb;
         $wpsc_ups_settings = get_option("wpsc_ups_settings");
-        $wpsc_ups_environment = '';
-        if(!empty($wpsc_ups_settings))
-			$wpsc_ups_environment = (array_key_exists("upsenvironment",$wpsc_ups_settings)) ? $wpsc_ups_settings["upsenvironment"] : "1";
+        $wpsc_ups_environment = (array_key_exists("upsenvironment",(array)$wpsc_ups_settings)) ? $wpsc_ups_settings["upsenvironment"] : "1";
         if ($wpsc_ups_environment == "1"){
             $this->service_url = "https://wwwcie.ups.com/ups.app/xml/Rate";
         }else{
@@ -57,7 +67,7 @@ class ups {
                             "01" => "Daily Pickup, with UPS Account",
                             "03" => "No Daily Pickup, with No or Other Account",
                             "04" => "Retail Outlet (Only US origin shipments)"
-                            );        
+                            );
 
         $this->Services = array(
             "14" => "Next Day Air Early AM",
@@ -81,12 +91,8 @@ class ups {
     }
 
     function getForm(){
-
-            if (!isset($this->Services) || !isset($this->drop_types)){
+            if (!isset($this->Services)){
                 $this->_includeUPSData();
-            }
-            if (!isset($this->service_url)){
-                $this->_setServiceURL();
             }
 
             //__('Your Packaging', 'wpsc');  <-- use to translate
@@ -141,7 +147,7 @@ class ups {
                 $sel2_drop = "01";
             }else{ $sel2_drop = $wpsc_ups_settings['DropoffType']; }
 
-            foreach(array_keys($this->drop_types) as $dkey){
+            foreach(array_keys((array)$this->drop_types) as $dkey){
                 $sel = "";
                 if ($sel2_drop == $dkey){
                     $sel = 'selected="selected"';
@@ -193,10 +199,9 @@ class ups {
             $output .= "</tr>\n\r";
 
             $selected_env = $wpsc_ups_settings['upsenvironment'];
-            if ($selected_env == "1")
+            if ($selected_env == "1"){
                 $env_test = "checked=\"checked\"";
-            else
-            	$env_test = "";
+            }
             $output .= ("
                         <tr>
                             <td><label for=\"ups_env_test\" >".__('Use Testing Environment', 'wpsc')."</label></td>
@@ -215,6 +220,31 @@ class ups {
                             <td><label for=\"ups_negotiated_rates\" >".__('Show UPS negotiated rates', 'wpsc')." *</label></td>
                             <td>
                                 <input type=\"checkbox\" id=\"ups_negotiated_rates\" name=\"wpsc_ups_settings[ups_negotiated_rates]\" value=\"1\" ".$negotiated_rates." /><br />
+                            </td>
+                        </tr>
+                        ");
+            $insured_shipment = "";
+            if ($wpsc_ups_settings['insured_shipment'] == "1"){
+                $insured_shipment = "checked=\"checked\"";
+            }
+            $output .= ("
+                        <tr>
+                            <td><label for=\"ups_insured_shipment\" >".__('Insure shipment against cart total', 'wpsc')." *</label></td>
+                            <td>
+                                <input type=\"checkbox\" id=\"ups_insured_shipment\" name=\"wpsc_ups_settings[insured_shipment]\" value=\"1\" ".$insured_shipment." /><br />
+                            </td>
+                        </tr>
+                        ");
+            $singular_shipping = "";
+            if ($wpsc_ups_settings['singular_shipping'] == "1"){
+                $singular_shipping = "checked=\"checked\"";
+            }
+            $output .= ("
+                        <tr>
+                            <td><label for=\"ups_singular_shipping\" >".__('Singular Shipping', 'wpsc')." *</label></td>
+                            <td>
+                                <input type=\"checkbox\" id=\"ups_singular_shipping\" name=\"wpsc_ups_settings[singular_shipping]\" value=\"1\" ".$singular_shipping." /><br />
+                                ".__('Rate each quantity of items in a cart as its own package using dimensions on product')."
                             </td>
                         </tr>
                         ");
@@ -284,7 +314,7 @@ class ups {
         /* This function is called when the user hit "submit" in the
          * UPS settings area under Shipping to update the setttings.
          */
-        if (isset($_POST['wpsc_ups_settings']) && $_POST['wpsc_ups_settings'] != '') {
+        if ($_POST['wpsc_ups_settings'] != '') {
             $wpsc_ups_services = $_POST['wpsc_ups_services'];
             update_option('wpsc_ups_services',$wpsc_ups_services);
             $temp = $_POST['wpsc_ups_settings'];
@@ -304,9 +334,13 @@ class ups {
         $xml = "";
         if (is_array($data)){
             foreach($data as $key=>$value){
-                $xml .= "<".trim($key).">\n";
-                $xml .= $this->array2xml($value);
-                $xml .= "</".trim($key).">\n";
+                //if(empty($value)){
+                //    $xml .= "<".trim($key)." />\n";
+                //}else{
+                    $xml .= "<".trim($key).">\n";
+                    $xml .= $this->array2xml($value);
+                    $xml .= "</".trim($key).">\n";
+               // }
             }
         }else if(is_bool($data)){
             if($data){$xml = "true\n";}
@@ -317,23 +351,82 @@ class ups {
         return $xml;
     }
 
+    private function _is_large(&$pack ,$package){
+        $maximum = 165; // in inches
+        $large_floor = 130; // in inches
+        $calc_total = ((2 * $package->width)+(2 * $package->height));
+        if ($calc_total >= $maximum){
+            throw new Exception("Package dimensions exceed non-freight limits");
+        }elseif($calc_total > $large_floor){
+            $pack["LargePackageIndicator"] = "";
+        }
+    }
+    
+    private function _insured_value(&$pack, $package, $args){
+        $monetary_value = $package->value;
+        if ($package->insurance === TRUE){
+            if ($package->insured_amount){
+                $monetary_value = $package->insured_amount;
+            }
+            $pack["PackageServiceOptions"]["InsuredValue"] = array(
+                    "CurrencyCode" => $args["currency"],
+                    "MonetaryValue" => $package->insured_amount
+            );
+        }
+        
+    }
+    
+    private function _declared_value(&$pack, $package, $args){
+        $pack["PackageServiceOptions"]["DeclaredValue"] = array(
+                "CurrencyCode" => $args["currency"],
+                "MonetaryValue" => $args["cart_total"]
+        );
+    }
+    
+    private function _build_shipment(&$Shipment, $args){
+        $cart_shipment = $this->shipment;
+
+        foreach($cart_shipment->packages as $package){
+            $pack = array(
+                "PackagingType" => array(
+                    "Code"=>"02"
+                ),
+                "Dimensions" => array(
+                    "UnitOfMeasurement" => array(
+                        "Code" => "IN"
+                    ),
+                    "Length" => $package->length,
+                    "Width" => $package->width,
+                    "Height" => $package->height
+                ),
+                "PackageWeight"=>array(
+                	"UnitOfMeasurement"=>array(
+                        "Code" => "LBS"
+                    ),
+                    "Weight" => $package->weight
+                )
+            ); // End Package
+            // handle if the package is "large" or not (UPS standard)
+            $this->_is_large($pack, $package);
+            $this->_insured_value($pack, $package, $args);
+            $this->_declared_value($pack, $package, $args);
+            $Shipment .= $this->array2xml(array("Package"=>$pack));
+        } // End for each package in shipment
+    }
 
     private function _buildRateRequest($args){
         // Vars is an array
         // $RateRequest, $RatePackage, $RateCustomPackage, $RateRequestEnd
         // Are defined in ups_data.php that is included below if not
         // done so by instantiating class ... shouldnt ever need to
-        if (!isset($this->MessageStart)){
-            $this->_includeUPSData();
-        }
-        // Always start of with this, it includes the auth block//
+        // Always start of with this, it includes the auth block
         $REQUEST = "<?xml version=\"1.0\"?>\n
         <AccessRequest xml:lang=\"en-US\">\n";
 
         $access = array(
             "AccessLicenseNumber"=>base64_decode($args['api_id']),   // UPS API ID#
-            "UserId" =>base64_decode($args['username']), 			// UPS API Username
-            "Password" =>base64_decode($args['password'])  			// UPS API Password
+            "UserId" =>base64_decode($args['username']), // UPS API Username
+            "Password" =>base64_decode($args['password'])  // UPS API Password
         );
 
         $REQUEST .= $this->array2xml($access);
@@ -377,10 +470,10 @@ class ups {
         }
 
         // Set up Shipment Node
-        $Shipment = array();
+        $Shipment = "";
 
         // Shipper Address (billing)
-        $Shipment["Shipper"]=array(
+        $Shipper = array(
             "Address"=>array(
                 "StateProvinceCode"=>$args['shipr_state'],
                 "PostalCode"=>$args['shipr_pcode'], // The shipper Postal Code
@@ -390,18 +483,21 @@ class ups {
         // Negotiated Rates
         if (array_key_exists('negotiated_rates', $args) ){
             if ($args['negotiated_rates'] == '1' && !empty($args['account_number'])){
-                $Shipment["Shipper"]["ShipperNumber"] = $args['account_number'];
+                $Shipper["ShipperNumber"] = $args['account_number'];
             }
         }
 
         // If the city is configured use it
         if (array_key_exists('shipr_city', $args)){
             if (!empty($args['shipr_city'])){
-                $Shipment["Shipper"]["Address"]["City"] = $args["shipr_city"];
+                $Shipper["Address"]["City"] = $args["shipr_city"];
             }
         }
+        
+        $Shipment .= $this->array2xml(array("Shipper"=>$Shipper));
+        
         // The physical address the shipment is from (normally the same as billing)
-        $Shipment["ShipFrom"]=array(
+        $ShipFrom=array(
             "Address"=>array(
                 "StateProvinceCode"=>$args['shipf_state'],
                 "PostalCode"=>$args['shipf_pcode'], // The shipper Postal Code
@@ -411,41 +507,60 @@ class ups {
         // If the city is configured use it
         if (array_key_exists('shipf_city', $args)){
             if (!empty($args['shipf_city'])){
-                $Shipment["ShipFrom"]["Address"]["City"] = $args["shipf_city"];
+                $ShipFrom["Address"]["City"] = $args["shipf_city"];
             }
         }
 
-        $Shipment["ShipTo"]= array(
+        $Shipment .= $this->array2xml(array("ShipFrom"=>$ShipFrom));
+        
+        $ShipTo= array(
             "Address"=>array(
-                "StateProvinceCode"=>$args['dest_state'], 	// The Destination State
-                "PostalCode"=>$args['dest_pcode'], 			// The Destination Postal Code
-                "CountryCode"=>$args['dest_ccode'], 		// The Destination Country
+                "StateProvinceCode"=>$args['dest_state'], // The Destination State
+                "PostalCode"=>$args['dest_pcode'], // The Destination Postal Code
+                "CountryCode"=>$args['dest_ccode'], // The Destination Country
+                //"ResidentialAddress"=>"1"
             ));
 
         if ($args['residential'] == '1'){ //ResidentialAddressIndicator orig - Indicator
-            $Shipment["ShipTo"]["Address"]["ResidentialAddressIndicator"] = "1";
+            $ShipTo["Address"]["ResidentialAddressIndicator"] = "1";
         }
+        
+        $Shipment .= $this->array2xml(array("ShipTo"=>$ShipTo));
 
         // If there is a specific service being requested then
         // we want to pass the service into the XML
         if (isset($args["service"])){
-           $Shipment["Service"] = array("Code" =>$args['service']);
+           $Shipment .=  array("Service"=>array("Code" =>$args['service']));
         }
 
         // Include this only if you want negotiated rates
         if (array_key_exists('negotiated_rates', $args) ){
             if ($args['negotiated_rates'] == "1"){
-                $Shipment["RateInformation"]=array("NegotiatedRatesIndicator" => "");
+                $Shipment .=array("RateInformation"=>array("NegotiatedRatesIndicator" => ""));
             }
         }
-
-        $Shipment["Package"] = array(
-            "PackagingType"=>array("Code"=>$args['packaging']),
-            "PackageWeight"=>array(
-                "UnitOfMeasurement"=>array("Code"=>$args['units']),
-                "Weight" => $args["weight"]
-            )
-        );
+         
+        if ((boolean)$args["singular_shipping"]){
+            $this->_build_shipment($Shipment,$args);
+        }else{
+            $package = array("Package"=> array(
+                "PackagingType"=>array("Code"=>$args['packaging']),
+                "PackageWeight"=>array(
+                    "UnitOfMeasurement"=>array("Code"=>$args['units']),
+                    "Weight" => $args["weight"]
+                )
+            ));
+            if ((boolean)$args["insured_shipment"]){
+                $package["PackageServiceOptions"] = array(
+                    "InsuredValue"=> array(
+                        "CurrencyCode"=>$args["currency"],
+                        "MonetaryValue"=>$args["cart_total"]
+                    )
+                );
+            }
+            
+            $Shipment .= $this->array2xml($package);
+        }
 
         // Set the structure for the Shipment Node
         $RatingServiceRequest["Shipment"] = $Shipment;
@@ -458,11 +573,6 @@ class ups {
     }
 
     private function _makeRateRequest($message){
-
-		if (!isset($this->service_url)) {
-			$this->_setServiceURL;
-		}
-
         // Make the XML request to the server and retrieve the response
         $ch = curl_init();
 
@@ -501,10 +611,6 @@ class ups {
 
     private function _parseQuote($raw){
         global $wpdb;
-
-		if (!isset($this->Services)){
-			$this->_includeUPSData();
-        }
 
         $config = get_option('wpsc_ups_settings');
         $debug  = (array_key_exists('upsenvironment', $config)) ? $config['upsenvironment'] : "";
@@ -545,6 +651,7 @@ class ups {
                     $price = "";
                     $time = "";
 
+                    //if (array_key_exists('ups_negotiated_rates', $config)){
                     $getNegotiatedRateNode = $rate_block->getElementsByTagName("NegotiatedRates");
                     if ($getNegotiatedRateNode){
                         $negotiatedRateNode = $getNegotiatedRateNode->item(0);
@@ -567,7 +674,15 @@ class ups {
                     // Get the <TotalCharges> Node from the XML chunk
                     $getChargeNodes = $rate_block->getElementsByTagName("TotalCharges");
                     $chargeNode = $getChargeNodes->item(0);
-
+/*
+                    $getDeliveryNode = $rate_block->getElementsByTagName("GuaranteedDaysToDelivery");
+                    $deliveryDays = $getDeliveryNode->item(0)->nodeValue;
+                    if ($deliveryDays){
+                        $time = $this->futureDate($deliveryDays);
+                    }else{
+                        $time = $this->futureDate(6);
+                    }
+*/
                     // Get the <CurrencyCode> from the <TotalCharge> chunk
                     $getCurrNode= $chargeNode->getElementsByTagName("CurrencyCode");
                     // Get the value of <CurrencyCode>
@@ -584,14 +699,14 @@ class ups {
                     // are not explicitly defined.
                     if (!empty($wpsc_ups_services)){
                         if (is_array($wpsc_ups_services)){
-                            if (array_search($serviceCode, $wpsc_ups_services) === false){
+                            if (array_search($serviceCode, (array)$wpsc_ups_services) === false){
                                 continue;
                             }
                         }else if ($wpsc_ups_services != $serviceCode){
                             continue;
                         }
                     }
-                    if(array_key_exists($serviceCode,$this->Services)){
+                    if(array_key_exists($serviceCode,(array)$this->Services)){
                         $rate_table[$this->Services[$serviceCode]] = array($currCode,$price);
                     }
 
@@ -630,7 +745,7 @@ class ups {
     }
 
     function getQuote(){
-        global $wpdb;
+        global $wpdb, $wpec_ash;
 
         // Arguments array for various functions to use
         $args = array();
@@ -640,16 +755,17 @@ class ups {
         $wpsc_ups_settings = get_option("wpsc_ups_settings");
         // Get the wordpress shopping cart options
         $wpsc_options = get_option("wpsc_options");
-
+        
         // API Auth settings //
         $args['username'] = (array_key_exists('upsaccount',$wpsc_ups_settings)) ? $wpsc_ups_settings['upsusername'] : "";
         $args['password'] = (array_key_exists('upspassword',$wpsc_ups_settings)) ? $wpsc_ups_settings['upspassword'] : "";
         $args['api_id']   = (array_key_exists('upsid',$wpsc_ups_settings)) ? $wpsc_ups_settings['upsid'] : "";
         $args['account_number'] = (array_key_exists('upsaccount',$wpsc_ups_settings)) ? $wpsc_ups_settings['upsaccount'] : "";
-        $args['negotiated_rates'] = (array_key_exists('ups_negotiated_rates',$wpsc_ups_settings)) ? 
+        $args['negotiated_rates'] = (array_key_exists('ups_negotiated_rates',$wpsc_ups_settings)) ?
                                                     $wpsc_ups_settings['ups_negotiated_rates'] : "";
         $args['residential'] = $wpsc_ups_settings['49_residential'];
-
+        $args["singular_shipping"] = (array_key_exists("singular_shipping", $wpsc_ups_settings)) ? $wpsc_ups_settings["singular_shipping"] : "0";
+        $args['insured_shipment'] = (array_key_exists("insured_shipment", $wpsc_ups_settings)) ? $wpsc_ups_settings["insured_shipment"] : "0";
         // What kind of pickup service do you use ?
         $args['DropoffType'] = $wpsc_ups_settings['DropoffType'];
         $args['packaging'] = $wpsc_ups_settings['48_container'];
@@ -684,7 +800,7 @@ class ups {
             // So, UPS is a little off the times
             $args['dest_ccode'] = "GB";
         }
-
+        
         // If ths zip code is provided via a form post use it!
         if(isset($_POST['zipcode']) && ($_POST['zipcode'] != "Your Zipcode" && $_POST['zipcode'] != "YOURZIPCODE")) {
           $args['dest_pcode'] = $_POST['zipcode'];
@@ -701,7 +817,7 @@ class ups {
         if(isset($_POST['region']) && !empty($_POST['region'])) {
             $query ="SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`
                                 WHERE `".WPSC_TABLE_REGION_TAX."`.`id` = '".$_POST['region']."'";
-            $dest_region_data = $wpdb->get_results($query, ARRAY_A);      
+            $dest_region_data = $wpdb->get_results($query, ARRAY_A);
             $args['dest_state'] = (is_array($dest_region_data)) ? $dest_region_data[0]['code'] : "";
             $_SESSION['wpsc_state'] = $args['dest_state'];
         } else if(isset($_SESSION['wpsc_state'])) {
@@ -714,17 +830,17 @@ class ups {
         $shipping_cache_check['state'] = $args['dest_state'];
         $shipping_cache_check['zipcode'] = $args['dest_pcode'];
         $shipping_cache_check['weight'] = $args['weight'];
-        
-        // This is where shipping breaks out of UPS if weight is higher than 150 LBS
-        if($weight > 150){
-                unset($_SESSION['quote_shipping_method']);
-                $shipping_quotes[TXT_WPSC_OVER_UPS_WEIGHT] = 0;
-                $_SESSION['wpsc_shipping_cache_check']['weight'] = $args['weight'];
-                $_SESSION['wpsc_shipping_cache'][$this->internal_name] = $shipping_quotes;
-                $_SESSION['quote_shipping_method'] = $this->internal_name;
-                return array($shipping_quotes);
+        if (!(boolean)$args["singular_shipping"]){
+            // This is where shipping breaks out of UPS if weight is higher than 150 LBS
+            if($weight > 150){
+                    unset($_SESSION['quote_shipping_method']);
+                    $shipping_quotes[TXT_WPSC_OVER_UPS_WEIGHT] = 0;
+                    $_SESSION['wpsc_shipping_cache_check']['weight'] = $args['weight'];
+                    $_SESSION['wpsc_shipping_cache'][$this->internal_name] = $shipping_quotes;
+                    $_SESSION['quote_shipping_method'] = $this->internal_name;
+                    return array($shipping_quotes);
+            }
         }
-        
         // We do not want to spam UPS (and slow down our process) if we already
         // have a shipping quote!
         if(($_SESSION['wpsc_shipping_cache_check'] === $shipping_cache_check)
@@ -733,6 +849,8 @@ class ups {
             $rate_table = $_SESSION['wpsc_shipping_cache'][$this->internal_name];
             return $rate_table;
         }else{
+            global $wpsc_cart;
+            $args["cart_total"] = $wpsc_cart->calculate_subtotal(true);
             // Build the XML request
             $request = $this->_buildRateRequest($args);
             // Now that we have the message to send ... Send it!
@@ -744,10 +862,13 @@ class ups {
             if ($quotes != false){
                 $rate_table = $this->_formatTable($quotes,$args['currency']);
             }else{
-                if ($wpsc_ups_settings['upsenvironment'] == '1' && 'true' == WP_DEBUG){
+                if ($wpsc_ups_settings['upsenvironment'] == '1'){
                     echo "<strong>:: GetQuote ::DEBUG OUTPUT::</strong><br />";
                     echo "Arguments sent to UPS";
                     print_r($args);
+                    echo "<hr />";
+                    print $request;
+                    echo "<hr />";
                     echo "Response from UPS";
                     echo $raw_quote;
                     echo "</strong>:: GetQuote ::End DEBUG OUTPUT::";
@@ -755,10 +876,10 @@ class ups {
             }
         }
         
-        $_SESSION['wpsc_shipping_cache_check']['state'] = $args['dest_state'];
-        $_SESSION['wpsc_shipping_cache_check']['zipcode'] = $args['dest_pcode'];
-        $_SESSION['wpsc_shipping_cache_check']['weight'] = $args['weight'];
-        $_SESSION['wpsc_shipping_cache'][$this->internal_name] = $rate_table;
+        $wpec_ash->cache_results($this->internal_name,
+                                 $args["dest_ccode"], $args["dest_state"],
+                                 $args["dest_pcode"], $rate_table, $this->shipment);
+        
         // return the final formatted array !
         return $rate_table;
     }
@@ -767,6 +888,5 @@ class ups {
     function get_item_shipping(){
     }
 }
-$ups = new ups();
-$wpsc_shipping_modules[$ups->getInternalName()] = $ups;
-?>
+$ash_ups = new ash_ups();
+$wpsc_shipping_modules[$ash_ups->getInternalName()] = $ash_ups;
