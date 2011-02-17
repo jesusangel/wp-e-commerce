@@ -53,10 +53,48 @@ function wpsc_query_vars_product_list($vars){
 	}
 	return $vars;
 }
+
+/**
+ * setting the screen option to between 1 and 999
+ * @access public
+ *
+ * @since 3.8
+ * @param $status
+ * @param $option (string) name of option being saved
+ * @param $value (string) value of option being saved
+ * @return $value after changes...
+ */
+function wpsc_set_screen_option($status, $option, $value){
+	if ($option == "edit_wpsc_product_per_page"){
+		$value = (int) $value;
+		if ( $value < 1 || $value > 999 )
+			return FALSE;
+		return $value;
+	}
+	return $value;
+} 
+add_filter('set-screen-option', 'wpsc_set_screen_option', 99, 3);
+
+/**
+ * When rearranging the products for drag and drop it is easiest to arrange them when they are all on the same page...
+ * @access public (wp-admin)
+ *
+ * @since 3.8
+ * @param $per_page (int) number of products per page
+ * @param $post_type (string) name of current post type
+ * @return $per_page after changes...
+ */
 function wpsc_drag_and_drop_ordering($per_page, $post_type){
-	global $wpdb;
-	if('wpsc-product' == $post_type && 'dragndrop' == get_option('wpsc_sort_by') ){
-		$per_page = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->posts} WHERE `post_type`='wpsc-product' AND `post_parent`=0");
+	global $wpdb; 
+	if('wpsc-product' == $post_type ){
+		if( 'dragndrop' == get_option('wpsc_sort_by')){	
+			$per_page = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->posts} WHERE `post_type`='wpsc-product' AND `post_parent`=0");
+		}else{
+		$_post_type = str_replace('-', '_', $post_type);
+		$edit_per_page = 'edit_' . $_post_type . '_per_page';
+		$per_page = (int) get_user_option( $edit_per_page );
+		}
+		
 		return $per_page;
 	}else{
 		return $per_page;
