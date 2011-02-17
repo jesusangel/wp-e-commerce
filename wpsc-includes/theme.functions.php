@@ -1152,10 +1152,9 @@ function wpsc_user_log( $content = '' ) {
 		ob_start();
 
 		include( wpsc_get_template_file_path('wpsc-user-log.php') );
-		$output = ob_get_contents();
-
-		ob_end_clean();
-		return preg_replace( "/(<p>)*\[userlog\](<\/p>)*/", $output, $content );
+		$output = ob_get_clean();
+		$content = preg_replace( "/(<p>)*\[userlog\](<\/p>)*/", '[userlog]', $content );
+		return str_replace( '[userlog]', $output, $content );
 	} else {
 		return $content;
 	}
