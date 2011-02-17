@@ -531,7 +531,7 @@ function wpsc_admin_dashboard_rightnow() {
 function wpsc_dashboard_widget_setup() {
 	global $current_user;
 	get_currentuserinfo();
-	if($current_user->user_level>9) {
+	if($current_user->user_level>9 || ( function_exists( 'current_user_can' ) && current_user_can( 'level_10' ) ) ) {
 		wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
     wp_add_dashboard_widget('wpsc_dashboard_widget', __('e-Commerce'),'wpsc_dashboard_widget');
 	}
@@ -647,7 +647,7 @@ function wpsc_quarterly_dashboard_widget(){
 function wpsc_quarterly_setup(){
 	global $current_user;
 	get_currentuserinfo();
-	if($current_user->user_level>9) {
+	if($current_user->user_level>9 || ( function_exists( 'current_user_can' ) && current_user_can( 'level_10' ) ) ) {
 		$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 		wp_enqueue_script('datepicker-ui', WPSC_URL."/js/ui.datepicker.js",array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
 		wp_add_dashboard_widget('wpsc_quarterly_dashboard_widget', __('Sales by Quarter'),'wpsc_quarterly_dashboard_widget');
@@ -658,7 +658,7 @@ add_action('wp_dashboard_setup', 'wpsc_quarterly_setup');
 function wpsc_dashboard_widget() {
 	global $current_user;
 	get_currentuserinfo();
-	if($current_user->user_level>9) {
+	if($current_user->user_level>9 || ( function_exists( 'current_user_can' ) && current_user_can( 'level_10' ) ) ) {
     do_action('wpsc_admin_pre_activity');
     do_action('wpsc_admin_post_activity');
 	}
@@ -735,7 +735,7 @@ function wpsc_dashboard_4months_widget(){
 function wpsc_dashboard_4months_widget_setup() {
 	global $current_user;
 	get_currentuserinfo();
-	if($current_user->user_level == 10) {
+	if($current_user->user_level == 10 || ( function_exists( 'current_user_can' ) && current_user_can( 'level_10' ) ) ) {
     wp_add_dashboard_widget('wpsc_dashboard_4months_widget', __('Sales by'),'wpsc_dashboard_4months_widget');
 	}
 }
