@@ -940,28 +940,31 @@ function wpsc_filter_feature_image_text( $translation, $text, $domain ) {
 	return $translation;
 }
 function wpsc_attachment_fields( $form_fields, $post ) {
+	if(isset($_GET["post_id"]))
+		$parent_post = get_post( absint($_GET["post_id"]) );
+	else
+		$parent_post = get_post( $post->post_parent );
 
-	$parent_post = get_post( $post->post_parent );
-
-	if ( $parent_post->post_type == "wpsc-product" || $parent_post->post_title == "stopgap" ) {
+	if ( $parent_post->post_type == "wpsc-product" ) {
 
 		//Unfortunate hack, as I'm not sure why the From Computer tab doesn't process filters the same way the Gallery does
 
 		echo '
 <script type="text/javascript">
 
-	jQuery(function($){
+	jQuery(function(){
 
-		var product_image = $("a.wp-post-thumbnail").text();
+		jQuery("a.wp-post-thumbnail").each(function(){
+			var product_image = jQuery(this).text();
+			if (product_image == "' . __('Use as featured image') . '") {
+				jQuery(this).text("' . __('Use as Product Thumbnail', 'wpsc') . '");
+			}
+		});
 
-		if (product_image == "Use as featured image") {
-			$("a.wp-post-thumbnail").text("Use as Product Thumbnail");
-		}
-
-		var trash = $("#media-upload a.del-link").text();
+		var trash = jQuery("#media-upload a.del-link").text();
 
 		if (trash == "Delete") {
-			$("#media-upload a.del-link").text("Trash");
+			jQuery("#media-upload a.del-link").text("Trash");
 		}
 
 
@@ -1066,29 +1069,20 @@ function wpsc_gallery_css_mods() {
 	</style>';
 	print '
 	<script type="text/javascript">
+	jQuery(function(){
+		jQuery("td.A1B1").each(function(){
 
-	jQuery(function($){
-		$("td.A1B1").each(function(){
-
-			var target = $(this).next();
-				$("p > input.button", this).appendTo(target);
+			var target = jQuery(this).next();
+				jQuery("p > input.button", this).appendTo(target);
 
 		});
 
-		var title = $("div.media-item span.title").text();
-
-		if(title == "stopgap") {
-			$("div.media-item").hide();
-		}
-
-		var product_image = $("a.wp-post-thumbnail").text();
-
-		if (product_image == "Use as featured image") {
-			$("a.wp-post-thumbnail").text("Use as Product Thumbnail");
-		}
-
-
-
+		jQuery("a.wp-post-thumbnail").each(function(){
+			var product_image = jQuery(this).text();
+			if (product_image == "' . __('Use as featured image') . '") {
+				jQuery(this).text("' . __('Use as Product Thumbnail', 'wpsc') . '");
+			}
+		});
 	});
 
 	</script>';
