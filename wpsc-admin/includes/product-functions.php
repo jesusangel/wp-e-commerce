@@ -764,24 +764,24 @@ function wpsc_ajax_toggle_publish() {
 */
 
 function wpsc_update_custom_meta($product_id, $post_data) {
-  global $wpdb;
+
     if($post_data['new_custom_meta'] != null) {
-      foreach((array)$post_data['new_custom_meta']['name'] as $key => $name) {
-			$value = $post_data['new_custom_meta']['value'][(int)$key];
-	        if(($name != '') && ($value != '')) {
-				add_post_meta($product_id, $name, $value);
-	        }
-		}
+	foreach((array)$post_data['new_custom_meta']['name'] as $key => $name) {
+	    $value = $post_data['new_custom_meta']['value'][(int)$key];
+	    if(($name != '') && ($value != '')) {
+		add_post_meta($product_id, $name, $value);
+	    }
 	}
+    }
 		
-	if (!isset($post_data['custom_meta'])) $post_data['custom_meta'] = '';
-	if($post_data['custom_meta'] != null) {
-		foreach((array)$post_data['custom_meta'] as $key => $values) {
-			if(($values['name'] != '') && ($values['value'] != '')) {
-        		update_post_meta($product_id, $name, $value);
-			}
-		}
-	}
+    if (!isset($post_data['custom_meta'])) $post_data['custom_meta'] = '';
+    if($post_data['custom_meta'] != null) {	    
+	    foreach((array)$post_data['custom_meta'] as $key => $values) {
+		    if(($values['name'] != '') && ($values['value'] != '')) {
+			    update_post_meta($product_id, $values['name'], $values['value']);
+		    }
+	    }
+    }
 }
 
  /**
