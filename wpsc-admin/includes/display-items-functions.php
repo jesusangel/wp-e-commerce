@@ -266,12 +266,22 @@ function wpsc_stock_control_forms() {
 					<?php else: ?>
 						<label for="stock_limit_quantity"><?php _e( 'Quantity:', 'wpsc' ); ?></label>
 						<input type='text' id="stock_limit_quantity" name='meta[_wpsc_stock]' size='3' value='<?php echo $product_data['meta']['_wpsc_stock']; ?>' class='stock_limit_quantity' />
+						<?php
+						$remaining_quantity = wpsc_get_remaining_quantity( $post->ID );
+						$reserved_quantity = $product_data['meta']['_wpsc_stock'] - $remaining_quantity;
+						if($reserved_quantity): ?>
+						<p><em>
+						<?php
+							printf(_n('%s of them is reserved for pending or recently completed orders.', '%s of them are reserved for pending or recently completed orders.', $reserved_quantity, 'wpsc'), $reserved_quantity);
+						?>
+						</em></p>
+						<?php endif; ?>
 					<?php endif; ?>
 						<div class='unpublish_when_none_left'>
 							<input type='checkbox' id="inform_when_oos" name='meta[_wpsc_product_metadata][unpublish_when_none_left]' class='inform_when_oos'<?php if ( $product_meta['unpublish_when_none_left'] == 1 ) echo ' checked="checked"'; ?> />
 							<label for="inform_when_oos"><?php _e( 'Notify site owner and unpublish this Product if stock runs out', 'wpsc' ); ?></label>
 						</div>
-						<?php _e( 'If stock runs out, this Product will not be available on the shop unless you untick this box or add more stock.', 'wpsc' ); ?>
+						<p><em><?php _e( 'If stock runs out, this Product will not be available on the shop unless you untick this box or add more stock.', 'wpsc' ); ?></em></p>
 				</div> <?php
 	} else { ?>
 				<div style='display: none;' class='edit_stock'>
