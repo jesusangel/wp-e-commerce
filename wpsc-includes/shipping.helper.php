@@ -527,7 +527,6 @@ class ASH{
                 $shipment->add_package($package);
             }
         }
-
         return $shipment;
     }
     

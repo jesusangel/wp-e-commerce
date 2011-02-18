@@ -28,7 +28,7 @@ class ash_usps{
      * This is the "prettier" version of $internal_name to be shown to end-users.
      * @var string
      */
-    var $name="USPS 2.0";
+    var $name="USPS";
     /**
      * This flag is used by WP-E-Commerce to denote whether or not
      * it accesses an external API to provide shipping rates and requires cURL
@@ -582,7 +582,7 @@ class ash_usps{
         global $wpec_ash_xml;
 	    $package_services = array();
         $this->_clean_response($response);
-        
+
 	    $packages = $wpec_ash_xml->get("Package", $response);
 	    
 	    foreach($packages as $package){
@@ -884,10 +884,9 @@ class ash_usps{
         $this->shipment->set_destination($this->internal_name);
 	    // Check to see if the cached shipment is still accurate, if not we need new rate
 	    $cache = $wpec_ash->check_cache($this->internal_name, $this->shipment);
-	    
-	    if ($cache){
-	        return $cache["rate_table"];
-	    }
+		//if ($cache){
+		//    return $cache["rate_table"];
+		//}
 
         $data = array();
         //*** WPEC Configuration values ***\\
@@ -906,7 +905,9 @@ class ash_usps{
 		//************ GET THE RATE ************\\
         $rate_table = $this->_run_quote($data);
         //************ CACHE the Results ************\\
+
         $wpec_ash->cache_results($this->internal_name, $rate_table, $this->shipment);
+
         return $rate_table;
 	}
 

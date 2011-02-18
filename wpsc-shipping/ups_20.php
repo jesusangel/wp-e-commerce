@@ -12,8 +12,8 @@ class ash_ups {
 
     function ash_ups() {
         global $wpec_ash;
-        $this->internal_name = "ups 2.0";
-        $this->name="UPS 2.0";
+        $this->internal_name = "ups";
+        $this->name="UPS";
         $this->is_external=true;
         $this->requires_curl=true;
         $this->requires_weight=true;
