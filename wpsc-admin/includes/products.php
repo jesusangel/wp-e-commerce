@@ -15,9 +15,8 @@
  */
 function wpsc_admin_product_listing($parent_product = null) {
 	global $wp_query, $wpsc_products;
-
 	add_filter('the_title','esc_html');
-	$args = array_merge( $wp_query->query, array( 'posts_per_page' => '-1', 'post_status' => 'publish,draft,locked,private' ) );
+	$args = array_merge( $wp_query->query, array( 'posts_per_page' => '-1' ) );
 	$wpsc_temp_query = query_posts( $args );
 	if ( empty($wpsc_products) )
 		$wpsc_products = &$wpsc_temp_query;
