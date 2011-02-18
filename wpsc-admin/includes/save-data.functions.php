@@ -144,8 +144,14 @@ function wpsc_admin_category_forms_add() {
 		<h3 class="hndle"><?php _e('Presentation Settings'); ?></h3>
 
 		<div class="inside">
+			<tr>
+				<td>
+			<label for='image'><?php _e( 'Category Image' , 'wpsc' ); ?></label>					
+				</td>
+				<td>
 			<input type='file' name='image' value='' /><br /><br />
-
+				</td>
+</tr>
 				<tr>
 					<td>
 						<?php _e('Catalog View', 'wpsc'); ?>
