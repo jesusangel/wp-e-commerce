@@ -1001,8 +1001,6 @@ function wpsc_item_add_preview_file($product_id, $preview_file) {
 	remove_filter('upload_dir', 'wpsc_modify_upload_directory');
   	return $id;
   
-  
-  ///OLD CODE replaced 13/12/2010
 
 }
 

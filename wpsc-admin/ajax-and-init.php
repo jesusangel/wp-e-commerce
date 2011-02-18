@@ -691,26 +691,25 @@ if ( isset( $_REQUEST['wpsc_admin_action2'] ) && ($_REQUEST['wpsc_admin_action2'
 //edit purchase log status function
 function wpsc_purchlog_edit_status( $purchlog_id='', $purchlog_status='' ) {
 	global $wpdb;
-	if ( ($purchlog_id == '') && ($purchlog_status == '') ) {
+	if ( empty($purchlog_id) && empty($purchlog_status) ) {
 		$purchlog_id = absint( $_POST['purchlog_id'] );
 		$purchlog_status = absint( $_POST['purchlog_status'] );
 	}
 
 	$log_data = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `id` = '{$purchlog_id}' LIMIT 1", ARRAY_A );
-	if ( ($purchlog_id == 2) && function_exists( 'wpsc_member_activate_subscriptions' ) ) {
+	$is_transaction = wpsc_check_purchase_processed($log_data['processed']);
+	if ( $is_transaction ) {
 		wpsc_member_activate_subscriptions( $_POST['id'] );
 	}
 
 	//in the future when everyone is using the 2.0 merchant api, we should use the merchant class to update the staus,
 	// then you can get rid of this hook and have each person overwrite the method that updates the status.
 	do_action('wpsc_edit_order_status', array('purchlog_id'=>$purchlog_id, 'purchlog_data'=>$log_data, 'new_status'=>$purchlog_status));
-	// if the order is marked as failed, remove the claim on the stock
-	if ( $purchlog_status == 5 )
-		$wpdb->query( "DELETE FROM `" . WPSC_TABLE_CLAIMED_STOCK . "` WHERE `cart_id` = '{$purchlog_id}' AND `cart_submitted` = '1'" );
-
 
 	$wpdb->query( "UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET processed='{$purchlog_status}' WHERE id='{$purchlog_id}'" );
-
+	
+	wpsc_clear_stock_claims();
+	
 	if ( ($purchlog_id > $log_data['processed']) && ($log_data['processed'] <= 2) && $log_data['email_sent'] == 0 ) {
 		transaction_results($log_data['sessionid'],false,null);
 	}
