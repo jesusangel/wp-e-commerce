@@ -187,13 +187,6 @@ function wpsc_additional_column_data( $column ) {
 				$has_var = '1';
                 if( !$is_parent ) {
                   	echo wpsc_currency_display( $price );
-     	          	$args = array(
-						'display_currency_symbol' => false,
-						'display_decimal_point'   => true,
-						'display_currency_code'   => false,
-						'display_as_html'         => false
-						);
-                  	$price = wpsc_currency_display( $price, $args );
                     echo '<div id="inline_' . $post->ID . '_price" class="hidden">' . trim($price) . '</div>';
 	                 $has_var = '0';
                 }
