@@ -415,9 +415,16 @@ add_action( 'shutdown', 'wpsc_serialize_shopping_cart' );
  * wpsc_start_the_query
  */
 function wpsc_start_the_query() {
-	global $wp_query, $wpsc_query, $wpsc_query_vars;
-	if ( null == $wpsc_query ) {
+	global $wpsc_page_titles, $wp_query, $wpsc_query, $wpsc_query_vars;
+	if(isset($wp_query->query_vars['term']) && in_array($wp_query->query_vars['term'], $wpsc_page_titles)){
+		$product_page_id = wpec_get_the_post_id_by_shortcode('[productspage]');
+		$wp_query = new WP_Query( 'pagename=products-page/'.$wp_query->query_vars['term'] );
 
+	}elseif ( null == $wpsc_query ) {
+		
+		$products_page = $wpsc_page_titles['products'];
+		$checkout_page = $wpsc_page_titles['checkout'];
+		$userlog_page = $wpsc_page_titles['userlog'];
 		if ( count( $wpsc_query_vars ) <= 1 ) {
 			$wpsc_query_vars = array(
 				'post_status' => 'publish, locked, private',
