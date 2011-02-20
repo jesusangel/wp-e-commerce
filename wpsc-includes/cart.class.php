@@ -944,23 +944,25 @@ class wpsc_cart {
     * @param array  variations on the product
     * @return boolean true on sucess, false on failure
    */
-  function get_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
-    global $wpdb;
-      $stock = get_post_meta($product_id, '_wpsc_stock', true);
-     $stock = apply_filters('wpsc_product_stock', $stock, $product_id);
-      // check to see if the product uses stock
-      if(is_numeric($stock)){
-        $priceandstock_id = 0;
-       if($stock > 0) {
-            $claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')");
-            $output = $stock - $claimed_stock;
-        } else {
-            $output = 0;
-        }
+	function get_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
+		global $wpdb;
 
-    }
-    return $output;
-  }
+		$stock = get_post_meta($product_id, '_wpsc_stock', true);
+		$stock = apply_filters('wpsc_product_stock', $stock, $product_id);
+		$output = 0;
+
+		// check to see if the product uses stock
+		if (is_numeric( $stock ) ) {
+			$priceandstock_id = 0;
+
+			if ( $stock > 0 ) {
+				$claimed_stock = $wpdb->get_var( "SELECT SUM(`stock_claimed`) FROM `" . WPSC_TABLE_CLAIMED_STOCK . "` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')" );
+				$output = $stock - $claimed_stock;
+			}
+		}
+
+		return $output;
+	}
 
 
    /**
