@@ -258,22 +258,24 @@ function wpsc_column_sql_orderby( $orderby, $wp_query ) {
 
 	$wp_query->query = wp_parse_args( $wp_query->query );
 
-          switch ( $wp_query->query['orderby'] ) :
-            case 'stock' :
-                $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_stock') " . $wp_query->get('order');
-                break;
-            case 'price' :
-                $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_price') " . $wp_query->get('order');
-                break;
-            case 'sale_price' :
-                $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_special_price') " . $wp_query->get('order');
-                break;
-            case 'SKU' :
-                $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_sku') " . $wp_query->get('order');
-                break;
-        endswitch;
+        if( isset( $wp_query->query ) ) :
+            switch ( $wp_query->query['orderby'] ) :
+                case 'stock' :
+                    $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_stock') " . $wp_query->get('order');
+                    break;
+                case 'price' :
+                    $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_price') " . $wp_query->get('order');
+                    break;
+                case 'sale_price' :
+                    $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_special_price') " . $wp_query->get('order');
+                    break;
+                case 'SKU' :
+                    $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_sku') " . $wp_query->get('order');
+                    break;
+           endswitch;
+        endif;
         
-	return $orderby;
+    return $orderby;
 }
 function wpsc_cats_restrict_manage_posts() {
     global $typenow;
