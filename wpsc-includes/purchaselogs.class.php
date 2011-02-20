@@ -615,11 +615,9 @@ class wpsc_purchaselogs {
 			$dates = array_slice( $dates, 0, 3 );
 			$this->current_start_timestamp = $dates[2]['start'];
 			$this->current_end_timestamp = $dates[0]['end'];
-			$newlogs = $this->get_purchlogs( $dates, $status );
+			$newlogs = $this->get_purchlogs( $dates );
 			$_SESSION['newlogs'] = $newlogs;
 			$this->allpurchaselogs = $newlogs;
-
-         $this->allpurchaselogs = $purchaselogs;
       } else {
          $this->getdates();
          if ( isset( $_GET['view_purchlogs_by'] ) && isset( $_GET['view_purchlogs_by_status'] ) ) {

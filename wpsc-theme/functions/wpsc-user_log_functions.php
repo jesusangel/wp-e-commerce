@@ -377,11 +377,11 @@ function wpsc_user_details() {
 		echo " </td>\n\r";
 
 		echo " <td>";
-
+		$country = get_option( 'country_form_field' );
 		if ( $purchase['shipping_country'] != '' ) {
 			$billing_country = $purchase['billing_country'];
 			$shipping_country = $purchase['shipping_country'];
-		} else {
+		} elseif ( !empty($country)) {
 			$country_sql = "SELECT * FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id` = '" . $purchase['id'] . "' AND `form_id` = '" . get_option( 'country_form_field' ) . "' LIMIT 1";
 			$country_data = $wpdb->get_results( $country_sql, ARRAY_A );
 			$billing_country = $country_data[0]['value'];

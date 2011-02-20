@@ -71,7 +71,7 @@ function wpsc_css_header() {
 	global $post_type;
 ?>
 	<style>
-	<?php if ( ( $_GET['post_type'] == 'wpsc-product' ) || ( $post_type == 'wpsc-product' ) ) : ?>
+	<?php if ( ( 'wpsc-product' == $_GET['post_type'] ) || ( !empty( $post_type ) && 'wpsc-product' == $post_type ) ) : ?>
 	#icon-edit { background:transparent url('<?php echo WPSC_CORE_IMAGES_URL.'/icon32.png';?>') no-repeat; }
 	<?php endif; ?>
         </style>
@@ -85,7 +85,10 @@ function wpsc_price_control_forms() {
 	foreach ( $product_data['meta'] as $meta_key => $meta_value )
 		$product_data['meta'][$meta_key] = $meta_value[0];
 
-	$product_meta = maybe_unserialize( $product_data["_wpsc_product_metadata"][0] );
+	$product_meta = array();
+	if ( !empty( $product_data["_wpsc_product_metadata"] ) )
+		$product_meta = maybe_unserialize( $product_data["_wpsc_product_metadata"][0] );
+
 	if ( isset( $product_data['meta']['_wpsc_currency'] ) )
 		$product_alt_currency = maybe_unserialize( $product_data['meta']['_wpsc_currency'] );
 
@@ -236,7 +239,9 @@ function wpsc_stock_control_forms() {
 	foreach ( $product_data['meta'] as $meta_key => $meta_value )
 		$product_data['meta'][$meta_key] = $meta_value[0];
 
-	$product_meta = maybe_unserialize( $product_data["_wpsc_product_metadata"][0] );
+	$product_meta = array();
+	if ( !empty( $product_data["_wpsc_product_metadata"] ) )
+		$product_meta = maybe_unserialize( $product_data["_wpsc_product_metadata"][0] );
 
 	if ( !isset( $product_meta['unpublish_when_none_left'] ) )
 		$product_meta['unpublish_when_none_left'] = ''; ?>
@@ -298,7 +303,9 @@ function wpsc_product_taxes_forms() {
 	global $post, $wpdb, $wpsc_product_defaults;
 	$product_data = get_post_custom( $post->ID );
 
-	$product_data['meta'] = $product_meta = maybe_unserialize( $product_data['_wpsc_product_metadata'][0] );
+	$product_data['meta'] = $product_meta = array();
+	if ( !empty( $product_data['_wpsc_product_metadata'] ) )
+		$product_data['meta'] = $product_meta = maybe_unserialize( $product_data['_wpsc_product_metadata'][0] );
 
 	if ( !isset( $product_data['meta']['_wpsc_custom_tax'] ) )
 		$product_data['meta']['_wpsc_custom_tax'] = '';
@@ -369,7 +376,9 @@ function wpsc_product_variation_forms() {
 	foreach ( $product_data['meta'] as $meta_key => $meta_value )
 		$product_data['meta'][$meta_key] = $meta_value[0];
 
-	$product_meta = maybe_unserialize( $product_data["_wpsc_product_metadata"][0] );
+	$product_meta = array();
+	if ( !empty( $product_data["_wpsc_product_metadata"] ) )
+		$product_meta = maybe_unserialize( $product_data["_wpsc_product_metadata"][0] );
 
 	$siteurl = get_option( 'siteurl' );
 	$output  = '';
@@ -512,7 +521,9 @@ function wpsc_product_shipping_forms() {
 	foreach ( $product_data['meta'] as $meta_key => $meta_value )
 		$product_data['meta'][$meta_key] = $meta_value[0];
 
-	$product_meta = maybe_unserialize( $product_data["_wpsc_product_metadata"][0] );
+	$product_meta = array();
+	if ( !empty( $product_data["_wpsc_product_metadata"] ) )
+		$product_meta = maybe_unserialize( $product_data["_wpsc_product_metadata"][0] );
 
 	$product_data['transformed'] = array();
 	if ( !isset( $product_meta['weight'] ) )
@@ -616,7 +627,9 @@ function wpsc_product_advanced_forms() {
 	global $post, $wpdb, $variations_processor, $wpsc_product_defaults;
 	$product_data = get_post_custom( $post->ID );
 
-	$product_data['meta'] = $product_meta = maybe_unserialize( $product_data['_wpsc_product_metadata'][0] );
+	$product_data['meta'] = $product_meta = array();
+	if ( !empty( $product_data['_wpsc_product_metadata'] ) )
+		$product_data['meta'] = $product_meta = maybe_unserialize( $product_data['_wpsc_product_metadata'][0] );
 
 	$custom_fields = $wpdb->get_results( "
 		SELECT
@@ -728,7 +741,9 @@ function wpsc_product_external_link_forms() {
 	global $post, $wpdb, $variations_processor, $wpsc_product_defaults;
 	$product_data = get_post_custom( $post->ID );
 
-	$product_data['meta'] = $product_meta = maybe_unserialize( $product_data['_wpsc_product_metadata'][0] );
+	$product_data['meta'] = $product_meta = array();
+	if ( !empty( $product_data['_wpsc_product_metadata'] ) )
+		$product_data['meta'] = $product_meta = maybe_unserialize( $product_data['_wpsc_product_metadata'][0] );
 
 	// Get External Link Values
 	$external_link_value        = isset( $product_meta['external_link'] ) ? $product_meta['external_link'] : '';
@@ -787,7 +802,9 @@ function wpsc_product_download_forms() {
 	global $post, $wpdb, $wpsc_product_defaults;
 	$product_data = get_post_custom( $post->ID );
 
-	$product_data['meta'] = $product_meta = maybe_unserialize( $product_data['_wpsc_product_metadata'][0] );
+	$product_data['meta'] = $product_meta = array();
+	if ( !empty( $product_data['_wpsc_product_metadata'] ) )
+		$product_data['meta'] = $product_meta = maybe_unserialize( $product_data['_wpsc_product_metadata'][0] );
 
 	$upload_max = wpsc_get_max_upload_size();
 ?>

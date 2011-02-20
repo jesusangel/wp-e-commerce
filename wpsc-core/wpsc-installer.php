@@ -291,7 +291,7 @@ function wpsc_install() {
 		$wp_rewrite->flush_rules();
 		wpsc_update_categorymeta( $category_id, 'nice-name', $url_name );
 		wpsc_update_categorymeta( $category_id, 'description', __( "This is a description", 'wpsc' ) );
-		wpsc_update_categorymeta( $category_id, 'image', $image );
+		wpsc_update_categorymeta( $category_id, 'image', '' );
 		wpsc_update_categorymeta( $category_id, 'fee', '0' );
 		wpsc_update_categorymeta( $category_id, 'active', '1' );
 		wpsc_update_categorymeta( $category_id, 'order', '0' );
@@ -753,8 +753,6 @@ function wpsc_add_checkout_fields() {
 	( '" . __( 'Postal Code', 'wpsc' ) . "', 'text', '0', '0', '', '1', 17,'shippingpostcode');";
 
 		$wpdb->query( $sql );
-		update_option( 'country_form_field', $country_form_id[0]['id'] );
-		update_option( 'email_form_field', $email_form_id[0]['id'] );
 		$wpdb->query( "INSERT INTO `" . WPSC_TABLE_CHECKOUT_FORMS . "` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `checkout_order`, `unique_name` ) VALUES ( '" . __( 'Phone', 'wpsc' ) . "', 'text', '1', '0', '', '1', '8','billingphone');" );
 	}
 }

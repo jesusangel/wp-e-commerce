@@ -334,9 +334,6 @@ function wpsc_purchase_log_csv() {
 
 		foreach ( (array)$data as $purchase ) {
 			$form_headers = '';
-			$country_sql = "SELECT * FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id` = '" . $purchase['id'] . "' AND `form_id` = '" . get_option( 'country_form_field' ) . "' LIMIT 1";
-			$country_data = $wpdb->get_results( $country_sql, ARRAY_A );
-			$country = $country_data[0]['value'];
 			$output .= "\"" . $purchase['id'] . "\","; //Purchase ID
 			$output .= "\"" . $purchase['totalprice'] . "\","; //Purchase Total
 			foreach ( (array)$form_data as $form_field ) {

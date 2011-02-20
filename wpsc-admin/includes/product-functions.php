@@ -41,12 +41,14 @@ function wpsc_product_has_children($id){
 * @return nothing
 */
 function wpsc_admin_submit_product( $post_ID, $post ) {
-	
-    global $current_screen, $wpdb;
+	global $current_screen, $wpdb;
 
 	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || $current_screen->id != 'wpsc-product' )
-            return $post_ID;
-	
+		return $post_ID;
+
+	if ( empty( $_POST['meta'] ) )
+		return $post_ID;
+
     //Type-casting ( not so much sanitization, which would be good to do )
     $post_data = $_POST;
     $product_id = $post_ID;
@@ -201,7 +203,7 @@ function wpsc_pre_update( $data , $postarr ) {
 		$data['post_status'] = 'inherit';
 	}
 
-    if ( $postarr['meta']['_wpsc_product_metadata']['enable_comments'] == 0 || empty( $postarr['meta']['_wpsc_product_metadata']['enable_comments'] ) )
+    if ( !empty( $postarr['meta'] ) && ( $postarr['meta']['_wpsc_product_metadata']['enable_comments'] == 0 || empty( $postarr['meta']['_wpsc_product_metadata']['enable_comments'] ) ) )
         $data["comment_status"] = "closed";
     else
         $data["comment_status"] = "open";

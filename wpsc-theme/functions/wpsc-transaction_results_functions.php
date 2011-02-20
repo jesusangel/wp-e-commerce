@@ -103,11 +103,13 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 			$message = __('The Transaction was successful', 'wpsc')."\r\n".$message;
 			$message_html = __('The Transaction was successful', 'wpsc')."<br />".$message_html;
 		}
-
+		$country = get_option( 'country_form_field' );
+		$billing_country = '';
+		$shipping_country = '';
 		if ( !empty($purchase_log['shipping_country']) ) {
 			$billing_country = $purchase_log['billing_country'];
 			$shipping_country = $purchase_log['shipping_country'];
-		} else {
+		} elseif (  !empty($country) ) {
 			$country = $wpdb->get_var( "SELECT `value` FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id`=" . $purchase_log['id'] . " AND `form_id` = '" . get_option( 'country_form_field' ) . "' LIMIT 1" );
 						
 			$billing_country = $country;
