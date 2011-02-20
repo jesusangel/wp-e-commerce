@@ -571,8 +571,6 @@ function wpsc_save_category_set($category_id, $tt_id) {
 		}
 		//Good to here		
 		  
-        $name = $_POST['name'];
-
         if( isset( $_POST['tag_ID'] ) ) {
             //Editing
             $category_id= $_POST['tag_ID'];
@@ -586,7 +584,7 @@ function wpsc_save_category_set($category_id, $tt_id) {
 			wpsc_update_categorymeta($category_id, 'image', $image);
 		}
 		
-		if(is_numeric($_POST['height']) && is_numeric($_POST['width']) && ($image == null)) {
+		if ( !empty( $_POST['height'] ) && is_numeric( $_POST['height'] ) && !empty( $_POST['width'] ) && is_numeric( $_POST['width'] ) && $image == null ) {
 			$imagedata = wpsc_get_categorymeta($category_id, 'image');
 			if($imagedata != null) {
 				$height = $_POST['height'];
