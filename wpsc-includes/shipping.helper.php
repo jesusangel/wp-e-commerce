@@ -507,9 +507,9 @@ class ASH{
             $dimensions = get_product_meta($cart_item->product_id, 'dimensions');
             $dim_array = array();
             $dim_array["weight"] = $cart_item->weight;
-            $dim_array["height"] = (is_numeric($dimensions["height"])) ? $dimensions["height"] : 1;
-            $dim_array["width"]  = (is_numeric($dimensions["width"]))  ? $dimensions["width"]  : 1;
-            $dim_array["length"] = (is_numeric($dimensions["length"])) ? $dimensions["length"] : 1;
+            $dim_array["height"] = ( !empty( $dimensions["height"] ) && is_numeric( $dimensions["height"] ) ) ? $dimensions["height"] : 1;
+            $dim_array["width"]  = ( !empty( $dimensions["width"]  ) && is_numeric( $dimensions["width"]  ) ) ? $dimensions["width"]  : 1;
+            $dim_array["length"] = ( !empty( $dimensions["length"] ) && is_numeric( $dimensions["length"] ) ) ? $dimensions["length"] : 1;
             $package->set_dimensions($dim_array);
             //*** Set other meta ***\\
             $package->hazard = (get_product_meta($cart_item->product_id,"ship_hazard") === FALSE) ? FALSE : TRUE;
