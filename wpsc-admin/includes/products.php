@@ -266,23 +266,6 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			if($weight == ''){
 				$weight = '0';
 			}
-
-			$unit = $product_data['meta']['_wpsc_product_metadata']['weight_unit'];
-			switch($unit) {
-				case "pound":
-					$unit = " lbs.";
-					break;
-				case "ounce":
-					$unit = " oz.";
-					break;
-				case "kilograms":
-				case "kilogram":
-					$unit = " kgs.";
-					break;
-				case "gram":
-				default:
-					$unit = " g";
-			}
 			?>
 				<td  <?php echo $attributes ?>>
 					<span><?php echo $weight; ?></span>
