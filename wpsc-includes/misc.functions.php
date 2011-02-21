@@ -64,22 +64,22 @@ function wpsc_add_new_user( $user_login, $user_pass, $user_email ) {
 
 	// Check the username
 	if ( $user_login == '' ) {
-		$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Please enter a username.' ) );
+		$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Please enter a username.', 'wpsc' ) );
 	} elseif ( !validate_username( $user_login ) ) {
-		$errors->add( 'invalid_username', __( '<strong>ERROR</strong>: This username is invalid.  Please enter a valid username.' ) );
+		$errors->add( 'invalid_username', __( '<strong>ERROR</strong>: This username is invalid.  Please enter a valid username.', 'wpsc' ) );
 		$user_login = '';
 	} elseif ( username_exists( $user_login ) ) {
-		$errors->add( 'username_exists', __( '<strong>ERROR</strong>: This username is already registered, please choose another one.' ) );
+		$errors->add( 'username_exists', __( '<strong>ERROR</strong>: This username is already registered, please choose another one.', 'wpsc' ) );
 	}
 
 	// Check the e-mail address
 	if ( $user_email == '' ) {
-		$errors->add( 'empty_email', __( '<strong>ERROR</strong>: Please type your e-mail address.' ) );
+		$errors->add( 'empty_email', __( '<strong>ERROR</strong>: Please type your e-mail address.', 'wpsc' ) );
 	} elseif ( !is_email( $user_email ) ) {
-		$errors->add( 'invalid_email', __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.' ) );
+		$errors->add( 'invalid_email', __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.', 'wpsc' ) );
 		$user_email = '';
 	} elseif ( email_exists( $user_email ) ) {
-		$errors->add( 'email_exists', __( '<strong>ERROR</strong>: This email is already registered, please choose another one.' ) );
+		$errors->add( 'email_exists', __( '<strong>ERROR</strong>: This email is already registered, please choose another one.', 'wpsc' ) );
 	}
 
 	if ( $errors->get_error_code() ) {
@@ -87,7 +87,7 @@ function wpsc_add_new_user( $user_login, $user_pass, $user_email ) {
 	}
 	$user_id = wp_create_user( $user_login, $user_pass, $user_email );
 	if ( !$user_id ) {
-		$errors->add( 'registerfail', sprintf( __( '<strong>ERROR</strong>: Couldn&#8217;t register you... please contact the <a href="mailto:%s">webmaster</a> !' ), get_option( 'admin_email' ) ) );
+		$errors->add( 'registerfail', sprintf( __( '<strong>ERROR</strong>: Couldn&#8217;t register you... please contact the <a href="mailto:%s">webmaster</a> !', 'wpsc' ), get_option( 'admin_email' ) ) );
 		return $errors;
 	}
 	$credentials = array( 'user_login' => $user_login, 'user_password' => $user_pass, 'remember' => true );
@@ -761,7 +761,7 @@ function wpsc_check_memory_limit() {
 		foreach ( $sizes as $size ) {
 			// very, very rough estimation
 			if ( $freeMemory < round( $size['width'] * $size['height'] * 5.09 ) ) {
-				$result = sprintf( __( 'Please refrain from uploading images larger than <strong>%d x %d</strong> pixels' ), $size['width'], $size['height'] );
+				$result = sprintf( __( 'Please refrain from uploading images larger than <strong>%d x %d</strong> pixels', 'wpsc' ), $size['width'], $size['height'] );
 				return $result;
 			}
 		}

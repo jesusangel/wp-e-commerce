@@ -547,7 +547,7 @@ function wpsc_submit_checkout() {
 	
 	if ( (get_option( 'do_not_use_shipping' ) != 1) && (in_array( 'ups', (array)$options )) && $_SESSION['wpsc_zipcode'] == '' ) {
 		if ( $num_items != $disregard_shipping ) {
-			$_SESSION['categoryAndShippingCountryConflict'] = __( 'Please enter a Zipcode and click calculate to proceed' );
+			$_SESSION['categoryAndShippingCountryConflict'] = __( 'Please enter a Zipcode and click calculate to proceed', 'wpsc' );
 			$is_valid = false;
 		}
 	}
@@ -967,7 +967,7 @@ function wpsc_download_file() {
 				), array( 'id' => $download_data['id'] ) );
 			} else if ( $ip_number != $download_data['ip_number'] ) {
 				// if the IP number is set but does not match, fail here.
-				exit( _e( 'This download is no longer valid, Please contact the site administrator for more information.' ) );
+				exit( _e( 'This download is no longer valid, Please contact the site administrator for more information.', 'wpsc' ) );
 			}
 		}
 
@@ -984,7 +984,7 @@ function wpsc_download_file() {
 		}
 			
 		if ( $file_data == null ) {
-			exit( _e( 'This download is no longer valid, Please contact the site administrator for more information.' ) );
+			exit( _e( 'This download is no longer valid, Please contact the site administrator for more information.', 'wpsc' ) );
 		}
 
 		if ( $download_data != null ) {
@@ -1057,7 +1057,7 @@ function wpsc_download_file() {
 				exit();
 			}
 		} else {
-			exit( _e( 'This download is no longer valid, Please contact the site administrator for more information.' ) );
+			exit( _e( 'This download is no longer valid, Please contact the site administrator for more information.', 'wpsc' ) );
 		}
 	}
 }

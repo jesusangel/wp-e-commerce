@@ -28,7 +28,7 @@ class WP_Widget_Latest_Products extends WP_Widget {
 
 		extract( $args );
 
-		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Latest Products' ) : $instance['title'] );
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Latest Products', 'wpsc' ) : $instance['title'] );
 
 		echo $before_widget;
 
@@ -84,7 +84,7 @@ class WP_Widget_Latest_Products extends WP_Widget {
 		$height   = (int) $instance['height']; ?>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:' ); ?></label>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:', 'wpsc' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
 		</p>
 

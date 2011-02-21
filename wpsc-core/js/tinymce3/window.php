@@ -61,7 +61,7 @@ global $wpdb;
 									echo "<option value=".$category->term_id." >".$category->name."</option>"."\n";
 							?>
 						</select><br />
-						<span class="description"><?php _e('Select the category you would like to display with a Shortcode.') ?></span>
+						<span class="description"><?php _e('Select the category you would like to display with a Shortcode.', 'wpsc') ?></span>
 					</td>
 				</tr>
 				
@@ -69,7 +69,7 @@ global $wpdb;
 					<td><strong><label for="wpsc_perpage"><?php _e("Number of products per Page: ", 'wpsc'); ?></label></strong></td>
 					<td>
 						<input name="number_per_page" id="wpsc_perpage" type="text" value="" style="width: 80px" /><br />
-						<span class="description"><?php _e('Select the number of products you would like to display per page.') ?></span>
+						<span class="description"><?php _e('Select the number of products you would like to display per page.', 'wpsc') ?></span>
 					</td>
 				</tr>
 				
@@ -115,7 +115,7 @@ global $wpdb;
 								echo "<option value=".$category->term_id." >".$category->name."</option>"."\n";
 							?>
 						</select><br />
-						<span class="description"><?php _e('Select the category you would like to display with a Shortcode.') ?></span>
+						<span class="description"><?php _e('Select the category you would like to display with a Shortcode.', 'wpsc') ?></span>
 					</td>
 				</tr>
 				
@@ -142,7 +142,7 @@ global $wpdb;
 				
 					<span class="description"> <?php
 					_e('<p> To create a preview on your restricted page put this shortcode at the top of your page. you can include html within this short code to display things like images ','wpsc'); ?></span>
-					<code>[preview] Preview In Here [/preview]</code>
+					<code><?php _e('[preview] Preview In Here [/preview]', 'wpsc'); ?></code>
 					
 				<?php }else{ ?>
 				

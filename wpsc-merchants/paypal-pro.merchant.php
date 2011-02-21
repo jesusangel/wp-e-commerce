@@ -324,7 +324,7 @@ function form_paypal_pro() {
 	$output = '
 	<tr>
 		<td>
-			<label for="paypal_pro_username">' . __( 'API Username:' ) . '</label>
+			<label for="paypal_pro_username">' . __( 'API Username:', 'wpsc' ) . '</label>
 		</td>
 		<td>
 			<input type="text" name="PayPalPro[username]" id="paypal_pro_username" value="' . get_option( "paypal_pro_username" ) . '" size="30" />
@@ -332,7 +332,7 @@ function form_paypal_pro() {
 	</tr>
 	<tr>
 		<td>
-			<label for="paypal_pro_password">' . __( 'API Password:' ) . '</label>
+			<label for="paypal_pro_password">' . __( 'API Password:', 'wpsc' ) . '</label>
 		</td>
 		<td>
 			<input type="password" name="PayPalPro[password]" id="paypal_pro_password" value="' . get_option( 'paypal_pro_password' ) . '" size="16" />
@@ -340,7 +340,7 @@ function form_paypal_pro() {
 	</tr>
 	<tr>
 		<td>
-			<label for="paypal_pro_signature">' . __( 'API Signature:' ) . '</label>
+			<label for="paypal_pro_signature">' . __( 'API Signature:', 'wpsc' ) . '</label>
 		</td>
 		<td>
 			<input type="text" name="PayPalPro[signature]" id="paypal_pro_signature" value="' . get_option( 'paypal_pro_signature' ) . '" size="48" />
@@ -348,7 +348,7 @@ function form_paypal_pro() {
 	</tr>
 	<tr>
 		<td>
-			<label for="paypal_pro_testmode">' . __( 'Test Mode Enabled:' ) . '</label>
+			<label for="paypal_pro_testmode">' . __( 'Test Mode Enabled:', 'wpsc' ) . '</label>
 		</td>
 		<td>
 			<input type="hidden" name="PayPalPro[testmode]" value="off" /><input type="checkbox" name="PayPalPro[testmode]" id="paypal_pro_testmode" value="on" ' . $selected . ' />
@@ -372,13 +372,13 @@ if ( in_array( 'wpsc_merchant_paypal_pro', (array)get_option( 'custom_gateway_op
 
 	$gateway_checkout_form_fields[$nzshpcrt_gateways[$num]['internalname']] = "
 	<tr>
-		<td class='wpsc_CC_details'>Credit Card Number *</td>
+		<td class='wpsc_CC_details'>" . __( 'Credit Card Number *', 'wpsc' ) . "</td>
 		<td>
 			<input type='text' value='' name='card_number' />
 		</td>
 	</tr>
 	<tr>
-		<td class='wpsc_CC_details'>Credit Card Expiry *</td>
+		<td class='wpsc_CC_details'>" . __( 'Credit Card Expiry *', 'wpsc' ) . "</td>
 		<td>
 			<select class='wpsc_ccBox' name='expiry[month]'>
 			" . $months . "
@@ -401,18 +401,18 @@ if ( in_array( 'wpsc_merchant_paypal_pro', (array)get_option( 'custom_gateway_op
 		</td>
 	</tr>
 	<tr>
-		<td class='wpsc_CC_details'>CVV *</td>
+		<td class='wpsc_CC_details'>" . __( 'CVV *', 'wpsc' ) . "</td>
 		<td><input type='text' size='4' value='' maxlength='4' name='card_code' />
 		</td>
 	</tr>
 	<tr>
-		<td class='wpsc_CC_details'>Card Type *</td>
+		<td class='wpsc_CC_details'>" . __( 'Card Type *', 'wpsc' ) . "</td>
 		<td>
 		<select class='wpsc_ccBox' name='cctype'>
-			<option value='Visa'>Visa</option>
-			<option value='Mastercard'>MasterCard</option>
-			<option value='Discover'>Discover</option>
-			<option value='Amex'>Amex</option>
+			<option value='Visa'>" . __( 'Visa', 'wpsc' ) . "</option>
+			<option value='Mastercard'>" . __( 'MasterCard', 'wpsc' ) . "</option>
+			<option value='Discover'>" . __( 'Discover', 'wpsc' ) . "</option>
+			<option value='Amex'>" . __( 'Amex', 'wpsc' ) . "</option>
 		</select>
 		</td>
 	</tr>

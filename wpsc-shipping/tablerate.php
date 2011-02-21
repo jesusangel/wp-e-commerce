@@ -69,7 +69,7 @@ class tablerate {
 			}
 		}
 		$output.="<input type='hidden' name='checkpage' value='table'>";
-		$output.="<tr class='addlayer'><td colspan='2'>Layers: <a href='' style='cursor:pointer;' id='addlayer' >Add Layer</a></td></tr>";
+		$output.="<tr class='addlayer'><td colspan='2'>Layers: <a href='' style='cursor:pointer;' id='addlayer' >" . __('Add Layer', 'wpsc') . "</a></td></tr>";
 		return $output;
 	}
 

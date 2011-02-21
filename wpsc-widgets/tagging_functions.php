@@ -91,7 +91,7 @@ function wp_generate_product_tag_cloud( $tags, $args = '' ) {
 		$tag_id = $tag_ids[$tag];
 		$tag_link = esc_url( $tag_links[$tag] );
 		$tag = str_replace( ' ', '&nbsp;', esc_html( $tag ) );
-		$a[] = "<a href='$tag_link' class='tag-link-$tag_id' title='" . esc_attr( sprintf( __( '%d topics' ), $count ) ) . "'$rel style='font-size: " .
+		$a[] = "<a href='$tag_link' class='tag-link-$tag_id' title='" . esc_attr( sprintf( __( '%d topics', 'wpsc' ), $count ) ) . "'$rel style='font-size: " .
 				( $smallest + ( ( $count - $min_count ) * $font_step ) )
 				. "$unit;'>$tag</a>";
 	}

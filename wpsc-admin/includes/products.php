@@ -66,7 +66,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
         $title = get_the_title( $product->ID );
 
 	if ( empty( $title ) )
-		$title = __('(no title)');
+		$title = __('(no title)', 'wpsc');
 
 	?>
 
@@ -86,19 +86,19 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
                     case 'date': /* !date case */
 			if ( '0000-00-00 00:00:00' == $product->post_date && 'date' == $column_name ) {
-				$t_time = $h_time = __('Unpublished');
+				$t_time = $h_time = __('Unpublished', 'wpsc');
 				$time_diff = 0;
 			} else {
-				$t_time = get_the_time(__('Y/m/d g:i:s A'));
+				$t_time = get_the_time(__('Y/m/d g:i:s A', 'wpsc'));
 				$m_time = $product->post_date;
 				$time = get_post_time('G', true, $post);
 
 				$time_diff = time() - $time;
 
 				if ( $time_diff > 0 && $time_diff < 24*60*60 )
-					$h_time = sprintf( __('%s ago'), human_time_diff( $time ) );
+					$h_time = sprintf( __('%s ago', 'wpsc'), human_time_diff( $time ) );
 				else
-					$h_time = mysql2date(__('Y/m/d'), $m_time);
+					$h_time = mysql2date(__('Y/m/d', 'wpsc'), $m_time);
 			}
 
 			echo '<td ' . $attributes . '>';
@@ -108,14 +108,14 @@ function wpsc_product_row(&$product, $parent_product = null) {
 				echo '<abbr title="' . $t_time . '">' . apply_filters('post_date_column_time', $h_time, $post, $column_name, $mode) . '</abbr>';
 			echo '<br />';
 			if ( 'publish' == $product->post_status ) {
-				_e('Published');
+				_e('Published', 'wpsc');
 			} elseif ( 'future' == $product->post_status ) {
 				if ( $time_diff > 0 )
-					echo '<strong class="attention">' . __('Missed schedule') . '</strong>';
+					echo '<strong class="attention">' . __('Missed schedule', 'wpsc') . '</strong>';
 				else
-					_e('Scheduled');
+					_e('Scheduled', 'wpsc');
 			} else {
-				_e('Last Modified');
+				_e('Last Modified', 'wpsc');
 			}
 			echo '</td>';
 		break;
@@ -128,11 +128,11 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		<td <?php echo $attributes ?>>
 			<strong>
 			<?php if ( current_user_can('edit_post', $product->ID) && $product->post_status != 'trash' ) { ?>
-				<a class="row-title" href="<?php echo $edit_link; ?>" title="<?php echo esc_attr(sprintf(__('Edit &#8220;%s&#8221;'), $title)); ?>"><?php echo $title ?></a>
+				<a class="row-title" href="<?php echo $edit_link; ?>" title="<?php echo esc_attr(sprintf(__('Edit &#8220;%s&#8221;', 'wpsc'), $title)); ?>"><?php echo $title ?></a>
 				<?php if($parent_product): ?>
 					<input type="hidden" class="wpsc_ie_id wpsc_ie_field" value="<?php echo $product->ID ?>">
 					<input type="text" class="wpsc_ie_title wpsc_ie_field" value="<?php echo $title ?>">
-					<div class="wpsc_inline_actions"><input type="button" class="button-primary wpsc_ie_save" value="Save"><img src="<?php bloginfo('url') ?>/wp-admin/images/wpspin_light.gif" class="loading_indicator"><br/><input type="button" class="button-secondary cancel wpsc_ie_cancel" value="Cancel"></div>
+					<div class="wpsc_inline_actions"><input type="button" class="button-primary wpsc_ie_save" value="Save"><img src="<?php bloginfo('url') ?>/wp-admin/images/wpspin_light.gif" class="loading_indicator"><br/><input type="button" class="button-secondary cancel wpsc_ie_cancel" value="<?php _e('Cancel', 'wpsc'); ?>"></div>
 				<?php endif; ?>
 			<?php } else {
 				echo $title;
@@ -164,15 +164,15 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			$actions = array();
 			if ( current_user_can('edit_post', $product->ID) && 'trash' != $product->post_status ) {
 				$actions['edit'] = '<a class="edit-product" href="'.$edit_link.'" title="' . esc_attr(__('Edit this product', 'wpsc')) . '">'. __('Edit', 'wpsc') . '</a>';
-				$actions['quick_edit'] = "<a class='wpsc_editinline ".$has_var."' title='".esc_attr(__('Quick Edit', 'wpsc'))."' href='#'>".__('Quick Edit')."</a>";
+				$actions['quick_edit'] = "<a class='wpsc_editinline ".$has_var."' title='".esc_attr(__('Quick Edit', 'wpsc'))."' href='#'>".__('Quick Edit', 'wpsc')."</a>";
 			}
 
 			if ( in_array($product->post_status, array('pending', 'draft')) ) {
 				if ( current_user_can('edit_product', $product->ID) ) {
-					$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('Preview &#8220;%s&#8221;'), $title)) . '" rel="permalink">'.__('Preview').'</a>';
+					$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('Preview &#8220;%s&#8221;', 'wpsc'), $title)) . '" rel="permalink">'.__('Preview', 'wpsc').'</a>';
 				}
 			} else if ( 'trash' != $product->post_status ) {
-				$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('View &#8220;%s&#8221;'), $title)).'" rel="permalink">'.__('View').'</a>';
+				$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('View &#8220;%s&#8221;', 'wpsc'), $title)).'" rel="permalink">'.__('View', 'wpsc').'</a>';
 			}
 
 			$actions = apply_filters('post_row_actions', $actions, $product);
@@ -312,7 +312,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 					$out[] = "<a href='admin.php?page=wpsc-edit-products&amp;category={$c->slug}'> " . esc_html(sanitize_term_field('name', $c->name, $c->term_id, 'category', 'display')) . "</a>";
 					echo join( ', ', $out );
 			} else {
-				_e('Uncategorized');
+				_e('Uncategorized', 'wpsc');
 			}
 		?></td>
 		<?php
@@ -330,7 +330,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 					$out[] = "<a href='edit.php?tag=$c->slug'> " . esc_html(sanitize_term_field('name', $c->name, $c->term_id, 'post_tag', 'display')) . "</a>";
 				echo join( ', ', $out );
 			} else {
-				_e('No Tags');
+				_e('No Tags', 'wpsc');
 			}
 		?></td>
 		<?php
@@ -361,10 +361,10 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		?>
 		<td <?php echo $attributes ?>><div class="post-com-count-wrapper">
 		<?php
-			$pending_phrase = sprintf( __('%s pending'), number_format( $pending_comments ) );
+			$pending_phrase = sprintf( __('%s pending', 'wpsc'), number_format( $pending_comments ) );
 			if ( $pending_comments )
 				echo '<strong>';
-				comments_number("<a href='edit-comments.php?p=$product->ID' title='$pending_phrase' class='post-com-count'><span class='comment-count'>" . /* translators: comment count link */ _x('0', 'comment count') . '</span></a>', "<a href='edit-comments.php?p=$product->ID' title='$pending_phrase' class='post-com-count'><span class='comment-count'>" . /* translators: comment count link */ _x('1', 'comment count') . '</span></a>', "<a href='edit-comments.php?p=$product->ID' title='$pending_phrase' class='post-com-count'><span class='comment-count'>" . /* translators: comment count link: % will be substituted by comment count */ _x('%', 'comment count') . '</span></a>');
+				comments_number("<a href='edit-comments.php?p=$product->ID' title='$pending_phrase' class='post-com-count'><span class='comment-count'>" . /* translators: comment count link */ _x('0', 'comment count', 'wpsc') . '</span></a>', "<a href='edit-comments.php?p=$product->ID' title='$pending_phrase' class='post-com-count'><span class='comment-count'>" . /* translators: comment count link */ _x('1', 'comment count', 'wpsc') . '</span></a>', "<a href='edit-comments.php?p=$product->ID' title='$pending_phrase' class='post-com-count'><span class='comment-count'>" . /* translators: comment count link: % will be substituted by comment count */ _x('%', 'comment count', 'wpsc') . '</span></a>');
 				if ( $pending_comments )
 				echo '</strong>';
 		?>
@@ -383,7 +383,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		case 'control_view':  /* !control view case */
 		?>
-		<td><a href="<?php the_permalink(); ?>" rel="permalink" class="view"><?php _e('View'); ?></a></td>
+		<td><a href="<?php the_permalink(); ?>" rel="permalink" class="view"><?php _e('View', 'wpsc'); ?></a></td>
 		<?php
 		break;
 
@@ -391,7 +391,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		case 'control_edit':  /* !control edit case */
 		?>
-		<td><?php if ( current_user_can('edit_post', $product->ID) ) { echo "<a href='$edit_link' class='edit'>" . __('Edit') . "</a>"; } ?></td>
+		<td><?php if ( current_user_can('edit_post', $product->ID) ) { echo "<a href='$edit_link' class='edit'>" . __('Edit', 'wpsc') . "</a>"; } ?></td>
 		<?php
 		break;
 
@@ -399,7 +399,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		case 'control_delete':  /* !control delete case */
 		?>
-		<td><?php if ( current_user_can('delete_post', $product->ID) ) { echo "<a href='" . wp_nonce_url("post.php?action=delete&amp;post=$id", 'delete-post_' . $product->ID) . "' class='delete'>" . __('Delete') . "</a>"; } ?></td>
+		<td><?php if ( current_user_can('delete_post', $product->ID) ) { echo "<a href='" . wp_nonce_url("post.php?action=delete&amp;post=$id", 'delete-post_' . $product->ID) . "' class='delete'>" . __('Delete', 'wpsc') . "</a>"; } ?></td>
 		<?php
 		break;
 

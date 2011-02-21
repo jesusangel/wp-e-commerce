@@ -85,11 +85,11 @@ function wpsc_display_upgrades_page() {
 						<div class='postbox'>
 							<h3 class='hndle'><?php _e( 'API Key Reset', 'wpsc' ); ?></h3>
 							<p>
-								<label for='activation_name'><?php _e( 'Name', 'wpsc' ); ?>:</label>
+								<label for='activation_name'><?php _e( 'Name:', 'wpsc' ); ?></label>
 								<input class='text' type='text' size='40' value='<?php echo get_option( 'activation_name' ); ?>' name='activation_name' id='activation_name' />
 							</p>
 							<p>
-								<label for='activation_key'><?php _e( 'API Key', 'wpsc' ); ?>:</label>
+								<label for='activation_key'><?php _e( 'API Key:', 'wpsc' ); ?></label>
 								<input class='text' type='text' size='40' value='<?php echo get_option( 'activation_key' ); ?>' name='activation_key' id='activation_key' />
 							</p>
 							<p>

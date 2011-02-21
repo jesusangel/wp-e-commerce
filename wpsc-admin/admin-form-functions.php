@@ -30,7 +30,7 @@ $conditions = unserialize($coupon['condition']);
   $output .= "   <select name='edit_coupon[".$id."][is-percentage]'>";
   $output .= "     <option value='0' ".(($coupon['is-percentage'] == 0) ? "selected='true'" : '')." >$</option>\n\r";//
   $output .= "     <option value='1' ".(($coupon['is-percentage'] == 1) ? "selected='true'" : '')." >%</option>\n\r";
-  $output .= "     <option value='2' ".(($coupon['is-percentage'] == 2) ? "selected='true'" : '')." >Free shipping</option>\n\r";
+  $output .= "     <option value='2' ".(($coupon['is-percentage'] == 2) ? "selected='true'" : '')." >" . __( 'Free shipping', 'wpsc' ) . "'</option>\n\r";
   $output .= "   </select>\n\r";
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
@@ -61,20 +61,20 @@ $conditions = unserialize($coupon['condition']);
   if($conditions != null){
 	  $output .= "<tr>";
 	  $output .= "<th>";
-	  $output .= "Conditions";
+	  $output .= __("Conditions", 'wpsc');
 	  $output .= "</th>";
 	  $output .= "</tr>";
 	  $output .= "<th>";
-	  $output .= "Delete";
+	  $output .= __("Delete", 'wpsc');
 	  $output .= "</th>";
 	  $output .= "<th>";
-	  $output .= "Property";
+	  $output .= __("Property", 'wpsc');
 	  $output .= "</th>";
 	  $output .= "<th>";
-	  $output .= "Logic";
+	  $output .= __("Logic", 'wpsc');
 	  $output .= "</th>";
 	  $output .= "<th>";
-	  $output .= "Value";
+	  $output .= __("Value", 'wpsc');
 	  $output .= "</th>";
 	  $output .= " </tr>\n\r";
 	  $i=0;
@@ -83,7 +83,7 @@ $conditions = unserialize($coupon['condition']);
 		  $output .= "<td>";
 		  $output .= "<input type='hidden' name='coupon_id' value='".$id."' />";
 		  $output .= "<input type='submit' id='delete_condition".$i."' style='display:none;' value='".$i."' name='delete_condition' />";
-		  $output .= "<span style='cursor:pointer;' class='delete_button' onclick='jQuery(\"#delete_condition".$i."\").click()'>Delete</span>";
+		  $output .= "<span style='cursor:pointer;' class='delete_button' onclick='jQuery(\"#delete_condition".$i."\").click()'>" . __('Delete', 'wpsc' ) . "</span>";
 		  $output .= "</td>";
 		  $output .= "<td>";
 		  $output .= $condition['property'];
@@ -114,25 +114,25 @@ function wpsc_coupons_conditions($id){
 
 $output ='
 <input type="hidden" name="coupon_id" value="'.$id.'" />
-<tr><td colspan="3"><b>Add Conditions</b></td></tr>
+<tr><td colspan="3"><b>' . __( 'Add Conditions', 'wpsc') . '</b></td></tr>
 <tr><td colspan="6">
 	<div class="coupon_condition">
 		<div>
 			<select class="ruleprops" name="rules[property][]">
-				<option value="item_name" rel="order">Item name</option>
-				<option value="item_quantity" rel="order">Item quantity</option>
-				<option value="total_quantity" rel="order">Total quantity</option>
-				<option value="subtotal_amount" rel="order">Subtotal amount</option>
+				<option value="item_name" rel="order">' . __( 'Item name', 'wpsc') . '</option>
+				<option value="item_quantity" rel="order">' . __( 'Item quantity', 'wpsc') . '</option>
+				<option value="total_quantity" rel="order">' . __( 'Total quantity', 'wpsc') . '</option>
+				<option value="subtotal_amount" rel="order">' . __( 'Subtotal amount', 'wpsc') . '</option>
 				' . apply_filters( 'wpsc_coupon_rule_property_options', '' ) . '
 			</select>
 			<select name="rules[logic][]">
-				<option value="equal">Is equal to</option>
-				<option value="greater">Is greater than</option>
-				<option value="less">Is less than</option>
-				<option value="contains">Contains</option>
-				<option value="not_contain">Does not contain</option>
-				<option value="begins">Begins with</option>
-				<option value="ends">Ends with</option>
+				<option value="equal">' . __( 'Is equal to', 'wpsc') . '</option>
+				<option value="greater">' . __( 'Is greater than', 'wpsc') . '</option>
+				<option value="less">' . __( 'Is less than', 'wpsc') . '</option>
+				<option value="contains">' . __( 'Contains', 'wpsc') . '</option>
+				<option value="not_contain">' . __( 'Does not contain', 'wpsc') . '</option>
+				<option value="begins">' . __( 'Begins with', 'wpsc') . '</option>
+				<option value="ends">' . __( 'Ends with', 'wpsc') . '</option>
 			</select>
 			<span>
 				<input type="text" name="rules[value][]"/>
@@ -383,7 +383,7 @@ function wpsc_packing_slip($purchase_id) {
 							$gateway_name = $gateway['name'];
 						}
 					} else {
-						$gateway_name = "Manual Payment";
+						$gateway_name = __('Manual Payment', 'wpsc');
 					}
 				}
 			}
@@ -404,7 +404,7 @@ function wpsc_packing_slip($purchase_id) {
 				echo " <th>".__('Price', 'wpsc')." </th>";
 				
 				echo " <th>".__('Shipping', 'wpsc')." </th>";
-				echo '<th>Tax</th>';
+				echo '<th>' . __('Tax', 'wpsc') . '</th>';
 				echo '</tr>';
 			$endtotal = 0;
 			$all_donations = true;

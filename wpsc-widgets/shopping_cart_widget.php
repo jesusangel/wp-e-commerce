@@ -57,7 +57,7 @@ class WP_Widget_Shopping_Cart extends WP_Widget {
 		}
 
 		// Start widget output
-		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Shopping Cart' ) : $instance['title'] );
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Shopping Cart', 'wpsc' ) : $instance['title'] );
 		echo $before_widget;
 
 		if ( $title )
@@ -134,13 +134,13 @@ class WP_Widget_Shopping_Cart extends WP_Widget {
 			$show_sliding_cart = '';
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:' ); ?></label>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:', 'wpsc' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
 		</p>
 		<input type='hidden' name="<?php echo $this->get_field_name( 'show_sliding_cart' ); ?>" value='0' />
 		<p>
 			
-			<label for="<?php echo $this->get_field_id('show_sliding_cart'); ?>"><?php _e( 'Use Sliding Cart:' ); ?></label>
+			<label for="<?php echo $this->get_field_id('show_sliding_cart'); ?>"><?php _e( 'Use Sliding Cart:', 'wpsc' ); ?></label>
 			<input id="<?php echo $this->get_field_id( 'show_sliding_cart' ); ?>" name="<?php echo $this->get_field_name( 'show_sliding_cart' ); ?>" type="checkbox" value="1" <?php echo $show_sliding_cart; ?> />
 		</p>
 		

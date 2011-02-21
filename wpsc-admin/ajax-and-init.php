@@ -360,7 +360,7 @@ function wpsc_purchase_log_csv() {
 			// Go through all products in cart and display quantity and sku
 			foreach ( (array)$cart as $item ) {
 				$skuvalue = get_product_meta($item['prodid'], 'sku', true);
-				if(empty($skuvalue)) $skuvalue = 'N/A';
+				if(empty($skuvalue)) $skuvalue = __('N/A', 'wpsc');
 				$output .= "\"" . $item['quantity'] . " x " . str_replace( '"', '\"', $item['name'] ) . "\"";
 				$output .= "," . $skuvalue."," ;
 			}

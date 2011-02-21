@@ -117,13 +117,13 @@ function wpsc_additional_column_data( $column ) {
                     $src = wp_get_attachment_url( $attached_image->ID );
                  ?>
                     <div style='width:38px; height:38px; overflow:hidden;'>
-                        <img title='<?php _e( 'Drag to a new position' ); ?>' src='<?php echo $src; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
+                        <img title='<?php _e( 'Drag to a new position', 'wpsc' ); ?>' src='<?php echo $src; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
                     </div>
                 <?php
 		     } else {
 		      	$image_url = WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif";
                 ?>
-                      <img title='<?php _e( 'Drag to a new position' ); ?>' src='<?php echo $image_url; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
+                      <img title='<?php _e( 'Drag to a new position', 'wpsc' ); ?>' src='<?php echo $image_url; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
                 <?php
                      }
                 break;
@@ -174,7 +174,7 @@ function wpsc_additional_column_data( $column ) {
             case 'stock' :
                 $stock = get_post_meta( $post->ID, '_wpsc_stock', true );
                     if( $stock == '' )
-                        $stock = 'N/A';
+                        $stock = __('N/A', 'wpsc');
                     if( !$is_parent ) {
                         echo $stock;
                         echo '<div id="inline_' . $post->ID . '_stock" class="hidden">' . $stock . '</div>';
@@ -206,7 +206,7 @@ function wpsc_additional_column_data( $column ) {
             case 'SKU' :
                 $sku = get_post_meta( $post->ID, '_wpsc_sku', true );
                     if( $sku == '' )
-                        $sku = 'N/A';
+                        $sku = __('N/A', 'wpsc');
 
                     echo $sku;
                     echo '<div id="inline_' . $post->ID . '_sku" class="hidden">' . $sku . '</div>';

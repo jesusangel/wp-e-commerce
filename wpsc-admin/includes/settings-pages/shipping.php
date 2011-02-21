@@ -149,7 +149,7 @@ function wpsc_options_shipping() {
 									?>
 									<div <?php echo $shipping_discount_settings; ?> id='shipping_discount_value'>
 
-						Sales over or equal to: <?php echo $currency_sign; ?><input type='text' size='6' name='wpsc_options[shipping_discount_value]' value='<?php echo $value; ?>' id='shipping_discount_value' /> will receive free shipping.
+						<?php printf(__('Sales over or equal to: %1$s<input type="text" size="6" name="wpsc_options[shipping_discount_value]" value="%2$s" id="shipping_discount_value" /> will receive free shipping.', 'wpsc'), $currency_sign, $value ); ?>
 									</div>
 
 

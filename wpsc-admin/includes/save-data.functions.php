@@ -68,7 +68,7 @@ function wpsc_custom_category_columns( $columns ) {
     
     $custom_array = array(
         'cb' => '<input type="checkbox">',
-        'image' => __( 'Image' )
+        'image' => __( 'Image', 'wpsc' )
     );
     
     $columns = array_merge( $custom_array, $columns );
@@ -141,7 +141,7 @@ function wpsc_admin_category_forms_add() {
 	<h3><?php _e('Advanced Settings', 'wpsc'); ?></h3>
 
 	<div id="poststuff" class="postbox">
-		<h3 class="hndle"><?php _e('Presentation Settings'); ?></h3>
+		<h3 class="hndle"><?php _e('Presentation Settings', 'wpsc'); ?></h3>
 
 		<div class="inside">
 			<tr>

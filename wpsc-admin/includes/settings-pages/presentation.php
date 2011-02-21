@@ -75,7 +75,7 @@ function wpsc_theme_presentation_page_metabox(){
 					if ( isset( $_SESSION['wpsc_themes_backup'] ) && ($_SESSION['wpsc_themes_backup'] == true) ) {
 					?>
 						<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
-							<p><?php _e( "Thanks, you have made a succesful backup of your theme.  It is located at the URL below.  Please note each backup you create will replace your previous backups." ); ?></p>
+							<p><?php _e( "Thanks, you have made a succesful backup of your theme.  It is located at the URL below.  Please note each backup you create will replace your previous backups.", 'wpsc' ); ?></p>
 							<p>URL: <?php echo "/" . str_replace( ABSPATH, "", WPSC_THEME_BACKUP_DIR ); ?></p>
 						</div>
 					<?php
@@ -1031,7 +1031,7 @@ function wpsc_options_presentation() {
 									break;
 							}
 ?>
-									<?php _e( "Crop Thumbnails" ); ?>:
+									<?php _e( "Crop Thumbnails", 'wpsc' ); ?>:
 								</th>
 								<td>
 											<input type='radio' value='1' name='wpsc_options[wpsc_crop_thumbnails]' id='wpsc_crop_thumbnails1' <?php echo $crop1; ?> /> <label for='crop1'><?php _e( 'Yes', 'wpsc' ); ?></label> &nbsp;
@@ -1132,7 +1132,7 @@ function wpsc_options_presentation() {
 
 							<tr>
 								<th scope="row">
-									<?php _e( "Gallery Thumbnail Image Size" ); ?>:
+									<?php _e( "Gallery Thumbnail Image Size", 'wpsc' ); ?>:
 								</th>
 								<td>
 									<?php _e( 'Height', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[wpsc_gallery_image_height]' value='<?php echo get_option( 'wpsc_gallery_image_height' ); ?>' />
@@ -1228,7 +1228,7 @@ function wpsc_options_presentation() {
 					<div id='wpsc_enable_comments' <?php echo $intense_debate_account_id_display_state; ?> >
 						<?php _e( 'IntenseDebate Account ID', 'wpsc' ); ?>:<br/>
 						<input type='text' size='30' name='wpsc_options[wpsc_intense_debate_account_id]' value='<?php echo get_option( 'wpsc_intense_debate_account_id' ); ?>' /><br/>
-						<small><a href='http://intensedebate.com/sitekey/' title='Help finding the Account ID'><?php _e( 'Help on finding the Account ID' ); ?></a></small>
+						<small><a href='http://intensedebate.com/sitekey/' title='Help finding the Account ID'><?php _e( 'Help on finding the Account ID', 'wpsc' ); ?></a></small>
 					</div>
 				</td>
 			</tr>
@@ -1244,10 +1244,10 @@ function wpsc_options_presentation() {
 					<div class='wpsc_comments_details' <?php echo $intense_debate_account_id_display_state ?> >
 									<input type='radio' value='1' name='wpsc_options[wpsc_comments_which_products]' id='wpsc_comments_which_products1' <?php if ( get_option( 'wpsc_comments_which_products' ) == 1 || !get_option( 'wpsc_comments_which_products' ) ) {
 				echo "checked='checked'";
-			} ?> /><label for='wpsc_comments_which_products1'>All Products</label>&nbsp;
+			} ?> /><label for='wpsc_comments_which_products1'><?php _e( 'All Products', 'wpsc' ); ?></label>&nbsp;
 									<input type='radio' value='2' name='wpsc_options[wpsc_comments_which_products]' id='wpsc_comments_which_products2' <?php if ( get_option( 'wpsc_comments_which_products' ) == 2 ) {
 				echo "checked='checked'";
-			} ?> /><label for='wpsc_comments_which_products2'>Per Product</label>&nbsp;
+			} ?> /><label for='wpsc_comments_which_products2'><?php _e( 'Per Product', 'wpsc' ); ?></label>&nbsp;
 						<br />
 					</div>
 				</td>

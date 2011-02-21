@@ -9,13 +9,13 @@
   * for internal operations.
   */
 $nzshpcrt_gateways[$num] = array(
-	'name' => 'PayPal Express Checkout 2.0',
+	'name' =>  __( 'PayPal Express Checkout 2.0', 'wpsc' ),
 	'api_version' => 2.0,
 	'image' => WPSC_URL . '/images/paypal.gif',
 	'class_name' => 'wpsc_merchant_paypal_express',
 	'has_recurring_billing' => false,
 	'wp_admin_cannot_cancel' => true,
-	'display_name' => 'PayPal Express',
+	'display_name' => __( 'PayPal Express', 'wpsc' ),
 	'requirements' => array(
 		/// so that you can restrict merchant modules to PHP 5, if you use PHP 5 features
 		'php_version' => 4.3,
@@ -253,32 +253,32 @@ function form_paypal_express() {
 	
 	$output = "
 		<tr>
-		  <td>API Username
+		  <td>" . __('API Username', 'wpsc' ) . "
 		  </td>
 		  <td>
 		  <input type='text' size='40' value='".get_option('paypal_certified_apiuser')."' name='paypal_certified_apiuser' />
 		  </td>
 		</tr>
 		<tr>
-		  <td>API Password
+		  <td>" . __('API Password', 'wpsc' ) . "
 		  </td>
 		  <td>
 		  <input type='text' size='40' value='".get_option('paypal_certified_apipass')."' name='paypal_certified_apipass' />
 		  </td>
 		</tr>
 		<tr>
-		 <td>API Signature
+		 <td>" . __('API Signature', 'wpsc' ) . "
 		 </td>
 		 <td>
 		 <input type='text' size='70' value='".get_option('paypal_certified_apisign')."' name='paypal_certified_apisign' />
 		 </td>
 		</tr>
 		<tr>
-		 <td>Server Type
+		 <td>" . __('Server Type', 'wpsc' ) . "
 		 </td>
 		 <td>
-			<input $serverType1 type='radio' name='paypal_certified_server_type' value='sandbox' /> Sandbox (For testing)
-			<input $serverType2 type='radio' name='paypal_certified_server_type' value='production' /> Production
+			<input $serverType1 type='radio' name='paypal_certified_server_type' value='sandbox' /> " . __('Sandbox (For testing)', 'wpsc' ) . "
+			<input $serverType2 type='radio' name='paypal_certified_server_type' value='production' /> " . __('Production', 'wpsc' ) . "
 		 </td>
 		</tr>";
 		
@@ -292,10 +292,10 @@ function form_paypal_express() {
 		if($current_currency != $store_currency_code) {
 			$output .= "<tr> <td colspan='2'><strong class='form_group'>".__('Currency Converter')."</td> </tr>
 			<tr>
-				<td colspan='2'>".__('Your website is using a currency not accepted by PayPal, select an accepted currency using the drop down menu bellow. Buyers on your site will still pay in your local currency however we will convert the currency and send the order through to PayPal using the currency you choose below.')."</td>
+				<td colspan='2'>".__('Your website is using a currency not accepted by PayPal, select an accepted currency using the drop down menu bellow. Buyers on your site will still pay in your local currency however we will convert the currency and send the order through to PayPal using the currency you choose below.', 'wpsc')."</td>
 			</tr>\n";
 		
-			$output .= "<tr>\n <td>Convert to </td>\n ";
+			$output .= "<tr>\n <td>" . __('Convert to', 'wpsc' ) . " </td>\n ";
 			$output .= "<td>\n <select name='paypal_curcode'>\n";
 	
 			if (!isset($wpsc_gateways['wpsc_merchant_paypal_express']['supported_currencies']['currency_list'])) 
@@ -375,7 +375,7 @@ function paypal_processingfunctions(){
 		<center>
 		<table width="700" align="left">
 		<tr>
-			<td colspan="2" class="header">The PayPal API has returned an error!</td>
+			<td colspan="2" class="header">' . __('The PayPal API has returned an error!', 'wpsc' ) . '</td>
 		</tr>
 		';
 	    //it will print if any URL errors 
@@ -420,15 +420,15 @@ function paypal_processingfunctions(){
 				$count=$count+1; 
 				$_SESSION['paypalExpressMessage'] .="
 					<tr>
-						<td>Error Number:</td>
+						<td>" . __('Error Number:', 'wpsc' ) . "</td>
 						<td> $errorCode </td>
 					</tr>
 					<tr>
-						<td>Short Message:</td>
+						<td>" . __('Short Message:', 'wpsc' ) . "</td>
 						<td> $shortMessage </td>
 					</tr>
 					<tr>
-						<td>Long Message:</td>
+						<td>" . __('Long Message:', 'wpsc' ) . "</td>
 						<td> $longMessage </td>
 					</tr>";
 			
@@ -599,44 +599,44 @@ function paypal_processingfunctions(){
 					$output ="
 				       <table width='400' class='paypal_express_form'>
 				        <tr>
-				            <td align='left' class='firstcol'><b>Order Total:</b></td>
+				            <td align='left' class='firstcol'><b>" . __('Error Number:', 'wpsc' ) . "Order Total:</b></td>
 				            <td align='left'>".$wpsc_cart->process_as_currency($_SESSION['paypalAmount']) ."</td>
 				        </tr>
 						<tr>
-						    <td align='left'><b>Shipping Address: </b></td>
+						    <td align='left'><b>" . __('Shipping Address:', 'wpsc' ) . " </b></td>
 						</tr>
 				        <tr>
 				            <td align='left' class='firstcol'>
-				                Street 1:</td>
+				                " . __('Street 1:', 'wpsc' ) . "</td>
 				            <td align='left'>".$resArray['SHIPTOSTREET']."</td>
 				
 				        </tr>
 				        <tr>
 				            <td align='left' class='firstcol'>
-				                Street 2:</td>
+				                " . __('Street 2:', 'wpsc' ) . "</td>
 				            <td align='left'>".$resArray['SHIPTOSTREET2']."
 				            </td>
 				        </tr>
 				        <tr>
 				            <td align='left' class='firstcol'>
-				                City:</td>
+				                " . __('City:', 'wpsc' ) . "</td>
 				
 				            <td align='left'>".$resArray['SHIPTOCITY']."</td>
 				        </tr>
 				        <tr>
 				            <td align='left' class='firstcol'>
-				                State:</td>
+				                " . __('State:', 'wpsc' ) . "</td>
 				            <td align='left'>".$resArray['SHIPTOSTATE']."</td>
 				        </tr>
 				        <tr>
 				            <td align='left' class='firstcol'>
-				                Postal code:</td>
+				                " . __('Postal code:', 'wpsc' ) . "</td>
 				
 				            <td align='left'>".$resArray['SHIPTOZIP']."</td>
 				        </tr>
 				        <tr>
 				            <td align='left' class='firstcol'>
-				                Country:</td>
+				                " . __('Country:', 'wpsc' ) . "</td>
 				            <td align='left'>".$resArray['SHIPTOCOUNTRYNAME']."</td>
 				        </tr>
 				        <tr>

@@ -31,7 +31,7 @@ class WP_Widget_Product_Categories extends WP_Widget {
 
 		extract( $args );
 
-		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Product Categories' ) : $instance['title'] );
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Product Categories', 'wpsc'  ) : $instance['title'] );
 
 		echo $before_widget;
 
@@ -125,7 +125,7 @@ class WP_Widget_Product_Categories extends WP_Widget {
 		 ?>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:' ); ?></label>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:', 'wpsc' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
 		</p>
 

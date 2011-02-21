@@ -267,7 +267,7 @@ function wpsc_stock_control_forms() {
 					<?php if ( wpsc_product_has_children( $post->ID ) ) : ?>
 			    		<?php $stock = wpsc_variations_stock_remaining( $post->ID ); ?>
 						<p><?php _e( 'This Product has variations, to edit the quantity please use the Variation Controls below.' , 'wpsc' ); ?></p>
-						<p><?php printf( _n( "%s variant item in stock.", "%s variant items in stock.", $stock ), $stock ); ?></p>
+						<p><?php printf( _n( "%s variant item in stock.", "%s variant items in stock.", $stock, 'wpsc' ), $stock ); ?></p>
 					<?php else: ?>
 						<label for="stock_limit_quantity"><?php _e( 'Quantity:', 'wpsc' ); ?></label>
 						<input type='text' id="stock_limit_quantity" name='meta[_wpsc_stock]' size='3' value='<?php echo $product_data['meta']['_wpsc_stock']; ?>' class='stock_limit_quantity' />
@@ -677,7 +677,7 @@ function wpsc_product_advanced_forms() {
 			</td>
 		</tr>
 		<tr>
-			<td class='itemfirstcol' colspan='2'><br /> <strong><?php _e( 'Merchant Notes', 'wpsc' ); ?>:</strong><br />
+			<td class='itemfirstcol' colspan='2'><br /> <strong><?php _e( 'Merchant Notes:', 'wpsc' ); ?></strong><br />
 
 			<textarea cols='40' rows='3' name='meta[_wpsc_product_metadata][merchant_notes]' id='merchant_notes'>
                             <?php if ( isset( $product_meta['merchant_notes'] ) )
@@ -711,8 +711,8 @@ function wpsc_product_advanced_forms() {
 		<td class='itemfirstcol' colspan='2'>
 
 			<input type='checkbox' <?php echo $product_meta['google_prohibited']; ?> name='meta[_wpsc_product_metadata][google_prohibited]' id='add_google_prohibited' /> <label for='add_google_prohibited'>
-			<?php _e( 'Prohibited', 'wpsc' ); ?>
-			<a href='http://checkout.google.com/support/sell/bin/answer.py?answer=75724'>by Google?</a></label><br />
+			<?php _e( 'Prohibited <a href="http://checkout.google.com/support/sell/bin/answer.py?answer=75724">by Google?</a>', 'wpsc' ); ?>
+			</label><br />
 		</td>
 	</tr>
 	<?php
@@ -1193,7 +1193,7 @@ function wpsc_save_quickedit_box( $post_id ) {
 		update_post_meta( $post_id, '_wpsc_price', $_POST['price'] );
 		update_post_meta( $post_id, '_wpsc_special_price', $_POST['sale_price'] );
 	}
-	if($_POST['sku'] == 'N/A')
+	if($_POST['sku'] == __('N/A', 'wpsc'))
 		update_post_meta( $post_id, '_wpsc_sku', '' );
 	else
 		update_post_meta( $post_id, '_wpsc_sku', $_POST['sku'] );

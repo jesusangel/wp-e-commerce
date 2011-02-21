@@ -9,13 +9,13 @@ function wpec_options_taxes() {
 ?>
 	<form name='wpec_taxes_options' id='wpec_taxes_options' method='post' action='' class='wpsc_form_track'>
 		<div class="wrap">
-			<h3><?php _e( 'Tax Settings' ); ?></h3>
+			<h3><?php _e( 'Tax Settings', 'wpsc' ); ?></h3>
 			<p>
 				<label for='wpec_taxes_enabled'>
 					<input <?php if ( $wpec_taxes_options['wpec_taxes_enabled'] ) {
 		echo 'checked="checked"';
 	} ?> type="checkbox" id='wpec_taxes_enabled' name='wpsc_options[wpec_taxes_enabled]' />
-<?php _e( 'Turn tax on' ); ?>
+<?php _e( 'Turn tax on', 'wpsc' ); ?>
 			</label>
 		</p>
 		<p>
@@ -23,7 +23,7 @@ function wpec_options_taxes() {
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_inprice'] == 'exclusive' ) {
 		echo 'checked="checked"';
 	} ?> type="radio" value='exclusive' id='wpec_taxes_inprice1' name='wpsc_options[wpec_taxes_inprice]' />
-<?php _e( 'Product prices are tax exclusive - add tax to the price during checkout' ); ?>
+<?php _e( 'Product prices are tax exclusive - add tax to the price during checkout', 'wpsc' ); ?>
 			</label>
 		</p>
 		<p>
@@ -31,16 +31,16 @@ function wpec_options_taxes() {
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_inprice'] == 'inclusive' ) {
 		echo 'checked="checked"';
 	} ?> type="radio" value='inclusive' id='wpec_taxes_inprice2' name='wpsc_options[wpec_taxes_inprice]' />
-<?php _e( "Product prices are tax inclusive - during checkout the total price doesn't increase but tax is shown as a line item" ); ?>
+<?php _e( "Product prices are tax inclusive - during checkout the total price doesn't increase but tax is shown as a line item", 'wpsc' ); ?>
 			</label>
 		</p>
-		<h4><?php _e( 'Product Specific Tax' ); ?></h4>
+		<h4><?php _e( 'Product Specific Tax', 'wpsc' ); ?></h4>
 		<p>
 			<label for='wpec_taxes_product_1'>
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_product'] == 'add' ) {
 		echo 'checked="checked"';
 	} ?> type="radio" value='add' id='wpec_taxes_product_1' name='wpsc_options[wpec_taxes_product]' />
-<?php _e( 'Add per product tax to tax percentage if product has a specific tax rate' ); ?>
+<?php _e( 'Add per product tax to tax percentage if product has a specific tax rate', 'wpsc' ); ?>
 			</label>
 		</p>
 		<p>
@@ -48,17 +48,17 @@ function wpec_options_taxes() {
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_product'] == 'replace' ) {
 		echo 'checked="checked"';
 	} ?> type="radio" value='replace' id='wpec_taxes_product_2' name='wpsc_options[wpec_taxes_product]' />
-<?php _e( 'Replace tax percentage with product specific tax rate' ); ?>
+<?php _e( 'Replace tax percentage with product specific tax rate', 'wpsc' ); ?>
 			</label>
 		</p>
 
-		<h4><?php _e( 'Tax Logic' ); ?></h4>
+		<h4><?php _e( 'Tax Logic', 'wpsc' ); ?></h4>
 		<p>
 			<label for='wpec_taxes_logic_1'>
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'billing_shipping' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='billing_shipping' id='wpec_taxes_logic_1' name='wpsc_options[wpec_taxes_logic]' />
-					<?php _e( 'Apply tax when Billing and Shipping Country is the same as Tax Rate' ); ?>
+					<?php _e( 'Apply tax when Billing and Shipping Country is the same as Tax Rate', 'wpsc' ); ?>
 			</label>
 		<div id='billing_shipping_preference_container' style='margin-left: 20px;'>
             <p>
@@ -66,7 +66,7 @@ function wpec_options_taxes() {
 					<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'billing_shipping' && $wpec_taxes_options['wpec_billing_shipping_preference'] == 'billing_address' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='billing_address' id='wpec_billing_preference' name='wpsc_options[wpec_billing_shipping_preference]' />
-				<?php _e( 'Apply tax to Billing Address' ); ?>
+				<?php _e( 'Apply tax to Billing Address', 'wpsc' ); ?>
 					</label>
 	            </p>
 	            <p>
@@ -74,7 +74,7 @@ function wpec_options_taxes() {
 						<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'billing_shipping' && $wpec_taxes_options['wpec_billing_shipping_preference'] == 'shipping_address' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='shipping_address' id='wpec_shipping_preference' name='wpsc_options[wpec_billing_shipping_preference]' />
-<?php _e( 'Apply tax to Shipping Address' ); ?>
+<?php _e( 'Apply tax to Shipping Address', 'wpsc' ); ?>
 					</label>
 	            </p>
 			</div>
@@ -84,7 +84,7 @@ function wpec_options_taxes() {
 					<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'billing' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='billing' id='wpec_taxes_logic_2' name='wpsc_options[wpec_taxes_logic]' />
-					<?php _e( 'Apply tax when Billing Country is the same as Tax Rate' ); ?>
+					<?php _e( 'Apply tax when Billing Country is the same as Tax Rate', 'wpsc' ); ?>
 			</label>
 		</p>
 		<p>
@@ -92,12 +92,12 @@ function wpec_options_taxes() {
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'shipping' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='shipping' id='wpec_taxes_logic_3' name='wpsc_options[wpec_taxes_logic]' />
-					<?php _e( 'Apply tax when Shipping Country is the same as Tax Rate' ); ?>
+					<?php _e( 'Apply tax when Shipping Country is the same as Tax Rate', 'wpsc' ); ?>
 			</label>
 		</p>
 		<div id='metabox-holder' class="metabox-holder">
 			<div id='wpec-taxes-rates-container' class='postbox'>
-				<h3 class='hndle' style='cursor: default'><?php _e( 'Tax Rates' ); ?></h3>
+				<h3 class='hndle' style='cursor: default'><?php _e( 'Tax Rates', 'wpsc' ); ?></h3>
 				<div id='wpec-taxes-rates' class='inside'>
 					<!--Start Taxes Output-->
 <?php
@@ -151,11 +151,11 @@ function wpec_options_taxes() {
 				<div id='wpec-taxes-bands' class='inside'>
 
 <?php
-					echo '<p>' . __( 'Note: Tax Bands are special tax rules you can create and apply on a per-product basis. <br /> Please visit the product page to apply your Tax Band.' ) . '</p>';
+					echo '<p>' . __( 'Note: Tax Bands are special tax rules you can create and apply on a per-product basis. <br /> Please visit the product page to apply your Tax Band.', 'wpsc' ) . '</p>';
 
 					//echo message regarding inclusive tax
 					if ( !$wpec_taxes_controller->wpec_taxes_isincluded() ) {
-						echo '<p>' . __( 'Note: Tax Bands do not take affect when product prices are tax exclusive.' ) . '</p>';
+						echo '<p>' . __( 'Note: Tax Bands do not take affect when product prices are tax exclusive.', 'wpsc' ) . '</p>';
 					}// if
 
 					$tax_bands = $wpec_taxes_controller->wpec_taxes->wpec_taxes_get_bands();

@@ -38,7 +38,7 @@ class WP_Widget_Price_Range extends WP_Widget {
 		extract( $args );
 	
 		echo $before_widget;
-		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Price Range' ) : $instance['title'] );
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Price Range', 'wpsc' ) : $instance['title'] );
 		if ( $title ) {
 			echo $before_title . $title . $after_title;
 		}
@@ -81,7 +81,7 @@ class WP_Widget_Price_Range extends WP_Widget {
 		
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:' ); ?></label>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:', 'wpsc' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
 		</p>
 		<?php

@@ -323,7 +323,7 @@ function wpsc_purchaselog_details_SKU() {
       if ( $meta_value != null ) {
          return $meta_value;
       } else {
-         return 'N/A';
+         return __('N/A', 'wpsc');
       }
    }
 }
@@ -852,7 +852,7 @@ class wpsc_purchaselogs {
       $lname = $wpdb->get_var( $sql );
       $namestring = $fname . ' ' . $lname . ' (<a href="mailto:' . $email . '?subject=Message From ' . get_option( 'siteurl' ) . '">' . $email . '</a>) ';
       if ( $fname == '' && $lname == '' && $email == '' ) {
-         $namestring = 'N/A';
+         $namestring = __('N/A', 'wpsc');
       }
       return $namestring;
    }

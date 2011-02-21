@@ -339,7 +339,7 @@ function wpsc_display_coupons_page() {
 							echo $coupon['value'] . "%";
 
 						else if ( $coupon['is-percentage'] == 2 )
-							echo "Free Shipping";
+							echo __("Free Shipping", 'wpsc');
 
 						else
 							echo wpsc_currency_display( $coupon['value'] );

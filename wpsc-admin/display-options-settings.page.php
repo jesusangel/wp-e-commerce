@@ -221,7 +221,7 @@ function wpsc_get_payment_form( $paymentname ,$selected_gateway_data='') {
 		$output ='';
 		$output .="<tr>
 					  <td style='border-top: none;'>
-					  ".__("Display Name")."
+					  ".__("Display Name", 'wpsc')."
 					  </td>
 					  <td style='border-top: none;'>";
 
@@ -251,7 +251,7 @@ function wpsc_get_payment_form( $paymentname ,$selected_gateway_data='') {
 		}
 
 		$output .="<input type='text' name='user_defined_name[".$paymentname."]' value='". $display_name ."' /><br />
-					<span class='small description'>".__('The text that people see when making a purchase')."</span>
+					<span class='small description'>".__('The text that people see when making a purchase', 'wpsc')."</span>
 					</td>
 					</tr>";
 		$payment_forms = $form["form"]();
@@ -273,22 +273,22 @@ function wpsc_settings_page_update_notification() {
 		<?php
 
 		if ( isset( $_GET['updated'] ) && (int)$_GET['updated'] ) {
-			printf( _n( ' Setting options updated.', ' %s Settings options updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
+			printf( _n( '%s Setting options updated.', ' %s Settings options updated.', $_GET['updated'] ), absint( $_GET['updated'] ) );
 			unset( $_GET['updated'] );
 			$message = true;
 		}
 		if ( isset( $_GET['deleted'] ) && (int)$_GET['deleted'] ) {
-			printf( _n( '%s Setting option deleted.', '%s Setting option deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+			printf( _n( '%s Setting option deleted.', '%s Setting option deleted.', $_GET['deleted'] ), absint( $_GET['deleted'] ) );
 			unset( $_GET['deleted'] );
 			$message = true;
 		}
 		if ( isset( $_GET['shipadd'] ) && (int)$_GET['shipadd'] ) {
-			printf( _n( ' Shipping option updated.', ' Shipping option updated.', $_GET['shipadd'] ), number_format_i18n( $_GET['shipadd'] ) );
+			printf( _n( '%s Shipping option updated.', '%s Shipping option updated.', $_GET['shipadd'] ), absint( $_GET['shipadd'] ) );
 			unset( $_GET['shipadd'] );
 			$message = true;
 		}
 		if ( isset( $_GET['added'] ) && (int)$_GET['added'] ) {
-			printf( _n( '%s Checkout field added.', '%s Checkout fields added.', $_GET['added'] ), number_format_i18n( $_GET['added'] ) );
+			printf( _n( '%s Checkout field added.', '%s Checkout fields added.', $_GET['added'] ), absint( $_GET['added'] ) );
 			unset( $_GET['added'] );
 			$message = true;
 		}

@@ -6,12 +6,12 @@ function wpsc_options_checkout(){
 
 	do_action('wpsc_checkout_form_fields_page');
 	$columns = array(
-		'drag' => 'Drag',
-		'name' => 'Name',
-		'type' => 'Type',
-		'unique_names' => 'Unique Names',
-		'mandatory' => 'Mandatory',
-		'trash' => 'Trash',
+		'drag' => __('Drag', 'wpsc'),
+		'name' => __('Name', 'wpsc'),
+		'type' => __('Type', 'wpsc'),
+		'unique_names' => __('Unique Names', 'wpsc'),
+		'mandatory' => __('Mandatory', 'wpsc'),
+		'trash' => __('Trash', 'wpsc'),
 	);
 	register_column_headers('display-checkout-list', $columns);	
 
@@ -131,7 +131,7 @@ function wpsc_options_checkout(){
 				
 				<p class='add_new_form_set_forms'>
 					<label><?php _e("Add new Form Set",'wpsc'); ?>: <input type="text" value="" name="new_form_set" /></label>
-					<input type="submit" value="<?php _e('Add'); ?>" class="button-secondary" id="formset-add-sumbit"/>
+					<input type="submit" value="<?php _e('Add', 'wpsc'); ?>" class="button-secondary" id="formset-add-sumbit"/>
 				</p>
 				
 				<?php
@@ -167,7 +167,7 @@ function wpsc_options_checkout(){
 			<?php
 					foreach((array)$form_data as $form_field) {
 			    echo "<tr id='checkout_".$form_field['id']."' class='checkout_form_field'>\n\r";
-			    echo '<td class="drag"><a href="" onclick="return false;" title="Click and Drag to Order Checkout Fields"><img src="' . WPSC_CORE_IMAGES_URL . '/roll-over-drag.jpg" alt="roll-over-drag" /></a></td>';
+			    echo '<td class="drag"><a href="" onclick="return false;" title="' . __('Click and Drag to Order Checkout Fields', 'wpsc') . '"><img src="' . WPSC_CORE_IMAGES_URL . '/roll-over-drag.jpg" alt="roll-over-drag" /></a></td>';
 			    echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".htmlentities(stripslashes($form_field['name']), ENT_QUOTES, "UTF-8")."' /></td>";
 			    
 			    echo "      <td class='typecol'>";
@@ -177,17 +177,17 @@ function wpsc_options_checkout(){
 			      if($form_type === $form_field['type']) {
 			        $selected = "selected='selected'";
 			      }
-			      echo "<option value='".$form_type."' ".$selected.">".__($form_type_name, 'wpsc')."</option>";
+			      echo "<option value='".$form_type."' ".$selected.">" . $form_type_name . "</option>";
 			    }
 			 
 			    echo "</select>";
 			   if(in_array($form_field['type'], array('select','radio','checkbox'))){
-			    	   echo "<a class='wpsc_edit_checkout_options' rel='form_options[".$form_field['id']."]' href=''>more options</a>";			   
+			    	   echo "<a class='wpsc_edit_checkout_options' rel='form_options[".$form_field['id']."]' href=''>" . __('more options', 'wpsc') . "</a>";			   
 			    }
 			    echo "</td>";
 			    $checked = "";
 			    echo "<td><select name='unique_names[".$form_field['id']."]'>";
-			    echo "<option value='-1'>Select a Unique Name</option>";
+			    echo "<option value='-1'>" . __('Select a Unique Name', 'wpsc') . "</option>";
 			    foreach($unique_names as $unique_name){
 			       $selected = "";
 			      if($unique_name == $form_field['unique_name']) {

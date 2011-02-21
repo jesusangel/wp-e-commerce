@@ -173,10 +173,10 @@ function wpsc_get_child_object_in_terms($parent_id, $terms, $taxonomies, $args =
 	foreach ( (array) $taxonomies as $taxonomy ) {
 		if ($current_version_number < 3.8) {
 			if ( ! taxonomy_exists($taxonomy) )
-				return new WP_Error('invalid_taxonomy', __('Invalid Taxonomy'));
+				return new WP_Error('invalid_taxonomy', __('Invalid Taxonomy', 'wpsc'));
 			} else {
 			if ( !taxonomy_exists($taxonomy) )
-				return new WP_Error('invalid_taxonomy', __('Invalid Taxonomy'));
+				return new WP_Error('invalid_taxonomy', __('Invalid Taxonomy', 'wpsc'));
 			}
 			
 	}
@@ -252,10 +252,10 @@ function wpsc_get_child_object_in_terms_var($parent_id, $terms, $taxonomies, $ar
 	foreach ( (array) $taxonomies as $taxonomy ) {
 		if ($current_version_number < 3.8) {
 			if ( ! taxonomy_exists($taxonomy) )
-				return new WP_Error('invalid_taxonomy', __('Invalid Taxonomy'));
+				return new WP_Error('invalid_taxonomy', __('Invalid Taxonomy', 'wpsc'));
 			} else {
 			if ( !taxonomy_exists($taxonomy) )
-				return new WP_Error('invalid_taxonomy', __('Invalid Taxonomy'));
+				return new WP_Error('invalid_taxonomy', __('Invalid Taxonomy', 'wpsc'));
 			}
 			
 	}

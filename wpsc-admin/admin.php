@@ -167,19 +167,18 @@ function wpsc_admin_pages() {
 
 		// Debug Page
 		if ( ( defined( 'WPSC_ADD_DEBUG_PAGE' ) && ( WPSC_ADD_DEBUG_PAGE == true ) ) || ( isset( $_SESSION['wpsc_activate_debug_page'] ) && ( true == $_SESSION['wpsc_activate_debug_page'] ) ) )
-			$page_hooks[] = add_options_page( __( 'Store Debug' ), __( 'Store Debug' ), 'administrator', 'wpsc-debug', 'wpsc_debug_page' );
+			$page_hooks[] = add_options_page( __( 'Store Debug', 'wpsc' ), __( 'Store Debug', 'wpsc' ), 'administrator', 'wpsc-debug', 'wpsc_debug_page' );
 
 		// Contextual help
 		if ( function_exists( 'add_contextual_help' ) ) {
 			$header = '<p><strong>' . __( 'For More Information', 'wpsc' ) . '</strong></p>';
 
-			add_contextual_help( 'toplevel_page_wpsc-sales-logs',        $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/sales/'>About the Sales Page</a>" );
-			add_contextual_help( 'toplevel_page_wpsc-edit-products',     $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/products'>About the Products Page</a>" );
-			add_contextual_help( 'products_page_wpsc-edit-groups',       $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/categories/'>About the Categories Page</a>" );
-			add_contextual_help( 'products_page_edit-tags',              $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/variations/'>About the Variations Page</a>" );
-			add_contextual_help( 'settings_page_wpsc-settings',          $header . "<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/general/'>General Settings</a><br />
-																						<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/checkout/'>Checkout Options</a> <br />" );
-			add_contextual_help( 'products_page_wpsc-edit-coupons',          $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/marketing'>Marketing Options</a><br />" );
+			add_contextual_help( 'toplevel_page_wpsc-sales-logs',        $header . __( "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/sales/'>About the Sales Page</a>", 'wpsc' ) );
+			add_contextual_help( 'toplevel_page_wpsc-edit-products',     $header . __( "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/products'>About the Products Page</a>", 'wpsc' ) );
+			add_contextual_help( 'products_page_wpsc-edit-groups',       $header . __( "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/categories/'>About the Categories Page</a>", 'wpsc' ) );
+			add_contextual_help( 'products_page_edit-tags',              $header . __( "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/variations/'>About the Variations Page</a>", 'wpsc' ) );
+			add_contextual_help( 'settings_page_wpsc-settings',          $header . __( "<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/general/'>General Settings</a><br /> <a target='_blank' href='http://getshopped.org/resources/docs/store-settings/checkout/'>Checkout Options</a> <br />", 'wpsc' ) );
+			add_contextual_help( 'products_page_wpsc-edit-coupons',          $header .  __( "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/marketing'>Marketing Options</a><br />", 'wpsc' ) );
 		}
 
 		$page_hooks = apply_filters( 'wpsc_additional_pages', $page_hooks, $products_page );
@@ -368,10 +367,10 @@ function wpsc_admin_dynamic_js() {
 
 	$form_types = '';
 	foreach ( (array)$form_types1 as $form_type ) {
-		$form_types .= "<option value='" . $form_type . "'>" . __( $form_type, 'wpsc' ) . "</option>";
+		$form_types .= "<option value='" . $form_type . "'>" . $form_type . "</option>";
 	}
 
-	$unique_names = "<option value='-1'>Select a Unique Name</option>";
+	$unique_names = "<option value='-1'>" . __('Select a Unique Name', 'wpsc') . "</option>";
 	foreach ( (array)$unique_names1 as $unique_name ) {
 		$unique_names.= "<option value='" . $unique_name . "'>" . $unique_name . "</option>";
 	}
@@ -872,9 +871,9 @@ function wpsc_ajax_ie_save() {
 		$price = get_product_meta( $id, 'price', true );
 		$special_price = get_product_meta( $id, 'special_price', true );
 		$sku = get_product_meta( $id, 'sku', true );
-		$sku = ( $sku )?$sku:'N/A';
+		$sku = ( $sku )?$sku:__('N/A', 'wpsc');
 		$stock = get_product_meta( $id, 'stock', true );
-		$stock = ( $stock === '' )?'N/A':$stock;
+		$stock = ( $stock === '' )?__('N/A', 'wpsc'):$stock;
 		$results = array( 'id' => $id, 'title' => $post->post_title, 'weight' => absint( $meta['weight'] ), 'price' => wpsc_currency_display( $price ), 'special_price' => wpsc_currency_display( $special_price ), 'sku' => $sku, 'stock' => $stock );
 		echo '(' . json_encode( $results ) . ')';
 		die();

@@ -56,7 +56,7 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
     $post_meta['meta'] = (array)$_POST['meta'];
 	$post_data['meta']['_wpsc_price'] = abs((float)str_replace( ',','',$post_data['meta']['_wpsc_price'] ));
 	$post_data['meta']['_wpsc_special_price'] = abs((float)str_replace( ',','',$post_data['meta']['_wpsc_special_price'] ));
-	if($post_data['meta']['_wpsc_sku'] == 'N/A')
+	if($post_data['meta']['_wpsc_sku'] == __('N/A', 'wpsc'))
 		$post_data['meta']['_wpsc_sku'] = '';
 	if(isset($post_data['meta']['_wpsc_is_donation']))
 		$post_data['meta']['_wpsc_is_donation'] = 1;
@@ -415,7 +415,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		 }
 		if ($product_id == 0) {
 			if ( $wpsc_error ) {
-				return new WP_Error('db_update_error', __('Could not update product in the database'), $wpdb->last_error);
+				return new WP_Error('db_update_error', __( 'Could not update product in the database', 'wpsc' ), $wpdb->last_error);
 			} else {
 				return false;
 			}
@@ -432,7 +432,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		 }
 		if ($product_id == 0 ) {
 			if ( $wp_error ) {
-				return new WP_Error('db_insert_error', __('Could not insert product into the database'), $wpdb->last_error);
+				return new WP_Error('db_insert_error', __( 'Could not insert product into the database', 'wpsc' ), $wpdb->last_error);
 			} else {
 				return 0;
 			}

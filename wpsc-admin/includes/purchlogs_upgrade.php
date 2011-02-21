@@ -32,23 +32,23 @@ if(isset($_POST)){
 function wpsc_select_options_purchlogs_fix($id){
 	?>
 	<select name='<?php echo $id; ?>'>
-		<option value='-1'>Select an Option</option>
-		<option value='billingfirstname'>Billing First Name</option>
-		<option value='billinglastname'>Billing Last Name</option>
-		<option value='billingaddress'>Billing Address</option>
-		<option value='billingcity'>Billing City</option>
-		<option value='billingstate'>Billing State</option>
-		<option value='billingcountry'>Billing Country</option>
-		<option value='billingemail'>Billing Email</option>
-		<option value='billingphone'>Billing Phone</option>
-		<option value='billingpostcode'>Billing Post Code</option>
-		<option value='shippingfirstname'>Shipping First Name</option>
-		<option value='shippinglastname'>Shipping Last Name</option>		
-		<option value='shippingaddress'>Shipping Address</option>
-		<option value='shippingcity'>Shipping City</option>
-		<option value='shippingstate'>Shipping State</option>
-		<option value='shippingcountry'>Shipping Country</option>
-		<option value='shippingpostcode'>Shipping Post Code</option>
+		<option value='-1'><?php _e( 'Select an Option', 'wpsc' ); ?>'</option>
+		<option value='billingfirstname'><?php _e( 'Billing First Name', 'wpsc' ); ?></option>
+		<option value='billinglastname'><?php _e( 'Billing Last Name', 'wpsc' ); ?></option>
+		<option value='billingaddress'><?php _e( 'Billing Address', 'wpsc' ); ?></option>
+		<option value='billingcity'><?php _e( 'Billing City', 'wpsc' ); ?></option>
+		<option value='billingstate'><?php _e( 'Billing State', 'wpsc' ); ?></option>
+		<option value='billingcountry'><?php _e( 'Billing Country', 'wpsc' ); ?></option>
+		<option value='billingemail'><?php _e( 'Billing Email', 'wpsc' ); ?></option>
+		<option value='billingphone'><?php _e( 'Billing Phone', 'wpsc' ); ?></option>
+		<option value='billingpostcode'><?php _e( 'Billing Post Code', 'wpsc' ); ?></option>
+		<option value='shippingfirstname'><?php _e( 'Shipping First Name', 'wpsc' ); ?></option>
+		<option value='shippinglastname'><?php _e( 'Shipping Last Name', 'wpsc' ); ?></option>		
+		<option value='shippingaddress'><?php _e( 'Shipping Address', 'wpsc' ); ?></option>
+		<option value='shippingcity'><?php _e( 'Shipping City', 'wpsc' ); ?></option>
+		<option value='shippingstate'><?php _e( 'Shipping State', 'wpsc' ); ?></option>
+		<option value='shippingcountry'><?php _e( 'Shipping Country', 'wpsc' ); ?></option>
+		<option value='shippingpostcode'><?php _e( 'Shipping Post Code', 'wpsc' ); ?></option>
 
 	</select> 
 	<?php
@@ -59,14 +59,14 @@ function wpsc_select_options_purchlogs_fix($id){
 	
 			<?php if ( $numChanged != 0 && $numQueries != 0 ) {
 				echo '<div id="message" class="updated fade"><p>';
-				printf(_n( 'Check Out Form Fields updated.', 'Check Out Form Fields updated.', $numChanged, $numQueries ), $numChanged , $numQueries);
+				_e( 'Check Out Form Fields updated.', 'wpsc' );
 				echo '</p></div>';
 			}
 	
 			?>
 			
-<h2><?php echo esc_html( __('Sales', 'wpsc').' Upgrade Fix' ); ?> </h2>
-<p><?php _e('Upgrading to WP e-Commerce 3.7 and later requires you to run this fix once.The following Boxes corresponds to the form fields in your current checkout page.  All you have to do is select from the drop-down menu box what each of the following fields represent. Sorry for any inconvenience caused, but we\'re sure you\'ll agree that the new purchase logs are worth this minor hassle. '); ?> </p>
+<h2><?php echo esc_html( __('Sales Upgrade Fix', 'wpsc') ); ?> </h2>
+<p><?php _e('Upgrading to WP e-Commerce 3.7 and later requires you to run this fix once.The following Boxes corresponds to the form fields in your current checkout page.  All you have to do is select from the drop-down menu box what each of the following fields represent. Sorry for any inconvenience caused, but we\'re sure you\'ll agree that the new purchase logs are worth this minor hassle.', 'wpsc'); ?> </p>
 
 <div class="metabox-holder" style="width:700px">
 <form action='' method='post'>
@@ -97,7 +97,7 @@ function wpsc_select_options_purchlogs_fix($id){
 		
 	}
 	?>
-	<input type='submit' value='Apply' class='button-secondary action' />
+	<input type='submit' value='<?php _e('Apply', 'wpsc'); ?>' class='button-secondary action' />
 </form>
 </div>
 </div>

@@ -304,7 +304,7 @@ class wpec_taxes_controller {
             $default_select_settings = array(
                'id' => 'wpec_taxes_band',
                'name' => 'wpec_taxes_band',
-               'label' => __( 'Custom Tax Band' )
+               'label' => __( 'Custom Tax Band', 'wpsc' )
             );
             $band_select_settings = wp_parse_args( $input_settings, $default_select_settings );
 
@@ -516,7 +516,7 @@ class wpec_taxes_controller {
             'id' => "band-name-{$key}",
             'name' => "wpsc_options[wpec_taxes_{$type}][{$key}][name]",
             'class' => 'taxes-band',
-            'label' => __( 'Name' )
+            'label' => __( 'Name', 'wpsc' )
          );
 			$bands_hidden_index = array(
 				'type' => 'hidden',
@@ -530,7 +530,7 @@ class wpec_taxes_controller {
             'id' => "shipping-{$key}",
             'name' => "wpsc_options[wpec_taxes_{$type}][{$key}][shipping]",
             'class' => "taxes-{$type}",
-            'label' => __( 'Apply to Shipping' )
+            'label' => __( 'Apply to Shipping', 'wpsc'  )
          );
       }// if
 

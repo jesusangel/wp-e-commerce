@@ -41,7 +41,7 @@ function wpsc_shopping_cart( $input = null, $override_state = null ) {
 		}
 		if ( $state == 4 ) {
 			echo "<div id='widgetshoppingcart'>";
-			echo "<h3>" . __( 'Shopping Cart' ) . "$fancy_collapser</h3>";
+			echo "<h3>" . __( 'Shopping Cart', 'wpsc' ) . "$fancy_collapser</h3>";
 			echo "  <div id='shoppingcartcontents'>";
 			echo wpsc_shopping_basket_internals( $cart, false, true );
 			echo "  </div>";
@@ -49,7 +49,7 @@ function wpsc_shopping_cart( $input = null, $override_state = null ) {
 			$dont_add_input = true;
 		} else {
 			echo "<div id='sideshoppingcart'>";
-			echo "<h3>" . __( 'Shopping Cart' ) . "$fancy_collapser</h3>";
+			echo "<h3>" . __( 'Shopping Cart', 'wpsc' ) . "$fancy_collapser</h3>";
 			echo "  <div id='shoppingcartcontents'>";
 			if ( isset( $cart ) ) {
 				echo wpsc_shopping_basket_internals( $cart, false, true );
@@ -66,7 +66,7 @@ function wpsc_shopping_cart( $input = null, $override_state = null ) {
 				$cart = $_SESSION['nzshpcrt_cart'];
 			}
 			echo "<div id='shoppingcart'>";
-			echo "<h3>" . __( 'Shopping Cart' ) . "$fancy_collapser</h3>";
+			echo "<h3>" . __( 'Shopping Cart', 'wpsc' ) . "$fancy_collapser</h3>";
 			echo "  <div id='shoppingcartcontents'>";
 			echo wpsc_shopping_basket_internals( $cart, false, true );
 			echo "  </div>";
