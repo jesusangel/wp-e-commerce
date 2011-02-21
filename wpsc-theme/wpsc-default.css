@@ -320,7 +320,6 @@ Author URI: http://instinct.co.nz
 #list_view_products_page_container {
 /* 	width:650px;	 */
 	position:relative;
-	line-height:1.2em;
 }
 
 #list_view_products_page_container .wpsc_page_numbers_top {
@@ -331,84 +330,20 @@ Author URI: http://instinct.co.nz
 	margin-top:10px;	
 }
 
-#list_view_products_page_container .wpsc_page_numbers_top a:link, #list_view_products_page_container .wpsc_page_numbers_top a:visited, #list_view_products_page_container .wpsc_page_numbers_bottom a:link, #list_view_products_page_container .wpsc_page_numbers_bottom a:visited {
-	padding:5px 8px;
-	background-color:#006699;
-	background:-webkit-gradient(
-    linear,
-    left bottom,
-    left top,
-    color-stop(0.76, rgb(73,166,192)),
-    color-stop(1, rgb(125,195,215))
-	);
-	background:-moz-linear-gradient(
-    center bottom,
-    rgb(73,166,192) 76%,
-    rgb(125,195,215) 100%
-	);
-	margin-right:5px;
-	color:#ffffff;
-	font-size:12px;
-	border-radius:3px;
-	-moz-border-radius:3px;
-	-webkit-border-radius:3px;
-	text-decoration:none;
-	*display:inline-block;
-}
-
-#list_view_products_page_container .wpsc_page_numbers_top a:hover, #list_view_products_page_container .wpsc_page_numbers_top a:active, #list_view_products_page_container .wpsc_page_numbers_bottom a:hover, #list_view_products_page_container .wpsc_page_numbers_bottom a:active {
-	background:#49a6c0;
-}
-
-#list_view_products_page_container .wpsc_page_numbers_top span.current, #list_view_products_page_container .wpsc_page_numbers_top span.current, #list_view_products_page_container .wpsc_page_numbers_bottom span.current, #list_view_products_page_container .wpsc_page_numbers_bottom span.current {
-	padding:5px 8px;
-	background-color:#999;
-	color:#ffffff;
-	font-size:12px;
-	border-radius:3px;
-	-moz-border-radius:3px;
-	-webkit-border-radius:3px;
-	*display:inline-block;	
-	margin-right:5px;
-}
-
 #list_view_products_page_container p, #content #list_view_products_page_container p {
 	line-height:1.2em;
-	font-size:13px;
 	margin:0;
 	padding:0;	
 }
 
 #list_view_products_page_container span.sale {
-	background:url(wpsc-images/sale.png) no-repeat scroll 0 0 transparent;
-	position:absolute;
-	top:-3px;
-	left:-14px;
-	text-indent:-9999px;
-	display:block;
-	width:40px;
-	height:40px;
+	display:none;
 }
 
 
 #list_view_products_page_container input, #content #list_view_products_page_container input, #list_view_products_page_container textarea, #content #list_view_products_page_container textarea {
-	line-height:1.2em;
 	margin:0;
 	padding:0;
-}
-
-table.list_productdisplay, #content table.list_productdisplay {
-	border-collapse:collapse;
-	border:none;
-	padding:0;
-	margin:0 0 10px 0;
-	width:100%;
-}
-
-table.list_productdisplay td, #content table.list_productdisplay td {
-	border:1px dashed #ccc;
-	padding:5px;
-	vertical-align:middle;
 }
 
 table.list_productdisplay form.product_form {
@@ -447,7 +382,6 @@ table.list_productdisplay .wpsc_buy_button_container .wpsc_loading_animation img
 
 table.list_productdisplay .oldprice {
 	text-decoration:line-through;
-	color:#666;	
 }
 
 #list_view_products_page_container table.list_productdisplay input.wpsc_buy_button, #content #list_view_products_page_container table.list_productdisplay input.wpsc_buy_button {
