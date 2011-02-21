@@ -600,7 +600,7 @@ function paypal_processingfunctions(){
 				       <table width='400' class='paypal_express_form'>
 				        <tr>
 				            <td align='left' class='firstcol'><b>" . __('Error Number:', 'wpsc' ) . "Order Total:</b></td>
-				            <td align='left'>".$wpsc_cart->process_as_currency($_SESSION['paypalAmount']) ."</td>
+				            <td align='left'>" . wpsc_currency_display($_SESSION['paypalAmount']) . "</td>
 				        </tr>
 						<tr>
 						    <td align='left'><b>" . __('Shipping Address:', 'wpsc' ) . " </b></td>

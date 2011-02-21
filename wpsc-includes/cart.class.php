@@ -46,7 +46,7 @@ function wpsc_cart_item_count() {
 function wpsc_coupon_amount($forDisplay=true) {
    global $wpsc_cart;
    if($forDisplay == true) {
-     $output = $wpsc_cart->process_as_currency($wpsc_cart->coupons_amount);
+     $output = wpsc_currency_display($wpsc_cart->coupons_amount);
    } else {
       $output = $wpsc_cart->coupons_amount;
    }
@@ -71,7 +71,7 @@ function wpsc_cart_total($forDisplay=true) {
        $total = 0;
    }
    if($forDisplay){
-      return $wpsc_cart->process_as_currency($total);
+      return wpsc_currency_display($total);
    }else{
       return $total;
    }
@@ -103,9 +103,9 @@ function wpsc_cart_total_widget( $shipping = true, $tax = true, $coupons = true 
    }
 
    if ( get_option( 'add_plustax' ) == 1 ) {
-      return $wpsc_cart->process_as_currency( $wpsc_cart->calculate_subtotal() );
+      return wpsc_currency_display( $wpsc_cart->calculate_subtotal() );
    } else {
-      return $wpsc_cart->process_as_currency( $total );
+      return wpsc_currency_display( $total );
    }
 
 }
@@ -146,9 +146,9 @@ function wpsc_cart_tax($forDisplay = true) {
    global $wpsc_cart;
    if($forDisplay){
        if(wpsc_tax_isincluded() == false){
-         return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax());
+         return wpsc_currency_display($wpsc_cart->calculate_total_tax());
       }else{
-         return '('.$wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax()).')';
+         return '(' . wpsc_currency_display($wpsc_cart->calculate_total_tax()) . ')';
       }
 
    }else{
@@ -212,7 +212,7 @@ function wpsc_cart_has_shipping() {
 */
 function wpsc_cart_shipping() {
    global $wpsc_cart;
-   return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_shipping());
+   return wpsc_currency_display($wpsc_cart->calculate_total_shipping());
 }
 
 
@@ -294,7 +294,7 @@ function wpsc_cart_item_quantity_single_prod($id) {
 function wpsc_cart_item_price($forDisplay = true) {
    global $wpsc_cart;
    if($forDisplay){
-      return $wpsc_cart->process_as_currency($wpsc_cart->cart_item->total_price);
+      return wpsc_currency_display($wpsc_cart->cart_item->total_price);
    }else{
       return $wpsc_cart->cart_item->total_price;
    }
@@ -307,7 +307,7 @@ function wpsc_cart_item_price($forDisplay = true) {
 function wpsc_cart_single_item_price($forDisplay = true) {
    global $wpsc_cart;
    if($forDisplay){
-      return $wpsc_cart->process_as_currency(($wpsc_cart->cart_item->total_price) / ($wpsc_cart->cart_item->quantity));
+      return wpsc_currency_display(($wpsc_cart->cart_item->total_price) / ($wpsc_cart->cart_item->quantity));
    }else{
       return ($wpsc_cart->cart_item->total_price / $wpsc_cart->cart_item->quantity);
    }
@@ -320,7 +320,7 @@ function wpsc_cart_single_item_price($forDisplay = true) {
 function wpsc_cart_item_shipping($forDisplay = true) {
    global $wpsc_cart;
    if($forDisplay){
-      return $wpsc_cart->process_as_currency($wpsc_cart->cart_item->shipping);
+      return wpsc_currency_display($wpsc_cart->cart_item->shipping);
    }else{
       return $wpsc_cart->cart_item->shipping;
    }
@@ -461,7 +461,7 @@ function wpsc_shipping_quote_value($numeric = false) {
    if($numeric == true) {
       return $wpsc_cart->shipping_quote['value'];
    } else {
-      return $wpsc_cart->process_as_currency($wpsc_cart->shipping_quote['value']);
+      return wpsc_currency_display($wpsc_cart->shipping_quote['value']);
    }
 }
 
@@ -1285,44 +1285,8 @@ class wpsc_cart {
     * @return string a price with a currency sign
    */
    function process_as_currency($price) {
-      global $wpdb, $wpsc_currency_data;
-      $currency_type = get_option('currency_type');
-      if(count($wpsc_currency_data) < 3) {
-         $wpsc_currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1",ARRAY_A) ;
-      }
-      $price = round($price + pow(10, -2-1), 2);
-      $price =  number_format($price, 2, '.', ',');
-
-      if($wpsc_currency_data['symbol'] != '') {
-         if(isset($nohtml) && $nohtml == true) {
-            $currency_sign = $wpsc_currency_data['symbol'];
-         } else {
-            $currency_sign = $wpsc_currency_data['symbol_html'];
-         }
-      } else {
-         $currency_sign = $wpsc_currency_data['code'];
-      }
-
-      $currency_sign_location = get_option('currency_sign_location');
-      switch($currency_sign_location) {
-         case 1:
-         $output = $price.$currency_sign;
-         break;
-
-         case 2:
-         $output = $price.' '.$currency_sign;
-         break;
-
-         case 3:
-         $output = $currency_sign.$price;
-         break;
-
-         case 4:
-         $output = $currency_sign.'  '.$price;
-         break;
-      }
-
-      return $output;
+   	  _deprecated_function( __FUNCTION__, '3.8', 'wpsc_currency_display');
+      return wpsc_currency_display($price);
   }
 
    /**

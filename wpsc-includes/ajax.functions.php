@@ -776,7 +776,7 @@ function wpsc_change_tax() {
 
 
 	foreach ( $wpsc_cart->cart_items as $key => $cart_item ) {
-		echo "jQuery('#shipping_$key').html(\"" . $wpsc_cart->process_as_currency( $cart_item->shipping ) . "\");\n\r";
+		echo "jQuery('#shipping_$key').html(\"" . wpsc_currency_display( $cart_item->shipping ) . "\");\n\r";
 	}
 
 	echo "jQuery('#checkout_shipping').html(\"" . wpsc_cart_shipping() . "\");\n\r";
