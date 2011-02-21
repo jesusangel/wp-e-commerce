@@ -800,6 +800,7 @@ class wpsc_products_by_category {
 			}
 			$in_cats = "'" . implode( "', '", $in_cats ) . "'";
 			$whichcat .= "AND $wpdb->term_taxonomy.term_id IN ($in_cats)";
+			$whichcat .= " AND $wpdb->posts.post_status IN ('publish', 'locked', 'private') ";
 			$groupby = "{$wpdb->posts}.ID";
 
 			$this->sql_components['join']     = $join;
