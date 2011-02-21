@@ -502,7 +502,7 @@ function wpsc_the_category_title($title='', $id=''){
 		remove_filter('the_title','wpsc_the_category_title');
 	}
 	// if its product-page but paginated
-	if(empty($category->name) && $wp_query->query_vars['paged'] && $wp_query->posts[0]->post_title == $post->post_title && 'wpsc-product' == $wp_query->query_vars['post_type'] ){
+	if(empty($category->name) && isset( $wp_query->query_vars['paged'] ) && $wp_query->query_vars['paged'] && $wp_query->posts[0]->post_title == $post->post_title && 'wpsc-product' == $wp_query->query_vars['post_type'] ){
 		$post_id = wpec_get_the_post_id_by_shortcode('[productspage]');
 		$post = get_post($post_id);
 		$title = $post->post_title;
