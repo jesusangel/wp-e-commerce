@@ -953,7 +953,7 @@ function wpsc_display_products_page( $query ) {
 			$args['posts_per_page'] = $query['number_per_page'];
 		}
 		if( '0' == get_option('use_pagination') ){
-			$args['nopaging'] = false;
+			$args['nopaging'] = true;
 			$args['posts_per_page'] = '-1';
 		}
 		if(!empty($query['tag'])){
