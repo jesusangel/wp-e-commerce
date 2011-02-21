@@ -1135,8 +1135,8 @@ function wpsc_options_presentation() {
 									<?php _e( "Gallery Thumbnail Image Size", 'wpsc' ); ?>:
 								</th>
 								<td>
-									<?php _e( 'Height', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[wpsc_gallery_image_height]' value='<?php echo get_option( 'wpsc_gallery_image_height' ); ?>' />
-									<?php _e( 'Width', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[wpsc_gallery_image_width]' value='<?php echo get_option( 'wpsc_gallery_image_width' ); ?>' /> <br />
+									<?php _e( 'Width', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[wpsc_gallery_image_width]' value='<?php echo get_option( 'wpsc_gallery_image_width' ); ?>' /> 
+									<?php _e( 'Height', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[wpsc_gallery_image_height]' value='<?php echo get_option( 'wpsc_gallery_image_height' ); ?>' /><br />
 
 								</td>
 							</tr>
