@@ -159,7 +159,12 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
 		}
 	}
 	// if we succeed, we can do further editing (todo - if_wp_error)
-
+	
+	// if we have no categories selected, assign one.
+	if( isset( $post_data['tax_input']['wpsc_product_category'] ) && count( $post_data['tax_input']['wpsc_product_category'] ) == 1 && $post_data['tax_input']['wpsc_product_category'][0] == 0){
+		$post_data['tax_input']['wpsc_product_category'][1] = wpsc_add_product_category_default($product_id);
+	
+	}
 	// and the meta
 	wpsc_update_product_meta($product_id, $post_data['meta']);
 
@@ -189,6 +194,8 @@ function wpsc_admin_submit_product( $post_ID, $post ) {
 	}
 	return $product_id;
 }
+
+
 function wpsc_pre_update( $data , $postarr ) {
  	if ( (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || $postarr["post_type"] != 'wpsc-product' )
         return $data;
@@ -217,6 +224,8 @@ function wpsc_pre_update( $data , $postarr ) {
 add_filter( 'wp_insert_post_data','wpsc_pre_update', 99, 2 );
 add_action( 'save_post', 'wpsc_admin_submit_product', 10, 2 );
 add_action( 'admin_notices', 'wpsc_admin_submit_notices' );
+
+
 function wpsc_admin_submit_notices() {
     global $current_screen, $post;
     
@@ -227,6 +236,17 @@ function wpsc_admin_submit_notices() {
     unset( $_SESSION['product_error_messages'] );
 }
  
+/**
+  * wpsc_add_product_category_default, if there is no category assigned assign first product category as default
+  *
+  * @since 3.8
+  * @param $product_id (int) the Post ID
+  * @return null
+  */ 
+function wpsc_add_product_category_default($product_id){
+	$terms = get_terms( 'wpsc_product_category', array( 'orderby' => 'id' ) );
+	wp_set_object_terms( $product_id , array( $terms[0]->slug ) , 'wpsc_product_category' );
+}
 /**
 * wpsc_sanitise_product_forms function 
 * 
