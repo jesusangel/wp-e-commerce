@@ -343,7 +343,6 @@ function wpsc_admin_include_css_and_js_refac( $pagehook ) {
 				'dragndrop_set' => ( get_option( 'wpsc_sort_by' ) == 'dragndrop' ? 'true' : 'false' ),
 				'l10n_print_after' => 'try{convertEntities(wpsc_adminL10n);}catch(e){};'
 			) );
-		wp_deregister_script( 'autosave' );			
 	}
 	if ( 'dashboard_page_wpsc-upgrades' == $pagehook )
 		wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );

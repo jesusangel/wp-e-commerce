@@ -418,7 +418,7 @@ function wpsc_start_the_query() {
 	global $wpsc_page_titles, $wp_query, $wpsc_query, $wpsc_query_vars;
 	if(isset($wp_query->query_vars['term']) && in_array($wp_query->query_vars['term'], $wpsc_page_titles)){
 		$product_page_id = wpec_get_the_post_id_by_shortcode('[productspage]');
-		$wp_query = new WP_Query( 'pagename=products-page/'.$wp_query->query_vars['term'] );
+		$wp_query = new WP_Query( 'pagename='.$wpsc_page_titles['products'].'/'.$wp_query->query_vars['term'] );
 
 	}elseif ( null == $wpsc_query ) {
 		
@@ -431,6 +431,8 @@ function wpsc_start_the_query() {
 				'post_parent' => 0,
 				'order'       => apply_filters('wpsc_product_order','ASC')
 			);
+			if($wp_query->query_vars['preview'])
+				$wpsc_query_vars['post_status'] = 'any';	
 			
 			if( isset( $_GET['product_order'] ) )
 				$wpsc_query_vars['order'] = $_GET['product_order'];

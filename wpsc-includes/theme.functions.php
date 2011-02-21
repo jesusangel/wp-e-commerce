@@ -437,7 +437,12 @@ function wpsc_single_template( $content ) {
 	if ( 'wpsc-product' == $wp_query->post->post_type && !is_archive() && $wp_query->post_count <= 1 ) {
 		remove_filter( "the_content", "wpsc_single_template" );
 		$single_theme_path = wpsc_get_template_file_path( 'wpsc-single_product.php' );
-		$wpsc_temp_query = new WP_Query( array( 'post__in' => array( $wp_query->post->ID ), 'post_type' => 'wpsc-product','posts_per_page'=>1 ) );
+		if( isset( $wp_query->query_vars['preview'] ) && $wp_query->query_vars['preview'])
+			$is_preview = 'true';
+		else
+			$is_preview = 'false';
+		$wpsc_temp_query = new WP_Query( array( 'p' => $wp_query->post->ID , 'post_type' => 'wpsc-product','posts_per_page'=>1, 'preview' => $is_preview ) );
+
 		list( $wp_query, $wpsc_temp_query ) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query object
 		ob_start();
 		include( $single_theme_path );

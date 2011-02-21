@@ -135,13 +135,13 @@ function wpsc_price_control_forms() {
 
     	<div class='wpsc_floatleft' style="width:85px;">
     		<label><?php _e( 'Price', 'wpsc' ); ?>:</label><br />
-			<input type='text' class='text' size='10' name='meta[_wpsc_price]' value='<?php echo number_format( $product_data['meta']['_wpsc_price'], 2, '.', '' ); ?>' />
+			<input type='text' class='text' size='10' name='meta[_wpsc_price]' value='<?php echo ( isset($product_data['meta']['_wpsc_price']) ) ? number_format( $product_data['meta']['_wpsc_price'], 2, '.', '' ) : '0.00';  ?>' />
 		</div>
 		<div class='wpsc_floatleft' style='display:<?php if ( ( $product_data['special'] == 1 ) ? 'block' : 'none'
 	); ?>; width:85px; margin-left:30px;'>
 			<label for='add_form_special'><?php _e( 'Sale Price', 'wpsc' ); ?>:</label>
 			<div id='add_special'>
-				<input type='text' size='10' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2, '.', '' ); ?>' name='meta[_wpsc_special_price]' />
+				<input type='text' size='10' value='<?php echo ( isset($product_data['meta']['_wpsc_special_price']) ) ? number_format( $product_data['meta']['_wpsc_special_price'], 2, '.', '' ) : '0.00' ; ?>' name='meta[_wpsc_special_price]' />
 			</div>
 		</div>
 		<br style="clear:both" />
@@ -189,9 +189,9 @@ function wpsc_price_control_forms() {
 	endif;
 
 	echo "<br style='clear:both' />
-          <br/><input id='add_form_donation' type='checkbox' name='meta[_wpsc_is_donation]' value='yes' " . ( ( $product_data['meta']['_wpsc_is_donation'] == 1 ) ? 'checked="checked"' : '' ) . " />&nbsp;<label for='add_form_donation'>" . __( 'This is a donation, checking this box populates the donations widget.', 'wpsc' ) . "</label>";
+          <br/><input id='add_form_donation' type='checkbox' name='meta[_wpsc_is_donation]' value='yes' " . ( isset($product_data['meta']['_wpsc_is_donation']) && ( $product_data['meta']['_wpsc_is_donation'] == 1 ) ? 'checked="checked"' : '' ) . " />&nbsp;<label for='add_form_donation'>" . __( 'This is a donation, checking this box populates the donations widget.', 'wpsc' ) . "</label>";
 ?>
-				<br /><br /> <input type='checkbox' value='1' name='table_rate_price[state]' id='table_rate_price'  <?php echo ( ( (bool)$product_meta['table_rate_price']['state'] == true ) ? 'checked=\'checked\'' : '' ); ?> />
+				<br /><br /> <input type='checkbox' value='1' name='table_rate_price[state]' id='table_rate_price'  <?php echo ( ( isset($product_meta['table_rate_price']['state']) && (bool)$product_meta['table_rate_price']['state'] == true ) ? 'checked=\'checked\'' : '' ); ?> />
 				<label for='table_rate_price'><?php _e( 'Table Rate Price', 'wpsc' ); ?></label>
 				<div id='table_rate'>
 					<a class='add_level' style='cursor:pointer;'><?php _e( '+ Add level', 'wpsc' ); ?></a><br />
@@ -528,16 +528,45 @@ function wpsc_product_shipping_forms() {
 	$product_data['transformed'] = array();
 	if ( !isset( $product_meta['weight'] ) )
 		$product_meta['weight'] = "";
+	
+	if( !isset( $product_meta['weight_unit'] ) )
+		$product_meta['weight_unit'] = '';
+		
+	$product_data['transformed']['weight'] = wpsc_convert_weight( $product_meta['weight'], "pound", $product_meta['weight_unit']);
+	
+	// Fix wp_debug notices
+	if(!isset($product_meta['dimensions'])){
+		$product_meta['dimensions'] = array(
+			'height' => 0,
+			'width' => 0,
+			'length' => 0
+		);
+	}
+	if( !isset($product_meta['display_weight_as']) )
+		$product_meta['display_weight_as'] = '';
 
-	$product_data['transformed']['weight'] = wpsc_convert_weight( $product_meta['weight'], "pound", $product_meta['weight_unit'] );
+	if( !isset(	$product_meta['dimensions']['height_unit'] ) )
+		$product_meta['dimensions']['height_unit'] = '';
 
-?>
+	if( !isset(	$product_meta['dimensions']['width_unit'] ) )
+		$product_meta['dimensions']['width_unit'] = '';
+
+	if( !isset(	$product_meta['dimensions']['length_unit'] ) )
+		$product_meta['dimensions']['length_unit'] = '';
+
+	if( !isset(	$product_meta['shipping'] ) ){
+		$product_meta['shipping']['local'] = '';
+		$product_meta['shipping']['international'] = '';
+	}
+	if( !isset( $product_meta['no_shipping'] ) )
+		$product_meta['no_shipping'] = '';
+?>	
 		<table>
 
      <!--USPS shipping changes-->
 		   <tr>
 			  <td>
-				<?php _e( 'Weight', 'wpsc' )?>
+				<?php _e( 'Weight', 'wpsc' ); ?>
 			  </td>
 			  <td>
 				 <input type='text' size='5' name='meta[_wpsc_product_metadata][weight]' value='<?php echo $product_data['transformed']['weight']; ?>' />
@@ -555,7 +584,7 @@ function wpsc_product_shipping_forms() {
 				<?php _e( 'Height', 'wpsc' ); ?>
                           </td>
 			  <td>
-                             <input type='text' size='5' name='meta[_wpsc_product_metadata][dimensions][height]' value= '<?php echo $product_meta['dimensions']['height']; ?>'>
+                             <input type='text' size='5' name='meta[_wpsc_product_metadata][dimensions][height]' value= '<?php echo  $product_meta['dimensions']['height'] ; ?>'>
                              <select name='meta[_wpsc_product_metadata][dimensions][height_unit]'>
                                     <option value='in' <?php echo ( ( $product_meta['dimensions']['height_unit'] == 'in' ) ? 'selected' : '' ); ?> ><?php _e( 'inches', 'wpsc' ); ?></option>
                                     <option value='cm' <?php echo ( ( $product_meta['dimensions']['height_unit'] == 'cm' ) ? 'selected' : '' ); ?> ><?php _e( 'cm', 'wpsc' ); ?></option>
@@ -643,6 +672,12 @@ function wpsc_product_advanced_forms() {
 		ORDER BY
 			LOWER(meta_key)", ARRAY_A
 	);
+	if( !isset( $product_meta['engraved'] ) )
+		$product_meta['engraved'] = '';
+
+	if( !isset( $product_meta['can_have_uploaded_image'] ) )
+		$product_meta['can_have_uploaded_image	'] = '';
+
 ?>
 
         <table>
@@ -798,10 +833,9 @@ function wpsc_additional_desc() {
 
 }
 function wpsc_product_download_forms() {
-
 	global $post, $wpdb, $wpsc_product_defaults;
 	$product_data = get_post_custom( $post->ID );
-
+	$output = '';
 	$product_data['meta'] = $product_meta = array();
 	if ( !empty( $product_data['_wpsc_product_metadata'] ) )
 		$product_data['meta'] = $product_meta = maybe_unserialize( $product_data['_wpsc_product_metadata'][0] );
@@ -1170,15 +1204,16 @@ function edit_multiple_image_gallery( $post ) {
  */
 
 function wpsc_save_quickedit_box( $post_id ) {
-
-	if ( !defined( 'DOING_AJAX' ) )
+	global $current_screen;
+	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || $current_screen->id != 'edit-wpsc-product' )
 		return;
 
 	$is_parent = ( bool )wpsc_product_has_children( $post_id );
 	$product_meta = get_post_meta( $post_id, '_wpsc_product_metadata', true );
+
 	$weight_unit = $product_meta["weight_unit"];
 	$weight = wpsc_convert_weight( $_POST["weight"], $weight_unit, "pound" );
-
+	
 	if ( isset( $product_meta["weight"] ) )
 		unset( $product_meta["weight"] );
 
