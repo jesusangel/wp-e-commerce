@@ -1047,7 +1047,7 @@ function wpsc_attachment_fields( $form_fields, $post ) {
 		$form_fields["wpsc_custom_thumb"] = array(
 			"label" => __( "Products Page Thumbnail Size:", 'wpsc' ),
 			"input" => "html", // this is default if "input" is omitted
-			"helps" => "<span style='text-align:left; clear:both; display:block; padding-top:3px;'>Custom thumbnail size for this image on the main Product Page</span>",
+			"helps" => "<span style='text-align:left; clear:both; display:block; padding-top:3px;'>" . __( 'Custom thumbnail size for this image on the main Product Page', 'wpsc') . "</span>",
 			"html" => $custom_thumb_html
 		);
 
