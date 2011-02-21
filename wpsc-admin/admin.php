@@ -488,7 +488,7 @@ function wpsc_admin_latest_activity() {
 	echo "<span class='pricedisplay'>";
 	echo $currentMonthOrders;
 	echo "</span>";
-	echo "<span class='dashboardWidget'>" . __( 'Orders', 'wpsc' ) . "</span>";
+	echo "<span class='dashboardWidget'>" . _n( 'Order', 'Orders', $currentMonthOrders, 'wpsc' ) . "</span>";
 	echo "</p>";
 	echo "<p class='dashboardWidgetSpecial'>";
 	//calculates average sales amount per order for the month
@@ -497,7 +497,7 @@ function wpsc_admin_latest_activity() {
 		echo wpsc_currency_display( $monthsAverage );
 	}
 	//echo "</span>";
-	echo "<span class='dashboardWidget'>" . __( 'Avg Orders', 'wpsc' ) . "</span>";
+	echo "<span class='dashboardWidget'>" . __( 'Avg Order', 'wpsc' ) . "</span>";
 	echo "</p>";
 	echo "</div>";
 	/*
