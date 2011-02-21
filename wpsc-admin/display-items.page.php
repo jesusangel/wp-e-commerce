@@ -258,7 +258,7 @@ function wpsc_column_sql_orderby( $orderby, $wp_query ) {
 
 	$wp_query->query = wp_parse_args( $wp_query->query );
 
-        if( isset( $wp_query->query ) ) :
+        if( isset( $wp_query->query['orderby'] ) ) :
             switch ( $wp_query->query['orderby'] ) :
                 case 'stock' :
                     $orderby = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $wpdb->posts.ID AND meta_key = '_wpsc_stock') " . $wp_query->get('order');
