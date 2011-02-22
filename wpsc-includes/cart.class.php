@@ -1220,7 +1220,7 @@ class wpsc_cart {
   function calculate_base_shipping() {
     global $wpdb, $wpsc_shipping_modules;
     if($this->uses_shipping()) {
-         if ( empty( $this->shipping_quotes ) && is_callable( array( $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote" ) ) ) {
+         if ( isset( $this->shipping_quotes ) && empty( $this->shipping_quotes ) && is_callable( array( $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote" ) ) ) {
             $this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
          }
          if($this->selected_shipping_option == null){
@@ -1820,9 +1820,8 @@ class wpsc_cart_item {
    function save_to_db($purchase_log_id) {
       global $wpdb, $wpsc_shipping_modules;
 
-      if($method === null) {
-         $method = $this->cart->selected_shipping_method;
-      }
+      $method = $this->cart->selected_shipping_method;
+	  $shipping = 0;
       if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
          $shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
       }

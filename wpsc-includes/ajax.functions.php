@@ -501,6 +501,9 @@ if ( isset( $_REQUEST['wpsc_action'] ) && ($_REQUEST['wpsc_action'] == 'cart_htm
  */
 function wpsc_submit_checkout() {
 	global $wpdb, $wpsc_cart, $user_ID, $nzshpcrt_gateways, $wpsc_shipping_modules, $wpsc_gateways;
+	$num_items = 0;
+	$use_shipping = 0;
+	$disregard_shipping = 0;
 	$_SESSION['wpsc_checkout_misc_error_messages'] = array( );
 	$wpsc_checkout = new wpsc_checkout();
 	$selected_gateways = get_option( 'custom_gateway_options' );
@@ -614,7 +617,8 @@ function wpsc_submit_checkout() {
 		$wpsc_cart->submit_stock_claims( $purchase_log_id );
 		if ( get_option( 'wpsc_also_bought' ) == 1 )
 			wpsc_populate_also_bought_list();
-
+		if( !isset( $our_user_id ) && isset( $user_ID ))
+			$our_user_id = $user_ID;
 		$wpsc_cart->log_id = $purchase_log_id; 
 		do_action( 'wpsc_submit_checkout', array( "purchase_log_id" => $purchase_log_id, "our_user_id" => $our_user_id ) );
 		if ( get_option( 'permalink_structure' ) != '' )

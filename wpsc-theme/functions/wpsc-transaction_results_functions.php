@@ -151,7 +151,8 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 					} else {
 						$order_status = $purchase_log['processed'];
 					}
-					$previous_download_ids[] = $download_data['id'];
+					if( isset( $download_data['id'] ) )
+						$previous_download_ids[] = $download_data['id'];
 				}
 
 				do_action( 'wpsc_confirm_checkout', $purchase_log['id'] );

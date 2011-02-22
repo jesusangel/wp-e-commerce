@@ -812,16 +812,18 @@ class wpsc_checkout {
 				$our_user_id = '';
 			}
 		}
-		if ( $our_user_id < 1 ) {
+		if ( isset( $our_user_id ) && $our_user_id < 1 ) {
 			$our_user_id = $user_ID;
 		}
 		// check we have a user id
-		if ( $our_user_id > 0 ) {
+		if ( isset( $our_user_id ) && $our_user_id > 0 ) {
 			$user_ID = $our_user_id;
 		}
 		//Basic Form field validation for billing and shipping details
 		foreach ( $this->checkout_items as $form_data ) {
-			$value = $_POST['collected_data'][$form_data->id];
+			$value = '';
+			if( isset( $_POST['collected_data'][$form_data->id] ) )
+				$value = $_POST['collected_data'][$form_data->id];
 			$_SESSION['wpsc_checkout_saved_values'][$form_data->id] = $value;
 			$bad_input = false;
 			if ( ($form_data->mandatory == 1) || ($form_data->type == "coupon") ) {
@@ -875,10 +877,12 @@ class wpsc_checkout {
 		$count = $this->get_count_checkout_fields() + 1;
 		$i = 0;
 		foreach ( $this->checkout_items as $form_data ) {
-			$value = $_POST['collected_data'][$form_data->id];
-			if ( $value == '' ) {
+			$value = '';
+			if( isset( $_POST['collected_data'][$form_data->id] ) )
+				$value = $_POST['collected_data'][$form_data->id];
+			if ( empty( $value ) && isset( $form_data->value ) )
 				$value = $form_data->value;
-			}
+
 
 			if ( $form_data->type != 'heading' ) {
 				if ( is_array( $value ) && ($form_data->unique_name == 'billingcountry' || $form_data->unique_name == 'shippingcountry') ) {
