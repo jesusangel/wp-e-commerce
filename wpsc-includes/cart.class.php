@@ -833,7 +833,7 @@ class wpsc_cart {
 
     if(($parameters['quantity'] > 0) && ($this->check_remaining_quantity($product_id, $parameters['variation_values'], $parameters['quantity']) == true)) {
          $new_cart_item = new wpsc_cart_item($product_id,$parameters, $this);
-
+         do_action('wpsc_set_cart_item' , $product_id , $parameters , $this);
          $add_item = true;
          $edit_item = false;
          if((count($this->cart_items) > 0) && ($new_cart_item->is_donation != 1)) {
@@ -862,6 +862,7 @@ class wpsc_cart {
          if($add_item === true) {
             $this->cart_items[] = $new_cart_item;
          }
+
       }
 
      // if some action was performed, return true, otherwise, return false;
