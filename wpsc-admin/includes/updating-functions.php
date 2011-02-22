@@ -228,7 +228,7 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 		$post_data['_wpsc_product_metadata']['is_stock_limited'] = (int)(bool)$product['quantity_limited'];
 		
 		// Product Weight
-		$post_data['_wpsc_product_metadata']['weight'] = wpsc_convert_weight($product['weight'], $product['weight_unit'], "pound");
+		$post_data['_wpsc_product_metadata']['weight'] = wpsc_convert_weight($product['weight'], $product['weight_unit'], "pound", true);
 		$post_data['_wpsc_product_metadata']['weight_unit'] = $product['weight_unit'];
 		$post_data['_wpsc_product_metadata']['display_weight_as'] = $product['weight_unit'];
 		
@@ -459,7 +459,7 @@ function wpsc_convert_variation_combinations() {
 				$post_data['_wpsc_original_variation_id'] = (float)$variation_item->id;
 			
 				// Product Weight
-				$post_data['_wpsc_product_metadata']['weight'] = wpsc_convert_weight($variation_item->weight, $variation_item->weight_unit, "pound");
+				$post_data['_wpsc_product_metadata']['weight'] = wpsc_convert_weight($variation_item->weight, $variation_item->weight_unit, "pound", true);
 				$post_data['_wpsc_product_metadata']['display_weight_as'] = $variation_item->weight_unit;
 				$post_data['_wpsc_product_metadata']['weight_unit'] = $variation_item->weight_unit;
  	

@@ -850,11 +850,16 @@ function wpsc_ajax_ie_save() {
 		'post_title' => $_POST['title']
 	);
 
-	$id = wp_update_post( $product );
+	$id = wp_update_post( $product ); 
 	if ( $id > 0 ) {
+		//need parent meta to know which weight unit we are using
+		$post = get_post( $id );
+		$parent_meta = get_product_meta($post->post_parent, 'product_metadata', true );
 		$product_meta = get_product_meta( $product['ID'], 'product_metadata', true );
-		if ( is_numeric( $_POST['weight'] ) || empty( $_POST['weight'] ) )
-			$product_meta['weight'] = $_POST['weight'];
+		if ( is_numeric( $_POST['weight'] ) || empty( $_POST['weight'] ) ){
+			$product_meta['weight'] = wpsc_convert_weight($_POST['weight'], $parent_meta['weight_unit'], 'pound', true);
+			$product_meta['weight_unit'] = $parent_meta['weight_unit'];
+		}
 
 		update_product_meta( $product['ID'], 'product_metadata', $product_meta );
 		update_product_meta( $product['ID'], 'price', (float)$_POST['price'] );
@@ -873,7 +878,7 @@ function wpsc_ajax_ie_save() {
 		$sku = ( $sku )?$sku:__('N/A', 'wpsc');
 		$stock = get_product_meta( $id, 'stock', true );
 		$stock = ( $stock === '' )?__('N/A', 'wpsc'):$stock;
-		$results = array( 'id' => $id, 'title' => $post->post_title, 'weight' => absint( $meta['weight'] ), 'price' => wpsc_currency_display( $price ), 'special_price' => wpsc_currency_display( $special_price ), 'sku' => $sku, 'stock' => $stock );
+		$results = array( 'id' => $id, 'title' => $post->post_title, 'weight' => wpsc_convert_weight($meta['weight'], 'pound', $parent_meta['weight_unit']), 'price' => wpsc_currency_display( $price ), 'special_price' => wpsc_currency_display( $special_price ), 'sku' => $sku, 'stock' => $stock );
 		echo '(' . json_encode( $results ) . ')';
 		die();
 	} else {

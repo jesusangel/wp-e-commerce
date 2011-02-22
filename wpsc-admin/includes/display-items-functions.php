@@ -1158,7 +1158,7 @@ function wpsc_save_quickedit_box( $post_id ) {
 	$product_meta = get_post_meta( $post_id, '_wpsc_product_metadata', true );
 
 	$weight_unit = $product_meta["weight_unit"];
-	$weight = wpsc_convert_weight( $_POST["weight"], $weight_unit, "pound" );
+	$weight = wpsc_convert_weight( $_POST["weight"], $weight_unit, "pound", true );
 	
 	if ( isset( $product_meta["weight"] ) )
 		unset( $product_meta["weight"] );
