@@ -212,7 +212,7 @@ function wpsc_right_now() {
 								<?php echo $product_count; ?>
 							</td>
 							<td class='t'>
-								<?php echo _n('Product', 'Products', $product_count, 'wpsc'); ?>
+								<?php echo _nx( 'Product', 'Products', $product_count, 'dashboard widget', 'wpsc' ); ?>
 							</td>
 							<td class='b'>
 								<?php echo $sales_count; ?>

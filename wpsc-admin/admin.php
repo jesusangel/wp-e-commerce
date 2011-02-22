@@ -515,7 +515,7 @@ function wpsc_admin_latest_activity() {
 	echo "<span class='pricedisplay'>";
 	echo $totalOrders;
 	echo "</span>";
-	echo "<span class='dashboardWidget'>" . __( 'Orders', 'wpsc' ) . "</span>";
+	echo "<span class='dashboardWidget'>" . _n( 'Order', 'Orders', $totalOrders, 'wpsc' ) . "</span>";
 	echo "</p>";
 	echo "<p class='dashboardWidgetSpecial'>";
 	//calculates average sales amount per order for the month
