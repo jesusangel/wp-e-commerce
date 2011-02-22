@@ -482,7 +482,7 @@ function wpsc_admin_latest_activity() {
 	//calculates amount of money made for the month
 	$currentMonthsSales = wpsc_currency_display( admin_display_total_price( $start_timestamp, $end_timestamp ) );
 	echo $currentMonthsSales;
-	echo "<span class='dashboardWidget'>" . __( 'Sales', 'wpsc' ) . "</span>";
+	echo "<span class='dashboardWidget'>" . _x( 'Sales', 'the total value of sales in dashboard widget'. 'wpsc' ) . "</span>";
 	echo "</p>";
 	echo "<p class='dashboardWidgetSpecial'>";
 	echo "<span class='pricedisplay'>";
@@ -509,7 +509,7 @@ function wpsc_admin_latest_activity() {
 
 	echo "<p class='dashboardWidgetSpecial'>";
 	echo wpsc_currency_display( admin_display_total_price() );
-	echo "<span class='dashboardWidget'>" . __( 'Sales', 'wpsc' ) . "</span>";
+	echo "<span class='dashboardWidget'>" . _x( 'Sales', 'the total value of sales in dashboard widget'. 'wpsc' ) . "</span>";
 	echo "</p>";
 	echo "<p class='dashboardWidgetSpecial'>";
 	echo "<span class='pricedisplay'>";
@@ -526,7 +526,7 @@ function wpsc_admin_latest_activity() {
 	}
 	echo wpsc_currency_display( $totalAverage );
 	//echo "</span>";
-	echo "<span class='dashboardWidget'>" . __( 'Avg Orders', 'wpsc' ) . "</span>";
+	echo "<span class='dashboardWidget'>" . __( 'Avg Order', 'wpsc' ) . "</span>";
 	echo "</p>";
 	echo "</div>";
 	echo "<div style='clear:both'></div>";
