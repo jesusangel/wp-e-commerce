@@ -496,7 +496,7 @@ function wpsc_the_category_title($title='', $id=''){
 	$post = get_post($id);
 
 	// If its the category page
-	if( wpsc_is_viewable_taxonomy() && $wp_query->posts[0]->post_title == $post->post_title && $wp_query->is_archive && !is_admin()){
+	if( wpsc_is_viewable_taxonomy() && isset( $wp_query->posts[0] ) && $wp_query->posts[0]->post_title == $post->post_title && $wp_query->is_archive && !is_admin()){
 		$category = get_term_by('slug',$wp_query->query_vars['wpsc_product_category'],'wpsc_product_category');
 		remove_filter('the_title','wpsc_the_category_title');
 	}
@@ -517,7 +517,6 @@ function wpsc_the_category_title($title='', $id=''){
 		return $category->name;
 	else
 		return $title;
-
 
 }
 
