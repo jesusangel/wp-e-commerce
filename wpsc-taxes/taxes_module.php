@@ -94,6 +94,9 @@ function wpec_submit_taxes_options() {
 		//check the rates
 		if ( isset( $_POST['wpsc_options']['wpec_taxes_' . $taxes_type] ) ) {
 			foreach ( $_POST['wpsc_options']['wpec_taxes_' . $taxes_type] as $tax_rate ) {
+				if( !isset( $tax_rate['region_code'] ) )
+					$tax_rate['region_code'] = '';
+
 				//if there is no country then skip
 				if ( empty( $tax_rate['country_code'] ) ) {
 					continue;

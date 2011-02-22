@@ -327,6 +327,7 @@ class wpec_taxes {
 		//database connection
 		global $wpdb;
 
+		if( isset( $country ) && 'all-markets' == $country ) return;
 		//get the id for the given country code
 		$country_id = $this->wpec_taxes_get_country_information( 'id', array( 'isocode' => $country ) );
 

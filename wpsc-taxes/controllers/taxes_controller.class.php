@@ -434,7 +434,7 @@ class wpec_taxes_controller {
    function wpec_taxes_build_select_options( $input_array, $option_value, $option_text, $option_selected=false, $select_settings='' ) {
       $returnable = '';
       $options = '';
-//       exit($option_value.'Now an <pre>'.print_r($input_array,1).'</pre>'.$option_selected);
+	if( empty($input_array)) return;
       foreach ( $input_array as $value ) {
          //if the selected value exists in the input array skip it and continue processing
          if ( is_array( $value ) ) {

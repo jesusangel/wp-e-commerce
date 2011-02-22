@@ -182,6 +182,13 @@ function wpsc_install() {
 
 	add_option( 'wpsc_category_url_cache', array(), '', 'yes' );
 
+	// add in some default tax settings
+	add_option( 'wpec_taxes_inprice', 'exclusive' );
+	
+	add_option( 'wpec_taxes_product', 'replace' );
+
+	add_option( 'wpec_taxes_logic', 'billing' );
+	
 	wpsc_product_files_htaccess();
 
 	/*
