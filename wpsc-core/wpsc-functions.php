@@ -421,7 +421,12 @@ function wpsc_start_the_query() {
 		$wp_query = new WP_Query( 'pagename='.$wpsc_page_titles['products'].'/'.$wp_query->query_vars['term'] );
 
 	}elseif ( null == $wpsc_query ) {
-		
+		if($wp_query->is_404 && isset( $wp_query->query['pagename']) && strpos( $wp_query->query['pagename'] , $wpsc_page_titles['products'] ) !== false){
+			global $post;
+			$wp_query = new WP_Query('post_type=wpsc-product&name='.$wp_query->query_vars['name']);
+			if(isset($wp_query->post->ID))
+				$post = $wp_query->post;
+		}
 		$products_page = $wpsc_page_titles['products'];
 		$checkout_page = $wpsc_page_titles['checkout'];
 		$userlog_page = $wpsc_page_titles['userlog'];

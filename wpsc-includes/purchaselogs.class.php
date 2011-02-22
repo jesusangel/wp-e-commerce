@@ -243,7 +243,7 @@ function wpsc_the_purch_status_name() {
 function wpsc_purchlogs_getfirstdates() {
    global $purchlogs;
    $dates = $purchlogs->getdates();
-
+   $fDate = '';
    foreach ( $dates as $date ) {
       $is_selected = '';
       $cleanDate = date( 'M Y', $date['start'] );
@@ -613,7 +613,8 @@ class wpsc_purchaselogs {
 		if ( !isset( $_GET['view_purchlogs_by'] ) && !isset( $_GET['purchlogs_searchbox'] ) ) {
 			$dates = $this->getdates();
 			$dates = array_slice( $dates, 0, 3 );
-			$this->current_start_timestamp = $dates[2]['start'];
+			if(isset($dates[2]['start']))
+				$this->current_start_timestamp = $dates[2]['start'];
 			$this->current_end_timestamp = $dates[0]['end'];
 			$newlogs = $this->get_purchlogs( $dates );
 			$_SESSION['newlogs'] = $newlogs;
