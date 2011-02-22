@@ -502,7 +502,7 @@ function wpsc_start_the_query() {
 		}
 	}
 
-	if( $wpsc_query->post_count == 0  && isset($wpsc_query_vars['wpsc_product_category'])){
+	if( isset($wpsc_query->post_count) && $wpsc_query->post_count == 0  && isset($wpsc_query_vars['wpsc_product_category'])){
 		$products_page_id = wpec_get_the_post_id_by_shortcode('[productspage]');
 		$args = array(
 			'post_type' => 'page',
@@ -782,7 +782,7 @@ class wpsc_products_by_category {
 		if ( ('' != $q['wpsc_product_category']) && !$query->is_singular ) {
 			$q['taxonomy'] = 'wpsc_product_category';
 			$q['term'] = $q['wpsc_product_category'];
-
+			$in_cats = '';
 			$join = " INNER JOIN $wpdb->term_relationships
 				ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id)
 			INNER JOIN $wpdb->term_taxonomy
@@ -790,16 +790,22 @@ class wpsc_products_by_category {
 			";
 			if(isset($q['meta_key']))
 				$join .= " INNER JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id) ";
+		
 			$whichcat = " AND $wpdb->term_taxonomy.taxonomy = '{$q['taxonomy']}' ";
 
 			$term_data = get_term_by( 'slug', $q['term'], $q['taxonomy'] );
-			$in_cats = array( $term_data->term_id );
-			if('0' != get_option('show_subcatsprods_in_cat')){
+
+			if( is_object( $term_data ) )
+				$in_cats = array( $term_data->term_id );
+
+			if('0' != get_option('show_subcatsprods_in_cat') && is_object($term_data)){
 				$term_children_data = get_term_children( $term_data->term_id, $q['taxonomy'] );
 				$in_cats = array_reverse( array_merge( $in_cats, $term_children_data ) );
 			}
-			$in_cats = "'" . implode( "', '", $in_cats ) . "'";
-			$whichcat .= "AND $wpdb->term_taxonomy.term_id IN ($in_cats)";
+			if( is_array( $in_cats ) ){
+				$in_cats = "'" . implode( "', '", $in_cats ) . "'";
+				$whichcat .= "AND $wpdb->term_taxonomy.term_id IN ($in_cats)";
+			}
 			$whichcat .= " AND $wpdb->posts.post_status IN ('publish', 'locked', 'private') ";
 			$groupby = "{$wpdb->posts}.ID";
 

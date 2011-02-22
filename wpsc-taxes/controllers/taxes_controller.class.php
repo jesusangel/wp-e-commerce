@@ -293,6 +293,7 @@ class wpec_taxes_controller {
     * @return: string containing html select menu
     * */
    function wpec_taxes_display_tax_bands( $input_settings=array( ), $custom_tax_band=false ) {
+   	  $returnable = '';
       //if taxes are included and not disabled continue else notify customer
       if ( $this->wpec_taxes_isincluded() && $this->wpec_taxes->wpec_taxes_get_enabled() ) {
          //retrieve the bands and add the disabled value

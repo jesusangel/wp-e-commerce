@@ -1001,6 +1001,7 @@ function wpsc_filter_feature_image_text( $translation, $text, $domain ) {
 	return $translation;
 }
 function wpsc_attachment_fields( $form_fields, $post ) {
+	$out = '';
 	if(isset($_GET["post_id"]))
 		$parent_post = get_post( absint($_GET["post_id"]) );
 	else

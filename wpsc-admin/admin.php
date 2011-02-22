@@ -294,7 +294,7 @@ function wpsc_meta_boxes() {
 	if ( is_object( $post ) && $post->post_parent == 0 ) {
 		add_meta_box( 'wpsc_product_variation_forms', __('Variations', 'wpsc'), 'wpsc_product_variation_forms', $pagename, 'normal', 'high' );
 		add_meta_box( 'wpsc_product_external_link_forms', __('Off Site Product link', 'wpsc'), 'wpsc_product_external_link_forms', $pagename, 'normal', 'high' );
-	} else if( $post->post_status == "inherit"  ) {
+	} else if( is_object( $post ) && $post->post_status == "inherit" ) {
 		remove_meta_box( 'tagsdiv-product_tag', 'wpsc-product', 'core' );
 		remove_meta_box( 'wpsc_product_external_link_forms', 'wpsc-product', 'core' );
 		remove_meta_box( 'wpsc_product_categorydiv', 'wpsc-product', 'core' );
