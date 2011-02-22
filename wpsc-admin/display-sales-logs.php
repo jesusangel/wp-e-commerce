@@ -46,14 +46,14 @@ function wpsc_display_sales_logs() {
          if(!isset($_REQUEST['purchaselog_id'])){
             $columns = array(
                'cb' => '<input type="checkbox" />',
-               'purchid' => 'Order ID',
-               'date' => 'Date / Time',
+               'purchid' => __( 'Order ID', 'wpsc' ),
+               'date' => __( 'Date / Time', 'wpsc' ),
                'name' => '',
-               'amount' => 'Amount',
-               'details' => 'Details',
-               'status' => 'Status',
-               'delete' => 'Delete',
-               'track' => 'Tracking ID'
+               'amount' => __( 'Amount', 'wpsc' ),
+               'details' => __( 'Details', 'wpsc' ),
+               'status' => __( 'Status', 'wpsc' ),
+               'delete' => __( 'Delete', 'wpsc' ),
+               'track' => __( 'Tracking ID', 'wpsc' )
             );
             register_column_headers('display-sales-list', $columns);
             ///// start of update message section //////
@@ -317,8 +317,8 @@ function wpsc_display_sales_logs() {
         }
 
         ?>
-         <option value='all' <?php echo $date_is_selected['all']; ?>>All</option>
-            <option value='3mnths' <?php echo $date_is_selected['3mnths']; ?>>Three Months</option>
+         <option value='all' <?php echo $date_is_selected['all']; ?>><?php echo _x('All', 'all sales', 'wpsc'); ?></option>
+            <option value='3mnths' <?php echo $date_is_selected['3mnths']; ?>><?php _e('Three Months', 'wpsc'); ?></option>
          <?php  echo wpsc_purchlogs_getfirstdates(); ?>
       </select>
       <select id='view_purchlogs_by_status' name='view_purchlogs_by_status'>
@@ -342,7 +342,7 @@ function wpsc_display_sales_logs() {
          }else{
                $is_selected = '';
           } ?>
-         <option <?php echo $is_selected; ?> value='-1'>Status: All</option>
+         <option <?php echo $is_selected; ?> value='-1'><?php _e('Status: All', 'wpsc'); ?></option>
       </select>
       <input type='hidden' value='purchlog_filter_by' name='wpsc_admin_action' />
       <input type="submit" value="<?php _e('Filter', 'wpsc'); ?>" name="doaction2" id="doaction2" class="button-secondary action" />
@@ -365,7 +365,7 @@ function wpsc_display_sales_logs() {
          <?php get_purchaselogs_content(); ?>
          </tbody>
       </table>
-      <p><strong style='float:left' ><?php _e('Total:', 'wpsc'); ?></strong> <?php echo wpsc_currency_display( wpsc_the_purch_total() ); ?></p>
+      <p><strong><?php _e('Total:', 'wpsc'); ?></strong> <?php echo wpsc_currency_display( wpsc_the_purch_total() ); ?></p>
 <?php
          if(!isset($purchlogs->current_start_timestamp) && !isset($purchlogs->current_end_timestamp)){
             $purchlogs->current_start_timestamp = $purchlogs->earliest_timestamp;
@@ -410,7 +410,10 @@ function wpsc_display_sales_logs() {
       <td><?php echo wpsc_the_purch_item_date(); ?></td> <!--Date -->
       <td><?php echo wpsc_the_purch_item_name(); ?></td> <!--Name/email -->
       <td><?php echo wpsc_currency_display( wpsc_the_purch_item_price() ); ?></td><!-- Amount -->
-      <td><a href='<?php echo htmlentities(add_query_arg('purchaselog_id', wpsc_the_purch_item_id()), ENT_QUOTES, 'UTF-8') ; ?>'><?php echo wpsc_the_purch_item_details();?> Items</a></td><!-- Details -->
+      <td><a href='<?php echo htmlentities(add_query_arg('purchaselog_id', wpsc_the_purch_item_id()), ENT_QUOTES, 'UTF-8') ; ?>'><?php
+      $number_of_items = wpsc_the_purch_item_details();
+      printf( _n( '%s Item', '%s Items', $number_of_items, 'wpsc' ), $number_of_items );
+      ?></a></td><!-- Details -->
       <td>
       <?php if(!wpsc_purchlogs_is_google_checkout()){ ?>
          <select class='selector' name='<?php echo wpsc_the_purch_item_id(); ?>' title='<?php echo wpsc_the_purch_item_id(); ?>' >
