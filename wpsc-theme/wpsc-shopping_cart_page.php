@@ -457,7 +457,7 @@ endif;
 	
 	      <tr class="total_price total_shipping">
 	         <td class='wpsc_totals'>
-	            <?php _e('Total Shipping', 'wpsc'); ?>
+	            <?php _e('Total Shipping', 'wpsc'); ?>:
 	         </td>
 	         <td class='wpsc_totals'>
 	            <span id="checkout_shipping" class="pricedisplay checkout-shipping"><?php echo wpsc_cart_shipping(); ?></span>
@@ -468,7 +468,7 @@ endif;
      <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount(false) > 0)): ?>
       <tr class="total_price">
          <td class='wpsc_totals'>
-            <?php _e('Discount', 'wpsc'); ?>
+            <?php _e('Discount', 'wpsc'); ?>:
          </td>
          <td class='wpsc_totals'>
             <span id="coupons_amount" class="pricedisplay"><?php echo wpsc_coupon_amount(); ?></span>
