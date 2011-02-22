@@ -1,13 +1,13 @@
 <?php
 
-require_once('library/googlecart.php');
-require_once('library/googleitem.php');
-require_once('library/googleshipping.php');
-require_once('library/googletax.php');
-require_once('library/googleresponse.php');
-require_once('library/googlemerchantcalculations.php');
-require_once('library/googleresult.php');
-require_once('library/googlerequest.php');
+require_once(WPSC_FILE_PATH.'/wpsc-merchants/library/googlecart.php');
+require_once(WPSC_FILE_PATH.'/wpsc-merchants/library/googleitem.php');
+require_once(WPSC_FILE_PATH.'/wpsc-merchants/library/googleshipping.php');
+require_once(WPSC_FILE_PATH.'/wpsc-merchants/library/googletax.php');
+require_once(WPSC_FILE_PATH.'/wpsc-merchants/library/googleresponse.php');
+require_once(WPSC_FILE_PATH.'/wpsc-merchants/library/googlemerchantcalculations.php');
+require_once(WPSC_FILE_PATH.'/wpsc-merchants/library/googleresult.php');
+require_once(WPSC_FILE_PATH.'/wpsc-merchants/library/googlerequest.php');
 
 
 $nzshpcrt_gateways[$num]['name'] = 'Google Checkout';

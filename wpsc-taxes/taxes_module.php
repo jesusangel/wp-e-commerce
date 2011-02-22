@@ -3,8 +3,8 @@
 /**
  * Load required files
  * */
-require_once 'models/taxes.class.php';
-require_once 'controllers/taxes_controller.class.php';
+require_once WPSC_FILE_PATH.'/wpsc-taxes/models/taxes.class.php';
+require_once WPSC_FILE_PATH.'/wpsc-taxes/controllers/taxes_controller.class.php';
 
 function wpsc_include_taxes_js() {
   $version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
