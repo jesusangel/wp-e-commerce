@@ -876,63 +876,8 @@ function wpsc_product_download_forms() {
 	$output = apply_filters( 'wpsc_downloads_metabox', $output );
 }
 function wpsc_product_label_forms() {
-	//This is new to me...not sure why this is even here
-?>
-	<div id='wpsc_product_label_forms' class='postbox <?php echo ( ( array_search( 'wpsc_product_label_forms', $product_data['closed_postboxes'] ) !== false ) ? 'closed' : '' ); ?>'><div class="handlediv" title="<?php _e( 'Click to toggle', 'wpsc' ); ?>"><br></div>
-		<h3 class="<?php if ( function_exists( 'add_object_page' ) ) : ?>hndle<?php endif; ?>">
-			<?php if ( !function_exists( 'add_object_page' ) ) : ?>
-
-				<a class='togbox'>+</a>
-
-			<?php endif; ?>
-
-			<?php _e( 'Label Control', 'wpsc' ); ?>
-		</h3>
-		<div class='inside'>
-			<table>
-				<tr>
-					<td colspan='2'>
-<?php _e( 'Add Label', 'wpsc' ); ?> :
-						<a id='add_label'><?php _e( 'Add Label', 'wpsc' ); ?></a>
-					</td>
-				</tr>
-				<tr>
-					<td colspan='2'>
-						<div id="labels">
-							<table>
-								<tr>
-									<td><?php _e( 'Label', 'wpsc' ) ?> :</td>
-									<td><input type="text" name="productmeta_values[labels][]"></td>
-								</tr>
-								<tr>
-									<td><?php _e( 'Label Description', 'wpsc' ) ?> :</td>
-									<td><textarea name="productmeta_values[labels_desc][]"></textarea></td>
-								</tr>
-								<tr>
-									<td><?php _e( 'Life Number', 'wpsc' ) ?> :</td>
-									<td><input type="text" name="productmeta_values[life_number][]"></td>
-								</tr>
-								<tr>
-									<td><?php _e( 'Item Number', 'wpsc' ) ?> :</td>
-									<td><input type="text" name="productmeta_values[item_number][]"></td>
-								</tr>
-								<tr>
-									<td><?php _e( 'Product Code', 'wpsc' ) ?> :</td>
-									<td><input type="text" name="productmeta_values[product_code][]"></td>
-								</tr>
-								<tr>
-									<td><?php _e( 'PDF', 'wpsc' ) ?> :</td>
-									<td><input type="file" name="pdf[]"></td>
-								</tr>
-							</table>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</div>
-
-<?php
+	_deprecated_function( __FUNCTION__, '3.8' );
+	return false;
 }
 /**
  * Adding function to change text for media buttons
