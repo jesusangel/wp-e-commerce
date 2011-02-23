@@ -720,7 +720,7 @@ function wpsc_save_product_order() {
 	global $wpdb;
 
 	$products = array( );
-	foreach ( $_POST['page'] as $product ) {
+	foreach ( $_POST['post'] as $product ) {
 		$products[] = absint( $product );
 	}
 
@@ -1721,9 +1721,9 @@ function variation_price_field( $variation ) {
 		<span class="description"><?php _e( 'You can list a default price here for this variation.  You can list a regular price (18.99), differential price (+1.99 / -2) or even a percentage-based price (+50% / -25%).', 'wpsc' ); ?></span>
 	</div>
 	<script type="text/javascript">
-		jQuery('.form-field #parent option:not(.level-0)').remove();
+		jQuery('.form-field #parent option:not(.level-0, [value="-1"])').remove();
 		jQuery('#parent').mousedown(function(){
-			jQuery('.form-field #parent option:not(.level-0)').remove();
+			jQuery('.form-field #parent option:not(.level-0, [value="-1"])').remove();
 		});
 	</script>
 	<?php
