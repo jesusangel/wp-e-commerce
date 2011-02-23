@@ -47,27 +47,27 @@ function wpsc_display_settings_page() { ?>
 		<?php
 			switch ( $page ) {
 				case 'checkout' :
-					require_once( 'includes/settings-pages/checkout.php' );
+					require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/settings-pages/checkout.php' );
 					wpsc_options_checkout();
 					break;
 
 				case 'gateway' :
-					require_once( 'includes/settings-pages/gateway.php' );
+					require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/settings-pages/gateway.php' );
 					wpsc_options_gateway();
 					break;
 
 				case 'shipping' :
-					require_once( 'includes/settings-pages/shipping.php' );
+					require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/settings-pages/shipping.php' );
 					wpsc_options_shipping();
 					break;
 
 				case 'admin' :
-					require_once( 'includes/settings-pages/admin.php' );
+					require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/settings-pages/admin.php' );
 					wpsc_options_admin();
 					break;
 
 				case 'presentation'  :
-					require_once( 'includes/settings-pages/presentation.php' );
+					require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/settings-pages/presentation.php' );
 					wpsc_options_presentation();
 					break;
 
@@ -76,18 +76,18 @@ function wpsc_display_settings_page() { ?>
 					break;
 
 				case 'marketing' :
-					require_once( 'includes/settings-pages/marketing.php' );
+					require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/settings-pages/marketing.php' );
 					wpsc_options_marketing();
 					break;
 
 				case 'import' :
-					require_once( 'includes/settings-pages/import.php' );
+					require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/settings-pages/import.php' );
 					wpsc_options_import();
 					break;
 
 				case 'general' :
 				default :
-					require_once( 'includes/settings-pages/general.php' );
+					require_once( WPSC_FILE_PATH . '/wpsc-admin/includes/settings-pages/general.php' );
 					wpsc_options_general();
 					break;
 			}
