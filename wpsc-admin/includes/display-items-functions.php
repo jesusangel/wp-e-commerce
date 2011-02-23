@@ -940,7 +940,8 @@ function wpsc_filter_gettex_with_context( $translation, $text, $context, $domain
 	if ( 'Taxonomy Parent' == $context && 'Parent' == $text && isset($_GET['taxonomy']) && 'wpsc-variation' == $_GET['taxonomy'] ) {
 		$translations = &get_translations_for_domain( $domain );
 		return $translations->translate( 'Variation set', 'wpsc' );
-		return $translation;
+		//this will never happen, this is here only for gettex to pick up the translation
+		return __( 'Variation set', 'wpsc' );
 	}
 	return $translation;
 }
@@ -962,7 +963,16 @@ function wpsc_filter_feature_image_text( $translation, $text, $domain ) {
 		if ( $post->post_type != 'wpsc-product' ) return $translation;
 		$translations = &get_translations_for_domain( $domain );
 		return $translations->translate( 'Use as Product Thumbnail', 'wpsc' );
+		//this will never happen, this is here only for gettex to pick up the translation
+		return __( 'Use as Product Thumbnail', 'wpsc' );
 	}
+	if ( 'The name is how it appears on your site.' == $text && isset($_GET['taxonomy']) && 'wpsc-variation' == $_GET['taxonomy'] ){
+		$translations = &get_translations_for_domain( $domain );
+		return $translations->translate( 'The name is how it appears on your site. <br><div class="error"><strong>Please read this carefully before starting to work with variations:</strong><br />Variations in WP e-Commerce are divided into sets. For example set <strong>Color</strong> could have variations <strong>Red, Green,</strong> and <strong>Blue</strong>. To create a set simply enter <stron>Name</strong> and push Enter key on your keyboard or click <strong>Add New Variation/Set</strong> button in the bottom of this page. Now you can select the variation set that you\'ve just created from <strong>Variation set</strong> drop-down menu and add some variations to it.</div>', 'wpsc' );
+		//this will never happen, this is here only for gettex to pick up the translation
+		return __( 'The name is how it appears on your site. <br><div class="error"><strong>Please read this carefully before starting to work with variations:</strong><br />Variations in WP e-Commerce are divided into sets. For example set <strong>Color</strong> could have variations <strong>Red, Green,</strong> and <strong>Blue</strong>. To create a set simply enter <stron>Name</strong> and push Enter key on your keyboard or click <strong>Add New Variation/Set</strong> button in the bottom of this page. Now you can select the variation set that you\'ve just created from <strong>Variation set</strong> drop-down menu and add some variations to it.</div>', 'wpsc' );
+	} 
+	
 	return $translation;
 }
 function wpsc_attachment_fields( $form_fields, $post ) {
