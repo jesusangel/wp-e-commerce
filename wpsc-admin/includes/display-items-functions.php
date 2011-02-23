@@ -920,9 +920,33 @@ if ( ( isset( $_REQUEST['parent_page'] ) && ( $_REQUEST['parent_page'] == 'wpsc-
 add_filter( 'gettext', 'wpsc_filter_delete_text', 12 , 3 );
 add_filter( 'attachment_fields_to_edit', 'wpsc_attachment_fields', 11, 2 );
 add_filter( 'gettext', 'wpsc_filter_feature_image_text', 12, 3 );
+add_filter( 'gettext_with_context', 'wpsc_filter_gettex_with_context', 12, 4);
 
 if ( isset( $_REQUEST["save"] ) && isset( $_REQUEST["attachments"] ) && is_array( $_REQUEST["attachments"] ) ) {
 	//wpsc_regenerate_thumbnails();
+}
+
+function wpsc_exclude_variation_children( $cashe, $taxonomies, $args ){
+
+}
+
+/*
+ * This filter overrides string with context translations
+ *
+ * @param $translation The current translation
+ * @param $text The text being translated
+ * @param $context The domain for the translation
+ * @param $domain The domain for the translation
+ * @return string The translated / filtered text.
+ */
+function wpsc_filter_gettex_with_context( $translation, $text, $context, $domain ) {
+
+	if ( 'Taxonomy Parent' == $context && 'Parent' == $text && isset($_GET['taxonomy']) && 'wpsc-variation' == $_GET['taxonomy'] ) {
+		$translations = &get_translations_for_domain( $domain );
+		return $translations->translate( 'Variation set', 'wpsc' );
+		return $translation;
+	}
+	return $translation;
 }
 
 /*
@@ -941,7 +965,7 @@ function wpsc_filter_feature_image_text( $translation, $text, $domain ) {
 		$post = get_post( $_REQUEST['post_id'] );
 		if ( $post->post_type != 'wpsc-product' ) return $translation;
 		$translations = &get_translations_for_domain( $domain );
-		return $translations->translate( 'Use as Product Thumbnail', 'wpsc' ) ;
+		return $translations->translate( 'Use as Product Thumbnail', 'wpsc' );
 	}
 	return $translation;
 }
