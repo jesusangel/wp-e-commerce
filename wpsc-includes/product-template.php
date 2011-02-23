@@ -100,6 +100,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	if(empty($page_link))
 		$page_link = wpsc_a_page_url();
 		
+	//if there is no pagination	
 	if(!get_option('permalink_structure')) {
 		$category = '?';
 		if(isset($wpsc_query->query_vars['wpsc_product_category']))

@@ -494,7 +494,7 @@ function wpsc_is_viewable_taxonomy(){
 function wpsc_the_category_title($title='', $id=''){
 	global $wp_query;
 	$post = get_post($id);
-
+	
 	// If its the category page
 	if( wpsc_is_viewable_taxonomy() && isset( $wp_query->posts[0] ) && $wp_query->posts[0]->post_title == $post->post_title && $wp_query->is_archive && !is_admin()){
 		$category = get_term_by('slug',$wp_query->query_vars['wpsc_product_category'],'wpsc_product_category');
@@ -506,12 +506,17 @@ function wpsc_the_category_title($title='', $id=''){
 		$category = get_term_by('slug',$wp_query->query_vars['term'],'product_tag');
 		remove_filter('the_title','wpsc_the_category_title');
 	}
-
+	// if its product-page but paginated
+	if(empty($category->name) && isset( $wp_query->query_vars['paged'] ) && $wp_query->query_vars['paged'] && $wp_query->posts[0]->post_title == $post->post_title && 'wpsc-product' == $wp_query->query_vars['post_type'] ){
+		$post_id = wpec_get_the_post_id_by_shortcode('[productspage]');
+		$post = get_post($post_id);
+		$title = $post->post_title;
+		remove_filter('the_title','wpsc_the_category_title');		
+	}
 	if(!empty($category->name))
 		return $category->name;
 	else
 		return $title;
-
 }
 
 /**
@@ -1064,6 +1069,7 @@ function wpsc_products_page( $content = '' ) {
 			$GLOBALS['post'] = $wp_query->post;
 		return preg_replace( "/(<p>)*\[productspage\](<\/p>)*/", $output, $content );
 	} elseif(is_archive() && wpsc_is_viewable_taxonomy()){	
+
 		remove_filter( 'the_content', 'wpautop' );
 		return wpsc_products_page('[productspage]');
 	} else {
