@@ -1720,14 +1720,12 @@ function variation_price_field( $variation ) {
 		<input type="text" name="variation_price" id="variation_price" style="width:50px;" value="<?php echo $price; ?>"><br />
 		<span class="description"><?php _e( 'You can list a default price here for this variation.  You can list a regular price (18.99), differential price (+1.99 / -2) or even a percentage-based price (+50% / -25%).', 'wpsc' ); ?></span>
 	</div>
-	<style type="text/css">
-		.form-field #parent option{
-			display:none;
-		}
-		.form-field #parent option.level-0{
-			display:block;
-		}
-	</style>
+	<script type="text/javascript">
+		jQuery('.form-field #parent option:not(.level-0)').remove();
+		jQuery('#parent').mousedown(function(){
+			jQuery('.form-field #parent option:not(.level-0)').remove();
+		});
+	</script>
 	<?php
 	} else{
 	?>
