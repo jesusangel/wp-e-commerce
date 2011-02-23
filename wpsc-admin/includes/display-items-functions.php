@@ -926,10 +926,6 @@ if ( isset( $_REQUEST["save"] ) && isset( $_REQUEST["attachments"] ) && is_array
 	//wpsc_regenerate_thumbnails();
 }
 
-function wpsc_exclude_variation_children( $cashe, $taxonomies, $args ){
-
-}
-
 /*
  * This filter overrides string with context translations
  *
