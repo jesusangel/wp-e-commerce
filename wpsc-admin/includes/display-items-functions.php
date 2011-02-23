@@ -135,13 +135,13 @@ function wpsc_price_control_forms() {
 
     	<div class='wpsc_floatleft' style="width:85px;">
     		<label><?php _e( 'Price', 'wpsc' ); ?>:</label><br />
-			<input type='text' class='text' size='10' name='meta[_wpsc_price]' value='<?php echo ( isset($product_data['meta']['_wpsc_price']) ) ? number_format( $product_data['meta']['_wpsc_price'], 2, '.', '' ) : '0.00';  ?>' />
+			<input type='text' class='text' size='10' name='meta[_wpsc_price]' value='<?php echo ( isset($product_data['meta']['_wpsc_price']) ) ? number_format( (float)$product_data['meta']['_wpsc_price'], 2, '.', '' ) : '0.00';  ?>' />
 		</div>
 		<div class='wpsc_floatleft' style='display:<?php if ( ( $product_data['special'] == 1 ) ? 'block' : 'none'
 	); ?>; width:85px; margin-left:30px;'>
 			<label for='add_form_special'><?php _e( 'Sale Price', 'wpsc' ); ?>:</label>
 			<div id='add_special'>
-				<input type='text' size='10' value='<?php echo ( isset($product_data['meta']['_wpsc_special_price']) ) ? number_format( $product_data['meta']['_wpsc_special_price'], 2, '.', '' ) : '0.00' ; ?>' name='meta[_wpsc_special_price]' />
+				<input type='text' size='10' value='<?php echo ( isset($product_data['meta']['_wpsc_special_price']) ) ? number_format( (float)$product_data['meta']['_wpsc_special_price'], 2, '.', '' ) : '0.00' ; ?>' name='meta[_wpsc_special_price]' />
 			</div>
 		</div>
 		<br style="clear:both" />
@@ -631,7 +631,7 @@ function wpsc_product_shipping_forms() {
                              <?php _e( 'Local Shipping Fee', 'wpsc' ); ?>
 			  </td>
 			  <td>
-				<input type='text' size='10' name='meta[_wpsc_product_metadata][shipping][local]' value='<?php echo number_format( $product_meta['shipping']['local'], 2, '.', '' ); ?>' />
+				<input type='text' size='10' name='meta[_wpsc_product_metadata][shipping][local]' value='<?php echo number_format( (float)$product_meta['shipping']['local'], 2, '.', '' ); ?>' />
 			  </td>
 			</tr>
 
@@ -640,7 +640,7 @@ function wpsc_product_shipping_forms() {
                             <?php _e( 'International Shipping Fee', 'wpsc' ); ?>
 			  </td>
 			  <td>
-				<input type='text' size='10' name='meta[_wpsc_product_metadata][shipping][international]' value='<?php echo number_format( $product_meta['shipping']['international'], 2, '.', '' ); ?>' />
+				<input type='text' size='10' name='meta[_wpsc_product_metadata][shipping][international]' value='<?php echo number_format( (float)$product_meta['shipping']['international'], 2, '.', '' ); ?>' />
 			  </td>
 			</tr>
 			<tr>
@@ -968,7 +968,7 @@ function wpsc_filter_feature_image_text( $translation, $text, $domain ) {
 	}
 	if ( 'The name is how it appears on your site.' == $text && isset($_GET['taxonomy']) && 'wpsc-variation' == $_GET['taxonomy'] ){
 		$translations = &get_translations_for_domain( $domain );
-		return $translations->translate( 'The name is how it appears on your site. <br><div class="error"><strong>Please read this carefully before starting to work with variations:</strong><br />Variations in WP e-Commerce are divided into sets. For example set <strong>Color</strong> could have variations <strong>Red, Green,</strong> and <strong>Blue</strong>. To create a set simply enter <stron>Name</strong> and push Enter key on your keyboard or click <strong>Add New Variation/Set</strong> button in the bottom of this page. Now you can select the variation set that you\'ve just created from <strong>Variation set</strong> drop-down menu and add some variations to it.</div>', 'wpsc' );
+		return $translations->translate( 'The name is how it appears on your site. <br><div class="error"><strong>Please read this carefully before starting to work with variations:</strong><br />Variations in WP e-Commerce are divided into sets. For example set <strong>Color</strong> could have variations <strong>Red, Green,</strong> and <strong>Blue</strong>. To create a variation set simply enter the <strong>name</strong> and push Enter key on your keyboard or click <strong>Add New Variation/Set</strong> button in the bottom of this page. Then you will be able to select it from <strong>Variation set</strong> drop-down menu and add some variations to it. To add a new variation set just select <strong>None</strong> in <strong>Variation set</strong> drop-down menu.</div>', 'wpsc' );
 		//this will never happen, this is here only for gettex to pick up the translation
 		return __( 'The name is how it appears on your site. <br><div class="error"><strong>Please read this carefully before starting to work with variations:</strong><br />Variations in WP e-Commerce are divided into sets. For example set <strong>Color</strong> could have variations <strong>Red, Green,</strong> and <strong>Blue</strong>. To create a set simply enter <stron>Name</strong> and push Enter key on your keyboard or click <strong>Add New Variation/Set</strong> button in the bottom of this page. Now you can select the variation set that you\'ve just created from <strong>Variation set</strong> drop-down menu and add some variations to it.</div>', 'wpsc' );
 	} 
