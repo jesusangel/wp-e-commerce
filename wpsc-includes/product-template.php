@@ -133,7 +133,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 		$output .= "<a href=\"". $page_link . $additional_links . "\" title=\"" . __('First Page', 'wpsc') . "\">" . __('&laquo; First', 'wpsc') . "</a>";
 
 	// Should we show the PREVIOUS PAGE link?
-	if($current_page > 2) {
+	if($current_page > 1) {
 		$previous_page = $current_page - 1;	
 		$output .= " <a href=\"". $page_link .$separator. $previous_page . $additional_links . "\" title=\"" . __('Previous Page', 'wpsc') . "\">" . __('&lt; Previous', 'wpsc') . "</a>";
 	}
