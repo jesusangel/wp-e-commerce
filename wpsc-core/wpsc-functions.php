@@ -330,7 +330,7 @@ function wpsc_register_post_types() {
 		'hierarchical' => false,
 		'labels' => $labels,
 		'rewrite' => array(
-			'slug' => '/tagged',
+			'slug' => '/' . sanitize_title_with_dashes( _x( 'tagged', 'slug, part of url', 'wpsc' ) ),
 			'with_front' => false )
 	) );
 
