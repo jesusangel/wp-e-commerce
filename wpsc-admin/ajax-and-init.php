@@ -69,7 +69,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 }
 
 function wpsc_ajax_sales_quarterly() {
-	global $wpdb;
 	$lastdate = $_POST['add_start'];
 	$date = preg_split( '/-/', $lastdate );
 	if ( !isset( $date[0] ) )
@@ -133,8 +132,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
   Function and action for publishing or unpublishing single products
  */
 function wpsc_ajax_toggle_published() {
-	global $wpdb;
-
 	$product_id = absint( $_GET['product'] );
 	check_admin_referer( 'toggle_publish_' . $product_id );
 
@@ -154,8 +151,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
  * Purposely not duplicating stick post status (logically, products are most often duplicated because they share many attributes, where products are generally 'featured' uniquely.)
  */
 function wpsc_duplicate_product() {
-	global $wpdb;
-
 	// Get the original post
 	$id = absint( $_GET['product'] );
 	$post = wpsc_duplicate_this_dangit( $id );
@@ -181,7 +176,7 @@ function wpsc_duplicate_this_dangit( $id ) {
 }
 
 function wpsc_duplicate_product_process( $post ) {
-	global $wpdb, $current_user;
+	global $current_user;
 	wp_get_current_user();
 	$user_ID = $current_user->ID;
 
@@ -214,7 +209,6 @@ function wpsc_duplicate_product_process( $post ) {
 		);
 	// Insert the new template in the post table
 	$new_post_id = wp_insert_post($defaults);
-	//$new_post_id = $wpdb->insert_id;
 
 	// Copy the taxonomies
 	wpsc_duplicate_taxonomies( $post->ID, $new_post_id, $post->post_type );
@@ -232,15 +226,11 @@ function wpsc_duplicate_product_process( $post ) {
  * Copy the taxonomies of a post to another post
  */
 function wpsc_duplicate_taxonomies( $id, $new_id, $post_type ) {
-	global $wpdb;
-	if ( isset( $wpdb->terms ) ) {
-		// WordPress 2.3
-		$taxonomies = get_object_taxonomies( $post_type ); //array("category", "post_tag");
-		foreach ( $taxonomies as $taxonomy ) {
-			$post_terms = wp_get_object_terms( $id, $taxonomy );
-			for ( $i = 0; $i < count( $post_terms ); $i++ ) {
-				wp_set_object_terms( $new_id, $post_terms[$i]->slug, $taxonomy, true );
-			}
+	$taxonomies = get_object_taxonomies( $post_type ); //array("category", "post_tag");
+	foreach ( $taxonomies as $taxonomy ) {
+		$post_terms = wp_get_object_terms( $id, $taxonomy );
+		for ( $i = 0; $i < count( $post_terms ); $i++ ) {
+			wp_set_object_terms( $new_id, $post_terms[$i]->slug, $taxonomy, true );
 		}
 	}
 }
@@ -313,7 +303,7 @@ if ( isset( $_GET['wpsc_admin_action'] ) && ($_GET['wpsc_admin_action'] == 'dupl
 }
 
 function wpsc_purchase_log_csv() {
-	global $wpdb, $user_level, $wp_rewrite, $wpsc_purchlog_statuses, $wpsc_gateways;
+	global $wpdb, $wpsc_gateways;
 	get_currentuserinfo();
 	$count = 0;
 	if ( ($_GET['rss_key'] == 'key') && is_numeric( $_GET['start_timestamp'] ) && is_numeric( $_GET['end_timestamp'] ) && (current_user_can('edit_post')) ) {
@@ -384,8 +374,7 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 }
 
 function wpsc_admin_ajax() {
-	global $wpdb, $user_level, $wp_rewrite;
-	get_currentuserinfo();
+	global $wpdb;
 
 	if ( $_POST['action'] == 'product-page-order' ) {
 		$current_order = get_option( 'wpsc_product_page_order' );
@@ -478,12 +467,6 @@ function wpsc_admin_ajax() {
 			exit();
 		}
 	}
-
-	if ( isset( $_POST['language_setting'] ) && ($_GET['page'] = WPSC_DIR_NAME . '/wpsc-admin/display-options.page.php') ) {
-		if ( $user_level >= 7 ) {
-			update_option( 'language_setting', $_POST['language_setting'] );
-		}
-	}
 }
 
 function wpsc_admin_sale_rss() {
@@ -520,7 +503,7 @@ function wpsc_admin_sale_rss() {
 }
 
 function wpsc_swfupload_images() {
-	global $wpdb, $current_user, $user_ID;
+	global $wpdb, $current_user;
 	$file = $_FILES['async-upload'];
 	$product_id = absint( $_POST['product_id'] );
 	$nonce = $_POST['_wpnonce'];
@@ -817,7 +800,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
  */
 
 function wpsc_ajax_get_shipping_form() {
-	global $wpdb, $wpsc_shipping_modules;
 	$shippingname = $_REQUEST['shippingname'];
 	$_SESSION['previous_shipping_name'] = $shippingname;
 	$shipping_data = wpsc_get_shipping_form( $shippingname );
@@ -830,7 +812,6 @@ function wpsc_ajax_get_shipping_form() {
 }
 
 function wpsc_ajax_get_payment_form() {
-	global $wpdb, $nzshpcrt_gateways;
 	$paymentname = $_REQUEST['paymentname'];
 	$_SESSION['previous_payment_name'] = $paymentname;
 	$payment_data = wpsc_get_payment_form( $paymentname );
@@ -1076,7 +1057,6 @@ function wpsc_update_page_urls($auto = false) {
 		}
 
 		update_option( $option_key, $the_new_link );
-		$updated;
 	}
 	
 	if(!$auto){
@@ -1153,8 +1133,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 	add_action( 'admin_init', 'wpsc_change_region_tax' );
 
 function wpsc_product_files_existing() {
-	global $wpdb;
-
 	//List all product_files, with checkboxes
 
 	$product_id = absint( $_GET["product_id"] );
@@ -1206,7 +1184,7 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 	add_action( 'admin_init', 'wpsc_product_files_existing' );
 
 function prod_upload() {
-	global $wpdb, $product_id;
+	global $wpdb;
 	$product_id = absint( $_POST["product_id"] );
 
 	foreach ( $_POST["select_product_file"] as $selected_file ) {
@@ -1259,7 +1237,6 @@ if ( isset( $_GET['wpsc_admin_action'] ) && ($_GET['wpsc_admin_action'] == 'prod
 
 //change the gateway settings
 function wpsc_gateway_settings() {
-	global $wpdb;
 	//To update options
 	if ( isset( $_POST['wpsc_options'] ) ) {
 		foreach ( $_POST['wpsc_options'] as $key => $value ) {
@@ -1479,8 +1456,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 
 //for ajax call of settings page tabs
 function wpsc_settings_page_ajax() {
-	global $wpdb;
-
 	$html                = '';
 	$modified_page_title = $_POST['page_title'];
 	$page_title          = str_replace( "tab-", "", $modified_page_title );
@@ -1566,7 +1541,6 @@ if ( isset($_POST["edit_var_val"]) )
 add_action('wp_ajax_wpsc_update_variations', 'wpsc_update_variations', 50 );
 
 function wpsc_delete_variation_set() {
-	global $wpdb;
 	check_admin_referer( 'delete-variation' );
 
 	if ( is_numeric( $_GET['deleteid'] ) ) {
