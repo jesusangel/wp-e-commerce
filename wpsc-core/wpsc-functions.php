@@ -1161,7 +1161,4 @@ if ( is_ssl() ) {
 	add_filter( 'option_transact_url',      'wpsc_add_https_to_page_url_options' );
 	add_filter( 'option_user_account_url',  'wpsc_add_https_to_page_url_options' );
 }
-
-
-
 ?>
