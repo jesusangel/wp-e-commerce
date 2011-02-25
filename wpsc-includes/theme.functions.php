@@ -855,6 +855,7 @@ if (isset($product_image_size_list)) {
 			}
 		}
 	}
+	exit();
 }
 	if ( (isset($_GET['brand']) && is_numeric( $_GET['brand'] )) || (get_option( 'show_categorybrands' ) == 3) ) {
 		$brandstate = 'block';
