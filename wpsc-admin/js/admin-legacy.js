@@ -263,52 +263,6 @@ var getresults=function(results) {
 		}
 		);
 
-
-	//SWFUpload
-	filesizeLimit = 5120000;
-
-	if (typeof SWFUpload != "undefined") {
-		var swfu = new SWFUpload({
-			flash_url : WPSC_CORE_JS_URL + '/swfupload.swf',
-			upload_url: base_url + '/?action=wpsc_add_image',
-			button_placeholder_id : "spanButtonPlaceholder",
-			button_width: 103,
-			button_height: 24,
-			button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
-			button_cursor: SWFUpload.CURSOR.HAND,
-			post_params: {
-				"prodid" : jQuery('#prodid').val()
-				},
-			file_queue_limit : 1,
-			file_size_limit : filesizeLimit+'b',
-			file_types : "*.jpg;*.jpeg;*.png;*.gif;*.JPG;*.JPEG;*.PNG;*.GIF",
-			file_types_description : "Web-compatible Image Files",
-			file_upload_limit : filesizeLimit,
-			custom_settings : {
-				targetHolder : false,
-				progressBar : false,
-				sorting : false
-			},
-			debug: false,
-
-			file_queued_handler : imageFileQueued,
-			file_queue_error_handler : imageFileQueueError,
-			file_dialog_complete_handler : imageFileDialogComplete,
-			upload_start_handler : startImageUpload,
-			upload_progress_handler : imageUploadProgress,
-			upload_error_handler : imageUploadError,
-			upload_success_handler : imageUploadSuccess,
-			upload_complete_handler : imageUploadComplete,
-			queue_complete_handler : imageQueueComplete
-		});
-	}
-
-	jQuery("#add-product-image").click(function(){
-		swfu.selectFiles();
-	});
-	activate_resizable();
-	tb_init("a.thickbox");
-
 	jQuery("div.admin_product_name a.shorttag_toggle").toggle(
 		function () {
 			jQuery("div.admin_product_shorttags", jQuery(this).parent("div.admin_product_name")).css('display', 'block');

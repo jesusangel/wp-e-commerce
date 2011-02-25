@@ -502,47 +502,6 @@ function wpsc_admin_sale_rss() {
 	}
 }
 
-function wpsc_swfupload_images() {
-	global $wpdb, $current_user;
-	$file = $_FILES['async-upload'];
-	$product_id = absint( $_POST['product_id'] );
-	$nonce = $_POST['_wpnonce'];
-	$output = '';
-	// Flash often fails to send cookies with the POST or upload, so we need to pass it in GET or POST instead, code is from wp-admin/async-upload.php
-	if ( is_ssl() && empty( $_COOKIE[SECURE_AUTH_COOKIE] ) && !empty( $_REQUEST['auth_cookie'] ) ) {
-		$_COOKIE[SECURE_AUTH_COOKIE] = $_REQUEST['auth_cookie'];
-	} else if ( empty( $_COOKIE[AUTH_COOKIE] ) && !empty( $_REQUEST['auth_cookie'] ) ) {
-		$_COOKIE[AUTH_COOKIE] = $_REQUEST['auth_cookie'];
-	}
-	unset( $current_user );
-
-	if ( !current_user_can( 'upload_files' ) ) {
-		exit( "status=-1;\n" );
-	}
-
-	if ( !wp_verify_nonce( $nonce, 'product-swfupload' ) ) {
-		exit( "status=-1;\n" );
-	}
-
-
-
-	$id = media_handle_upload( 'async-upload', $product_id );
-
-	if ( !is_wp_error( $id ) ) {
-		$src = wp_get_attachment_image_src( $id );
-		$output .= "upload_status=1;\n";
-		$output .= "image_src='" . $src[0] . "';\n";
-		$output .= "image_id='$id';\n";
-		$output .= "product_id='$product_id';\n";
-		$output .= "replace_existing=0;";
-	} else {
-		$output .= "status=0;\n";
-	}
-
-
-	exit( $output );
-}
-
 function wpsc_display_invoice() {
 
 	global $body_id;
@@ -1622,9 +1581,6 @@ function wpsc_delete_coupon(){
 	wp_redirect( $sendback );
 	exit();		
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc_add_image' == $_REQUEST['wpsc_admin_action'] ) )
-	add_action( 'admin_init', 'wpsc_swfupload_images' );
 
 if ( isset( $_GET['action'] ) && ( 'purchase_log' == $_GET['action'] ) )
 	add_action( 'admin_init', 'wpsc_admin_sale_rss' );
