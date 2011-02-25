@@ -332,7 +332,7 @@ function wpsc_register_post_types() {
 		'rewrite' => array(
 			'slug' => '/' . sanitize_title_with_dashes( _x( 'tagged', 'slug, part of url', 'wpsc' ) ),
 			'with_front' => false )
-	) ); 
+	) );
 
 	// Product categories, is heirarchical and can use permalinks
 	$labels = array(
