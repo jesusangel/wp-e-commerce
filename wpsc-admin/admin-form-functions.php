@@ -218,7 +218,7 @@ function wpsc_right_now() {
 								<?php echo $sales_count; ?>
 							</td>
 							<td class='last'>
-								<?php echo _n('Sale', 'Sales', $sales_count, 'wpsc'); ?>
+								<?php echo _nx('Sale', 'Sales', $sales_count, 'dashboard widget', 'wpsc'); ?>
 							</td>
 						</tr>
 						<tr>
@@ -226,7 +226,7 @@ function wpsc_right_now() {
 								<?php echo $group_count; ?>
 							</td>
 							<td class='t'>
-								<?php echo _n('Category', 'Categories', $group_count, 'wpsc'); ?>
+								<?php echo _nx('Category', 'Categories', $group_count, 'dashboard widget', 'wpsc'); ?>
 							</td>
 							<td class='b'>
 								<?php echo $pending_sales; ?>
@@ -240,7 +240,7 @@ function wpsc_right_now() {
 								<?php echo $variation_count; ?>
 							</td>
 							<td class='t'>
-								<?php echo _n('Variation', 'Variations', $variation_count, 'wpsc'); ?>
+								<?php echo _nx('Variation', 'Variations', $variation_count, 'dashboard widget', 'wpsc'); ?>
 							</td>
 							<td class='b'>
 								<?php echo $accept_sales; ?>
