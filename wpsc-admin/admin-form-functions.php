@@ -195,88 +195,55 @@ function wpsc_right_now() {
 	$pending_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
 	$accept_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('2' ,'3', '4')");
 	$theme = get_option('wpsc_selected_theme');
-	if (function_exists('add_object_page')) { 
-	ob_start();
 	?>
-		<div id='dashboard_right_now' class='postbox'>
-			<h3 class='hndle'>
-				<span><?php _e('Current Month', 'wpsc'); ?></span>
-				<br class='clear'/>
-			</h3>
-			<div class='inside'>
-				<div class='table'>
-					<p class='sub'><?php _e('At a Glance', 'wpsc'); ?></p>
-					<table style='border-top:1px solid #ececec;'>
-						<tr class='first'>
-							<td class='first b'>
-								<?php echo $product_count; ?>
-							</td>
-							<td class='t'>
-								<?php echo _nx( 'Product', 'Products', $product_count, 'dashboard widget', 'wpsc' ); ?>
-							</td>
-							<td class='b'>
-								<?php echo $sales_count; ?>
-							</td>
-							<td class='last'>
-								<?php echo _nx('Sale', 'Sales', $sales_count, 'dashboard widget', 'wpsc'); ?>
-							</td>
-						</tr>
-						<tr>
-							<td class='first b'>
-								<?php echo $group_count; ?>
-							</td>
-							<td class='t'>
-								<?php echo _nx('Category', 'Categories', $group_count, 'dashboard widget', 'wpsc'); ?>
-							</td>
-							<td class='b'>
-								<?php echo $pending_sales; ?>
-							</td>
-							<td class='last t waiting'>
-								<?php echo _n('Pending sale', 'Pending sales', $pending_sales, 'wpsc'); ?>
-							</td>
-						</tr>
-						<tr>
-							<td class='first b'>
-								<?php echo $variation_count; ?>
-							</td>
-							<td class='t'>
-								<?php echo _nx('Variation', 'Variations', $variation_count, 'dashboard widget', 'wpsc'); ?>
-							</td>
-							<td class='b'>
-								<?php echo $accept_sales; ?>
-							</td>
-							<td class='last t approved'>
-								<?php echo _n('Closed sale', 'Closed sales', $accept_sales, 'wpsc'); ?>
-							</td>
-						</tr>
-					</table>
-				</div>
-			</div>
-		</div>
-		<?php
-		$output = ob_get_clean();
-	} else {
-		ob_start();
-		?>	
-		<div id='rightnow'>
-			<h3 class='reallynow'>
-				<span><?php _e('Right Now', 'wpsc'); ?></span>
-			</h3>
-			<p class='youhave'>
-				<?php printf(_n('You have %s product,', 'You have %s products,', $product_count, 'wpsc'), $product_count); ?>
-				<?php printf(_n(' contained within %s category.', ' contained within %s categories.', $group_count, 'wpsc' ), $group_count); ?>
-				<?php printf(_n('This month you made %1$s sale and generated a total of %2$s and your total sales ever is %3$s.', 'This month you made %1$s sales and generated a total of %2$s and your total sales ever is %3$s.', $sales_count, 'wpsc'), $sales_count, $monthtotal, $overaltotal ); ?> 
-				<?php printf(_n('You have %s sale awaiting approval.', 'You have %s sales awaiting approval.', $pending_sales, 'wpsc'), $pending_sales); ?>
-			</p>
-			<p class='youare'>
-				<?php printf(__('You are using the %1$s style. This is WP e-Commerce %2$s.', 'wpsc'), $theme, WPSC_PRESENTABLE_VERSION ); ?>
-			</p>
-		</div>
-		<br />
-		<?php
-		$output = ob_get_clean();
-	}
-	return $output;
+	<div class='table'>
+		<p class='sub'><?php _e('At a Glance', 'wpsc'); ?></p>
+		<table style='border-top:1px solid #ececec;'>
+			<tr class='first'>
+				<td class='first b'>
+					<?php echo $product_count; ?>
+				</td>
+				<td class='t'>
+					<?php echo _nx( 'Product', 'Products', $product_count, 'dashboard widget', 'wpsc' ); ?>
+				</td>
+				<td class='b'>
+					<?php echo $sales_count; ?>
+				</td>
+				<td class='last'>
+					<?php echo _nx('Sale', 'Sales', $sales_count, 'dashboard widget', 'wpsc'); ?>
+				</td>
+			</tr>
+			<tr>
+				<td class='first b'>
+					<?php echo $group_count; ?>
+				</td>
+				<td class='t'>
+					<?php echo _nx('Category', 'Categories', $group_count, 'dashboard widget', 'wpsc'); ?>
+				</td>
+				<td class='b'>
+					<?php echo $pending_sales; ?>
+				</td>
+				<td class='last t waiting'>
+					<?php echo _n('Pending sale', 'Pending sales', $pending_sales, 'wpsc'); ?>
+				</td>
+			</tr>
+			<tr>
+				<td class='first b'>
+					<?php echo $variation_count; ?>
+				</td>
+				<td class='t'>
+					<?php echo _nx('Variation', 'Variations', $variation_count, 'dashboard widget', 'wpsc'); ?>
+				</td>
+				<td class='b'>
+					<?php echo $accept_sales; ?>
+				</td>
+				<td class='last t approved'>
+					<?php echo _n('Closed sale', 'Closed sales', $accept_sales, 'wpsc'); ?>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<?php
 }
 
 

@@ -92,11 +92,8 @@ function wpsc_display_sales_logs() {
             <div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>
 
             <?php
-               if(function_exists('wpsc_right_now')) {
-                  echo wpsc_right_now();
-               }
-
-                  ?>
+				do_meta_boxes('wpsc-sales-logs', 'top', false);
+			?>
                </div><br />
                <div id='wpsc_purchlog_searchbox'>
                   <?php wpsc_purchaselogs_searchbox(); ?>

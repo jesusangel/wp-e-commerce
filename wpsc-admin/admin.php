@@ -887,10 +887,15 @@ function wpsc_ajax_ie_save() {
 	die();
 }
 
+function wpsc_add_meta_boxes(){
+	add_meta_box( 'dashboard_right_now', __('Current Month', 'wpsc'), 'wpsc_right_now', 'wpsc-sales-logs', 'top');
+}
+
 add_action( 'permalink_structure_changed' , 'wpsc_update_permalinks' );
 add_action( 'get_sample_permalink_html' , 'wpsc_update_permalinks' );
 add_action( 'wp_ajax_category_sort_order', 'wpsc_ajax_set_category_order' );
 add_action( 'wp_ajax_wpsc_ie_save', 'wpsc_ajax_ie_save' );
+add_action('add_meta_boxes', 'wpsc_add_meta_boxes');
 
 
 ?>
