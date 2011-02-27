@@ -324,6 +324,19 @@ function wpsc_admin_include_css_and_js_refac( $pagehook ) {
 		$siteurl = str_replace( "http://", "https://", $siteurl );
 
 	wp_admin_css( 'dashboard' );
+	
+	if($current_screen->id == 'dashboard_page_wpsc-sales-logs'){
+		// jQuery
+		wp_enqueue_script( 'jquery' );
+		wp_enqueue_script( 'jquery-ui-draggable' );
+		wp_enqueue_script( 'jquery-ui-droppable' );
+		wp_enqueue_script( 'jquery-ui-sortable' );
+		
+		// Metaboxes
+		wp_enqueue_script( 'common' );
+		wp_enqueue_script( 'wp-lists' );
+		wp_enqueue_script( 'postbox' );
+	}
 
 	$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
 	$pages = array( 'index.php', 'options-general.php', 'edit.php', 'post.php', 'post-new.php' );
@@ -888,12 +901,13 @@ function wpsc_ajax_ie_save() {
 }
 
 function wpsc_add_meta_boxes(){
-	add_meta_box( 'dashboard_right_now', __('Current Month', 'wpsc'), 'wpsc_right_now', 'wpsc-sales-logs', 'top' );
+	global $wp_current_screen_options;
+	add_meta_box( 'dashboard_right_now', __('Current Month', 'wpsc'), 'wpsc_right_now', 'dashboard_page_wpsc-sales-logs', 'top' );
 }
 
 add_action( 'permalink_structure_changed' , 'wpsc_update_permalinks' );
 add_action( 'get_sample_permalink_html' , 'wpsc_update_permalinks' );
 add_action( 'wp_ajax_category_sort_order', 'wpsc_ajax_set_category_order' );
 add_action( 'wp_ajax_wpsc_ie_save', 'wpsc_ajax_ie_save' );
-add_action('add_meta_boxes', 'wpsc_add_meta_boxes');
+add_action('in_admin_header', 'wpsc_add_meta_boxes');
 ?>

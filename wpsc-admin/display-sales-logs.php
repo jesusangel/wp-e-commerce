@@ -92,8 +92,8 @@ function wpsc_display_sales_logs() {
             <div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>
 
             <?php
-				do_action('add_meta_boxes');
-				do_meta_boxes('wpsc-sales-logs', 'top', true);
+				wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
+				do_meta_boxes('dashboard_page_wpsc-sales-logs', 'top', true);
 			?>
                </div><br />
                <div id='wpsc_purchlog_searchbox'>
@@ -102,6 +102,9 @@ function wpsc_display_sales_logs() {
                   <?php wpsc_purchaselogs_displaylist(); ?>
 
          </div>
+         <script type="text/javascript">
+         	jQuery(document).ready(function(){postboxes.add_postbox_toggles(pagenow);});
+         </script>
       </div>
       <?php }else{ //NOT IN GENERIC PURCHASE LOG PAGE, IN DETAILS PAGE PER PURCHASE LOG
 
