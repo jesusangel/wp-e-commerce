@@ -92,7 +92,8 @@ function wpsc_display_sales_logs() {
             <div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>
 
             <?php
-				do_meta_boxes('wpsc-sales-logs', 'top', false);
+				do_action('add_meta_boxes');
+				do_meta_boxes('wpsc-sales-logs', 'top', true);
 			?>
                </div><br />
                <div id='wpsc_purchlog_searchbox'>
