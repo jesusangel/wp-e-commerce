@@ -654,10 +654,6 @@ if ( isset( $_REQUEST['wpsc_action'] ) && ($_REQUEST['wpsc_action'] == 'submit_c
 	add_action( 'init', 'wpsc_submit_checkout' );
 }
 
-if ( isset( $_REQUEST['wpsc_action'] ) && ($_REQUEST['wpsc_action'] == 'gateway_notification') ) {
-	add_action( 'init', 'wpsc_gateway_notification' );
-}
-
 function wpsc_product_rss() {
 	global $wp_query,$wpsc_query, $wpdb;
 	list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
