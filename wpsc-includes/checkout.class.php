@@ -853,7 +853,7 @@ class wpsc_checkout {
 						break;
 				}
 				if ( $bad_input === true ) {
-					$_SESSION['wpsc_checkout_error_messages'][$form_data->id] = sprintf(__( 'Please enter a valid %s.', 'wpsc' ), strtolower( $form_data->name ));
+					$_SESSION['wpsc_checkout_error_messages'][$form_data->id] = sprintf(__( 'Please enter a valid <span class="wpsc_error_msg_field_name">%s</span>.', 'wpsc' ), esc_attr($form_data->name) );
 					$_SESSION['wpsc_checkout_saved_values'][$form_data->id] = '';
 				}
 			}
