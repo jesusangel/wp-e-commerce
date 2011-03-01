@@ -618,7 +618,7 @@ function wpsc_save_category_set($category_id, $tt_id) {
 			$uses_additional_forms = false;
 		}	
 		
-	  	if(($_POST['countrylist2'] != null ) && ($category_id > 0)){
+	  	if(isset( $_POST['countrylist2'] ) && !empty( $_POST['countrylist2'] ) && ($category_id > 0)){
 	    	$AllSelected = false;
 			$countryList = $wpdb->get_col("SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`");
 	    			
