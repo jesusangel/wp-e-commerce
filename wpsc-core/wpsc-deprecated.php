@@ -362,5 +362,16 @@ function display_ecomm_admin_menu() {
 	return false;
 }
 
+// displays error messages if the category setup is odd in some way
+// needs to be in a function because there are at least three places where this code must be used.
+function wpsc_odd_category_setup() {
+	_deprecated_function( __FUNCTION__, '3.8');
+	return false;
+}
+
+function wpsc_product_image_html( $image_name, $product_id ) {
+	_deprecated_function( __FUNCTION__, '3.8');
+	return false;
+}
 
 ?>

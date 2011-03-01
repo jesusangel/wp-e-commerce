@@ -126,7 +126,6 @@ function wpsc_loading_animation_url() {
 }
 
 function fancy_notifications() {
-	global $wpdb;
 	$output = "";
 	if ( get_option( 'fancy_notifications' ) == 1 ) {
 		$output = "";
@@ -147,7 +146,6 @@ function wpsc_fancy_notifications(){
 add_action( 'wpsc_theme_footer', 'wpsc_fancy_notifications' );
 
 function fancy_notification_content( $cart_messages ) {
-	global $wpdb;
 	$siteurl = get_option( 'siteurl' );
 	foreach ( (array)$cart_messages as $cart_message ) {
 		$output .= "<span>" . $cart_message . "</span><br />";
@@ -163,7 +161,6 @@ function fancy_notification_content( $cart_messages ) {
  */
 
 function wpsc_product_url( $product_id, $category_id = null, $escape = true ) {
-	global $wpdb, $wp_rewrite, $wp_query;
 	$post = get_post($product_id);
 	if ( isset($post->post_parent) && $post->post_parent > 0) {
 		return get_permalink($post->post_parent);
@@ -173,7 +170,6 @@ function wpsc_product_url( $product_id, $category_id = null, $escape = true ) {
 }
 
 function external_link( $product_id ) {
-	global $wpdb;
 	$link = get_product_meta( $product_id, 'external_link', true );
 	if ( !stristr( $link, 'http://' ) ) {
 		$link = 'http://' . $link;
@@ -181,56 +177,6 @@ function external_link( $product_id ) {
 	$target = wpsc_product_external_link_target( $product_id );
 	$output .= "<input class='wpsc_buy_button' type='button' value='" . wpsc_product_external_link_text( $product_id, __( 'Buy Now', 'wpsc' ) ) . "' onclick='return gotoexternallink(\"$link\", \"$target\")'>";
 	return $output;
-}
-
-// displays error messages if the category setup is odd in some way
-// needs to be in a function because there are at least three places where this code must be used.
-function wpsc_odd_category_setup() {
-	get_currentuserinfo();
-	global $userdata;
-	$output = '';
-	if ( ($userdata->wp_capabilities['administrator'] == 1) || ($userdata->user_level >= 9) ) {
-		if ( get_option( 'wpsc_default_category' ) == 1 ) {
-			$output = "<p>" . __( 'You are using the example product group as your default group and it has no products in it, you should set the default group to something else, you can do so from your Shop Settings page.', 'wpsc' ) . "</p>";
-		} else {
-			$output = "<p>" . __( 'This group is set as your default product group, you should either add some items to it or switch your default product group to one that does contain items.', 'wpsc' ) . "</p>";
-		}
-	}
-	return $output;
-}
-
-function wpsc_product_image_html( $image_name, $product_id ) {
-	global $wpdb, $wp_query;
-	if ( is_numeric( $wp_query->query_vars['product_category'] ) ) {
-		$category_id = (int)$wp_query->query_vars['product_category'];
-	} else if ( is_numeric( $_GET['category'] ) ) {
-		$category_id = (int)$_GET['category'];
-	} else {
-		$category_id = (int)get_option( 'wpsc_default_category' );
-	}
-
-	$product['height'] = get_product_meta( $id, 'thumbnail_height' );
-	$product['width'] = get_product_meta( $id, 'thumbnail_width' );
-
-
-	$use_thumbnail_image = 'false';
-	if ( ($product['height'] > $category['height']) || ($product['width'] > $category['width']) ) {
-		$use_thumbnail_image = 'true';
-	}
-
-	if ( $category_id > 0 ) {
-		$category = $wpdb->get_row( "SELECT `image_height` AS `height`, `image_width` AS `width` FROM `" . WPSC_TABLE_PRODUCT_CATEGORIES . "` WHERE `id` IN ('{$category_id}') LIMIT 1", ARRAY_A );
-	}
-	// if there is a height, width, and imagePNG function
-	if ( ($category['height'] != null) && ($category['width'] != null) && (function_exists( 'ImagePNG' )) ) {
-		$image_path = "index.php?productid=" . $product_id . "&amp;thumbnail=" . $use_thumbnail_image . "&amp;width=" . $category['width'] . "&amp;height=" . $category['height'] . "";
-	} else {
-		$image_path = WPSC_THUMBNAIL_URL . $image_name;
-		if ( is_ssl ( ) ) {
-			$image_path = str_replace( "http://", "https://", $image_path );
-		}
-	}
-	return $image_path;
 }
 
 /* 19-02-09

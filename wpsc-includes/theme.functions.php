@@ -1259,7 +1259,6 @@ function add_to_cart_shortcode( $content = '' ) {
 	return $content;
 }
 function wpsc_enable_page_filters( $excerpt = '' ) {
-	global $wp_query;
 	add_filter( 'the_content', 'add_to_cart_shortcode', 12 ); //Used for add_to_cart_button shortcode
 	add_filter( 'the_content', 'wpsc_products_page', 1 );
 	add_filter( 'the_content', 'wpsc_single_template',12 );
@@ -1383,7 +1382,7 @@ function is_products_page(){
  * @return void
  */
 function wpsc_display_featured_products_page() {
-	global $post, $wpsc_query,$wp_query;
+	global $wp_query;
 	$sticky_array = get_option( 'sticky_products' );
 	if ( (is_front_page() || is_home() || is_products_page() ) && !empty( $sticky_array ) && $wp_query->post_count > 1) {
 		$query = get_posts( array(
