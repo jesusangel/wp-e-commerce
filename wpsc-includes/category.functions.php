@@ -137,16 +137,17 @@ function wpsc_print_category_classes($category_to_print = false, $echo = true) {
 		$curr_cat_parents = wpsc_get_term_parents($curr_cat->term_id, 'wpsc_product_category');
 		
 		//if current category is the same as the one we are printing - then add wpsc-current-cat class
-		if( $category_to_print[term_id] == $curr_cat->term_id )
+		if( $category_to_print['term_id'] == $curr_cat->term_id )
 			$result = ' wpsc-current-cat ';
 		//else check if the category that we are printing is parent of current category
 		elseif ( in_array($category_to_print[term_id], $curr_cat_parents) )
 			$result = ' wpsc-cat-ancestor ';
 	}
-	if($echo)
-		echo $result;
-	else
-		return $result;
+	if( isset($result) )
+		if($echo)
+			echo $result;
+		else
+			return $result;
 }
 
 
