@@ -374,7 +374,7 @@ jQuery(document).ready(function(){
 			post_values = "category_id="+category_id+"&"+product_order;
 			jQuery.post( 'index.php?wpsc_admin_action=save_product_order', post_values, function(returned_data) { });
 		},
-		items: 'tr',
+		items: 'tbody tr',
 		axis: 'y',
 		containment: 'table.widefat tbody',
 		placeholder: 'product-placeholder',
