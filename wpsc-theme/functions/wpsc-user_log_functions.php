@@ -498,15 +498,10 @@ function wpsc_user_details() {
 					$alternate = "class='alt'";
 
 				$variation_list = '';
-				/* $purch_data is not set..
-				if ( $purch_data[0]['shipping_country'] != '' ) {
-					$billing_country = $purch_data[0]['billing_country'];
-					$shipping_country = $purch_data[0]['shipping_country'];
-				} else { */
+				
 				$billing_country = !empty($country_data[0]['value']) ? $country_data[0]['value'] : '';
 				$shipping_country = !empty($country_data[0]['value']) ? $country_data[0]['value'] : '';
-				/*}*/
-
+				
 				$shipping = $cart_row['pnp'];
 				$total_shipping += $shipping;
 				echo "<tr $alternate>";
@@ -553,17 +548,22 @@ function wpsc_user_details() {
 			echo " </td>";
 
 			echo " <td>";
+			echo " <td>";
+			echo " </td>";
 			echo " </td>";
 
 			echo " <td>";
 			echo "<strong>" . __( 'Total Shipping', 'wpsc' ) . ":</strong><br />";
+			echo "<strong>" . __( 'Total Tax', 'wpsc' ) . ":</strong><br />";
 			echo "<strong>" . __( 'Final Total', 'wpsc' ) . ":</strong>";
 			echo " </td>";
 
 			echo " <td>";
 			$total_shipping += $purchase['base_shipping'];
 			$endtotal += $total_shipping;
+			$endtotal += $purchase['wpec_taxes_total'];
 			echo wpsc_currency_display( $total_shipping, array('display_as_html' => false)  ) . "<br />";
+			echo wpsc_currency_display( $purchase['wpec_taxes_total'] , array('display_as_html' => false) );
 			echo wpsc_currency_display( $endtotal , array('display_as_html' => false) );
 			echo " </td>";
 
