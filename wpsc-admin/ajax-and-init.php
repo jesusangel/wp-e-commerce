@@ -911,7 +911,7 @@ function wpsc_submit_options( $selected='' ) {
 
 		update_option( 'custom_shipping_options', $_POST['custom_shipping_options'] );
 
-
+		$shipadd = 0;
 		foreach ( $GLOBALS['wpsc_shipping_modules'] as $shipping ) {
 			foreach ( (array)$_POST['custom_shipping_options'] as $shippingoption ) {
 				if ( $shipping->internal_name == $shippingoption ) {

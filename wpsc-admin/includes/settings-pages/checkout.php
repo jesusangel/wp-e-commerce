@@ -115,7 +115,7 @@ function wpsc_options_checkout(){
 					<label for='wpsc_form_set'><?php _e('Select a Form Set' , 'wpsc'); ?>:</label>
 					<select id='wpsc_form_set' name='wpsc_form_set'>
 					<?php
-						$checkout_sets = esc_attr( get_option('wpsc_checkout_form_sets') );
+						$checkout_sets = get_option('wpsc_checkout_form_sets');
 						foreach((array)$checkout_sets as $key => $value) {
 							$selected_state = "";
 							if(isset($_GET['checkout-set']) && $_GET['checkout-set'] == $key) {

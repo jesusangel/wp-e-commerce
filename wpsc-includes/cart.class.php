@@ -1693,7 +1693,7 @@ class wpsc_cart_item {
          $this->is_downloadable = false;
       }
 
-      if (isset($this->cart->selected_shipping_method) && is_callable( array( $wpsc_shipping_modules[$this->cart->selected_shipping_method], "get_item_shipping" ) ) )
+      if (isset($this->cart->selected_shipping_method) && isset( $wpsc_shipping_modules[$this->cart->selected_shipping_method] ) && is_callable( array( $wpsc_shipping_modules[$this->cart->selected_shipping_method], "get_item_shipping" ) ) )
          $this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
 
      // update the claimed stock here
@@ -1712,17 +1712,18 @@ class wpsc_cart_item {
    */
 
    function calculate_shipping($method = null) {
-    global $wpdb, $wpsc_cart, $wpsc_shipping_modules;
-    if($method === null) {
-      $method = $this->cart->selected_shipping_method;
-    }
-      if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
+      global $wpdb, $wpsc_cart, $wpsc_shipping_modules;
+      $shipping = '';
+      if($method === null)
+        $method = $this->cart->selected_shipping_method;
+      
+      if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  ))
          $shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this);
-    }
-    if($method == $this->cart->selected_shipping_method) {
+      
+      if($method == $this->cart->selected_shipping_method && !empty( $shipping ) )
          $this->shipping = $shipping;
-    }
-     return $shipping;
+      
+      return $shipping;
    }
 
    /**
