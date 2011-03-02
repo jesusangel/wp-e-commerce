@@ -45,7 +45,7 @@ class weightrate {
 	 * @return unknown
 	 */
 	function getForm() {
-
+		$output = "";
 		$output.="<tr><th>".__('Total weight <br />(<abbr alt="You must enter the weight here in pounds, regardless of what you used on your products" title="You must enter the weight here in pounds, regardless of what you used on your products">in pounds</abbr>)', 'wpsc')."</th><th>".__('Shipping Price', 'wpsc')."</th></tr>";
 
 		$layers = get_option("weight_rate_layers");
@@ -55,7 +55,7 @@ class weightrate {
 			foreach ($layers as $key => $shipping) {
 
 				$output.="<tr class='rate_row'><td >";
-				$output .="<i style='color: grey;'>".__('If weight is ', 'wpsc')."</i><input type='text' value='$key' name='weight_layer[]'size='4'><i style='color: grey;'>".__(' and above', 'wpsc')."</i></td><td>".wpsc_get_currency_symbol()."<input type='text' value='{$shipping}' name='weight_shipping[]' size='4'>&nbsp;&nbsp;<a href='#' class='delete_button' >".__('Delete', 'wpsc')."</a></td></tr>";
+				$output .="<i style='color: grey;'>".__('If weight is ', 'wpsc')."</i><input type='text' value='$key' name='weight_layer[]'size='4'><i style='color: grey;'>".__(' and above', 'wpsc')."</i></td><td>".wpsc_get_currency_symbol()."<input type='text' value='".esc_attr($shipping)."' name='weight_shipping[]' size='4'>&nbsp;&nbsp;<a href='#' class='delete_button' >".__('Delete', 'wpsc')."</a></td></tr>";
 
 			}
 
@@ -80,14 +80,15 @@ class weightrate {
 		if (!isset($_POST['weight_shipping'])) {
 			$_POST['weight_shipping'] = '';
 		}
+		$new_layer = '';
 		$layers = (array)$_POST['weight_layer'];
 		$shippings = (array)$_POST['weight_shipping'];
 
-		if ($shippings != '') {
+		if ( !empty($shippings) ) {
 
 			foreach ($shippings as $key => $price) {
 
-				if ($price == '') {
+				if ( empty($price) ) {
 
 					unset($shippings[$key]);
 					unset($layers[$key]);
@@ -102,11 +103,8 @@ class weightrate {
 
 		}
 
-		if ($_POST['checkpage'] == 'weight') {
-
+		if ($_POST['checkpage'] == 'weight' && !empty($new_layer))
 			update_option('weight_rate_layers', $new_layer);
-
-		}
 		return true;
 	}
 

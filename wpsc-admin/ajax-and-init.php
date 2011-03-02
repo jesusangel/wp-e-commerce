@@ -1639,7 +1639,7 @@ function variation_price_field( $variation ) {
 	}
 
 	if ( isset( $term_id ) && is_array( $term_prices ) && array_key_exists( $term_id, $term_prices ) )
-		$price = $term_prices[$term_id]["price"];
+		$price = esc_attr( $term_prices[$term_id]["price"] );
 	else
 		$price = '';
 

@@ -52,26 +52,26 @@ class flatrate {
 
 		switch (get_option('base_country')) {
 		case 'NZ':
-			$output .= "<tr class='rate_row'><td>South Island</td><td>$<input type='text' size='4' name='shipping[southisland]' value='{$shipping['southisland']}'></td></tr>";
-			$output .= "<tr class='rate_row'><td>North Island</td><td>$<input type='text' size='4' name='shipping[northisland]'	value='{$shipping['northisland']}'></td></tr>";
+			$output .= "<tr class='rate_row'><td>South Island</td><td>$<input type='text' size='4' name='shipping[southisland]' value='".esc_attr($shipping['southisland'])."'></td></tr>";
+			$output .= "<tr class='rate_row'><td>North Island</td><td>$<input type='text' size='4' name='shipping[northisland]'	value='".esc_attr($shipping['northisland'])."'></td></tr>";
 			break;
 
 		case 'US':
-			$output .= "<tr class='rate_row'><td>Continental 48 States</td><td>$<input type='text' size='4' name='shipping[continental]' value='{$shipping['continental']}'></td></tr>";
-			$output .= "<tr class='rate_row'><td>All 50 States</td><td>$<input type='text' size='4' name='shipping[all]'	value='{$shipping['all']}'></td></tr>";
+			$output .= "<tr class='rate_row'><td>Continental 48 States</td><td>$<input type='text' size='4' name='shipping[continental]' value='".esc_attr($shipping['continental'])."'></td></tr>";
+			$output .= "<tr class='rate_row'><td>All 50 States</td><td>$<input type='text' size='4' name='shipping[all]'	value='".esc_attr($shipping['all'])."'></td></tr>";
 			break;
 
 		default:
-			$output .= "<td>$<input type='text' name='shipping[local]' size='4' value='{$shipping['local']}'></td></tr>";
+			$output .= "<td>$<input type='text' name='shipping[local]' size='4' value='".esc_attr($shipping['local'])."'></td></tr>";
 			break;
 		}
 
 		$output.= "<tr ><td colspan='2'><strong>Base International</strong></td></tr>";
-		$output .= "<tr class='rate_row'><td>North America</td><td>$<input size='4' type='text' name='shipping[northamerica]'	value='{$shipping['northamerica']}'></td></tr>";
-		$output .= "<tr class='rate_row'><td>South America</td><td>$<input size='4' type='text' name='shipping[southamerica]'	value='{$shipping['southamerica']}'></td></tr>";
-		$output .= "<tr class='rate_row'><td>Asia and Pacific</td><td>$<input size='4' type='text' name='shipping[asiapacific]'	value='{$shipping['asiapacific']}'></td></tr>";
-		$output .= "<tr class='rate_row'><td>Europe</td><td>$<input type='text' size='4' name='shipping[europe]'	value='{$shipping['europe']}'></td></tr>";
-		$output .= "<tr class='rate_row'><td>Africa</td><td>$<input type='text' size='4' name='shipping[africa]'	value='{$shipping['africa']}'></td></tr>";
+		$output .= "<tr class='rate_row'><td>North America</td><td>$<input size='4' type='text' name='shipping[northamerica]'	value='".esc_attr($shipping['northamerica'])."'></td></tr>";
+		$output .= "<tr class='rate_row'><td>South America</td><td>$<input size='4' type='text' name='shipping[southamerica]'	value='".esc_attr($shipping['southamerica'])."'></td></tr>";
+		$output .= "<tr class='rate_row'><td>Asia and Pacific</td><td>$<input size='4' type='text' name='shipping[asiapacific]'	value='".esc_attr($shipping['asiapacific'])."'></td></tr>";
+		$output .= "<tr class='rate_row'><td>Europe</td><td>$<input type='text' size='4' name='shipping[europe]'	value='".esc_attr($shipping['europe'])."'></td></tr>";
+		$output .= "<tr class='rate_row'><td>Africa</td><td>$<input type='text' size='4' name='shipping[africa]'	value='".esc_attr($shipping['africa'])."'></td></tr>";
 		return $output;
 	}
 
@@ -140,25 +140,25 @@ class flatrate {
 			switch ($country) {
 			case 'NZ':
 				if (strlen($flatrates['northisland']) > 0) {
-					$shipping_quotes["North Island"] = $flatrates['northisland'];
+					$shipping_quotes["North Island"] = esc_attr($flatrates['northisland']);
 				}
 				if (strlen($flatrates['southisland']) > 0) {
-					$shipping_quotes["South Island"] = $flatrates['southisland'];
+					$shipping_quotes["South Island"] = esc_attr($flatrates['southisland']);
 				}
 				break;
 
 			case 'US':
 				if (strlen($flatrates['continental']) > 0) {
-					$shipping_quotes["Continental 48 States"] = $flatrates['continental'];
+					$shipping_quotes["Continental 48 States"] = esc_attr($flatrates['continental']);
 				}
 				if (strlen($flatrates['all']) > 0) {
-					$shipping_quotes["All 50 States"] = $flatrates['all'];
+					$shipping_quotes["All 50 States"] = esc_attr($flatrates['all']);
 				}
 				break;
 
 			default:
 				if (strlen($flatrates['local']) > 0) {
-					$shipping_quotes["Local Shipping"] = $flatrates['local'];
+					$shipping_quotes["Local Shipping"] = esc_attr($flatrates['local']);
 				}
 				break;
 			}

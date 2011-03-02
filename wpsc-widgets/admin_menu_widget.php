@@ -13,7 +13,6 @@ class WP_Widget_Admin_Menu extends WP_Widget {
 	 * Widget Constuctor
 	 */
 	function WP_Widget_Admin_Menu() {
-
 		$widget_ops = array(
 			'classname'   => 'widget_wpsc_admin_menu',
 			'description' => __( 'Admin Menu Widget', 'wpsc' )
@@ -60,7 +59,7 @@ class WP_Widget_Admin_Menu extends WP_Widget {
 	function update( $new_instance, $old_instance ) {
 	
 		$instance = $old_instance;
-		$instance['title']  = strip_tags( $new_instance['title'] );
+		$instance['title']  = esc_attr( strip_tags( $new_instance['title'] ) );
 
 		return $instance;
 		

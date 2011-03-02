@@ -12,13 +12,13 @@ global $wpdb;
 				<tr>
 					<th scope="row"><?php _e('Max downloads per file', 'wpsc');?>:	</th>
 					<td>
-						<input type='text' size='10' value='<?php echo get_option('max_downloads'); ?>' name='wpsc_options[max_downloads]' />
+						<input type='text' size='10' value='<?php esc_attr_e( get_option('max_downloads') ); ?>' name='wpsc_options[max_downloads]' />
 					</td>
 				</tr>				
 				<?php
 				$wpsc_ip_lock_downloads1 = "";
 				$wpsc_ip_lock_downloads2 = "";
-				switch(get_option('wpsc_ip_lock_downloads')) {    
+				switch( esc_attr( get_option('wpsc_ip_lock_downloads') ) ) {    
 					case 1:
 					$wpsc_ip_lock_downloads1 = "checked ='checked'";
 					break;
@@ -44,7 +44,7 @@ global $wpdb;
 				<?php
 				$wpsc_check_mime_types1 = "";
 				$wpsc_check_mime_types2 = "";
-				switch(get_option('wpsc_check_mime_types')) {
+				switch( esc_attr( get_option('wpsc_check_mime_types') ) ) {
 					case 1:
 					$wpsc_check_mime_types2 = "checked ='checked'";
 					break;
@@ -76,7 +76,7 @@ global $wpdb;
 					<?php _e('Purchase Log Email', 'wpsc');?>:
 					</th>
 					<td>
-					<input class='text' name='wpsc_options[purch_log_email]' type='text' size='40' value='<?php echo get_option('purch_log_email'); ?>' />
+					<input class='text' name='wpsc_options[purch_log_email]' type='text' size='40' value='<?php esc_attr_e( get_option('purch_log_email') ); ?>' />
 					</td>
 				</tr>
 				<tr>
@@ -84,7 +84,7 @@ global $wpdb;
 					<?php _e('Purchase Receipt - Reply Address', 'wpsc');?>:
 					</th>
 					<td>
-					<input class='text' name='wpsc_options[return_email]' type='text' size='40' value='<?php echo get_option('return_email'); ?>'  />
+					<input class='text' name='wpsc_options[return_email]' type='text' size='40' value='<?php esc_attr_e( get_option('return_email') ); ?>'  />
 					</td>
 				</tr>
 
@@ -93,7 +93,7 @@ global $wpdb;
 					<?php  _e('Purchase Receipt - Reply Name', 'wpsc');?>:
 					</th>
 					<td>
-					<input class='text' name='wpsc_options[return_name]' type='text' size='40' value='<?php echo get_option('return_name'); ?>'  />
+					<input class='text' name='wpsc_options[return_name]' type='text' size='40' value='<?php esc_attr_e( get_option('return_name') ); ?>'  />
 					</td>
 				</tr>
 				
@@ -102,7 +102,7 @@ global $wpdb;
 					<?php _e('Terms and Conditions', 'wpsc');?>:
 					</th>
 					<td>
-					<textarea name='wpsc_options[terms_and_conditions]' cols='' rows='' style='width: 300px; height: 200px;'><?php echo stripslashes(get_option('terms_and_conditions')); ?></textarea>
+					<textarea name='wpsc_options[terms_and_conditions]' cols='' rows='' style='width: 300px; height: 200px;'><?php esc_attr_e(stripslashes(get_option('terms_and_conditions') ) ); ?></textarea>
 					</td>
 				</tr>
 	
@@ -121,7 +121,7 @@ global $wpdb;
 				</tr>
 				<tr>
 					<th><strong><?php _e('Purchase Receipt', 'wpsc');?></strong></th>
-					<td><textarea name="wpsc_options[wpsc_email_receipt]" cols='' rows=''   style='width: 300px; height: 200px;'><?php echo stripslashes(get_option('wpsc_email_receipt'));?></textarea></td>
+					<td><textarea name="wpsc_options[wpsc_email_receipt]" cols='' rows=''   style='width: 300px; height: 200px;'><?php esc_attr_e( stripslashes(get_option('wpsc_email_receipt') ) );?></textarea></td>
 				</tr>
 				<tr>
 					<td class='wpsc_td_note' colspan='2'>
@@ -132,7 +132,7 @@ global $wpdb;
 				</tr>
 				<tr>
 					<th><strong><?php _e('Admin Report', 'wpsc');?></strong></th>
-					<td><textarea name="wpsc_options[wpsc_email_admin]" cols='' rows='' style='width: 300px; height: 200px;'><?php echo stripslashes(get_option('wpsc_email_admin'));?></textarea></td>
+					<td><textarea name="wpsc_options[wpsc_email_admin]" cols='' rows='' style='width: 300px; height: 200px;'><?php esc_attr_e( stripslashes(get_option('wpsc_email_admin') ) );?></textarea></td>
 				</tr>
 			</table>
 			
@@ -147,11 +147,11 @@ global $wpdb;
 				</tr>
 				<tr>
 					<th><strong><?php _e('Tracking Email Subject', 'wpsc');?></strong></th>
-					<td><input name="wpsc_options[wpsc_trackingid_subject]" type='text' value='<?php echo stripslashes(get_option('wpsc_trackingid_subject'));?>' /></td>
+					<td><input name="wpsc_options[wpsc_trackingid_subject]" type='text' value='<?php esc_attr_e( stripslashes(get_option('wpsc_trackingid_subject') ) );?>' /></td>
 				</tr>
 				<tr>
 					<th><strong><?php _e('Tracking Email Message', 'wpsc');?></strong></th>
-					<td><textarea name="wpsc_options[wpsc_trackingid_message]" cols='' rows=''   style='width: 300px; height: 200px;'><?php echo stripslashes(get_option('wpsc_trackingid_message'));?></textarea></td>
+					<td><textarea name="wpsc_options[wpsc_trackingid_message]" cols='' rows=''   style='width: 300px; height: 200px;'><?php esc_attr_e( stripslashes(get_option('wpsc_trackingid_message') ) );?></textarea></td>
 				</tr>
 			</table>
 						  
@@ -170,8 +170,5 @@ global $wpdb;
 						
 <?php						
 }					
-						
-						
-
-
+	
 ?>

@@ -35,6 +35,12 @@ function wpsc_options_shipping() {
 					<input type='hidden' name='wpsc_admin_action' value='submit_options' />
 
 <?php
+
+	if ( !isset( $_SESSION['previous_shipping_name'] ) )
+		$_SESSION['previous_shipping_name'] = "";
+
+	$shipping_data = wpsc_get_shipping_form( $_SESSION['previous_shipping_name'] );
+
 	if ( get_option( 'custom_gateway' ) == 1 ) {
 		$custom_gateway_hide = "style='display:block;'";
 		$custom_gateway1 = 'checked="checked"';
@@ -42,6 +48,10 @@ function wpsc_options_shipping() {
 		$custom_gateway_hide = "style='display:none;'";
 		$custom_gateway2 = 'checked="checked"';
 	}
+	if ( $shipping_data['has_submit_button'] == 0 )
+		$update_button_css = 'style= "display: none;"';
+	else
+		$update_button_css = '';
 				/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
 				wpsc_settings_page_update_notification(); ?>
 					<div class='postbox'>
@@ -72,14 +82,14 @@ function wpsc_options_shipping() {
 							<tr>
 								<th><?php _e( 'Base City:', 'wpsc' ); ?></th>
 								<td>
-									<input type='text' name='wpsc_options[base_city]' value='<?php echo get_option( 'base_city' ); ?>' />
+									<input type='text' name='wpsc_options[base_city]' value='<?php esc_attr_e( get_option( 'base_city' ) ); ?>' />
 									<br /><?php _e( 'Please provide for more accurate rates', 'wpsc' ); ?>
 								</td>
 							</tr>
 							<tr>
 								<th><?php _e( 'Base Zipcode/Postcode:', 'wpsc' ); ?></th>
 								<td>
-									<input type='text' name='wpsc_options[base_zipcode]' value='<?php echo get_option( 'base_zipcode' ); ?>' />
+									<input type='text' name='wpsc_options[base_zipcode]' value='<?php esc_attr_e( get_option( 'base_zipcode' ) ); ?>' />
 									<br /><?php _e( 'If you are based in America then you need to set your own Zipcode for UPS and USPS to work. This should be the Zipcode for your Base of Operations.', 'wpsc' ); ?>
 								</td>
 							</tr>
@@ -108,8 +118,8 @@ function wpsc_options_shipping() {
 									<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").show()' value='1' name='wpsc_options[shipwire]' id='shipwire1' <?php echo $shipwire1; ?> /> <label for='shipwire1'><?php _e( 'Yes', 'wpsc' ); ?></label> &nbsp;
 									<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").hide()' value='0' name='wpsc_options[shipwire]' id='shipwire2' <?php echo $shipwire2; ?> /> <label for='shipwire2'><?php _e( 'No', 'wpsc' ); ?></label>
 									<?php
-									$shipwireemail = get_option( "shipwireemail" );
-									$shipwirepassword = get_option( "shipwirepassword" );
+									$shipwireemail = esc_attr_e( get_option( "shipwireemail" ) );
+									$shipwirepassword = esc_attr_e( get_option( "shipwirepassword" ) );
 									?>
 									<div id='wpsc_shipwire_setting' <?php echo $shipwire_settings; ?>>
 										<table>
@@ -145,7 +155,7 @@ function wpsc_options_shipping() {
 								<td>&nbsp;</td>
 								<td colspan="2">
 									<?php
-									$value = get_option( 'shipping_discount_value' );
+									$value = esc_attr_e( get_option( 'shipping_discount_value' ) );
 									?>
 									<div <?php echo $shipping_discount_settings; ?> id='shipping_discount_value'>
 
@@ -223,10 +233,10 @@ function wpsc_options_shipping() {
 										<div class='wpsc_shipping_options'>
 											<div class="wpsc-shipping-actions">
 										| <span class="edit">
-													<a class='edit-shippping-module' rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo htmlspecialchars( add_query_arg('tab', 'shipping' , add_query_arg('page', 'wpsc-settings'  , add_query_arg( 'shipping_module', $shipping->internal_name ) ) ) ); ?>#gateway_options' style="cursor:pointer;">Edit</a>
+													<a class='edit-shippping-module' rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo htmlspecialchars( add_query_arg('tab', 'shipping' , add_query_arg('page', 'wpsc-settings'  , add_query_arg( 'shipping_module', $shipping->internal_name ) ) ) ); ?>#gateway_options' style="cursor:pointer;"><?php _e( 'Edit' , 'wpsc' ); ?></a>
 														</span> |
 													</div>
-													<p><input <?php echo $disabled; ?> name='custom_shipping_options[]' <?php echo $shipping->checked; ?> type='checkbox' value='<?php echo $shipping->internal_name; ?>' id='<?php echo $shipping->internal_name; ?>_id' /><label for='<?php echo $shipping->internal_name; ?>_id'><?php echo $shipping->name; ?></label></p>
+													<p><input <?php echo $disabled; ?> name='custom_shipping_options[]' <?php echo $shipping->checked; ?> type='checkbox' value='<?php echo $shipping->internal_name; ?>' id='<?php echo $shipping->internal_name; ?>_id' /><label for='<?php echo $shipping->internal_name; ?>_id'><?php esc_attr_e( $shipping->name ); ?></label></p>
 												</div>
 										<?php } ?>
 
@@ -241,23 +251,12 @@ function wpsc_options_shipping() {
 
 									<td class='gateway_settings' rowspan='2'>
 										<div class='postbox'>
-<?php
-										if ( !isset( $_SESSION['previous_shipping_name'] ) )
-											$_SESSION['previous_shipping_name'] = "";
-
-										$shipping_data = wpsc_get_shipping_form( $_SESSION['previous_shipping_name'] );
-?>
-											<h3 class='hndle'><?php echo $shipping_data['name']; ?></h3>
+											<h3 class='hndle'><?php esc_html( $shipping_data['name'] ); ?></h3>
 											<div class='inside'>
 												<table class='form-table'>
 													<?php echo $shipping_data['form_fields']; ?>
 												</table>
-<?php
-										if ( $shipping_data['has_submit_button'] == 0 )
-											$update_button_css = 'style= "display: none;"';
-										else
-											$update_button_css = '';
-?>
+
 											<div class='submit' <?php echo $update_button_css; ?>>
 												<input type='submit' value='<?php _e( 'Update &raquo;', 'wpsc' ); ?>' name='updateoption' />
 											</div>

@@ -244,7 +244,7 @@ function wpsc_admin_submit_notices() {
   * @return null
   */ 
 function wpsc_add_product_category_default($product_id){
-	$terms = get_terms( 'wpsc_product_category', array( 'orderby' => 'id' ) );
+	$terms = get_terms( 'wpsc_product_category', array( 'orderby' => 'id', 'hide_empty' => 0 ) );
 	wp_set_object_terms( $product_id , array( $terms[0]->slug ) , 'wpsc_product_category' );
 }
 /**

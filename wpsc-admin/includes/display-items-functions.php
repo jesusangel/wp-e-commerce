@@ -794,19 +794,19 @@ function wpsc_product_external_link_forms() {
             <tbody>
                 <tr class="form-field">
                     <th valign="top" scope="row"><label for="external_link"><?php _e( 'External Link', 'wpsc' ); ?></label></th>
-                    <td><input type="text" name="meta[_wpsc_product_metadata][external_link]" id="external_link" value="<?php echo $external_link_value; ?>" size="50" style="width: 95%"></td>
+                    <td><input type="text" name="meta[_wpsc_product_metadata][external_link]" id="external_link" value="<?php esc_attr_e( $external_link_value ); ?>" size="50" style="width: 95%"></td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row"><label for="external_link_text"><?php _e( 'External Link Text', 'wpsc' ); ?></label></th>
-                    <td><input type="text" name="meta[_wpsc_product_metadata][external_link_text]" id="external_link_text" value="<?php echo $external_link_text_value; ?>" size="50" style="width: 95%"></td>
+                    <td><input type="text" name="meta[_wpsc_product_metadata][external_link_text]" id="external_link_text" value="<?php esc_attr_e( $external_link_text_value ); ?>" size="50" style="width: 95%"></td>
                 </tr>
                 <tr class="form-field">
                      <th valign="top" scope="row"><label for="external_link_target"><?php _e( 'External Link Target', 'wpsc' ); ?></label></th>
                     <td>
                         <select id="external_link_target" name="meta[_wpsc_product_metadata][external_link_target]">
                             <option value=""><?php _ex( 'Default (set by theme)', 'External product link target', 'wpsc' ); ?></option>
-                            <option value="_self" <?php echo $external_link_target_value_selected['_self']; ?>><?php _e( 'Open link in the same window', 'wpsc' ); ?></option>
-                            <option value="_blank" <?php echo $external_link_target_value_selected['_blank']; ?>><?php _e( 'Open link in a new window', 'wpsc' ); ?></option>
+                            <option value="_self" <?php  echo $external_link_target_value_selected['_self'] ; ?>><?php _e( 'Open link in the same window', 'wpsc' ); ?></option>
+                            <option value="_blank" <?php echo $external_link_target_value_selected['_blank'] ; ?>><?php _e( 'Open link in a new window', 'wpsc' ); ?></option>
                         </select>
                     </td>
                 </tr>

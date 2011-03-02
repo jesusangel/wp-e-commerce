@@ -90,6 +90,7 @@ class australiapost {
 	}
 	
 	function getForm() {
+		$output = '';
 		// Only for Australian merchants
 		if ($this->base_country != 'AU') {
 			return __('This shipping module only works if the base country in settings, region is set to Australia.', 'wpsc');

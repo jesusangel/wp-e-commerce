@@ -1,7 +1,7 @@
 <?php
 function coupon_edit_form($coupon) {
 
-$conditions = unserialize($coupon['condition']);
+$conditions = maybe_unserialize($coupon['condition']);
 
   $start_timestamp = strtotime($coupon['start']);
   $end_timestamp = strtotime($coupon['expiry']);

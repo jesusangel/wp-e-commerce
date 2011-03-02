@@ -331,27 +331,27 @@ function wpsc_display_coupons_page() {
 						echo "<tr $alternate>\n\r";
 
 						echo "    <td>\n\r";
-						echo $coupon['coupon_code'];
+						esc_attr_e( $coupon['coupon_code'] );
 						echo "    </td>\n\r";
 
 						echo "    <td>\n\r";
 						if ( $coupon['is-percentage'] == 1 )
-							echo $coupon['value'] . "%";
+							echo esc_attr( $coupon['value'] ) . "%";
 
 						else if ( $coupon['is-percentage'] == 2 )
 							echo __("Free Shipping", 'wpsc');
 
 						else
-							echo wpsc_currency_display( $coupon['value'] );
+							echo wpsc_currency_display( esc_attr( $coupon['value'] ) );
 
 						echo "    </td>\n\r";
 
 						echo "    <td>\n\r";
-						echo date( "d/m/Y", strtotime( $coupon['start'] ) );
+						echo date( "d/m/Y", strtotime( esc_attr( $coupon['start'] ) ) );
 						echo "    </td>\n\r";
 
 						echo "    <td>\n\r";
-						echo date( "d/m/Y", strtotime( $coupon['expiry'] ) );
+						echo date( "d/m/Y", strtotime( esc_attr( $coupon['expiry'] ) ) );
 						echo "    </td>\n\r";
 
 						echo "    <td>\n\r";
@@ -379,7 +379,7 @@ function wpsc_display_coupons_page() {
 
 						echo "    </td>\n\r";
 						echo "    <td>\n\r";
-						echo "<a title='" . $coupon['coupon_code'] . "' href='#' rel='" . $coupon['id'] . "' class='wpsc_edit_coupon'  >" . __( 'Edit', 'wpsc' ) . "</a>";
+						echo "<a title='" . esc_attr( $coupon['coupon_code'] ). "' href='#' rel='" . $coupon['id'] . "' class='wpsc_edit_coupon'  >" . __( 'Edit', 'wpsc' ) . "</a>";
 						echo "    </td>\n\r";
 						echo "  </tr>\n\r";
 						echo "  <tr class='coupon_edit'>\n\r";

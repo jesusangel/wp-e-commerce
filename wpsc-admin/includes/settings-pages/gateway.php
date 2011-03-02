@@ -33,7 +33,7 @@ function wpsc_options_gateway() {
 				$gateway['internalname'] = '';
 
 			$gatewaylist = '';
-			$gatewaylist .= "<option $disabled value='" . $gateway['internalname'] . "' " . $selected . " >" . $gateway['name'] . "</option>";
+			$gatewaylist .= "<option $disabled value='" . esc_attr( $gateway['internalname'] ) . "' " . $selected . " >" . esc_attr( $gateway['name'] )  . "</option>";
 		}
 	}
 	$nogw = '';
@@ -64,17 +64,9 @@ function wpsc_options_gateway() {
 			<table id='gateway_options' >
 				<tr>
 					<td class='select_gateway'>
-						<?php if ( IS_WP27 ) {
- ?>
-							<div class='postbox'>
-								<h3 class='hndle'><?php _e( 'General Settings', 'wpsc' ); ?></h3>
-								<div class='inside'>
-<?php } else { ?>
-								<div class="categorisation_title">
-									<strong class="form_group"><?php _e( 'Payment Gateways', 'wpsc' ); ?></strong>
-								</div>
-<?php } ?>
-
+						<div class='postbox'>
+							<h3 class='hndle'><?php _e( 'General Settings', 'wpsc' ); ?></h3>
+							<div class='inside'>
 								<p><?php _e( 'Activate the payment gateways that you want to make available to your customers by selecting them below.', 'wpsc' ); ?></p>
 								<br />
 								<?php
@@ -92,14 +84,14 @@ function wpsc_options_gateway() {
 													<a class='edit-payment-module' rel="<?php echo $gateway['internalname']; ?>" onclick="event.preventDefault();" title="Edit this Payment Module" href='<?php echo htmlspecialchars( add_query_arg( 'payment_module', $gateway['internalname'] ) ); ?>' style="cursor:pointer;">Edit</a>
 										</span> |
 									</div>
-									<p><input name='wpsc_options[custom_gateway_options][]' checked='checked' type='checkbox' value='<?php echo $gateway['internalname']; ?>' id='<?php echo $gateway['internalname']; ?>_id' />
-										<label for='<?php echo $gateway['internalname']; ?>_id'><?php echo $gateway['name']; ?></label></p>
+									<p><input name='wpsc_options[custom_gateway_options][]' checked='checked' type='checkbox' value='<?php esc_attr_e( $gateway['internalname'] ); ?>' id='<?php esc_attr_e( $gateway['internalname'] ); ?>_id' />
+										<label for='<?php esc_attr_e( $gateway['internalname'] ); ?>_id'><?php esc_attr_e( $gateway['name'] ); ?></label></p>
 								</div>
 <?php } else { ?>
 										<div class="wpsc_shipping_options">
 											<div class='wpsc-shipping-actions wpsc-payment-actions'>
 											| <span class="edit">
-													<a class='edit-payment-module' rel="<?php echo $gateway['internalname']; ?>" onclick="event.preventDefault();" title="Edit this Payment Module" href='<?php echo htmlspecialchars( add_query_arg( 'payment_module', $gateway['internalname'] ) ); ?>' style="cursor:pointer;">Edit</a>
+													<a class='edit-payment-module' rel="<?php echo $gateway['internalname']; ?>" onclick="event.preventDefault();" title="Edit this Payment Module" href='<?php echo htmlspecialchars( add_query_arg( 'payment_module', $gateway['internalname'] ) ); ?>' style="cursor:pointer;"><?php _e( 'Edit' , 'wpsc' ); ?></a>
 										</span> |
 									</div>
 									<p><input name='wpsc_options[custom_gateway_options][]' type='checkbox' value='<?php echo $gateway['internalname']; ?>' id='<?php echo $gateway['internalname']; ?>_id' />
@@ -112,10 +104,9 @@ function wpsc_options_gateway() {
 									<input type='hidden' value='true' name='update_gateways' />
 									<input type='submit' value='<?php _e( 'Update &raquo;', 'wpsc' ) ?>' name='updateoption' />
 								</div>
-<?php if ( IS_WP27 ) { ?>
 								</div>
 							</div>
-<?php } ?>
+
 								<h4><?php _e( 'We Recommend', 'wpsc' ); ?></h4>
 								<a style="border-bottom:none;" href="https://www.paypal.com/nz/mrb/pal=LENKCHY6CU2VY" target="_blank"><img src="<?php echo WPSC_CORE_IMAGES_URL; ?>/paypal-referal.gif" border="0" alt="Sign up for PayPal and start accepting credit card payments instantly." /></a> <br /><br />
 								<a style="border-bottom:none;" href="http://checkout.google.com/sell/?promo=seinstinct" target="_blank"><img src="https://checkout.google.com/buyer/images/google_checkout.gif" border="0" alt="Sign up for Google Checkout" /></a>

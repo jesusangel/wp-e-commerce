@@ -28,14 +28,14 @@ function wpsc_options_checkout(){
 		<div class='metabox-holder' style='width:95%;'>
 			<div class='postbox'>
 			<input type='hidden' name='checkout_submits' value='true' />
-			<h3 class='hndle'>Misc Checkout Options</h3>
+			<h3 class='hndle'><?php _e( 'Misc Checkout Options' , 'wpsc' ); ?></h3>
 			<div class='inside'>
 			<table>
 			<tr>
 				<td><?php _e('Users must register before checking out', 'wpsc'); ?>:</td>
 				<td>
 					<?php
-						$require_register = get_option('require_register');
+						$require_register = esc_attr( get_option('require_register') );
 						$require_register1 = "";
 						$require_register2 = "";
 						switch($require_register) {
@@ -59,7 +59,7 @@ function wpsc_options_checkout(){
 			<tr>
 						<?php
 					$shippingBilling = get_option('shippingsameasbilling');
-	
+					$shippingBilling1 = $shippingBilling2 = '';
 					switch($shippingBilling) {
 						case 1:
 						$shippingBilling1 = "checked ='checked'";
@@ -72,9 +72,9 @@ function wpsc_options_checkout(){
 				?>
 				<td scope="row"><?php _e('Enable Shipping Same as Billing Option: ', 'wpsc'); ?>:</td>
 				<td>
-				<input type='radio' value='1' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling1' <?php if (isset($shippingBilling1)) echo $shippingBilling1; ?> /> 
+				<input type='radio' value='1' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling1' <?php if (!empty($shippingBilling1)) echo $shippingBilling1; ?> /> 
 				<label for='shippingsameasbilling1'><?php _e('Yes', 'wpsc');?></label> &nbsp;
-				<input type='radio' value='0' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling2' <?php if (isset($shippingBilling2)) echo $shippingBilling2; ?> /> 
+				<input type='radio' value='0' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling2' <?php if (!empty($shippingBilling2)) echo $shippingBilling2; ?> /> 
 				<label for='shippingsameasbilling2'><?php _e('No', 'wpsc');?></label>
 				</td>
 				
@@ -83,7 +83,7 @@ function wpsc_options_checkout(){
 				<td><?php _e('Force users to use SSL', 'wpsc'); ?>:</td>
 				<td>
 				<?php
-					$wpsc_force_ssl = get_option('wpsc_force_ssl');
+					$wpsc_force_ssl = esc_attr( get_option('wpsc_force_ssl') );
 					$wpsc_force_ssl1 = "";
 					$wpsc_force_ssl2 = "";
 					switch($wpsc_force_ssl) {
@@ -115,13 +115,13 @@ function wpsc_options_checkout(){
 					<label for='wpsc_form_set'><?php _e('Select a Form Set' , 'wpsc'); ?>:</label>
 					<select id='wpsc_form_set' name='wpsc_form_set'>
 					<?php
-						$checkout_sets = get_option('wpsc_checkout_form_sets');
+						$checkout_sets = esc_attr( get_option('wpsc_checkout_form_sets') );
 						foreach((array)$checkout_sets as $key => $value) {
 							$selected_state = "";
 							if(isset($_GET['checkout-set']) && $_GET['checkout-set'] == $key) {
 								$selected_state = "selected='selected'";
 							}
-							echo "<option {$selected_state} value='{$key}'>".stripslashes($value)."</option>";
+							echo "<option {$selected_state} value='{$key}'>".esc_attr( stripslashes( $value ) )."</option>";
 						}
 					?>
 					</select>
@@ -147,7 +147,7 @@ function wpsc_options_checkout(){
 			  $form_data = $wpdb->get_results($form_sql,ARRAY_A);
 			  if (!isset($_GET['checkout-set'])) $_GET['checkout-set'] = '';
 			  
-			  $selected_checkout_set = $_GET['checkout-set'];
+			  $selected_checkout_set = esc_attr($_GET['checkout-set']);
   			echo "<input type='hidden' name='selected_form_set' value='".$selected_checkout_set."' />";
   			?>
 			<table id="wpsc_checkout_list" class="widefat page fixed"  cellspacing="0">
@@ -168,7 +168,7 @@ function wpsc_options_checkout(){
 					foreach((array)$form_data as $form_field) {
 			    echo "<tr id='checkout_".$form_field['id']."' class='checkout_form_field'>\n\r";
 			    echo '<td class="drag"><a href="" onclick="return false;" title="' . __('Click and Drag to Order Checkout Fields', 'wpsc') . '"><img src="' . WPSC_CORE_IMAGES_URL . '/roll-over-drag.jpg" alt="roll-over-drag" /></a></td>';
-			    echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".htmlentities(stripslashes($form_field['name']), ENT_QUOTES, "UTF-8")."' /></td>";
+			    echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".esc_attr(htmlentities(stripslashes($form_field['name']), ENT_QUOTES, "UTF-8"))."' /></td>";
 			    
 			    echo "      <td class='typecol'>";
 			    echo "<select class='wpsc_checkout_selectboxes' name='form_type[".$form_field['id']."]'>";

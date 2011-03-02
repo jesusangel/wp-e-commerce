@@ -406,7 +406,7 @@ class wpec_taxes_controller {
          }elseif($key == 'value'){
             $setting = stripslashes($setting);
          }
-         $returnable .= $key.'="'.$setting.'"';
+         $returnable .= $key.'="'. esc_attr( $setting ) .'"';
       }// foreach
       //close the input
       $returnable .= ' />';

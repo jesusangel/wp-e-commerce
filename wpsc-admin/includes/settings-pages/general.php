@@ -16,24 +16,24 @@ function wpsc_options_general() {
 				<td>
 					<select name='wpsc_options[base_country]' onchange='submit_change_country();'>
 
-						<?php echo country_list( get_option( 'base_country' ) ); ?>
+						<?php echo country_list( esc_attr( get_option( 'base_country' ) ) ); ?>
 
 					</select>
 					<span id='options_country'>
 					<?php
-						$region_list = $wpdb->get_results( "SELECT `" . WPSC_TABLE_REGION_TAX . "`.* FROM `" . WPSC_TABLE_REGION_TAX . "`, `" . WPSC_TABLE_CURRENCY_LIST . "`  WHERE `" . WPSC_TABLE_CURRENCY_LIST . "`.`isocode` IN('" . get_option( 'base_country' ) . "') AND `" . WPSC_TABLE_CURRENCY_LIST . "`.`id` = `" . WPSC_TABLE_REGION_TAX . "`.`country_id`", ARRAY_A );
+						$region_list = $wpdb->get_results( "SELECT `" . WPSC_TABLE_REGION_TAX . "`.* FROM `" . WPSC_TABLE_REGION_TAX . "`, `" . WPSC_TABLE_CURRENCY_LIST . "`  WHERE `" . WPSC_TABLE_CURRENCY_LIST . "`.`isocode` IN('" . esc_attr( get_option( 'base_country' ) ) . "') AND `" . WPSC_TABLE_CURRENCY_LIST . "`.`id` = `" . WPSC_TABLE_REGION_TAX . "`.`country_id`", ARRAY_A );
 						if ( !empty( $region_list ) ) { ?>
 
 						<select name='wpsc_options[base_region]'>
 							<?php
 							foreach ( $region_list as $region ) {
-								if ( get_option( 'base_region' ) == $region['id'] ) {
+								if ( esc_attr( get_option( 'base_region' ) ) == $region['id'] ) {
 									$selected = "selected='selected'";
 								} else {
 									$selected = "";
 								}
 							?>
-								<option value='<?php echo $region['id']; ?>' <?php echo $selected; ?> ><?php echo $region['name']; ?></option> <?php
+								<option value='<?php echo $region['id']; ?>' <?php echo $selected; ?> ><?php echo esc_attr( $region['name'] ); ?></option> <?php
 						}
 					?>
 						</select>
@@ -58,8 +58,7 @@ function wpsc_options_general() {
 							echo "<em>" . __( "The Target Markets feature has been disabled because you have the Suhosin PHP extension installed on this server. If you need to use the Target Markets feature then disable the suhosin extension, if you can not do this, you will need to contact your hosting provider.", 'wpsc' ) . "</em>";
 						} else {
 					?>
-							<span>Select: <a href='<?php echo add_query_arg( array( 'selected_all' => 'all' ) ) ?>' class='wpsc_select_all'>All</a>&nbsp; <a href='<?php echo add_query_arg( array( 'selected_all' => 'none' ) ) ?>' class='wpsc_select_none'>None</a></span><br />
-
+							<span><?php printf(__('Select: <a href="%1$s"  class="wpsc_select_all" title="All">All</a> <a href="%1$s" class="wpsc_select_none" title="None">None</a>' , 'wpsc') , add_query_arg( array( 'selected_all' => 'all' ) ), add_query_arg( array( 'selected_all' => 'none' ) )  ); ?></span><br />
 							<div id='resizeable' class='ui-widget-content multiple-select'>
 						<?php
 							foreach ( (array)$countrylist as $country ) {
@@ -69,12 +68,11 @@ function wpsc_options_general() {
 									<input type='checkbox' id="countrylist2-<?php echo $country['id']; ?>" name='countrylist2[]' value='<?php echo $country['id']; ?>' checked='checked' /> <label for="countrylist2-<?php echo $country['id']; ?>"><?php echo $country['country']; ?></label><br />
 						<?php } else {
  ?>
-									<input type='checkbox' id="countrylist2-<?php echo $country['id']; ?>" name='countrylist2[]' value='<?php echo $country['id']; ?>'  /> <label for="countrylist2-<?php echo $country['id']; ?>"><?php echo $country['country']; ?></label><br />
+									<input type='checkbox' id="countrylist2-<?php echo $country['id']; ?>" name='countrylist2[]' value='<?php echo $country['id']; ?>'  /> <label for="countrylist2-<?php echo $country['id']; ?>"><?php esc_attr_e( $country['country'] ); ?></label><br />
 <?php }
 							} ?>
 							</div><br />
-							Select the markets you are selling products to.
-<?php
+							<?php _e( 'Select the markets you are selling products to.' , 'wpsc'); 
 						}
 ?>
 					</td>
@@ -90,7 +88,7 @@ function wpsc_options_general() {
 						<?php
 						$currency_data = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CURRENCY_LIST . "` ORDER BY `country` ASC", ARRAY_A );
 						foreach ( $currency_data as $currency ) {
-							if ( get_option( 'currency_type' ) == $currency['id'] ) {
+							if ( esc_attr( get_option( 'currency_type' ) ) == $currency['id'] ) {
 								$selected = "selected='selected'";
 							} else {
 								$selected = "";
@@ -98,11 +96,11 @@ function wpsc_options_general() {
 							<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars( $currency['country'] ); ?> (<?php echo $currency['currency']; ?>)</option>
 						<?php
 						}
-						$currency_data = $wpdb->get_row( "SELECT `symbol`,`symbol_html`,`code` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `id`='" . get_option( 'currency_type' ) . "' LIMIT 1", ARRAY_A );
+						$currency_data = $wpdb->get_row( "SELECT `symbol`,`symbol_html`,`code` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `id`='" . esc_attr( get_option( 'currency_type' ) ) . "' LIMIT 1", ARRAY_A );
 						if ( $currency_data['symbol'] != '' ) {
-							$currency_sign = $currency_data['symbol_html'];
+							$currency_sign = esc_attr( $currency_data['symbol_html'] );
 						} else {
-							$currency_sign = $currency_data['code'];
+							$currency_sign = esc_attr( $currency_data['code'] );
 						}
 						?>
 					</select>
@@ -112,7 +110,7 @@ function wpsc_options_general() {
 				<th scope="row"><?php _e( 'Currency Sign Location', 'wpsc' ); ?>:</th>
 					<td>
 					<?php
-						$currency_sign_location = get_option( 'currency_sign_location' );
+						$currency_sign_location = esc_attr( get_option( 'currency_sign_location' ) );
 						$csl1 = "";
 						$csl2 = "";
 						$csl3 = "";
@@ -147,9 +145,9 @@ function wpsc_options_general() {
 				<tr>
 				<th scope="row"><?php _e( 'Thousands and decimal separators', 'wpsc' ); ?>:</th>
 					<td>
-						<?php _e( 'Thousands separator', 'wpsc' ); ?>: <input name="wpsc_options[wpsc_thousands_separator]" type="text" maxlength="1" size="1" value="<?php echo get_option( 'wpsc_thousands_separator' ); ?>" /> <br />
-						<?php _e( 'Decimal separator', 'wpsc' ); ?>: <input name="wpsc_options[wpsc_decimal_separator]" type="text" maxlength="1" size="1" value="<?php echo get_option( 'wpsc_decimal_separator' ); ?>" /> <br />
-						<?php _e( 'Preview:', 'wpsc' ); ?> 10<?php echo get_option( 'wpsc_thousands_separator' ); ?>000<?php echo get_option( 'wpsc_decimal_separator' ); ?>00
+						<?php _e( 'Thousands separator', 'wpsc' ); ?>: <input name="wpsc_options[wpsc_thousands_separator]" type="text" maxlength="1" size="1" value="<?php echo esc_attr( stripslashes( get_option( 'wpsc_thousands_separator' ) ) ); ?>" /> <br />
+						<?php _e( 'Decimal separator', 'wpsc' ); ?>: <input name="wpsc_options[wpsc_decimal_separator]" type="text" maxlength="1" size="1" value="<?php echo esc_attr( stripslashes( get_option( 'wpsc_decimal_separator' ) ) ); ?>" /> <br />
+						<?php _e( 'Preview:', 'wpsc' ); ?> 10<?php echo esc_attr( stripslashes( get_option( 'wpsc_thousands_separator' ) ) ); ?>000<?php echo esc_attr( stripslashes( get_option( 'wpsc_decimal_separator' ) ) ); ?>00
 					</td>
 				</tr>
 			</table>
@@ -157,7 +155,7 @@ function wpsc_options_general() {
 			<div class="submit">
 				<input type='hidden' name='wpsc_admin_action' value='submit_options' />
 				<?php wp_nonce_field( 'update-options', 'wpsc-update-options' ); ?>
-				<input type="submit" value="<?php _e( 'Update &raquo;', 'wpsc' ); ?>" name="updateoption"/>
+				<input type="submit" value="<?php _e( 'Update &raquo;', 'wpsc' ); ?>" name="updateoption" />
 			</div>
 		</div>
 	</form>

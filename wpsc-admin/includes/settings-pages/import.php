@@ -123,23 +123,23 @@ function wpsc_options_import() {
 
 		for ( $i = 0; $i < $num; $i++ ) {
 			$product_columns = array(
-				'post_title' => $cvs_data2['name'][$i],
-				'content' => $cvs_data2['description'][$i],
-				'additional_description' => $cvs_data2['additional_description'][$i],
-				'price' => str_replace( '$', '', $cvs_data2['price'][$i] ),
-				'weight' => $cvs_data2['weight'][$i],
-				'weight_unit' => $cvs_data2['weight_unit'][$i],
+				'post_title' => esc_attr( $cvs_data2['name'][$i] ),
+				'content' => esc_attr( $cvs_data2['description'][$i] ),
+				'additional_description' => esc_attr( $cvs_data2['additional_description'][$i] ),
+				'price' => esc_attr( str_replace( '$', '', $cvs_data2['price'][$i] ) ),
+				'weight' => esc_attr( $cvs_data2['weight'][$i] ),
+				'weight_unit' => esc_attr( $cvs_data2['weight_unit'][$i] ),
 				'pnp' => null,
 				'international_pnp' => null,
 				'file' => null,
 				'image' => '0',
-				'quantity_limited' => $cvs_data2['quantity_limited'][$i],
-				'quantity' => $cvs_data2['quantity'][$i],
+				'quantity_limited' => esc_attr( $cvs_data2['quantity_limited'][$i] ),
+				'quantity' => esc_attr( $cvs_data2['quantity'][$i] ),
 				'special' => null,
 				'special_price' => null,
 				'display_frontpage' => null,
 				'notax' => null,
-				'publish' => $status,
+				'publish' => esc_attr( $status ),
 				'active' => null,
 				'donation' => null,
 				'no_shipping' => null,
@@ -150,13 +150,13 @@ function wpsc_options_import() {
 				
 				),
 				'meta' => array(
-					'_wpsc_price' => str_replace( '$', '', $cvs_data2['price'][$i] ),
-					'_wpsc_sku' => $cvs_data2['sku'][$i],
-					'_wpsc_stock' => $cvs_data2['quantity'][$i],
-					'_wpsc_limited_stock' => $cvs_data2['quantity_limited'][$i],
+					'_wpsc_price' => esc_attr( str_replace( '$', '', $cvs_data2['price'][$i] ) ),
+					'_wpsc_sku' => esc_attr( $cvs_data2['sku'][$i] ),
+					'_wpsc_stock' => esc_attr( $cvs_data2['quantity'][$i] ),
+					'_wpsc_limited_stock' => esc_attr( $cvs_data2['quantity_limited'][$i] ),
 					'_wpsc_product_metadata' => array(
-						'weight' => $cvs_data2['weight'][$i],
-						'weight_unit' => $cvs_data2['weight_unit'][$i],
+						'weight' => esc_attr( $cvs_data2['weight'][$i] ),
+						'weight_unit' => esc_attr( $cvs_data2['weight_unit'][$i] ),
 					)
 				)
 			);

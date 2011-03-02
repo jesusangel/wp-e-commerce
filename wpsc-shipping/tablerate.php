@@ -46,7 +46,7 @@ class tablerate {
 	 * @return unknown
 	 */
 	function getForm() {
-
+		$output = "";
 		$output.="<tr><th>".__('Total Price', 'wpsc')."</th><th>".__('Shipping Price', 'wpsc')."</th></tr>";
 		$layers = get_option("table_rate_layers");
 
@@ -80,15 +80,15 @@ class tablerate {
 	 */
 	function submit_form() {
 		if (!isset($_POST['layer'])) $_POST['layer'] = '';
-
 		$layers = (array)$_POST['layer'];
 		$shippings = (array)$_POST['shipping'];
+		$new_layer = array();
 		if ($shippings != '') {
 			foreach ($shippings as $key => $price) {
-				if ($price == '') {
+				if ( empty( $price ) ) {
 					unset($shippings[$key]);
 					unset($layers[$key]);
-				} else {
+				} elseif(isset($layers[$key])) {
 					$new_layer[$layers[$key]] = $price;
 				}
 			}
