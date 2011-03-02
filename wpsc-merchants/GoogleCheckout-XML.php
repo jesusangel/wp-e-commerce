@@ -47,17 +47,19 @@ function gateway_google($fromcheckout = false){
 		$update = $wpdb->query($sql);
 		$sql = "SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE sessionid=".$_SESSION['wpsc_sessionid'];
 		$purchase_log_id = $wpdb->get_var($sql);
-		$sql = "DELETE FROM  `".WPSC_TABLE_CART_CONTENTS."` WHERE purchaseid = ".$purchase_log_id;
-		$wpdb->query($sql);
-		$wpsc_cart->save_to_db($purchase_log_id);
+		if( !empty($purchase_log_id) ){
+			$sql = "DELETE FROM  `".WPSC_TABLE_CART_CONTENTS."` WHERE purchaseid = ".$purchase_log_id;
+			$wpdb->query($sql);
+		}
 		if(! $update){
 			$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '".$_SESSION['wpsc_sessionid']."', '".(int)$user_ID."', UNIX_TIMESTAMP(), 'google', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '".$wpsc_cart->selected_shipping_method."', '".$wpsc_cart->selected_shipping_option."', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')";
 			$wpdb->query($sql);
 			$sql = "SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE sessionid=".$_SESSION['wpsc_sessionid'];
 			$purchase_log_id = $wpdb->get_var($sql);
-			$wpsc_cart->save_to_db($purchase_log_id);
-		}	
 		
+		}	
+		$wpsc_cart->save_to_db($purchase_log_id);
+
 		if(get_option('permalink_structure') != '') {
 			$separator = "?";
 		} else {
@@ -83,7 +85,6 @@ function gateway_google($fromcheckout = false){
 	$returnURL =  $transact_url.$separator."sessionid=".$sessionid."&gateway=google";
 	$cart->SetContinueShoppingUrl($returnURL);
 	$cart->SetEditCartUrl(get_option('shopping_cart_url'));
-	$no=1;
 	//new item code
 	$no = 0;
 	//google prohibited items not implemented
@@ -110,6 +111,7 @@ function gateway_google($fromcheckout = false){
 		$cart->AddItem($cartitem["$no"]);
 		$no++;
 	}
+	echo '<pre>'.print_r($wpsc_cart,1).'</pre>';
 	//If there are coupons applied add coupon as a product with negative price
 	if($wpsc_cart->coupons_amount > 0){
 		if($google_curr != $local_currency_code) {
@@ -129,7 +131,7 @@ function gateway_google($fromcheckout = false){
 	// Add shipping options
 	if(wpsc_uses_shipping() && $google_currency_shipping >0 ){
 		$Gfilter = new GoogleShippingFilters();
-		$google_checkout_shipping=get_option("google_shipping_country");
+		$google_checkout_shipping = get_option("google_shipping_country");
 		$googleshippingcountries = count($google_checkout_shipping);
 		if($googleshippingcountries == 242){
 			$Gfilter->SetAllowedWorldArea(true);
@@ -148,7 +150,7 @@ function gateway_google($fromcheckout = false){
 		}
 		
 		$Gfilter->SetAllowUsPoBox(false);
-		$ship_1 = new GoogleFlatRateShipping('Flat Rate Shipping', $google_currency_shipping);
+		$ship_1 = new GoogleFlatRateShipping($wpsc_cart->selected_shipping_method, $google_currency_shipping);
 		$ship_1->AddShippingRestrictions($Gfilter);
 		$cart->AddShipping($ship_1);
 	}
