@@ -945,8 +945,7 @@ function wpsc_scale_image() {
 add_action( 'init', 'wpsc_scale_image' );
 
 function wpsc_download_file() {
-	global $wpdb, $user_level, $wp_rewrite;
-	get_currentuserinfo();
+	global $wpdb;
 
 	if ( isset( $_GET['downloadid'] ) ) {
 		// strip out anything that isnt 'a' to 'z' or '0' to '9'

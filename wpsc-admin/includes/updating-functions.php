@@ -13,7 +13,7 @@
  * @return void
  */
 function wpsc_convert_category_groups() {
-	global $wpdb, $wp_rewrite, $user_ID;
+	global $wpdb, $user_ID;
 
 	//if they're updating from 3.6, and they've got categories with no group, let's fix that problem, eh?
  	$categorisation_groups = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')");
@@ -58,7 +58,7 @@ _get_term_hierarchy('wpsc_product_category');
  * @return void
  */
 function wpsc_convert_categories($new_parent_category, $group_id, $old_parent_category = 0) {
-	global $wpdb, $wp_rewrite, $user_ID;
+	global $wpdb, $user_ID;
 	
 	if($old_parent_category > 0) {
 		$categorisation = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active` IN ('1') AND `group_id` IN ('{$group_id}') AND `category_parent` IN ('{$old_parent_category}')");
@@ -109,7 +109,7 @@ function wpsc_convert_categories($new_parent_category, $group_id, $old_parent_ca
 }
 
 function wpsc_convert_variation_sets() {
-	global $wpdb, $wp_rewrite, $user_ID;
+	global $wpdb, $user_ID;
 	$variation_sets = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."`");
 	
 	foreach((array)$variation_sets as $variation_set) {
@@ -153,7 +153,7 @@ function wpsc_convert_variation_sets() {
  * @return void
  */
 function wpsc_convert_products_to_posts() {
-  global $wpdb, $wp_rewrite, $user_ID;
+  global $wpdb, $user_ID;
   // Select all products
   
 	$product_data = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`. * , `".WPSC_TABLE_PRODUCT_ORDER."`.order FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` ON `".WPSC_TABLE_PRODUCT_LIST."`.id = `".WPSC_TABLE_PRODUCT_ORDER."`.product_id WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`active` IN ( '1' )

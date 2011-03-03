@@ -272,10 +272,9 @@ add_action( 'rdf_item', 'wpsc_add_product_price_to_rss' );
  * The meat of this whole operation, this is where we register our post types
  *
  * @global array $wpsc_page_titles
- * @global object $wp_rewrite
  */
 function wpsc_register_post_types() {
-	global $wpsc_page_titles, $wp_rewrite;
+	global $wpsc_page_titles;
         $labels = array(
             'name' => _x( 'Products', 'post type name', 'wpsc' ),
             'singular_name' => _x( 'Product', 'post type singular name', 'wpsc' ),
