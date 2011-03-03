@@ -353,8 +353,8 @@ function wpsc_update_shipping_price() {
 	$quote_shipping_method = $_POST['key1'];
 	$quote_shipping_option = $_POST['key'];
 	$wpsc_cart->update_shipping( $quote_shipping_method, $quote_shipping_option );
-	echo "jQuery('.pricedisplay.checkout-shipping').html('" . wpsc_cart_shipping() . "');\n\r";
-	echo "jQuery('.pricedisplay.checkout-total').html('" . wpsc_cart_total() . "');\n\r";
+	echo "jQuery('.pricedisplay.checkout-shipping').html(\"" . wpsc_cart_shipping() . "\");\n\r";
+	echo "jQuery('.pricedisplay.checkout-total').html(\"" . wpsc_cart_total() . "\");\n\r";
 	exit();
 }
 
