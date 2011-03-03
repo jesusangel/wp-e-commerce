@@ -493,12 +493,13 @@ function wpsc_display_purchlog_shipping_state_and_postcode() {
    global $purchlogitem;
    
    if( is_numeric($purchlogitem->extrainfo->shipping_region) )
-   		$state = wpsc_get_region($purchlogitem->extrainfo->shipping_region);
+   		$state = esc_html( wpsc_get_region($purchlogitem->extrainfo->shipping_region) );
    else
-   		$state = $purchlogitem->shippinginfo['shippingstate']['value'];
+   		$state = esc_html( $purchlogitem->shippinginfo['shippingstate']['value'] );
    		
    if ( !empty( $state ) && !empty( $purchlogitem->shippinginfo['shippingpostcode']['value'] ) )
-      return esc_html( $state ). ', ' . esc_html( $purchlogitem->shippinginfo['shippingpostcode']['value'] );
+   			$state .= ', ' . esc_html( $purchlogitem->shippinginfo['shippingpostcode']['value'] );
+   return $state; 
 }
 
 function wpsc_display_purchlog_shipping_country() {
