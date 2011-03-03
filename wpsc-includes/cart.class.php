@@ -1006,8 +1006,8 @@ class wpsc_cart {
       $this->cart_item = null;
       $this->cart_item_count = 0;
       $this->current_cart_item = -1;
-      unset($this->coupons_amount);
-      unset($this->coupons_name);
+      $this->coupons_amount = 0;
+      $this->coupons_name = '';
       $this->clear_cache();
       $this->cleanup();
   }
