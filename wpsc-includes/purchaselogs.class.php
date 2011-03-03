@@ -466,7 +466,7 @@ function wpsc_display_purchlog_buyers_address() {
 
    return esc_html( nl2br(trim(htmlentities( stripslashes( $purchlogitem->userinfo['billingaddress']['value'] ), ENT_QUOTES, 'UTF-8'), "\n\r"))).'<br />'.
    esc_html( htmlentities( stripslashes( $state ), ENT_QUOTES, 'UTF-8') ).', '.
-   esc_html( htmlentities( stripslashes( $purchlogitem->userinfo['billingpostcode']['value'] ), ENT_QUOTES, 'UTF-8') ).'<br />'.esc_html( htmlentities( stripslashes( $purchlogitem->extrainfo->billing_country ), ENT_QUOTES, 'UTF-8') ) );
+   esc_html( htmlentities( stripslashes( $purchlogitem->userinfo['billingpostcode']['value'] ), ENT_QUOTES, 'UTF-8') ).'<br />'.esc_html( htmlentities( stripslashes( $purchlogitem->extrainfo->billing_country ), ENT_QUOTES, 'UTF-8') ) ;
 }
 
 function wpsc_display_purchlog_buyers_phone() {
