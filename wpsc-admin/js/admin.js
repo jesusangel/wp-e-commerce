@@ -974,12 +974,11 @@ function add_form_field() {
 	new_element_contents += "<td class='mandatorycol' style='text-align: center;'><input type='checkbox' name='new_form_mandatory["+new_element_number+"]' value='1' /></td>\n\r";
 	new_element_contents += "<td><a class='image_link' href='#' onclick='return remove_new_form_field(\""+new_element_id+"\");'><img src='" + WPSC_CORE_IMAGES_URL + "/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a></td>\n\r";
 	// new_element_contents += "</tr>";
-
-	new_element = document.createElement('tr');
-	new_element.id = new_element_id;
-	document.getElementById("wpsc_checkout_list_body").appendChild(new_element);
-	document.getElementById(new_element_id).innerHTML = new_element_contents;
-	jQuery('#'+new_element_id).addClass('checkout_form_field');
+        
+        var new_element = jQuery('<tr id="'+new_element_id+'" />');
+	jQuery(new_element).html(new_element_contents);
+	jQuery("tbody#wpsc_checkout_list_body").append(new_element);
+	jQuery(new_element).addClass('checkout_form_field');
 	return false;
 }
 
