@@ -563,7 +563,7 @@ function wpsc_user_details() {
 			$endtotal += $total_shipping;
 			$endtotal += $purchase['wpec_taxes_total'];
 			echo wpsc_currency_display( $total_shipping, array('display_as_html' => false)  ) . "<br />";
-			echo wpsc_currency_display( $purchase['wpec_taxes_total'] , array('display_as_html' => false) );
+			echo wpsc_currency_display( $purchase['wpec_taxes_total'] , array('display_as_html' => false) ). "<br />";
 			echo wpsc_currency_display( $endtotal , array('display_as_html' => false) );
 			echo " </td>";
 
