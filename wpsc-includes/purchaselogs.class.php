@@ -498,7 +498,7 @@ function wpsc_display_purchlog_shipping_state_and_postcode() {
    		$state = $purchlogitem->shippinginfo['shippingstate']['value'];
    		
    if ( !empty( $state ) && !empty( $purchlogitem->shippinginfo['shippingpostcode']['value'] ) )
-      return esc_html( $state . ', ' . $purchlogitem->shippinginfo['shippingpostcode']['value'] );
+      return esc_html( $state ). ', ' . esc_html( $purchlogitem->shippinginfo['shippingpostcode']['value'] );
 }
 
 function wpsc_display_purchlog_shipping_country() {
