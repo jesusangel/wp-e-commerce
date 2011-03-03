@@ -488,6 +488,8 @@ function wpsc_start_the_query() {
 
 				//This only works in WP 3.0.
 				case "price":
+					add_filter( 'posts_join', 'wpsc_add_meta_table' );
+					add_filter( 'posts_where', 'wpsc_add_meta_table_where' );
 					$wpsc_query_vars["meta_key"] = '_wpsc_price';
 					$wpsc_query_vars["orderby"] = 'meta_value_num';
 					break;
@@ -498,9 +500,11 @@ function wpsc_start_the_query() {
 			}
 		
 			add_filter( 'pre_get_posts', 'wpsc_generate_product_query', 11 );
+		
 			$wpsc_query = new WP_Query( $wpsc_query_vars );
 			//for 3.1 :| 
 			if(empty($wpsc_query->posts) && isset($wpsc_query->tax_query) && isset($wp_query->query_vars['wpsc_product_category'])){
+
 				$wpsc_query_vars = array();
 				$wpsc_query_vars['wpsc_product_category'] = $wp_query->query_vars['wpsc_product_category'];
 				if(1 == get_option('use_pagination')){
@@ -513,6 +517,7 @@ function wpsc_start_the_query() {
 			}
 		}
 	}
+
 	if(  $is_404 || ( ( isset($wpsc_query->post_count) && $wpsc_query->post_count == 0 ) && isset($wpsc_query_vars['wpsc_product_category'] )  )){
 		$args = array_merge($wp_query->query, array('posts_per_page' => get_option('wpsc_products_per_page')));
 		$wp_query = new WP_Query($args);
@@ -527,6 +532,24 @@ function wpsc_start_the_query() {
 		$_SESSION['wpsc_has_been_to_checkout'] = true;
 }
 add_action( 'template_redirect', 'wpsc_start_the_query', 8 );
+
+/**
+ * add meta table where section for ordering by price
+ *
+ */
+function wpsc_add_meta_table_where($where){
+	global $wpdb;
+	return $where . ' AND ' . $wpdb->postmeta . '.meta_key = "_wpsc_price"';
+}
+
+/**
+ * add meta table join section for ordering by price
+ *
+ */
+function wpsc_add_meta_table($join){
+	global $wpdb;
+	return $join . ' JOIN ' . $wpdb->postmeta . ' ON ' . $wpdb->posts. '.ID = ' . $wpdb->postmeta . '.post_id';
+}
 
 /**
  * wpsc_taxonomy_rewrite_rules function.
