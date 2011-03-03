@@ -481,7 +481,7 @@ function wpsc_display_purchlog_shipping_name() {
 
 function wpsc_display_purchlog_shipping_address() {
    global $purchlogitem;
-   return esc_html( nl2br(trim(htmlentities( stripslashes( $purchlogitem->shippinginfo['shippingaddress']['value'] ), ENT_QUOTES, 'UTF-8'), "\n\r")) );
+   return nl2br( esc_html( trim(htmlentities( stripslashes( $purchlogitem->shippinginfo['shippingaddress']['value'] ), ENT_QUOTES, 'UTF-8'), "\n\r")) );
 }
 
 function wpsc_display_purchlog_shipping_city() {
