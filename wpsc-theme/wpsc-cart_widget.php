@@ -74,7 +74,7 @@
 <?php else: ?>
 	<p class="empty">
 		<?php _e('Your shopping cart is empty', 'wpsc'); ?><br />
-		<a target="_parent" href="<?php echo get_option('product_list_url'); ?>" class="visitshop" title="Visit Shop"><?php _e('Visit the shop', 'wpsc'); ?></a>	
+		<a target="_parent" href="<?php echo get_option('product_list_url'); ?>" class="visitshop" title="<?php _e('Visit Shop', 'wpsc'); ?>"><?php _e('Visit the shop', 'wpsc'); ?></a>	
 	</p>
 <?php endif; ?>
 

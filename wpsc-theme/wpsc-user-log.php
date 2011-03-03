@@ -158,7 +158,7 @@ global $files, $separator, $purchase_log, $col_count, $products, $links; ?>
 				</p>
 
 				<p class="submit">
-					<input type="submit" name="submit" id="submit" value="Login &raquo;" tabindex="4" />
+					<input type="submit" name="submit" id="submit" value="<?php _e( 'Login &raquo;', 'wpsc' ); ?>" tabindex="4" />
 					<input type="hidden" name="redirect_to" value="<?php echo get_option( 'user_account_url' ); ?>" />
 				</p>
 			</form>
