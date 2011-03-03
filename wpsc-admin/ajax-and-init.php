@@ -637,7 +637,7 @@ function wpsc_purchlog_edit_status( $purchlog_id='', $purchlog_status='' ) {
 
 	$log_data = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `id` = '{$purchlog_id}' LIMIT 1", ARRAY_A );
 	$is_transaction = wpsc_check_purchase_processed($log_data['processed']);
-	if ( $is_transaction ) {
+	if ( $is_transaction && function_exists('wpsc_member_activate_subscriptions')) {
 		wpsc_member_activate_subscriptions( $_POST['id'] );
 	}
 
