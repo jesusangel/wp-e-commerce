@@ -491,14 +491,20 @@ function wpsc_display_purchlog_shipping_city() {
 
 function wpsc_display_purchlog_shipping_state_and_postcode() {
    global $purchlogitem;
-   
+   $state = '';
    if( is_numeric($purchlogitem->extrainfo->shipping_region) )
    		$state = esc_html( wpsc_get_region($purchlogitem->extrainfo->shipping_region) );
    else
    		$state = esc_html( $purchlogitem->shippinginfo['shippingstate']['value'] );
    		
-   if ( !empty( $state ) && !empty( $purchlogitem->shippinginfo['shippingpostcode']['value'] ) )
+   if ( !empty( $purchlogitem->shippinginfo['shippingpostcode']['value'] ) ){
+   		if( empty( $state ) )
+   			$state = esc_html( $purchlogitem->shippinginfo['shippingpostcode']['value'] );
+   		else
    			$state .= ', ' . esc_html( $purchlogitem->shippinginfo['shippingpostcode']['value'] );
+   }
+   
+
    return $state; 
 }
 
