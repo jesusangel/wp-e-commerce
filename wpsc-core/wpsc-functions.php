@@ -521,6 +521,7 @@ function wpsc_start_the_query() {
 	if(  $is_404 || ( ( isset($wpsc_query->post_count) && $wpsc_query->post_count == 0 ) && isset($wpsc_query_vars['wpsc_product_category'] )  )){
 		$args = array_merge($wp_query->query, array('posts_per_page' => get_option('wpsc_products_per_page')));
 		$wp_query = new WP_Query($args);
+
 	}
 
 	if ( isset( $wp_query->post->ID ) )
@@ -539,6 +540,9 @@ add_action( 'template_redirect', 'wpsc_start_the_query', 8 );
  */
 function wpsc_add_meta_table_where($where){
 	global $wpdb;
+
+	remove_filter( 'posts_where', 'wpsc_add_meta_table_where' );
+			
 	return $where . ' AND ' . $wpdb->postmeta . '.meta_key = "_wpsc_price"';
 }
 
@@ -548,6 +552,7 @@ function wpsc_add_meta_table_where($where){
  */
 function wpsc_add_meta_table($join){
 	global $wpdb;
+	remove_filter( 'posts_join', 'wpsc_add_meta_table' );
 	return $join . ' JOIN ' . $wpdb->postmeta . ' ON ' . $wpdb->posts. '.ID = ' . $wpdb->postmeta . '.post_id';
 }
 
