@@ -796,8 +796,7 @@ jQuery(document).ready(function(){
 	});
 
 	// Form change tracking code.
-	jQuery('form.wpsc_form_track :input, form.wpsc_form_track :radio, form.wpsc_form_track :checkbox')
-	.live('change', function() {
+	jQuery('form.wpsc_form_track input, form.wpsc_form_track textarea').live('change', function() {
 		jQuery(this).parents('form.wpsc_form_track:first').addClass('wpsc_form_changed');
 	});
 
