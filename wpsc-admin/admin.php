@@ -559,8 +559,8 @@ add_action( 'wpsc_admin_pre_activity', 'wpsc_admin_latest_activity' );
 
 function wpsc_dashboard_widget_setup() {
 	global $current_user;
-	get_currentuserinfo();
-	if ( is_admin() ) {
+
+	if ( is_admin() && current_user_can( 'manage_options' ) ) {
 		$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
 		// Enqueue the styles and scripts necessary
 		wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
