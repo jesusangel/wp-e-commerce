@@ -41,7 +41,7 @@ if ( !get_option( 'wpsc_checkout_form_sets' ) ) {
  * @return  $vars (array) - modified query arguments
  */
 function wpsc_query_vars_product_list($vars){
-
+	$vars['posts_per_archive_page'] = 0;
 	if(is_admin() && isset($vars['post_type']) && 'wpsc-product' == $vars['post_type'] && isset($vars['orderby'])){
 		$vars['orderby'] = 'date';
 		$vars['order'] = 'desc';
