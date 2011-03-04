@@ -526,7 +526,6 @@ function wpsc_start_the_query() {
 			$wp_query = new WP_Query( 'page_id='.$product_page_id);
 		}
 	}
-
 	if ( isset( $wp_query->post->ID ) )
 		$post_id = $wp_query->post->ID;
 	else
@@ -845,13 +844,21 @@ class wpsc_products_by_category {
 				$whichcat .= "AND $wpdb->term_taxonomy.term_id IN ($in_cats)";
 			}
 			$whichcat .= " AND $wpdb->posts.post_status IN ('publish', 'locked', 'private') ";
+			
 			$groupby = "{$wpdb->posts}.ID";
 
 			$this->sql_components['join']     = $join;
-			$this->sql_components['where']    = $whichcat;
 			$this->sql_components['fields']   = "{$wpdb->posts}.*, {$wpdb->term_taxonomy}.term_id";
-			$this->sql_components['order_by'] = "{$wpdb->term_taxonomy}.term_id";
 			$this->sql_components['group_by'] = $groupby;
+	
+			//what about ordering by price
+			if(isset($q['meta_key']) && '_wpsc_price' == $q['meta_key']){
+				$whichcat .= " AND $wpdb->postmeta.meta_key = '_wpsc_price'";	
+			}else{
+
+				$this->sql_components['order_by'] = "{$wpdb->term_taxonomy}.term_id";
+			}
+			$this->sql_components['where']    = $whichcat;		
 			add_filter( 'posts_join', array( &$this, 'join_sql' ) );
 			add_filter( 'posts_where', array( &$this, 'where_sql' ) );
 			add_filter( 'posts_fields', array( &$this, 'fields_sql' ) );
