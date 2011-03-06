@@ -816,7 +816,7 @@ class wpsc_products_by_category {
 
 
 		// Category stuff for nice URLs
-		if ( ('' != $q['wpsc_product_category']) && !$query->is_singular ) {
+		if ( !empty( $q['wpsc_product_category'] ) && !$query->is_singular ) {
 			$q['taxonomy'] = 'wpsc_product_category';
 			$q['term'] = $q['wpsc_product_category'];
 			$in_cats = '';
