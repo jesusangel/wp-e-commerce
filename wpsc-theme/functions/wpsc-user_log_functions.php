@@ -489,6 +489,7 @@ function wpsc_user_details() {
 
 			echo "</tr>";
 
+			$gsttotal = false;
 			$endtotal = $total_shipping = 0;
 			foreach ( (array)$cart_log as $cart_row ) {
 				$alternate = "";
@@ -522,9 +523,8 @@ function wpsc_user_details() {
 
 				echo " <td>";
 				$gst = $cart_row['tax_charged'];
-				if($gst > 0)
-					$endtotal += $gst * $cart_row['quantity'];
-
+				if( $gst > 0)
+					$gsttotal += $gst;
 				echo wpsc_currency_display( $gst , array('display_as_html' => false) );
 				echo " </td>";
 
@@ -563,7 +563,11 @@ function wpsc_user_details() {
 			$endtotal += $total_shipping;
 			$endtotal += $purchase['wpec_taxes_total'];
 			echo wpsc_currency_display( $total_shipping, array('display_as_html' => false)  ) . "<br />";
-			echo wpsc_currency_display( $purchase['wpec_taxes_total'] , array('display_as_html' => false) ). "<br />";
+			if ( $gsttotal ){ //if false then must be exclusive.. doesnt seem too reliable needs more testing
+				echo wpsc_currency_display( $gsttotal , array('display_as_html' => false) ). "<br />";
+			} else {
+				echo wpsc_currency_display( $purchase['wpec_taxes_total'] , array('display_as_html' => false) ). "<br />";
+			}
 			echo wpsc_currency_display( $endtotal , array('display_as_html' => false) );
 			echo " </td>";
 
@@ -605,7 +609,7 @@ function wpsc_user_details() {
 						 echo "  <tr><td>" . $form_field['name'] . ":</td><td>".$state ."</td></tr>";
 							break;
 						default:
-							echo "  <tr><td>" . $form_field['name'] . ":</td><td>" . $form_field['value'] . "</td></tr>";
+							echo "  <tr><td>" . $form_field['name'] . ":</td><td>" . esc_html( $form_field['value'] ) . "</td></tr>";
 
 					}
 				}
