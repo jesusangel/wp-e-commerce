@@ -971,10 +971,11 @@ function wpsc_display_products_page( $query ) {
 	// get the display type for the selected category
 	if(!empty($temp_wpsc_query->query_vars['term']))
 		$display_type = wpsc_get_the_category_display($temp_wpsc_query->query_vars['term']);	
-	else
+	elseif( !empty( $args['wpsc_product_category'] ) )
 		$display_type = wpsc_get_the_category_display($args['wpsc_product_category']);	
-
-
+	else
+		$display_type = 'default';
+	
 	if ( isset( $_SESSION['wpsc_display_type'] ) )
 		$display_type = $_SESSION['wpsc_display_type'];
 
@@ -988,7 +989,7 @@ function wpsc_display_products_page( $query ) {
 	list($temp_wpsc_query, $wp_query) = array( $wp_query, $temp_wpsc_query ); // swap the wpsc_query objects back
 	if ( $is_single == false ) {
 		$GLOBALS['post'] = $wp_query->post;
-	}
+	} 
 	return $output;
 }
 
