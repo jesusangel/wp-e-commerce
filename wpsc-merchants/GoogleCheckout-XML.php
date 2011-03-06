@@ -111,7 +111,6 @@ function gateway_google($fromcheckout = false){
 		$cart->AddItem($cartitem["$no"]);
 		$no++;
 	}
-	echo '<pre>'.print_r($wpsc_cart,1).'</pre>';
 	//If there are coupons applied add coupon as a product with negative price
 	if($wpsc_cart->coupons_amount > 0){
 		if($google_curr != $local_currency_code) {
