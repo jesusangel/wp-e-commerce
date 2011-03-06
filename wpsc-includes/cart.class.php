@@ -1777,7 +1777,7 @@ class wpsc_cart_item {
                } while ($file_data['name'] == null);
            }
 
-           $unique_id =  sha1(uniqid(rand(), true));
+           $unique_id =  sha1(uniqid(rand(),true));
             if(move_uploaded_file($file_data['tmp_name'], WPSC_USER_UPLOADS_DIR.$file_data['name']) )
               $this->custom_file = array(
                'file_name' => $file_data['name'],
