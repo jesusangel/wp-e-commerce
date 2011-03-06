@@ -773,7 +773,8 @@ function wpsc_packing_slip($purchase_id) {
 			echo "</table>\n\r";
 			
 			
-			
+		    do_action ( 'wpsc_packing_slip_extra_info', $purchase_id );
+
 			
       echo "<table class='packing_slip'>";
 				
