@@ -511,10 +511,7 @@ function wpsc_submit_checkout() {
 	$options = get_option( 'custom_shipping_options' );
 	$form_validity = $wpsc_checkout->validate_forms();
 	extract( $form_validity ); // extracts $is_valid and $error_messages
-	if ( get_option( 'do_not_use_shipping' ) == 0 && ($wpsc_cart->selected_shipping_method == null || $wpsc_cart->selected_shipping_option == null) ) {
-		$_SESSION['wpsc_checkout_misc_error_messages'][] = __( 'You must select a shipping method, otherwise we cannot process your order.', 'wpsc' );
-		$is_valid = false;
-	}
+
 	if ( $_POST['agree'] != 'yes' ) {
 		$_SESSION['wpsc_checkout_misc_error_messages'][] = __( 'Please agree to the terms and conditions, otherwise we cannot process your order.', 'wpsc' );
 		$is_valid = false;
@@ -548,11 +545,13 @@ function wpsc_submit_checkout() {
 	else
 		$is_valid = false;
 	
-	if ( (get_option( 'do_not_use_shipping' ) != 1) && (in_array( 'ups', (array)$options )) && $_SESSION['wpsc_zipcode'] == '' ) {
-		if ( $num_items != $disregard_shipping ) {
+	if ( get_option( 'do_not_use_shipping' ) == 0 && ($wpsc_cart->selected_shipping_method == null || $wpsc_cart->selected_shipping_option == null) && ( $num_items != $disregard_shipping ) ) {
+		$_SESSION['wpsc_checkout_misc_error_messages'][] = __( 'You must select a shipping method, otherwise we cannot process your order.', 'wpsc' );
+		$is_valid = false;
+	}
+	if ( (get_option( 'do_not_use_shipping' ) != 1) && (in_array( 'ups', (array)$options )) && $_SESSION['wpsc_zipcode'] == '' && ( $num_items != $disregard_shipping ) ) {
 			$_SESSION['categoryAndShippingCountryConflict'] = __( 'Please enter a Zipcode and click calculate to proceed', 'wpsc' );
 			$is_valid = false;
-		}
 	}
 	if ( $is_valid == true ) {
 		$_SESSION['categoryAndShippingCountryConflict'] = '';
