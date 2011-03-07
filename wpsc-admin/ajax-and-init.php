@@ -435,8 +435,10 @@ function wpsc_admin_ajax() {
 		$newvalue = $_POST['value'];
 		if ( $_REQUEST['suspend'] == 'true' ) {
 			if ( $_REQUEST['value'] == 1 ) {
-				wpsc_member_dedeactivate_subscriptions( $_POST['id'] );
+				if( function_exists('wpsc_member_dedeactivate_subscriptions'))
+					wpsc_member_dedeactivate_subscriptions( $_POST['id'] );
 			} else {
+				if( function_exists('wpsc_member_dedeactivate_subscriptions'))
 				wpsc_member_deactivate_subscriptions( $_POST['id'] );
 			}
 			exit();
