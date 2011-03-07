@@ -434,13 +434,11 @@ function wpsc_admin_ajax() {
 	if ( ($_REQUEST['log_state'] == "true") && is_numeric( $_POST['id'] ) && is_numeric( $_POST['value'] ) ) {
 		$newvalue = $_POST['value'];
 		if ( $_REQUEST['suspend'] == 'true' ) {
-			if ( $_REQUEST['value'] == 1 ) {
-				if( function_exists('wpsc_member_dedeactivate_subscriptions'))
+			if ( $_REQUEST['value'] == 1 && function_exists('wpsc_member_dedeactivate_subscriptions'))
 					wpsc_member_dedeactivate_subscriptions( $_POST['id'] );
-			} else {
-				if( function_exists('wpsc_member_dedeactivate_subscriptions'))
+			elseif( function_exists('wpsc_member_dedeactivate_subscriptions'))
 				wpsc_member_deactivate_subscriptions( $_POST['id'] );
-			}
+			
 			exit();
 		} else {
 
