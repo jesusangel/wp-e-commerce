@@ -132,11 +132,57 @@
 		jQuery('select[title="shippingcountry"]').change();
 		jQuery('select[title="shippingstate"]').change();
 		
-		if( jQuery('#change_country #current_country').val() && ( (jQuery('select[title="billingcountry"]').val() && jQuery('#change_country #current_country').val() != jQuery('select[title="billingcountry"]').val() ) || (jQuery('select[title="billingstate"]').val() && jQuery('select[title="billingstate"]').val() != jQuery('#change_country #region').val()) ) ){
-			jQuery('#change_country select').remove();
-			jQuery('#change_country').append('<input type="hidden" name="country" value="'+jQuery('select[title="billingcountry"]').val()+'" /><input type="hidden" name="region" value="'+jQuery('select[title="billingstate"]').val()+'" /><input type="hidden" name="shippingSameBilling" value="true" />').submit();
+		//evil. If shipping is enabled checks if shipping country is the same and billing and if shipping state is the same as billing. If not - changes shipping country and (or) state to billing.
+		if( 
+			//if shipping is enabled this element will be present, so if it's not, then it will skip everything
+			jQuery('#change_country #current_country').val() 
+			&&
+			//also we only need to do this when shipping country is different than billing country. following code does the check
+			(
+				//check if countries are different
+				(
+					//if billing country dropdown is present
+					jQuery('select[title="billingcountry"]')
+					&&
+					//and if the value is different from shipping
+					jQuery('#change_country #current_country').val() != jQuery('select[title="billingcountry"]').val()
+				) 
+				||
+				//ceck if billing region is different
+				(
+					//if billing region is present
+					jQuery('select[title="billingstate"]')
+					&&
+					//if its different from shipping
+					jQuery('select[title="billingstate"]').val() != jQuery('#change_country #region').val()
+				)
+			) 
+		){
+			jQuery('#current_country option').removeAttr('selected');
+			jQuery('#current_country option[value='+jQuery('select[title="billingcountry"]').val()+']').attr('selected', 'selected');
+			jQuery('#region').remove();
+			if(jQuery('select[title="billingstate"]').html()){
+				jQuery('#change_country #current_country').after('<select name="region" id="region" onchange="submit_change_country();">'+jQuery('select[title="billingstate"]').html()+'</select>')
+				jQuery('#region option').removeAttr('selected');
+				jQuery('#region option[value='+jQuery('select[title="billingstate"]').val()+']').attr('selected', 'selected');
+			}
+			var request_vars = {'country' : jQuery('#current_country').val(), 'wpsc_ajax_actions' : 'update_location', 'wpsc_update_location' : true, 'wpsc_submit_zipcode' : 'Calculate' };
+			if(jQuery('#region'))
+				request_vars.region = jQuery('#region').val();
+			if(typeof(updated_shipping_quote_after)=='undefined')
+				updated_shipping_quote_after = false;
+			jQuery.post( 
+				location.href,
+				request_vars,
+				function(){
+					if(!updated_shipping_quote_after){
+						jQuery('select[title="billingcountry"]').change();
+						updated_shipping_quote_after = false;
+					} else
+						updated_shipping_quote_after = false;
+				}
+			);
 		}
-		
 	}
 
 // this function is for binding actions to events and rebinding them after they are replaced by AJAX
@@ -157,6 +203,7 @@ jQuery(document).ready(function () {
 			wpsc_shipping_same_as_billing();
 		} else {
 			jQuery(this).parents('table:first').find('tr').show();
+			jQuery('.shipping_country_name').show();
 			jQuery('#shippingsameasbillingmessage').hide();
 			jQuery("select[title='billingregion'], select[title='billingstate'], select[title='billingcountry'], input[title='billingstate']").die( 'change', wpsc_shipping_same_as_billing );
 			jQuery("input[title='billingfirstname'], input[title='billinglastname'], textarea[title='billingaddress'], input[title='billingcity'], input[title='billingpostcode'], input[title='billingphone'], input[title='billingfirstname'], input[title='billingstate']").unbind('change', wpsc_shipping_same_as_billing).unbind('keyup', wpsc_shipping_same_as_billing);

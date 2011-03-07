@@ -747,6 +747,7 @@ function wpsc_change_tax() {
 
 	$tax = $wpsc_cart->calculate_total_tax();
 	$total = wpsc_cart_total();
+	$total_input = wpsc_cart_total(false);
 	if($wpsc_cart->coupons_amount >= wpsc_cart_total() && !empty($wpsc_cart->coupons_amount)){
 		$total = 0;
 	}
@@ -857,7 +858,8 @@ function wpsc_change_tax() {
 		echo "jQuery(\"tr.total_tax\").hide();\n\r";
 	}
 	echo "jQuery('#checkout_tax').html(\"<span class='pricedisplay'>" . wpsc_cart_tax() . "</span>\");\n\r";
-	echo "jQuery('#checkout_total').html(\"<span class='pricedisplay'>{$total}</span><input id='shopping_cart_total_price' type='hidden' value='{$total}' />\");\n\r";
+	echo "jQuery('#checkout_total').html(\"{$total}<input id='shopping_cart_total_price' type='hidden' value='{$total_input}' />\");\n\r";
+	echo "if(jQuery(\"#shippingSameBilling\").is(\":checked\")) wpsc_shipping_same_as_billing();";
 	exit();
 }
 
