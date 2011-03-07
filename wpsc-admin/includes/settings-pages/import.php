@@ -111,9 +111,8 @@ function wpsc_options_import() {
 		$column_data = $_POST['column'];
 		$value_data = $_POST['value_name'];
 		
-		if ($_POST['post_status'] == 'publish')
-			$status = '1';
-				
+		$status = esc_attr($_POST['post_status']);
+		
 		$name = array( );
 		foreach ( $value_data as $key => $value ) {
 
@@ -139,16 +138,11 @@ function wpsc_options_import() {
 				'special_price' => null,
 				'display_frontpage' => null,
 				'notax' => null,
-				'publish' => esc_attr( $status ),
 				'active' => null,
 				'donation' => null,
 				'no_shipping' => null,
 				'thumbnail_image' => null,
 				'thumbnail_state' => null,
-				'category' => array(
-					esc_html__( $_POST['category'] )
-				
-				),
 				'meta' => array(
 					'_wpsc_price' => esc_attr( str_replace( '$', '', $cvs_data2['price'][$i] ) ),
 					'_wpsc_sku' => esc_attr( $cvs_data2['sku'][$i] ),
@@ -161,7 +155,10 @@ function wpsc_options_import() {
 				)
 			);
 			$product_columns = wpsc_sanitise_product_forms( $product_columns );
-			wpsc_insert_product( $product_columns );
+			// status needs to be set here because wpsc_sanitise_product_forms overwrites it :/
+			$product_columns['post_status'] = $status;
+			$product_id = wpsc_insert_product( $product_columns );
+			wp_set_object_terms( $product_id , array( (int)$_POST['category'] ) , 'wpsc_product_category' );
 		}
 		echo "<br /><br />". sprintf(__("Success, your <a href='%s'>products</a> have been upload.", "wpsc"), admin_url('edit.php?post_type=wpsc-product'));
 	}
