@@ -113,7 +113,7 @@ div.starcontainer a{/*
  }
  
 div.starcontainer a:hover{
- background: url('images/blue-star.gif') !important; 
+ background: url('../images/blue-star.gif') !important; 
 /* border: 1px solid black;*/
  }
    
