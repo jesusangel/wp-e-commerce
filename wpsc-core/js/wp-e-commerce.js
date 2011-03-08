@@ -97,11 +97,7 @@
 			Array(
 				"input[title='billingemail']",
 				"input[title='shippingemail']"
-			), 
-			Array(
-				"input[title='billingstate']",
-				"input[title='shippingstate']"
-			) 
+			)
 		);
 		
 		for(var i in fields) {
@@ -113,7 +109,19 @@
 				jQuery(fields[i][1]).addClass('intra-field-label');
 		}
 		
-		//state
+		if(typeof(jQuery("input[title='billingstate']").val()) != 'undefined'){
+			jQuery("input[title='shippingstate']").val(jQuery("input[title='billingstate']").val());
+			jQuery("input[title='shippingstate']").parents('tr:first').hide();
+			if(!jQuery("input[title='billingstate']").hasClass('intra-field-label'))
+				jQuery("input[title='shippingstate']").removeClass('intra-field-label');
+			else
+				jQuery("input[title='shippingstate']").addClass('intra-field-label');
+		} else {
+			jQuery("input[title='shippingstate']").val(jQuery("select[title='billingstate']").val());
+			jQuery(".shipping_region_name").text(jQuery("select[title='billingstate'] option[selected='selected']").text());
+			jQuery("input[title='shippingstate']").parents('tr:first').hide();
+		}
+		
 		
 		jQuery("input.shipping_country").val(
 			jQuery("select[title='billingcountry'] :selected").text()
