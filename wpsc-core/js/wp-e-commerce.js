@@ -109,7 +109,7 @@
 				jQuery(fields[i][1]).addClass('intra-field-label');
 		}
 		
-		if(typeof(jQuery("input[title='billingstate']").val()) != 'undefined'){
+		if( jQuery("input[title='billingstate']").length ){
 			jQuery("input[title='shippingstate']").val(jQuery("input[title='billingstate']").val());
 			jQuery("input[title='shippingstate']").parents('tr:first').hide();
 			if(!jQuery("input[title='billingstate']").hasClass('intra-field-label'))
@@ -124,7 +124,7 @@
 		
 		
 		jQuery("input.shipping_country").val(
-			jQuery("select[title='billingcountry'] :selected").text()
+			jQuery("select[title='billingcountry']").val()
 		).removeClass('intra-field-label').parents('tr:first').hide();
 		
 		jQuery("span.shipping_country_name").html(
