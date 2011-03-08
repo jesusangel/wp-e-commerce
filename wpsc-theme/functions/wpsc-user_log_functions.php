@@ -348,6 +348,9 @@ function wpsc_user_details() {
 	$nzshpcrt_gateways = nzshpcrt_get_gateways();
 	$i = 0;
 	$subtotal = 0;
+
+        do_action( 'wpsc_pre_purchase_logs' );
+
 	foreach ( (array)$purchase_log as $purchase ) {
 		$status_state = "expand";
 		$status_style = "display:none;";
@@ -420,6 +423,8 @@ function wpsc_user_details() {
 		echo "  <strong class='form_group'>" . __( 'Order Status', 'wpsc' ) . ":</strong>\n\r";
 		echo $status_name . "<br /><br />";
 
+                do_action( 'wpsc_user_log_after_order_status', $purchase );
+                
 		//written by allen
 		$usps_id = get_option( 'usps_user_id' );
 		if ( $usps_id != null ) {
