@@ -161,7 +161,7 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 	foreach((array)$product_data as $product) {
 		$post_id = (int)$wpdb->get_var($wpdb->prepare( "SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = %s AND `meta_value` = %d LIMIT 1", '_wpsc_original_id', $product['id'] ));
 		
-		$sku = get_product_meta($product['id'], 'sku', true);
+		$sku = old_get_product_meta($product['id'], 'sku', true);
 
 		if($post_id == 0) {
 			$post_status = "publish";
@@ -588,5 +588,31 @@ function wpsc_update_database() {
 		$add_fields = $wpdb->query($wpdb->prepare("ALTER TABLE ".WPSC_TABLE_PURCHASE_LOGS." ADD wpec_taxes_rate decimal(11,2)"));
 	}	
 }
+/*
+ * The Old Get Product Meta for 3.7 Tables used in converting Products to Posts
+ */
 
+function old_get_product_meta($product_id, $key, $single = false) {
+  global $wpdb, $post_meta_cache, $blog_id;  
+  $product_id = (int)$product_id;
+  if($product_id > 0) {
+    $meta_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1");
+    //exit($meta_id);
+    if(is_numeric($meta_id) && ($meta_id > 0)) {      
+      if($single != false) {
+        $meta_values = maybe_unserialize($wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1"));
+			} else {
+        $meta_values = $wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id'");
+				$meta_values = array_map('maybe_unserialize', $meta_values);
+			}
+		}
+	} else {
+    $meta_values = false;
+	}
+	if (is_array($meta_values) && (count($meta_values) == 1)) {
+		return array_pop($meta_values);
+	} else {
+		return $meta_values;
+	}
+}
 ?>
