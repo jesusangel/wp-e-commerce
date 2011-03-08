@@ -371,7 +371,7 @@ function wpsc_convert_variation_combinations() {
 
 		// select the variation set associations
 		$variation_set_associations = $wpdb->get_col("SELECT `variation_id` FROM ".WPSC_TABLE_VARIATION_ASSOC." WHERE `associated_id` = '{$original_id}'");
-
+		//echo '$variation_set_associations<pre>'.print_r($variation_set_associations,1).'</pre>';
 		// select the variation associations if the count of variation sets is greater than zero
 		if(($original_id > 0) && (count($variation_set_associations) > 0)) {
 			$variation_associations = $wpdb->get_col("SELECT `value_id` FROM ".WPSC_TABLE_VARIATION_VALUES_ASSOC." WHERE `product_id` = '{$original_id}' AND `variation_id` IN(".implode(", ", $variation_set_associations).") AND `visible` IN ('1')");
@@ -379,7 +379,7 @@ function wpsc_convert_variation_combinations() {
 			// otherwise, we have no active variations, skip to the next product
 			continue;
 		}
-		
+	
 		foreach($variation_set_associations as $variation_set_id) {
 			$base_product_terms[] = wpsc_get_meta($variation_set_id, 'variation_set_id', 'wpsc_variation_set');
 		}
@@ -414,22 +414,23 @@ function wpsc_convert_variation_combinations() {
 			$product_values = $child_product_template;
 			
 			// select all values this "product" is associated with, then loop through them, getting the term id of the variation using the value ID
-			$variation_associations = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_COMBINATIONS." WHERE `priceandstock_id` = '{$variation_item->id}'");
-			foreach((array)$variation_associations as $association) {
+			$variation_associations_combinations = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_COMBINATIONS." WHERE `priceandstock_id` = '{$variation_item->id}'");
+			foreach((array)$variation_associations_combinations as $association) {
 				$variation_id = (int)wpsc_get_meta($association->value_id, 'variation_id', 'wpsc_variation');
 				// discard any values that are null, as they break the selecting of the terms
-				if($variation_id > 0) {
+				if($variation_id > 0 && in_array($association->value_id, $variation_associations) ) {
 					$variation_ids[] = $variation_id;
 				}
 			} 
 			
 			// if we have more than zero remaining terms, get the term data, then loop through it to convert it to a more useful set of arrays.
-			if(count($variation_ids) > 0) {
+			if(count($variation_ids) > 0 && ( count($variation_set_associations) == count($variation_ids) ) ) {
 				$combination_terms = get_terms('wpsc-variation', array(
 					'hide_empty' => 0,
 					'include' => implode(",", $variation_ids),
 					'orderby' => 'parent',
 				));
+
 				foreach($combination_terms as $term) {
 					$term_data['ids'][] = $term->term_id;
 					$term_data['slugs'][] = $term->slug;
