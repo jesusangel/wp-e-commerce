@@ -1069,4 +1069,12 @@ function wpsc_download_file() {
 }
 
 add_action( 'init', 'wpsc_download_file' );
+
+function wpsc_shipping_same_as_billing(){
+	$_SESSION['shippingSameBilling'] = $_POST['wpsc_shipping_same_as_billing'];
+	var_dump($_POST['wpsc_shipping_same_as_billing']);
+	var_dump($_SESSION['shippingSameBilling']);
+}
+
+add_action('wp_ajax_wpsc_shipping_same_as_billing', 'wpsc_shipping_same_as_billing');
 ?>

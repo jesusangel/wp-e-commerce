@@ -208,8 +208,21 @@ jQuery(document).ready(function () {
 		
 	jQuery("#shippingSameBilling").change(function(){
 		if(jQuery(this).is(":checked")){
+			var data = {
+				action: 'wpsc_shipping_same_as_billing',
+				wpsc_shipping_same_as_billing: true
+			};
+		
+			jQuery.post(ajaxurl, data, function(response) {
+			});
 			wpsc_shipping_same_as_billing();
 		} else {
+			var data = {
+				action: 'wpsc_shipping_same_as_billing',
+				wpsc_shipping_same_as_billing: false
+			};
+			jQuery.post(ajaxurl, data, function(response) {
+			});
 			jQuery(this).parents('table:first').find('tr').show();
 			jQuery('.shipping_country_name').show();
 			jQuery('#shippingsameasbillingmessage').hide();

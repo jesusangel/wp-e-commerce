@@ -301,10 +301,9 @@ endif;
                   	$_SESSION['shippingSameBilling'] = true;
                   elseif(isset($_POST['submit']) && !isset($_POST['shippingSameBilling']))
                   	$_SESSION['shippingSameBilling'] = false;
-                  	
-                  	
-                  	if($_SESSION['shippingSameBilling'])
-                  	$checked = 'checked="checked"';
+
+                  	if($_SESSION['shippingSameBilling'] == 'true')
+                  		$checked = 'checked="checked"';
                    ?>
 					<label for='shippingSameBilling'><?php _e('Same as billing address:','wpsc'); ?></label>
 					<input type='checkbox' value='true' name='shippingSameBilling' id='shippingSameBilling' <?php echo $checked; ?> />
