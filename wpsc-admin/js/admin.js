@@ -1046,18 +1046,11 @@ function hideelement1(id, item_value) {
 
 function toggle_display_options(state) {
 	switch(state) {
-		case 'list':
-			document.getElementById('grid_view_options').style.display = 'none';
-			document.getElementById('list_view_options').style.display = 'block';
-			break;
-
 		case 'grid':
-			document.getElementById('list_view_options').style.display = 'none';
 			document.getElementById('grid_view_options').style.display = 'block';
 			break;
 
 		default:
-			document.getElementById('list_view_options').style.display = 'none';
 			document.getElementById('grid_view_options').style.display = 'none';
 			break;
 	}
