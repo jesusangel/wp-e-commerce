@@ -63,12 +63,7 @@ global $wp_query;
 	
 		<?php /** start the product loop here */?>
 		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
-			
-			
-			<?php if(wpsc_category_transition()) :?>
-		  	<h3 class="wpsc_category_name"><?php echo wpsc_current_category_name(); ?></h3>
-			<?php endif; ?>
-		
+					
 			<div class="default_product_display product_view_<?php echo wpsc_the_product_id(); ?> <?php echo wpsc_category_class(); ?> group">   
 				<h2 class="prodtitle entry-title">
 							<?php if(get_option('hide_name_link') == 1) : ?>

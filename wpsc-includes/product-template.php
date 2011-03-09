@@ -576,24 +576,10 @@ function wpsc_current_category_name() {
  * @return string - the class of the selected category
  */
 function wpsc_category_transition() {
-	global $wpdb, $wp_query, $wpsc_query;
-	$current_category_id = null;
-	$previous_category_id = null;
-	$current_product_index = (int)$wp_query->current_post;
-	$previous_product_index = ((int)$wp_query->current_post - 1);
-
-	if ( $previous_product_index >= 0 && isset($wp_query->posts[$previous_product_index]->term_id))
-		$previous_category_id = $wp_query->posts[$previous_product_index]->term_id;
-	else
-		$previous_category_id = 0;
-
-	if(isset($wp_query->post->term_id))
-		$current_category_id = $wp_query->post->term_id;
-	if (( $current_category_id != $previous_category_id )&& $previous_category_id != null)
-		return true;
-	else
-		return false;
-
+	//removed because it was not working in 3.8 RC2 see first changest after
+	//http://plugins.trac.wordpress.org/changeset/357529/wp-e-commerce/
+	return false;
+	
 }
 /**
  * wpsc show fb like function, check whether to show facebook like
