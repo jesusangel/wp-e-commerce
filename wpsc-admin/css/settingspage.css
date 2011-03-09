@@ -55,6 +55,10 @@ tr.checkout-placeholder {
 	padding: 0px 0px 0px 5px;
 }
 
+#options_presentation{
+	min-width:850px;
+}
+
 table#gateway_options tr td {
 	padding: 0;
 	vertical-align: top;
