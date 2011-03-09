@@ -1280,8 +1280,8 @@ case 'sale_price' :
 </fieldset>
 <?php
 }
-
-add_action( 'bulk_edit_custom_box', 'wpsc_quick_edit_boxes', 10 );
+// TODO: this causes problems with wiping prices for now 
+//add_action( 'bulk_edit_custom_box', 'wpsc_quick_edit_boxes', 10 ); 
 add_action( 'quick_edit_custom_box', 'wpsc_quick_edit_boxes', 10, 2 );
 add_action( 'save_post', 'wpsc_save_quickedit_box' );
 
