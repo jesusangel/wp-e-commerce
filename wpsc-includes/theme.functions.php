@@ -967,7 +967,7 @@ function wpsc_display_products_page( $query ) {
 	list( $wp_query, $temp_wpsc_query ) = array( $temp_wpsc_query, $wp_query ); 
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 	
-	//Pretty sure this single_product code is legacy...but fixing it up just in case.
+	// Pretty sure this single_product code is legacy...but fixing it up just in case.
 	// get the display type for the selected category
 	if(!empty($temp_wpsc_query->query_vars['term']))
 		$display_type = wpsc_get_the_category_display($temp_wpsc_query->query_vars['term']);	
@@ -980,7 +980,10 @@ function wpsc_display_products_page( $query ) {
 		$display_type = $_SESSION['wpsc_display_type'];
 
 	ob_start();
-	wpsc_include_products_page_template($display_type);
+	if( 'wpsc-product' == $wp_query->post->post_type && !is_archive() && $wp_query->post_count <= 1 )
+		include( wpsc_get_template_file_path( 'wpsc-single_product.php' ) );
+	else
+		wpsc_include_products_page_template($display_type);
 	$is_single = false;
 	
 	$output = ob_get_contents();
