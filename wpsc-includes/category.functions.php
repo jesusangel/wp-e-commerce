@@ -249,6 +249,9 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 	if($category_branch === null) {
 		$category_branch =& $category_count_data;
 	}
+	$allowed_tags = array('a' => array('href' => array(),'title' => array()),'abbr' => array('title' => array()),'acronym' => array('title' => array()),'code' => array(),'em' => array(),'strong' => array(), 'b'=> array());
+	
+	$allowedtags = apply_filters('wpsc_category_description_allowed_tags' , $allowed_tags);
 
 	foreach((array)$category_data as $category_row) {
 	
