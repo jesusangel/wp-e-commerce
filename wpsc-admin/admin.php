@@ -912,6 +912,17 @@ function wpsc_add_meta_boxes(){
 	add_meta_box( 'dashboard_right_now', __('Current Month', 'wpsc'), 'wpsc_right_now', 'dashboard_page_wpsc-sales-logs', 'top' );
 }
 
+function wpsc_check_permalink_notice(){
+
+?>
+<div id="notice" class="error fade"><p>
+<?php printf( __( 'Due to a problem in WordPress Permalinks and Custom Post Types, WP e-Commerce encourages you to refresh your permalinks a second time. (for a more geeky explanation visit <a href="%s">trac</a>)' , 'wpsc' ), 'http://core.trac.wordpress.org/ticket/16736' ); ?>
+</p></div>
+<?php
+
+}
+
+add_action( 'permalink_structure_changed' , 'wpsc_check_permalink_notice' );
 add_action( 'permalink_structure_changed' , 'wpsc_update_permalinks' );
 add_action( 'get_sample_permalink_html' , 'wpsc_update_permalinks' );
 add_action( 'wp_ajax_category_sort_order', 'wpsc_ajax_set_category_order' );
