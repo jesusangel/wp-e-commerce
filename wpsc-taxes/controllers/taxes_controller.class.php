@@ -104,11 +104,16 @@ class wpec_taxes_controller {
     * @param: tax_percentage - the percentage you wish to use to calculate the tax
     * @return: calculated price
     * */
-   function wpec_taxes_calculate_tax( $price, $tax_percentage ) {
+   function wpec_taxes_calculate_tax( $price, $tax_percentage, $exclusive = true ) {
       $returnable = 0;
 
       if ( !empty( $tax_percentage ) ) {
-         $returnable = $price * ($tax_percentage / 100);
+      	if($exclusive)
+			$returnable = $price * ($tax_percentage / 100);
+		else{
+			$returnable = ($price / (100 + $tax_percentage) ) * $tax_percentage;
+		}
+			
       }// if
 
       return $returnable;
@@ -155,7 +160,6 @@ class wpec_taxes_controller {
    function wpec_taxes_calculate_included_tax( $cart_item ) {
       global $wpsc_cart;
       $returnable = false;
-      
       //do not calculate tax for this item if it is not taxable
       if(!isset($cart_item->meta[0]['wpec_taxes_taxable']))
       {
@@ -169,7 +173,7 @@ class wpec_taxes_controller {
             //get the taxable price - unit price multiplied by qty
             $taxable_price = $cart_item->unit_price * $cart_item->quantity;
 
-            $returnable = array( 'tax' => $this->wpec_taxes_calculate_tax( $taxable_price, $tax_rate ), 'rate' => $tax_rate );
+            $returnable = array( 'tax' => $this->wpec_taxes_calculate_tax( $taxable_price, $tax_rate, false ), 'rate' => $tax_rate );
          }// if
       }// if
 
