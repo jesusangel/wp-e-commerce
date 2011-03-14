@@ -184,21 +184,23 @@ class wpec_taxes {
 	 *         percentage rate for
 	 * */
 	function wpec_taxes_get_included_rate( $taxes_band_index, $country_code, $region_code='' ) {
-		//set the tax_rate
-		$tax_rate = 0;
-
-		//get the tax band
+		//get the tax band and tax rate
 		$tax_band = $this->wpec_taxes_get_band_from_index( $taxes_band_index );
-
+		$rate_array = $this->wpec_taxes_get_rate( $country_code, $region_code );
+		
 		//set the tax rate depending on product rate settings
-		switch ( $this->wpec_taxes_get_product() ) {
-			case 'add':
-				$rate_array = $this->wpec_taxes_get_rate( $country_code, $region_code );
-				$tax_rate += $rate_array['rate'];
-			case 'replace':
-				$tax_rate += $tax_band['rate'];
-				break;
-		}// switch
+		if(isset($tax_band['rate']))
+			switch ( $this->wpec_taxes_get_product() ) {
+				case 'add':
+					$tax_rate = $rate_array['rate'] + $tax_band['rate'];
+					break;
+				case 'replace':
+				default:
+						$tax_rate = $tax_band['rate'];
+					break;
+			}// switch
+		else
+			$tax_rate = $rate_array['rate'];
 		//return tax for this item
 		return $tax_rate;
 	} // wpec_taxes_get_included_rate
