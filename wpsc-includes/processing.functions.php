@@ -117,9 +117,8 @@ function wpsc_decrement_claimed_stock($purchase_log_id) {
 		$current_stock = get_post_meta($product_id, '_wpsc_stock', true);
 		$remaining_stock = $current_stock - $claimed_stock['stock_claimed'];
 		update_post_meta($product_id, '_wpsc_stock', $remaining_stock);
-		
-		$remaining_stock = $wpdb->get_row($sql_query, ARRAY_A);
-		if($remaining_stock == 0 && get_product_meta($product_id,'unpublish_when_none_left',true) == 1){
+		$product_meta = get_product_meta($product_id,'product_metadata',true);
+		if( $remaining_stock < 1 &&  $product_meta["unpublish_when_none_left"] == 1){
 			wp_mail(get_option('admin_email'), sprintf(__('%s is out of stock', 'wpsc'), $product->post_title), sprintf(__('Remaining stock of %s is 0. Product was unpublished.', 'wpsc'), $product->post_title) );
 			$wpdb->query("UPDATE `".$wpdb->posts."` SET `post_status` = 'draft' WHERE `ID` = '{$product_id}'");
 		}
