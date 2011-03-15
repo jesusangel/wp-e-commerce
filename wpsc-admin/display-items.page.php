@@ -117,13 +117,13 @@ function wpsc_additional_column_data( $column ) {
                     $src = wp_get_attachment_url( $attached_image->ID );
                  ?>
                     <div style='width:38px; height:38px; overflow:hidden;'>
-                        <img title='<?php _e( 'Drag to a new position', 'wpsc' ); ?>' src='<?php echo $src; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
+                        <img src='<?php echo $src; ?>' alt='<?php _e( 'Drag to a new position', 'wpsc' ); ?>' width='38' height='38' />
                     </div>
                 <?php
 		     } else {
 		      	$image_url = WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif";
                 ?>
-                      <img title='<?php _e( 'Drag to a new position', 'wpsc' ); ?>' src='<?php echo $image_url; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
+                      <img src='<?php echo $image_url; ?>' alt='<?php _e( 'Drag to a new position', 'wpsc' ); ?>' width='38' height='38' />
                 <?php
                      }
                 break;
