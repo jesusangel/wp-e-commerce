@@ -10,19 +10,6 @@
  * @since 3.8
  */
 
-/**
- * wpsc_core_load_textdomain()
- *
- * Load up the WPEC textdomain
- */
-function wpsc_core_load_textdomain() {
-	//if there is a translation file in wp-content/langauges then load it, else load from default location
-	//this is to alow users modify translations and don't loose modifications when upgrading
-	if( !load_plugin_textdomain( 'wpsc', false, '../languages/' ) )
-		load_plugin_textdomain( 'wpsc', false, dirname( plugin_basename( __FILE__ ) ) . '/../wpsc-languages/' );
-}
-add_action( 'plugins_loaded', 'wpsc_core_load_textdomain', 7 );
-
 add_filter( 'intermediate_image_sizes_advanced', 'wpsc_intermediate_image_sizes_advanced', 10, 1 );
 
 function wpsc_intermediate_image_sizes_advanced($sizes){
