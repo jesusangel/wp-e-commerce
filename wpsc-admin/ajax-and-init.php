@@ -26,17 +26,6 @@ if ( isset( $_REQUEST['submit'] ) && ($_REQUEST['submit'] == 'Add Tracking ID') 
 	add_action( 'admin_init', 'wpsc_ajax_add_tracking' );
 }
 
-function wpsc_delete_currency_layer() {
-	global $wpdb;
-	$meta_key = 'currency[' . $_POST['currSymbol'] . ']';
-	$sql = "DELETE FROM `" . WPSC_TABLE_PRODUCTMETA . "` WHERE `meta_key`='" . $meta_key . "' LIMIT 1";
-	$wpdb->query( $sql );
-}
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'delete_currency_layer') ) {
-	add_action( 'admin_init', 'wpsc_delete_currency_layer' );
-}
-
 function wpsc_purchlog_email_trackid() {
 	global $wpdb;
 	$id = absint( $_POST['purchlog_id'] );

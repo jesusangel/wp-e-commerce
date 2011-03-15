@@ -203,15 +203,9 @@ jQuery(document).ready(function(){
 	//delete currency layer in admin product page
 	jQuery('a.wpsc_delete_currency_layer').livequery(function(){
 		jQuery(this).click(function(event){
-			var currencySymbol = jQuery(this).attr('rel');
 			jQuery(this).prev('input').val('');
 			jQuery(this).prev('select').val('');
-			jQuery(this).parent('.wpsc_additional_currency').hide();
-
-			post_values = "currSymbol="+currencySymbol;
-			jQuery.post('index.php?wpsc_admin_action=delete_currency_layer',post_values, function(returned_data){});
-			//alert(currencySymbol);
-
+			jQuery(this).parent('div:first').hide();
 			event.preventDefault();
 		});
 	});

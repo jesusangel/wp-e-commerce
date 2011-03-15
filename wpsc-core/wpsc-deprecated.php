@@ -374,4 +374,9 @@ function wpsc_product_image_html( $image_name, $product_id ) {
 	return false;
 }
 
+function wpsc_delete_currency_layer() {
+	_deprecated_function( __FUNCTION__, '3.8');
+	return false;
+}
+
 ?>
