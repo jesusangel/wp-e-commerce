@@ -121,7 +121,7 @@ class flatrate {
 
 			if ($flatrates != '') {
 
-				if ($_SESSION['quote_shipping_method'] == $this->internal_name) {
+				if (isset($_SESSION['quote_shipping_method']) && $_SESSION['quote_shipping_method'] == $this->internal_name) {
 
 					if ($_SESSION['quote_shipping_option'] != "Flat Rate") {
 						$_SESSION['quote_shipping_option'] = null;
