@@ -396,6 +396,10 @@ function wpsc_akst_page() {
 
 function wpsc_akst_share_link($action = 'print') {
 	_deprecated_function( __FUNCTION__, '3.8');
+	if($action == 'print')
+		echo '<div class="st_sharethis" displayText="ShareThis"></div>';
+	else
+		return '<div class="st_sharethis" displayText="ShareThis"></div>';
 	return false;
 }
 
