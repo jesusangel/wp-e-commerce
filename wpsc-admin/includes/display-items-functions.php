@@ -161,7 +161,7 @@ function wpsc_price_control_forms() {
 			</select>
 			<?php _e( 'Price', 'wpsc' ); ?> :
 			<input type='text' class='text' size='8' name='newCurrPrice[]' value='0.00' style='display:inline' />
-			<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/cross.png' /></a>
+			<a href='' class='wpsc_delete_currency_layer'><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/cross.png' /></a>
 
 		</div> <!-- close new_layer -->
 <?php
