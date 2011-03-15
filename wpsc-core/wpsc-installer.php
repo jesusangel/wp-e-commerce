@@ -271,7 +271,7 @@ function wpsc_install() {
 			$newpages = true;
 		}
 		//update option
-		update_option( $page['option'], get_permalink( $page_id ) );
+		update_option( $page['option'], _get_page_link( $page_id ) );
 		//also if this is shopping_cart, then update checkout url option
 		if ( $page['option'] == 'shopping_cart_url' )
 			update_option( 'checkout_url', get_permalink( $page_id ) );
