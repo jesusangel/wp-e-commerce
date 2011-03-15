@@ -244,7 +244,7 @@ function wpsc_install() {
 		));
 		$newpages = true;
 	}
-	update_option( $pages['products-page']['option'], get_permalink( $products_page_id ) );
+	update_option( $pages['products-page']['option'], _get_page_link($products_page_id) );
 	//done. products page created. no we can unset products page data and create all other pages.
 	
 	//unset products page
