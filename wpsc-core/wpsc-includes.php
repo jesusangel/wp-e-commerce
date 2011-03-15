@@ -31,10 +31,6 @@ require_once( WPSC_FILE_PATH . '/wpsc-includes/upgrades.php' );
 // Editor
 require_once( WPSC_CORE_JS_PATH . '/tinymce3/tinymce.php' );
 
-// Share This
-if ( ( get_option( 'wpsc_share_this' ) == 1 ) && ( get_option( 'product_list_url' ) != '' ) )
-	include_once( WPSC_FILE_PATH . '/wpsc-includes/share-this.php' );
-
 require_once( WPSC_FILE_PATH . '/wpsc-includes/currency_converter.inc.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/shopping_cart_functions.php' );
 

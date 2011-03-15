@@ -152,11 +152,11 @@
 									<?php endif; ?>							
 								<?php endif; ?>
 							</div><!--close wpsc_product_price-->
-							<?php
-								if ( function_exists( 'wpsc_akst_share_link' ) && ( get_option( 'wpsc_share_this' ) == 1 ) )
-									echo wpsc_akst_share_link('return');
-							?>
-
+							<!--sharethis-->
+							<?php if ( get_option( 'wpsc_share_this' ) == 1 ): ?>
+							<div class="st_sharethis" displayText="ShareThis"></div>
+							<?php endif; ?>
+							<!--end sharethis-->
 							<input type="hidden" value="add_to_cart" name="wpsc_ajax_action" />
 							<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id" />					
 							<?php if( wpsc_product_is_customisable() ) : ?>

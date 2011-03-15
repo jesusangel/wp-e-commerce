@@ -614,6 +614,8 @@ function wpsc_enqueue_user_script_and_css() {
 
 		if ( is_ssl() )
 			$siteurl = str_replace( "http://", "https://", $siteurl );
+		if( get_option( 'wpsc_share_this' ) == 1 )
+			wp_enqueue_script( 'sharethis', 'http://w.sharethis.com/button/buttons.js', array(), false, true );
 		wp_enqueue_script( 'jQuery' );
 		wp_enqueue_script( 'wp-e-commerce',               WPSC_CORE_JS_URL	. '/wp-e-commerce.js',                 array( 'jquery' ), $version_identifier );
 		wp_enqueue_script( 'infieldlabel',               WPSC_CORE_JS_URL	. '/jquery.infieldlabel.min.js',                 array( 'jquery' ), $version_identifier );

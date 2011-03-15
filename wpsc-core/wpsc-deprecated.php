@@ -379,4 +379,29 @@ function wpsc_delete_currency_layer() {
 	return false;
 }
 
+function wpsc_akst_send_mail() {
+	_deprecated_function( __FUNCTION__, '3.8');
+	return false;
+}
+
+function wpsc_akst_hide_pop() {
+	_deprecated_function( __FUNCTION__, '3.8');
+	return false;
+}
+
+function wpsc_akst_page() {
+	_deprecated_function( __FUNCTION__, '3.8');
+	return false;
+}
+
+function wpsc_akst_share_link($action = 'print') {
+	_deprecated_function( __FUNCTION__, '3.8');
+	return false;
+}
+
+function wpsc_akst_share_form() {
+	_deprecated_function( __FUNCTION__, '3.8');
+	return false;
+}
+
 ?>
