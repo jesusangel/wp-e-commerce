@@ -408,4 +408,7 @@ function wpsc_akst_share_form() {
 	return false;
 }
 
-?>
+function wpsc_has_shipping_form() {
+	_deprecated_function( __FUNCTION__, '3.8');
+	return false;
+}
