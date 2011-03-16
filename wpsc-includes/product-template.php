@@ -38,7 +38,6 @@ function wpsc_a_page_url($page=null) {
 	$curpage = $wp_query->query_vars['paged'];
 	if($page != '')
 		$wp_query->query_vars['paged'] = $page;
-
 	if($wp_query->is_single === true) {
 		$wp_query->query_vars['paged'] = $curpage;
 		return wpsc_product_url($wp_query->post->ID);
@@ -66,7 +65,7 @@ function wpsc_a_page_url($page=null) {
  * @return 
  */
 function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $page_link = '') {
-	global $wp_query,$wpsc_query;
+	global $wp_query;
 	$num_paged_links = 4; //amount of links to show on either side of current page
 	
 	$additional_links = '';
@@ -103,9 +102,9 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	//if there is no pagination	
 	if(!get_option('permalink_structure')) {
 		$category = '?';
-		if(isset($wpsc_query->query_vars['wpsc_product_category']))
+		if(isset($wp_query->query_vars['wpsc_product_category']))
 			$category = '?wpsc_product_category='.$wp_query->query_vars['wpsc_product_category'];
-		if(isset($wpsc_query->query_vars['wpsc_product_category']) && is_string($wpsc_query->query_vars['wpsc_product_category'])){
+		if(isset($wp_query->query_vars['wpsc_product_category']) && is_string($wp_query->query_vars['wpsc_product_category'])){
 
 			$page_link = get_option('blogurl').$category.'&amp;paged';
 		}else{
@@ -115,8 +114,8 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 		$separator = '=';
 	}else{
 		// This will need changing when we get product categories sorted
-		if(isset($wpsc_query->query_vars['wpsc_product_category']))
-			$page_link = trailingslashit(get_option('product_list_url')).$wpsc_query->query_vars['wpsc_product_category'].'/';
+		if(isset($wp_query->query_vars['wpsc_product_category']))
+			$page_link = trailingslashit(get_option('product_list_url')).$wp_query->query_vars['wpsc_product_category'].'/';
 		else
 			$page_link = trailingslashit(get_option('product_list_url'));
 		
