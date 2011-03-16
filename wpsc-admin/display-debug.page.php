@@ -10,6 +10,8 @@
  * @since 3.7
  */
 function wpsc_debug_page() {
+	if ( !current_user_can('manage_options') )
+		wp_die("You don't look line an administrator.");
 	global $wpdb;
 	$fixpage = get_option( 'siteurl' ) . '/wp-admin/admin.php?page=wpsc-sales-logs&amp;subpage=upgrade-purchase-logs';
 ?>
@@ -150,6 +152,8 @@ function wpsc_debug_page() {
 }
 
 function wpsc_test_copying_themes() {
+	if ( !current_user_can('manage_options') )
+		wp_die("You don't look line an administrator.");
 
 	$new_dir    = @opendir( WPSC_THEMES_PATH );
 	$num        = 0;
@@ -175,6 +179,8 @@ function wpsc_test_copying_themes() {
 }
 
 function wpsc_group_and_update_download_links() {
+	if ( !current_user_can('manage_options') )
+		wp_die("You don't look line an administrator.");
 	global $wpdb;
 	$unique_file_names = $wpdb->get_col( "SELECT DISTINCT `filename` FROM  `" . WPSC_TABLE_PRODUCT_FILES . "`" );
 	foreach ( (array)$unique_file_names as $filename ) {
@@ -200,6 +206,8 @@ function wpsc_group_and_update_download_links() {
  * wpsc_clean_product_url_names, cleans dupicates
  */
 function wpsc_clean_product_url_names() {
+	if ( !current_user_can('manage_options') )
+		wp_die("You don't look line an administrator.");
 	global $wpdb;
 
 	$duplicated_meta_data = $wpdb->get_col( "SELECT `meta_value` FROM `" . WPSC_TABLE_PRODUCTMETA . "` WHERE `meta_key` IN('url_name') GROUP BY `meta_value` HAVING COUNT(`meta_value`) > 1 " );
@@ -226,6 +234,8 @@ function wpsc_clean_product_url_names() {
  * wpsc_redo_product_url_names, deletes all product URL names, then remakes then
  */
 function wpsc_redo_product_url_names() {
+	if ( !current_user_can('manage_options') )
+		wp_die("You don't look line an administrator.");
 	global $wpdb;
 
 	$product_data = $wpdb->get_results( "SELECT DISTINCT `products`.* FROM `" . WPSC_TABLE_PRODUCTMETA . "` AS `meta` LEFT JOIN `" . WPSC_TABLE_PRODUCT_LIST . "` AS `products` ON `meta`.`product_id` =  `products`.`id` WHERE `products`.`active` = '1' ORDER BY `meta`.`meta_value` DESC", ARRAY_A );
@@ -267,6 +277,8 @@ function wpsc_redo_product_url_names() {
 }
 
 function wpsc_recreate_product_url_names() {
+	if ( !current_user_can('manage_options') )
+		wp_die("You don't look line an administrator.");
 	global $wpdb;
 
 	$product_data = $wpdb->get_results( "SELECT `id`, `name` FROM `" . WPSC_TABLE_PRODUCT_LIST . "` WHERE `active` IN ('1')", ARRAY_A );
@@ -310,6 +322,8 @@ function wpsc_recreate_product_url_names() {
 }
 
 function wpsc_mass_resize_thumbnails_and_clean_images() {
+	if ( !current_user_can('manage_options') )
+		wp_die("You don't look line an administrator.");
 	global $wpdb;
 
 	$height = get_option( 'product_image_height' );
