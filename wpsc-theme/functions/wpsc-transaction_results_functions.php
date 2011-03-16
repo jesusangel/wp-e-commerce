@@ -121,7 +121,6 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 		$product_list = $product_list_html = $report_product_list = '';
 	
 		$cart = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CART_CONTENTS . "` WHERE `purchaseid` = '{$purchase_log['id']}'" , ARRAY_A );
-		//echo '<pre>'.print_r($wpsc_cart,1).'</pre>';
 		if ( ($cart != null) && ($errorcode == 0) ) {
 			$total_shipping = '';
 			foreach ( $cart as $row ) {

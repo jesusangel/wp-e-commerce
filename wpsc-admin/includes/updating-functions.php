@@ -371,7 +371,6 @@ function wpsc_convert_variation_combinations() {
 
 		// select the variation set associations
 		$variation_set_associations = $wpdb->get_col("SELECT `variation_id` FROM ".WPSC_TABLE_VARIATION_ASSOC." WHERE `associated_id` = '{$original_id}'");
-		//echo '$variation_set_associations<pre>'.print_r($variation_set_associations,1).'</pre>';
 		// select the variation associations if the count of variation sets is greater than zero
 		if(($original_id > 0) && (count($variation_set_associations) > 0)) {
 			$variation_associations = $wpdb->get_col("SELECT `value_id` FROM ".WPSC_TABLE_VARIATION_VALUES_ASSOC." WHERE `product_id` = '{$original_id}' AND `variation_id` IN(".implode(", ", $variation_set_associations).") AND `visible` IN ('1')");

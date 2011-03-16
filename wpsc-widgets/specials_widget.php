@@ -154,7 +154,6 @@ function wpsc_specials( $args = null, $instance ) {
 		'posts_per_page' 	=> $number
 	) ;	
 	$special_products = query_posts( $args );
-//	exit('<pre>'.print_r($args,1).'</pre>');
 	$output = '';
 	$product_ids[] = array();
 	if ( count( $special_products ) > 0 ) {

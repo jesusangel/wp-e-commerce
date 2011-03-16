@@ -240,8 +240,6 @@ function wpsc_display_form_fields() {
 					elseif( isset($shipping_form_field) )
 						echo "<br /><select name='collected_data[" . $shipping_form_field['id'] . "][1]'>" . nzshpcrt_region_list( $country_code, $meta_data[$shipping_form_field['id']] ) . "</select>";
 					break;
-					echo '<pre>'.print_r($shipping_form_field,1).'</pre>';
-						
 				case "email":
 					echo "<input type='text' value='" . $meta_data[$form_field['id']] . "' name='collected_data[" . $form_field['id'] . "]' />";
 					break;
