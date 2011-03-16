@@ -50,7 +50,7 @@ function wpsc_register_core_theme_files() {
 	wpsc_register_theme_file( 'wpsc-products_page.php' );
 	wpsc_register_theme_file( 'wpsc-shopping_cart_page.php' );
 	wpsc_register_theme_file( 'wpsc-transaction_results.php' );
-	wpsc_register_theme_file( 'wpsc-user_log.php' );
+	wpsc_register_theme_file( 'wpsc-user-log.php' );
 	wpsc_register_theme_file( 'wpsc-cart_widget.php' );
 	wpsc_register_theme_file( 'wpsc-featured_product.php' );
 	wpsc_register_theme_file( 'wpsc-category-list.php' );
