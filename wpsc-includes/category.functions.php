@@ -140,7 +140,7 @@ function wpsc_print_category_classes($category_to_print = false, $echo = true) {
 		if( $category_to_print['term_id'] == $curr_cat->term_id )
 			$result = ' wpsc-current-cat ';
 		//else check if the category that we are printing is parent of current category
-		elseif ( in_array($category_to_print[term_id], $curr_cat_parents) )
+		elseif ( in_array($category_to_print['term_id'], $curr_cat_parents) )
 			$result = ' wpsc-cat-ancestor ';
 	}
 	if( isset($result) )

@@ -58,6 +58,8 @@ function wpsc_product_row(&$product, $parent_product = null) {
 	
 	$global_product = $product;
 	setup_postdata($product);
+	$product_post_type_object = get_post_type_object('wpsc-product');
+	$current_user_can_edit_this_product = current_user_can( $product_type_object->cap->edit_post, $product->ID );
 
 	$rowclass = 'alternate' == $rowclass ? '' : 'alternate';
 	$post_owner = ( $current_user->ID == $product->post_author ? 'self' : 'other' );
@@ -127,7 +129,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		?>
 		<td <?php echo $attributes ?>>
 			<strong>
-			<?php if ( current_user_can('edit_post', $product->ID) && $product->post_status != 'trash' ) { ?>
+			<?php if ( $current_user_can_edit_this_product && $product->post_status != 'trash' ) { ?>
 				<a class="row-title" href="<?php echo $edit_link; ?>" title="<?php echo esc_attr(sprintf(__('Edit &#8220;%s&#8221;', 'wpsc'), $title)); ?>"><?php echo $title ?></a>
 				<?php if($parent_product): ?>
 					<input type="hidden" class="wpsc_ie_id wpsc_ie_field" value="<?php echo $product->ID ?>">
@@ -162,13 +164,13 @@ function wpsc_product_row(&$product, $parent_product = null) {
  			if(wpsc_product_has_children($product->ID))
  				$has_var = 'wpsc_has_variation';
 			$actions = array();
-			if ( current_user_can('edit_post', $product->ID) && 'trash' != $product->post_status ) {
+			if ( $current_user_can_edit_this_product && 'trash' != $product->post_status ) {
 				$actions['edit'] = '<a class="edit-product" href="'.$edit_link.'" title="' . esc_attr(__('Edit this product', 'wpsc')) . '">'. __('Edit', 'wpsc') . '</a>';
 				$actions['quick_edit'] = "<a class='wpsc_editinline ".$has_var."' title='".esc_attr(__('Quick Edit', 'wpsc'))."' href='#'>".__('Quick Edit', 'wpsc')."</a>";
 			}
 
 			if ( in_array($product->post_status, array('pending', 'draft')) ) {
-				if ( current_user_can('edit_product', $product->ID) ) {
+				if ( $current_user_can_edit_this_product ) {
 					$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('Preview &#8220;%s&#8221;', 'wpsc'), $title)) . '" rel="permalink">'.__('Preview', 'wpsc').'</a>';
 				}
 			} else if ( 'trash' != $product->post_status ) {
@@ -374,7 +376,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		case 'control_edit':  /* !control edit case */
 		?>
-		<td><?php if ( current_user_can('edit_post', $product->ID) ) { echo "<a href='$edit_link' class='edit'>" . __('Edit', 'wpsc') . "</a>"; } ?></td>
+		<td><?php if ( $current_user_can_edit_this_product ) { echo "<a href='$edit_link' class='edit'>" . __('Edit', 'wpsc') . "</a>"; } ?></td>
 		<?php
 		break;
 
@@ -382,7 +384,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		case 'control_delete':  /* !control delete case */
 		?>
-		<td><?php if ( current_user_can('delete_post', $product->ID) ) { echo "<a href='" . wp_nonce_url("post.php?action=delete&amp;post=$id", 'delete-post_' . $product->ID) . "' class='delete'>" . __('Delete', 'wpsc') . "</a>"; } ?></td>
+		<td><?php if ( $current_user_can_edit_this_product ) { echo "<a href='" . wp_nonce_url("post.php?action=delete&amp;post=$id", 'delete-post_' . $product->ID) . "' class='delete'>" . __('Delete', 'wpsc') . "</a>"; } ?></td>
 		<?php
 		break;
 

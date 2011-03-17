@@ -1825,7 +1825,7 @@ class wpsc_cart_item {
 
       $method = $this->cart->selected_shipping_method;
 	  $shipping = 0;
-      if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
+      if( !empty($method) && method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
          $shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
       }
       if($this->cart->has_total_shipping_discount()) {

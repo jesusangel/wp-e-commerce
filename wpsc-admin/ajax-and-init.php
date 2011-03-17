@@ -295,7 +295,7 @@ function wpsc_purchase_log_csv() {
 	global $wpdb, $wpsc_gateways;
 	get_currentuserinfo();
 	$count = 0;
-	if ( ($_GET['rss_key'] == 'key') && is_numeric( $_GET['start_timestamp'] ) && is_numeric( $_GET['end_timestamp'] ) && (current_user_can('edit_post')) ) {
+	if ( ($_GET['rss_key'] == 'key') && is_numeric( $_GET['start_timestamp'] ) && is_numeric( $_GET['end_timestamp'] ) && current_user_can( 'manage_options' ) ) {
 		$form_sql = "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1' AND `type` != 'heading' ORDER BY `checkout_order` DESC;";
 		$form_data = $wpdb->get_results( $form_sql, ARRAY_A );
 
@@ -394,7 +394,7 @@ function wpsc_admin_ajax() {
 	}
 
 	if ( ($_POST['remove_form_field'] == "true") && is_numeric( $_POST['form_id'] ) ) {
-		if ( current_user_can( 'level_7' ) ) {
+		if ( current_user_can( 'manage_options' ) ) {
 			$wpdb->query( $wpdb->prepare( "UPDATE `" . WPSC_TABLE_CHECKOUT_FORMS . "` SET `active` = '0' WHERE `id` = %d LIMIT 1 ;", $_POST['form_id'] ) );
 			exit( ' ' );
 		}

@@ -88,7 +88,7 @@ function wpsc_add_to_cart() {
 		}
 	}
 
-	if ( $_GET['ajax'] == 'true' ) {
+	if ( isset($_GET['ajax']) && $_GET['ajax'] == 'true' ) {
 		if ( ($product_id != null) && (get_option( 'fancy_notifications' ) == 1) ) {
 			echo "if(jQuery('#fancy_notification_content')) {\n\r";
 			echo "   jQuery('#fancy_notification_content').html(\"" . str_replace( array( "\n", "\r" ), array( '\n', '\r' ), addslashes( fancy_notification_content( $cart_messages ) ) ) . "\");\n\r";

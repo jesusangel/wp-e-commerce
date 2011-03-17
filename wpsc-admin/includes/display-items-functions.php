@@ -676,7 +676,7 @@ function wpsc_product_advanced_forms() {
 		$product_meta['engraved'] = '';
 
 	if( !isset( $product_meta['can_have_uploaded_image'] ) )
-		$product_meta['can_have_uploaded_image	'] = '';
+		$product_meta['can_have_uploaded_image'] = '';
 
 ?>
 
@@ -714,11 +714,10 @@ function wpsc_product_advanced_forms() {
 		<tr>
 			<td class='itemfirstcol' colspan='2'><br /> <strong><?php _e( 'Merchant Notes:', 'wpsc' ); ?></strong><br />
 
-			<textarea cols='40' rows='3' name='meta[_wpsc_product_metadata][merchant_notes]' id='merchant_notes'>
-                            <?php if ( isset( $product_meta['merchant_notes'] ) )
-		echo stripslashes( trim( $product_meta['merchant_notes'] ) );
-?>
-                       </textarea>
+			<textarea cols='40' rows='3' name='meta[_wpsc_product_metadata][merchant_notes]' id='merchant_notes'><?php 
+				if ( isset( $product_meta['merchant_notes'] ) )
+				echo stripslashes( trim( $product_meta['merchant_notes'] ) );
+			?></textarea>
 			<small><?php _e( 'These notes are only available here.', 'wpsc' ); ?></small>
 		</td>
 	</tr>
