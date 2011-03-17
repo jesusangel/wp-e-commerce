@@ -52,7 +52,7 @@ include_once( WPSC_FILE_PATH . '/wpsc-widgets/admin_menu_widget.php' );
 include_once( WPSC_FILE_PATH . '/wpsc-widgets/category_widget.php' );
 
 // Gregs ASH Shipping
-include_once( WPSC_FILE_PATH . '/wpsc-includes/shipping.helper.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/shipping.helper.php' );
 
 // Admin
 if ( is_admin() )
