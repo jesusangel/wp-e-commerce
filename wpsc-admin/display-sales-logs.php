@@ -402,7 +402,6 @@ function wpsc_display_sales_logs() {
  }
 
  function get_purchaselogs_content(){
-   global $purchlogs,$wpsc_purchase_log_statuses;
    while(wpsc_have_purch_items()) : wpsc_the_purch_item();
    ?>
    <tr>

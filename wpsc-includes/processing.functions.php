@@ -106,24 +106,32 @@ function wpsc_currency_display( $price_in, $args = null ) {
 	* @return string a price with a currency sign
 */
 function wpsc_decrement_claimed_stock($purchase_log_id) {
-  global $wpdb;
-  $all_claimed_stock = $wpdb->get_results($wpdb->prepare("SELECT * FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN('%s') AND `cart_submitted` IN('1')", $purchase_log_id), ARRAY_A);
+	global $wpdb;
+
+	//processed
+	$all_claimed_stock = $wpdb->get_results($wpdb->prepare("SELECT `cs`.`product_id`, `cs`.`stock_claimed`, `pl`.`id`, `pl`.`processed` FROM `" . WPSC_TABLE_CLAIMED_STOCK . "` `cs` JOIN `" . WPSC_TABLE_PURCHASE_LOGS . "` `pl` ON `cs`.`cart_id` = `pl`.`id` WHERE `cs`.`cart_id` = '%s'", $purchase_log_id));
 	
-	foreach((array)$all_claimed_stock as $claimed_stock) {
-		// for people to have claimed stock, it must have been available to take, no need to look at the existing stock, just subtract from it
-		// If this is ever wrong, and you get negative stock, do not fix it here, go find the real cause of the problem 				
-		$product_id = absint($claimed_stock['product_id']);	
-		$product = get_post($product_id);
-		$current_stock = get_post_meta($product_id, '_wpsc_stock', true);
-		$remaining_stock = $current_stock - $claimed_stock['stock_claimed'];
-		update_post_meta($product_id, '_wpsc_stock', $remaining_stock);
-		$product_meta = get_product_meta($product_id,'product_metadata',true);
-		if( $remaining_stock < 1 &&  $product_meta["unpublish_when_none_left"] == 1){
-			wp_mail(get_option('admin_email'), sprintf(__('%s is out of stock', 'wpsc'), $product->post_title), sprintf(__('Remaining stock of %s is 0. Product was unpublished.', 'wpsc'), $product->post_title) );
-			$wpdb->query("UPDATE `".$wpdb->posts."` SET `post_status` = 'draft' WHERE `ID` = '{$product_id}'");
+	if( !empty( $all_claimed_stock ) ){
+		switch($all_claimed_stock[0]->processed){
+			case 3:
+			case 4:
+			case 5:
+				foreach((array)$all_claimed_stock as $claimed_stock) {
+					$product = get_post($claimed_stock->product_id);
+					$current_stock = get_post_meta($product->ID, '_wpsc_stock', true);
+					$remaining_stock = $current_stock - $claimed_stock->stock_claimed;
+					update_product_meta($product->ID, 'stock', $remaining_stock);
+					$product_meta = get_product_meta($product->ID,'product_metadata',true);
+					if( $remaining_stock < 1 &&  $product_meta["unpublish_when_none_left"] == 1){
+						wp_mail(get_option('admin_email'), sprintf(__('%s is out of stock', 'wpsc'), $product->post_title), sprintf(__('Remaining stock of %s is 0. Product was unpublished.', 'wpsc'), $product->post_title) );
+						$wpdb->query("UPDATE `".$wpdb->posts."` SET `post_status` = 'draft' WHERE `ID` = '{$product_id}'");
+					}
+				}
+			case 6:
+				$wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN ('%s')", $purchase_log_id));
+				break;
 		}
 	}
-	$wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN ('%s')", $purchase_log_id));
 }
   
 /**

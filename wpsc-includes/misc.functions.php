@@ -604,21 +604,10 @@ function wpsc_readfile_chunked( $filename, $retbytes = true ) {
 function wpsc_clear_stock_claims() {
 	global $wpdb;
 	//time
-	$old_claimed_stock_timestamp = mktime( (date( 'H' ) - 1 ), date( 'i' ), date( 's' ), date( 'm' ), date( 'd' ), date( 'Y' ) );
+	$old_claimed_stock_timestamp = mktime( date( 'H' ), date( 'i' ), date( 's' ), date( 'm' ), date( 'd' ) - 7, date( 'Y' ) );
 	$old_claimed_stock_datetime = date( "Y-m-d H:i:s", $old_claimed_stock_timestamp );
 	/// Delete the old claims on stock (only those that weren't sold)
 	$wpdb->query( "DELETE FROM `" . WPSC_TABLE_CLAIMED_STOCK . "` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` = '0'" );
-	// get the number of items that has been actually sold
-	$sold = $wpdb->get_results( "SELECT product_id, variation_stock_id, cart_id, stock_claimed FROM `" . WPSC_TABLE_CLAIMED_STOCK . "` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` = '1'" );
-	
-	//decrement stock
-	foreach((array)$sold as $sold_product){
-		$stock = get_product_meta( $sold_product->product_id, 'stock', true );
-		//decrement product stock
-		update_product_meta( $sold_product->product_id, 'stock', $stock - $sold_product->stock_claimed );
-		//delete from claimed stock
-		$wpdb->query( "DELETE FROM `" . WPSC_TABLE_CLAIMED_STOCK . "` WHERE `product_id` = '" . $sold_product->product_id . "' AND `cart_id` = '" . $sold_product->cart_id . "'" );
-	}
 }
 
 add_action( 'wpsc_daily_cron_tasks', 'wpsc_clear_stock_claims' );
