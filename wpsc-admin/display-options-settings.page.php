@@ -185,7 +185,7 @@ function country_list( $selected_country = null ) {
  * Get Shipping Form for wp-admin 
  */
 function wpsc_get_shipping_form( $shippingname ) {
-	global $wpdb, $wpsc_shipping_modules;
+	global $wpsc_shipping_modules;
 
 	if ( array_key_exists( $shippingname, $wpsc_shipping_modules ) ) {
 		$shipping_forms       = $wpsc_shipping_modules[$shippingname]->getForm();
@@ -202,7 +202,7 @@ function wpsc_get_shipping_form( $shippingname ) {
  * Get Payment Form for wp-admin 
  */
 function wpsc_get_payment_form( $paymentname ,$selected_gateway_data='') {
-	global $wpdb, $nzshpcrt_gateways;
+	global $nzshpcrt_gateways;
 
 	$payment_gateway_names = get_option('payment_gateway_names');
 	$form                  = array();
