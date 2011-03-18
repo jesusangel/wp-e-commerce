@@ -644,9 +644,7 @@ function wpsc_purchlog_edit_status( $purchlog_id='', $purchlog_status='' ) {
 	}
 }
 
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'purchlog_edit_status') ) {
-	add_action( 'admin_init', 'wpsc_purchlog_edit_status' );
-}
+add_action( 'wp_ajax_purchlog_edit_status', 'wpsc_purchlog_edit_status' );
 
 function wpsc_save_product_order() {
 	global $wpdb;
