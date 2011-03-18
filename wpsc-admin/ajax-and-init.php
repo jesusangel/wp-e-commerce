@@ -165,9 +165,6 @@ function wpsc_duplicate_this_dangit( $id ) {
 }
 
 function wpsc_duplicate_product_process( $post ) {
-	global $current_user;
-	wp_get_current_user();
-	$user_ID = $current_user->ID;
 
 	$new_post_date = $post->post_date;
 	$new_post_date_gmt = get_gmt_from_date( $new_post_date );
@@ -184,7 +181,6 @@ function wpsc_duplicate_product_process( $post ) {
 	$defaults = array(
 		'post_status' 			=> $post->post_status, 
 		'post_type' 			=> $new_post_type,
-		'post_author' 			=> $user_ID,
 		'ping_status' 			=> $ping_status, 
 		'post_parent' 			=> $post->post_parent,
 		'menu_order' 			=> $post->menu_order,
