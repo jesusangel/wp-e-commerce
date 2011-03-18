@@ -555,8 +555,6 @@ add_action( 'wpsc_admin_pre_activity', 'wpsc_admin_latest_activity' );
  */
 
 function wpsc_dashboard_widget_setup() {
-	global $current_user;
-
 	if ( is_admin() && current_user_can( 'manage_options' ) ) {
 		$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
 		// Enqueue the styles and scripts necessary
@@ -707,9 +705,7 @@ function wpsc_quarterly_dashboard_widget() {
 
 
 function wpsc_dashboard_widget() {
-	global $current_user;
-	get_currentuserinfo();
-	if ( $current_user->user_level > 9 ) {
+	if ( current_user_can( 'manage_options' ) ) {
 		do_action( 'wpsc_admin_pre_activity' );
 		do_action( 'wpsc_admin_post_activity' );
 	}
