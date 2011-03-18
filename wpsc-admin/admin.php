@@ -850,8 +850,6 @@ function wpsc_ajax_ie_save() {
 		die();
 	}
 
-	global $wpdb;
-
 	$product = array(
 		'ID' => $_POST['id'],
 		'post_title' => $_POST['title']
@@ -895,7 +893,6 @@ function wpsc_ajax_ie_save() {
 }
 
 function wpsc_add_meta_boxes(){
-	global $wp_current_screen_options;
 	add_meta_box( 'dashboard_right_now', __('Current Month', 'wpsc'), 'wpsc_right_now', 'dashboard_page_wpsc-sales-logs', 'top' );
 }
 
