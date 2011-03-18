@@ -9,24 +9,8 @@
  */
 
 
-/**
- * wpsc_is_admin function.
- *
- * @access public
- * @return void
- * General use function for checking if user is on WPSC admin pages
- */
-
 require_once(WPSC_FILE_PATH . '/wpsc-admin/includes/products.php');
 
-function wpsc_is_admin() {
-    global $pagenow, $current_screen;
-
-        if( 'post.php' == $pagenow && 'wpsc-product' == $current_screen->post_type ) return true;
-
-    return false;
-    
-}
 
 /**
  * wpsc_additional_column_names function.

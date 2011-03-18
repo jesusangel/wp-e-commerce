@@ -412,3 +412,21 @@ function wpsc_has_shipping_form() {
 	_deprecated_function( __FUNCTION__, '3.8');
 	return false;
 }
+
+/**
+ * wpsc_is_admin function.
+ *
+ * @access public
+ * @return void
+ * General use function for checking if user is on WPSC admin pages
+ */
+
+function wpsc_is_admin() {
+	_deprecated_function( __FUNCTION__, '3.8');
+    global $pagenow, $current_screen;
+
+        if( 'post.php' == $pagenow && 'wpsc-product' == $current_screen->post_type ) return true;
+
+    return false;
+    
+}
