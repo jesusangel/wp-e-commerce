@@ -141,7 +141,6 @@ function wpsc_show_update_link() {
  * or bypass the normal download system.
  */
 function wpsc_admin_pages() {
-	global $userdata, $show_update_page, $post_type, $typenow, $current_screen; // set in /wpsc-admin/display-update.page.php
 
 	// Code to enable or disable the debug page
 	if ( isset( $_GET['wpsc_activate_debug_page'] ) ) {
