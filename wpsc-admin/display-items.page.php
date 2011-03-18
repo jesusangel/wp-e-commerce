@@ -79,7 +79,7 @@ function wpsc_additional_column_name_variations( $columns ){
  * 
  */
 function wpsc_additional_column_data( $column ) {
-    global $post, $wpdb;
+    global $post;
 
     $is_parent = ( bool )wpsc_product_has_children($post->ID);
         switch ( $column ) :
@@ -318,7 +318,6 @@ add_filter( 'posts_orderby', 'wpsc_column_sql_orderby', 10, 2 );
  * @return void 
  */
 function wpsc_update_featured_products() {
-	global $wpdb;
 	$is_ajax = (int)(bool)$_POST['ajax'];
 	$product_id = absint( $_GET['product_id'] );
 	check_admin_referer( 'feature_product_' . $product_id );
