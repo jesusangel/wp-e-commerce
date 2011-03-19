@@ -273,15 +273,23 @@ function wpsc_cats_restrict_manage_posts() {
             $tax_obj = get_taxonomy( $tax_slug );
             $tax_name = $tax_obj->labels->name;
             // retrieve array of term objects per taxonomy
-            $terms = get_terms( $tax_slug );
             // output html for taxonomy dropdown filter
             echo "<select name='$tax_slug' id='$tax_slug' class='postform'>";
             echo "<option value=''>" . sprintf(_x('Show All %s', 'Show all [category name]', 'wpsc'), $tax_name) . "</option>";
-            foreach ( $terms as $term ) 
-                echo '<option value='. $term->slug, ( isset($_GET[$tax_slug]) && $_GET[$tax_slug] == $term->slug) ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
+            wpsc_cats_restrict_manage_posts_print_terms($tax_slug);
             echo "</select>";
         }
     }
+}
+
+function wpsc_cats_restrict_manage_posts_print_terms($taxonomy, $parent = 0, $level = 0){
+	$prefix = str_repeat( '&nbsp;&nbsp;&nbsp;' , $level );
+	$terms = get_terms( $taxonomy, array( 'parent' => $parent ) );
+	if( !($terms instanceof WP_Error) && !empty($terms) )
+		foreach ( $terms as $term ){
+			echo '<option value='. $term->slug, ( isset($_GET[$tax_slug]) && $_GET[$tax_slug] == $term->slug) ? ' selected="selected"' : '','>' . $prefix . $term->name .' (' . $term->count .')</option>';
+			wpsc_cats_restrict_manage_posts_print_terms($taxonomy, $term->term_id, $level+1);
+		}
 }
 
 /**
