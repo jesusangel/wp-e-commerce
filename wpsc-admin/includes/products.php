@@ -36,7 +36,7 @@ function wpsc_admin_product_listing($parent_product = null) {
  */
 function wpsc_trashed_post_status($post_status){
 	$post = get_post(get_the_ID());
-	if('wpsc-product' == $post->post_type && 'trash' == $post->post_status && !in_array('trash', $post_status))
+	if( !empty($post) && 'wpsc-product' == $post->post_type && 'trash' == $post->post_status && !in_array('trash', $post_status))
 		$post_status[] = 'Trash';
 
 	return $post_status;
