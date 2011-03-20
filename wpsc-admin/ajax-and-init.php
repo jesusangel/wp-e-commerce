@@ -488,14 +488,10 @@ function wpsc_admin_sale_rss() {
 }
 
 function wpsc_display_invoice() {
-
-	global $body_id;
-
-	$body_id = 'wpsc-packing-slip';
 	$purchase_id = (int)$_GET['purchaselog_id'];
-	include_once(WPSC_FILE_PATH . "/wpsc-admin/admin-form-functions.php");
-	require_once(ABSPATH . 'wp-admin/includes/media.php');
-	wp_iframe( 'wpsc_packing_slip', $purchase_id );
+	add_action('wpsc_packing_slip', 'wpsc_packing_slip');
+	do_action('wpsc_before_packing_slip', $purchase_id);
+	do_action('wpsc_packing_slip', $purchase_id);
 	exit();
 }
 //other actions are here

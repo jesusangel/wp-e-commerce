@@ -248,6 +248,7 @@ function wpsc_right_now() {
 
 
 function wpsc_packing_slip($purchase_id) {
+	echo "<!DOCTYPE html><html><head><title>" . __( 'Packing Slip', 'wpsc' ) . "</title></head><body id='wpsc-packing-slip'>";
 	global $wpdb;
 	$purch_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='".$purchase_id."'";
 		$purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
@@ -433,7 +434,7 @@ function wpsc_packing_slip($purchase_id) {
 
 				echo '<td>';
 				echo wpsc_currency_display( $cart_row['tax_charged'] );
-				echo '<td>';
+				echo '</td>';
 				echo '</tr>';
 				}
 			echo "</table>";
