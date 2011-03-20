@@ -723,7 +723,8 @@ class wpsc_purchaselogs {
       $earliest_record = $wpdb->get_results( $earliest_record_sql, ARRAY_A );
 
       $this->current_timestamp = time();
-      $this->earliest_timestamp = $earliest_record[0]['date'];
+      //if there are no reccords set the date to now.
+      $this->earliest_timestamp = ($earliest_record[0]['date'])?$earliest_record[0]['date']:time();
 
       $this->current_year = date( "Y" );
       $this->earliest_year = date( "Y", $this->earliest_timestamp );
