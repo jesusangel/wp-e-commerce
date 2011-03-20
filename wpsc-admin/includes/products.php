@@ -59,7 +59,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 	$global_product = $product;
 	setup_postdata($product);
 	$product_post_type_object = get_post_type_object('wpsc-product');
-	$current_user_can_edit_this_product = current_user_can( $product_type_object->cap->edit_post, $product->ID );
+	$current_user_can_edit_this_product = current_user_can( $product_post_type_object->cap->edit_post, $product->ID );
 
 	$rowclass = 'alternate' == $rowclass ? '' : 'alternate';
 	$post_owner = ( $current_user->ID == $product->post_author ? 'self' : 'other' );
