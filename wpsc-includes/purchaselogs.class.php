@@ -265,9 +265,8 @@ function wpsc_change_purchlog_view( $viewby, $status='' ) {
       $purchlogs->allpurchaselogs = $purchaselogs;
    } elseif ( $viewby == '3mnths' ) {
       $dates = $purchlogs->getdates();
-
       $dates = array_slice( $dates, 0, 3 );
-      $purchlogs->current_start_timestamp = $dates[2]['start'];
+      $purchlogs->current_start_timestamp = $dates[count($dates)-1]['start'];
       $purchlogs->current_end_timestamp = $dates[0]['end'];
       $newlogs = $purchlogs->get_purchlogs( $dates, $status );
       $_SESSION['newlogs'] = $newlogs;
@@ -641,7 +640,7 @@ class wpsc_purchaselogs {
                $dates = $this->getdates();
 
                $dates = array_slice( $dates, 0, 3 );
-               $this->current_start_timestamp = $dates[2]['start'];
+               $this->current_start_timestamp = $dates[count($dates)-1]['start'];
                $this->current_end_timestamp = $dates[0]['end'];
                $newlogs = $this->get_purchlogs( $dates, $status );
                $_SESSION['newlogs'] = $newlogs;
