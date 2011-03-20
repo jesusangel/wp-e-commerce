@@ -82,7 +82,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 	foreach ( $posts_columns as $column_name=>$column_display_name ) {
 		$class = "class=\"$column_name column-$column_name\"";
 
-		$attributes = "$class$style";
+		$attributes = "$class";
 
 		switch ($column_name) {
 
@@ -123,7 +123,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		break;
 
 		case 'title': /* !title case */
-			$attributes = 'class="post-title column-title"' . $style;
+			$attributes = 'class="post-title column-title"';
 			
 			$edit_link = wp_nonce_url( $edit_link, 'edit-product_'.$product->ID );
 		?>
