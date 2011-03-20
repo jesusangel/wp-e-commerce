@@ -287,7 +287,7 @@ function wpsc_cats_restrict_manage_posts_print_terms($taxonomy, $parent = 0, $le
 	$terms = get_terms( $taxonomy, array( 'parent' => $parent ) );
 	if( !($terms instanceof WP_Error) && !empty($terms) )
 		foreach ( $terms as $term ){
-			echo '<option value='. $term->slug, ( isset($_GET[$tax_slug]) && $_GET[$tax_slug] == $term->slug) ? ' selected="selected"' : '','>' . $prefix . $term->name .' (' . $term->count .')</option>';
+			echo '<option value='. $term->slug, ( isset($_GET[$term->taxonomy]) && $_GET[$term->taxonomy] == $term->slug) ? ' selected="selected"' : '','>' . $prefix . $term->name .' (' . $term->count .')</option>';
 			wpsc_cats_restrict_manage_posts_print_terms($taxonomy, $term->term_id, $level+1);
 		}
 }
