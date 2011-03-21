@@ -63,6 +63,15 @@ function nzshpcrt_shopping_basket( $input = null, $override_state = null ) {
 	return wpsc_shopping_cart( $input, $override_state );
 }
 
+
+/**
+ * Function show_cats_brands
+ * deprecated as we do not have brands anymore...
+ *
+ */
+function show_cats_brands($category_group = null , $display_method = null, $order_by = 'name', $image = null) {
+	_deprecated_function( __FUNCTION__, '3.8', 'wpsc_shopping_cart'); 
+}
 /**
  * Filter: wpsc-purchlogitem-links-start
  *
