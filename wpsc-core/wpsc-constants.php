@@ -310,5 +310,3 @@ function wpsc_core_setup_globals() {
 		include_once( WPSC_THEMES_PATH . $selected_theme . '/' . $selected_theme . '.php' );
 
 }
-
-?>
