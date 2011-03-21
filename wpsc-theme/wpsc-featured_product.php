@@ -1,7 +1,10 @@
 <?php
 foreach ( $query as $product ) :
 	setup_postdata( $product );
-
+	
+	global $post;
+	$old_post = $post;
+	$post = $product;
 ?>
     <div class="wpsc_container wpsc_featured">
         <div class="featured_product_display">
@@ -30,4 +33,6 @@ foreach ( $query as $product ) :
         </div>
     </div>
     
-<?php endforeach; ?>
+<?php endforeach; 
+$post = $old_post;
+?>
