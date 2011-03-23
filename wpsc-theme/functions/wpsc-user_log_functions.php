@@ -92,7 +92,7 @@ function validate_form_data() {
 							break;
 
 						default:
-							$bad_input_message .= __( 'Please enter a valid', 'wpsc' ) . " " . strtolower( $form_data['name'] ) . ".";
+							$bad_input_message .= sprintf(__( 'Please enter a valid <span class="wpsc_error_msg_field_name">%s</span>.', 'wpsc' ), esc_html($form_data['name']) );
 							break;
 					}
 					$bad_input_message .= "<br />";
