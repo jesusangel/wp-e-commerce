@@ -125,8 +125,7 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 			$total_shipping = '';
 			foreach ( $cart as $row ) {
 				$link = array( );
-				if ( $purchase_log['email_sent'] != 1 )
-					$wpdb->update(WPSC_TABLE_DOWNLOAD_STATUS, array('active' => '1'), array('cartid' => $row['id'], 'purchid'=>$purchase_log['id']) );
+				$wpdb->update(WPSC_TABLE_DOWNLOAD_STATUS, array('active' => '1'), array('cartid' => $row['id'], 'purchid'=>$purchase_log['id']) );
 				do_action( 'wpsc_transaction_result_cart_item', array( "purchase_id" => $purchase_log['id'], "cart_item" => $row, "purchase_log" => $purchase_log ) );
 
 				if ( $is_transaction ) {
@@ -287,8 +286,7 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 			$message_html = str_replace( '%shop_name%', get_option( 'blogname' ), $message_html );
 			$message_html = str_replace( '%find_us%', $purchase_log['find_us'], $message_html );
 
-			if ( !empty($email) && ($purchase_log['email_sent'] != 1 || $resend_email) ) {
-				$wpdb->update(WPSC_TABLE_PURCHASE_LOGS, array('email_sent' => '1'), array('id' => $purchase_log['id']) );
+			if ( !empty($email) ) {
 				add_filter( 'wp_mail_from', 'wpsc_replace_reply_address', 0 );
 				add_filter( 'wp_mail_from_name', 'wpsc_replace_reply_name', 0 );
 
@@ -347,8 +345,10 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 
 			//echo '======REPORT======<br />'.$report.'<br />';
 			//echo '======EMAIL======<br />'.$message.'<br />';
-			if ( (get_option( 'purch_log_email' ) != null) && ($purchase_log['email_sent'] != 1) )
+			if ( (get_option( 'purch_log_email' ) != null) && ($purchase_log['email_sent'] != 1) ){
 				wp_mail( get_option( 'purch_log_email' ), __( 'Purchase Report', 'wpsc' ), $report );
+				$wpdb->update(WPSC_TABLE_PURCHASE_LOGS, array('email_sent' => '1'), array('id' => $purchase_log['id']) );
+			}
 
 			/// Adjust stock and empty the cart
 			$wpsc_cart->submit_stock_claims( $purchase_log['id'] );

@@ -442,7 +442,9 @@ jQuery(document).ready(function(){
 	jQuery('.sendTrackingEmail').click(function(event){
 		purchlog_id = jQuery(this).attr('title');
 		post_values = "purchlog_id="+purchlog_id;
-		jQuery.post( 'index.php?wpsc_admin_action=purchlog_email_trackid', post_values, function(returned_data) { });
+		var ajax_loader = jQuery(this).prev('.ajax-loading');
+		ajax_loader.css('visibility', 'visible');
+		jQuery.post( 'index.php?wpsc_admin_action=purchlog_email_trackid', post_values, function(returned_data) { ajax_loader.css('visibility', 'hidden'); });
 		event.preventDefault();
 	});
 

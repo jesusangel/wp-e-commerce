@@ -631,9 +631,8 @@ function wpsc_purchlog_edit_status( $purchlog_id='', $purchlog_status='' ) {
 	wpsc_clear_stock_claims();
 	wpsc_decrement_claimed_stock($purchlog_id);
 	
-	if ( ($log_data['processed'] > 2) && $log_data['email_sent'] == 0 ) {
+	if ( $purchlog_status == 3 )
 		transaction_results($log_data['sessionid'],false,null);
-	}
 }
 
 add_action( 'wp_ajax_purchlog_edit_status', 'wpsc_purchlog_edit_status' );
