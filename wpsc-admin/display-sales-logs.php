@@ -416,7 +416,7 @@ function wpsc_display_sales_logs() {
       ?></a></td><!-- Details -->
       <td>
       <?php if(!wpsc_purchlogs_is_google_checkout()){ ?>
-		 <img src="<?php echo admin_url('images/wpspin_light.gif'); ?>" class="ajax-loading" id="draft-ajax-loading" alt="" style="position:relative; top:3px;" />
+		 <img src="<?php echo admin_url('images/wpspin_light.gif'); ?>" class="ajax-loading" alt="" style="position:relative; top:3px;" />
          <select class='selector' name='<?php echo wpsc_the_purch_item_id(); ?>' title='<?php echo wpsc_the_purch_item_id(); ?>' >
          <?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
             <option value='<?php echo wpsc_the_purch_status_id(); ?>' <?php echo wpsc_is_checked_status(); ?> ><?php echo wpsc_the_purch_status_name(); ?> </option>
@@ -441,6 +441,7 @@ function wpsc_display_sales_logs() {
          <input type='submit' name='submit' class='button' value='Add Tracking ID' />
       </td>
       <td colspan='4'>
+         <img src="<?php echo admin_url('images/wpspin_light.gif'); ?>" class="ajax-loading" alt="" style="position:relative; top:3px;" />
          <a href='' title='<?php echo wpsc_the_purch_item_id(); ?>' class='sendTrackingEmail'><?php _e( 'Send Custom Message', 'wpsc' ); ?></a>
       </td>
    </tr>
