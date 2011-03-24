@@ -289,6 +289,7 @@ function transaction_results( $sessionid, $display_to_screen = true, $transactio
 			if ( !empty($email) ) {
 				add_filter( 'wp_mail_from', 'wpsc_replace_reply_address', 0 );
 				add_filter( 'wp_mail_from_name', 'wpsc_replace_reply_name', 0 );
+				$message = apply_filters('wpsc_email_message', $message, $report_id, $product_list, $total_tax, $total_shipping_email, $total_price_email);
 
 				if ( !$is_transaction ) {
 	
