@@ -46,6 +46,7 @@ global $files, $separator, $purchase_log, $col_count, $products, $links; ?>
 		<?php if ( wpsc_has_downloads() ) : ?>
 
 				<table class="logdisplay">
+				<?php echo('<pre> unique id '.print_r($products[0]['uniqueid'],1).'</pre>') ?>
 					<tr>
 						<th><?php _e( 'File Names', 'wpsc' ); ?> </th>
 						<th><?php _e( 'Downloads Left', 'wpsc' ); ?> </th>
@@ -66,7 +67,8 @@ global $files, $separator, $purchase_log, $col_count, $products, $links; ?>
 								<td>
 					<?php
 						if ( $products[$i]['downloads'] > 0 )
-							echo "<a href = " . $links[$i] . ">" . $file['post_title'] . "</a>";
+						
+							echo "<a href = " . get_option('siteurl')."?downloadid=".$products[$i]['uniqueid'] . ">" . $file['post_title'] . "</a>";
 						else
 							echo $file['post_title'] . "";
 
