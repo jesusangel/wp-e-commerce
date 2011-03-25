@@ -524,12 +524,13 @@ function wpsc_create_or_update_tables( $debug = false ) {
 					$wpdb->query( "ALTER TABLE `$table_name`	DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci" );
 				}
 			}
-			//get the column list
-			$existing_table_column_data = $wpdb->get_results( "SHOW FULL COLUMNS FROM `$table_name`", ARRAY_A );
-
+			
 			if ( isset( $table_data['actions']['before']['all'] ) && is_callable( $table_data['actions']['before']['all'] ) ) {
 				$table_data['actions']['before']['all']();
 			}
+			
+			//get the column list
+			$existing_table_column_data = $wpdb->get_results( "SHOW FULL COLUMNS FROM `$table_name`", ARRAY_A );
 
 			foreach ( (array)$existing_table_column_data as $existing_table_column ) {
 				$column_name = $existing_table_column['Field'];
@@ -765,8 +766,8 @@ function wpsc_add_checkout_fields() {
 }
 function wpsc_rename_checkout_column(){
 	global $wpdb;
-	$sql = "SELECT `checkout_order` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "`";
-	$col = $wpdb->get_col($sql);
+	$sql = "SHOW COLUMNS FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` LIKE 'checkout_order'";
+	$col = $wpdb->get_results($sql);
 	if(empty($col)){
 		$sql = "ALTER TABLE  `" . WPSC_TABLE_CHECKOUT_FORMS . "` CHANGE  `order`  `checkout_order` INT( 10 ) UNSIGNED NOT NULL DEFAULT  '0'";
 		$wpdb->query($sql);
