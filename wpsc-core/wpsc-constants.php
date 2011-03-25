@@ -28,7 +28,7 @@ function wpsc_core_constants() {
 	// Define Plugin version
 	define( 'WPSC_VERSION', '3.8' );
 	define( 'WPSC_MINOR_VERSION', ( '00000' . microtime( true ) ) );
-	define( 'WPSC_PRESENTABLE_VERSION', '3.8 RC3' );
+	define( 'WPSC_PRESENTABLE_VERSION', '3.8 RC4' );
 
 	// Define Debug Variables for developers
 	define( 'WPSC_DEBUG', false );
