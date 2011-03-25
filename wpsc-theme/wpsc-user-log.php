@@ -46,7 +46,6 @@ global $files, $separator, $purchase_log, $col_count, $products, $links; ?>
 		<?php if ( wpsc_has_downloads() ) : ?>
 
 				<table class="logdisplay">
-				<?php echo('<pre> unique id '.print_r($products[0]['uniqueid'],1).'</pre>') ?>
 					<tr>
 						<th><?php _e( 'File Names', 'wpsc' ); ?> </th>
 						<th><?php _e( 'Downloads Left', 'wpsc' ); ?> </th>
