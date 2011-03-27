@@ -283,7 +283,7 @@ jQuery(document).ready(function(){
             return false;
        }
 
-          jQuery('form#addtag, form#edittag').attr('enctype', 'multipart/form-data');
+          jQuery('.edit-tags-php form').attr('enctype', 'multipart/form-data');
 
       }
 	//Added for inline editing capabilities
