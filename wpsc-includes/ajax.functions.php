@@ -1046,7 +1046,7 @@ function wpsc_download_file() {
 				wpsc_readfile_chunked( $file_path );
 				exit();
 			}else{
-				wp_die(__('Double complete file fail - sorry something has gone wrong!', 'wpsc'));
+				wp_die(__('Sorry something has gone wrong with your download!', 'wpsc'));
 			}
 		} else {
 			exit( _e( 'This download is no longer valid, Please contact the site administrator for more information.', 'wpsc' ) );
