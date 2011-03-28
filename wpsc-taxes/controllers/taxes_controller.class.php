@@ -82,7 +82,10 @@ class wpec_taxes_controller {
 
 				//add shipping tax if set
 				if ( $tax_rate['shipping'] ) {
-					$total_tax += $this->wpec_taxes_calculate_tax( $wpsc_cart->calculate_total_shipping(), $tax_rate['rate'] );
+					if ( $this->wpec_taxes_isincluded() )
+						$total_tax += $this->wpec_taxes_calculate_tax( $wpsc_cart->calculate_total_shipping(), $tax_rate['rate'], false );
+					else
+						$total_tax += $this->wpec_taxes_calculate_tax( $wpsc_cart->calculate_total_shipping(), $tax_rate['rate'] );
 				}// if
 				
 				$returnable = array( 'total' => $total_tax );
