@@ -72,13 +72,13 @@ function wpsc_query_vars_product_list($vars){
  * @return $value after changes...
  */
 function wpsc_set_screen_option($status, $option, $value){
-	if ($option == "edit_wpsc_product_per_page"){
-		$value = (int) $value;
-		if ( $value < 1 || $value > 999 )
-			return FALSE;
+	if( in_array($option, array ("edit_wpsc_variation_per_page","edit_wpsc_product_per_page" )) ){
+		if ( "edit_wpsc_variation_per_page" == $option ){	
+			global $user_ID;
+			update_user_option($user_ID,'edit_wpsc-variation_per_page',$value);
+		}	
 		return $value;
 	}
-	return $value;
 } 
 add_filter('set-screen-option', 'wpsc_set_screen_option', 99, 3);
 
