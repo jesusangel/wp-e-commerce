@@ -94,8 +94,8 @@ function wpsc_delete_file() {
 	$file_name = basename( $_GET['file_name'] );
 	check_admin_referer( 'delete_file_' . $file_name );
 
-
-	$product_id_to_delete = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = '$file_name' AND post_parent = '$product_id' AND post_type ='wpsc-product-file'" ) );
+	$sql = $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_parent = %d AND post_type ='wpsc-product-file'", $file_name, $product_id );
+	$product_id_to_delete = $wpdb->get_var( $sql );
 
 	wp_delete_post( $product_id_to_delete, true );
 
@@ -1128,8 +1128,8 @@ function prod_upload() {
 	foreach ( $_POST["select_product_file"] as $selected_file ) {
 		// if we already use this file, there is no point doing anything more.
 
-
-		$file_post_data = $wpdb->get_row( "SELECT * FROM $wpdb->posts WHERE post_type = 'wpsc-product-file' AND post_title = '$selected_file'", ARRAY_A );
+		$sql = $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_type = 'wpsc-product-file' AND post_title = %s", $selected_file ); // TODO it's safer to select by post ID, in that case we will use get_posts()
+		$file_post_data = $wpdb->get_row( $sql, ARRAY_A );
 		$selected_file_path = WPSC_FILE_DIR . basename( $selected_file );
 
 		if ( isset( $attached_files_by_file[$selected_file] ) ) {
