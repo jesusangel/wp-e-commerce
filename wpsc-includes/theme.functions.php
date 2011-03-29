@@ -54,7 +54,7 @@ function wpsc_register_core_theme_files() {
 	wpsc_register_theme_file( 'wpsc-cart_widget.php' );
 	wpsc_register_theme_file( 'wpsc-featured_product.php' );
 	wpsc_register_theme_file( 'wpsc-category-list.php' );
-	
+	wpsc_register_theme_file( 'wpsc-category_widget.php' );	
 	// Let other plugins register their theme files
 	do_action( 'wpsc_register_core_theme_files' );
 }
