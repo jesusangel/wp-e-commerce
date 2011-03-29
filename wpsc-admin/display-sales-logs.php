@@ -376,9 +376,12 @@ function wpsc_display_sales_logs() {
                         'rss_key'         => 'key',
                          'start_timestamp'   => $purchlogs->current_start_timestamp,
                          'end_timestamp'  => $purchlogs->current_end_timestamp);
+                         
+         $piggy_url = 'http://www.bravenewcode.com/store/plugins/piggy/?utm_source=affiliate-6331&utm_medium=affiliates&utm_campaign=wpec#1';
       ?>
       <br />
-      <p><a class='admin_download' href='<?php echo htmlentities(add_query_arg($arr_params), ENT_QUOTES, 'UTF-8') ; ?>' ><img class='wpsc_pushdown_img' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/download.gif' alt='' title='' /> <span> <?php _e('Download CSV', 'wpsc'); ?></span></a></p>
+      <p><a class='admin_download' href='<?php echo htmlentities(add_query_arg($arr_params), ENT_QUOTES, 'UTF-8') ; ?>' ><img class='wpsc_pushdown_img' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/download.gif' alt='' title='' /> <span> <?php _e('Download CSV', 'wpsc'); ?></span></a>
+       <a target="_blank" class='admin_download' href='<?php echo htmlentities( $piggy_url, ENT_QUOTES, 'UTF-8') ; ?>'><img class='wpsc_pushdown_img' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/mobile.png' alt='' title='' /> <span> <?php _e('Mobile Sales App', 'wpsc'); ?></span></a></p>
    </form>
    <br />
    <script type="text/javascript">
