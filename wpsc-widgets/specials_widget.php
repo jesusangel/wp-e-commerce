@@ -162,6 +162,7 @@ function wpsc_specials( $args = null, $instance ) {
 				
 				if(!in_array(wpsc_the_product_id(),$product_ids)):
 				$product_ids[] = wpsc_the_product_id();
+				if( $show_thumbnails ):
 				 if ( wpsc_the_product_thumbnail() ) : ?>
 						<a rel="<?php echo str_replace(array(" ", '"',"'", '&quot;','&#039;'), array("_", "", "", "",''), wpsc_the_product_title()); ?>" href="<?php echo wpsc_the_product_permalink(); ?>">
 							<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
@@ -171,6 +172,7 @@ function wpsc_specials( $args = null, $instance ) {
 							<img class="no-image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="No Image" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo WPSC_URL; ?>/wpsc-theme/wpsc-images/noimage.png" width="<?php esc_attr_e( get_option('product_image_width') ); ?>" height="<?php esc_attr_e( get_option('product_image_height') ); ?>" />
 							</a>
 				<?php endif; ?>
+				<?php endif; // close show thumbnails ?> 
 				<br />
 				<span id="special_product_price_<?php echo wpsc_the_product_id(); ?>">
 				<!-- price display -->
@@ -195,7 +197,15 @@ function wpsc_specials( $args = null, $instance ) {
 				<?php echo wpsc_currency_display( wpsc_calculate_price( wpsc_the_product_id(),null,true ) ); ?>				
 				<?php endif; ?>
 				</span><br />			
-				<strong><a class="wpsc_product_title" href="<?php echo wpsc_product_url( wpsc_the_product_id(), false ); ?>"><?php echo wpsc_the_product_title(); ?></a></strong><br /> <?php
+				<strong><a class="wpsc_product_title" href="<?php echo wpsc_product_url( wpsc_the_product_id(), false ); ?>"><?php echo wpsc_the_product_title(); ?></a></strong><br /> 
+				
+				<?php if( $show_description ): ?>
+					<div class="wpsc-special-description">
+						<?php echo wpsc_the_product_description(); ?>
+					</div>									
+				<?php endif; // close show description ?> 
+			
+				<?php
 				
 				
 				endif; 
