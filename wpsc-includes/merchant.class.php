@@ -10,6 +10,7 @@
  * @since 3.7.6
  * @abstract
  * @subpackage wpsc-merchants
+ * @todo change get_post_meta to get_product_meta
  */
 /**
  * A Function to sort through merchant gateways alphabetically
@@ -188,7 +189,7 @@ class wpsc_merchant {
 			'billing_address'         => $address_data['billing'],
 			'shipping_address'        => $address_data['shipping'],
 		);
-	}
+	} 
 
 	/**
 	 * collate_cart method, collate cart data
@@ -202,17 +203,19 @@ class wpsc_merchant {
 
 		foreach ( $original_cart_data as $cart_row ) {
 			$is_downloadable = false;
-
+			
 			if ( $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_DOWNLOAD_STATUS . "` WHERE `cartid` = {$cart_row['id']}" ) )
 				$is_downloadable = true;
 
-			$is_recurring = (bool)wpsc_get_cartmeta( $cart_row['id'], 'is_recurring', true );
-
+			$is_recurring = (bool)get_post_meta( $cart_row['prodid'], '_wpsc_is_recurring', true );
+	
 			if ( $is_recurring == true )
 				$this->cart_data['is_subscription'] = true;
+					
 
-			$rebill_interval = wpsc_get_cartmeta( $cart_row['id'], 'rebill_interval', true );
-
+			$rebill_interval = get_post_meta( $cart_row['prodid'], '_wpsc_rebill_interval', true );
+			
+	
 			$new_cart_item = array(
 				"cart_item_id"         => $cart_row['id'],
 				"product_id"           => $cart_row['prodid'],
@@ -228,13 +231,13 @@ class wpsc_merchant {
 				"recurring_data"       => array(
 					"rebill_interval"  => array(
 						'unit'         => $rebill_interval['unit'],
-						'length'       => $rebill_interval['interval']
+						'length'       => $rebill_interval['number']
 					),
-					"charge_to_expiry" => (bool)wpsc_get_cartmeta( $cart_row['id'], 'charge_to_expiry', true ),
-					"times_to_rebill"  => wpsc_get_cartmeta( $cart_row['id'], 'times_to_rebill', true ),
+					"charge_to_expiry" => (bool)get_post_meta( $cart_row['prodid'], '_wpsc_charge_to_expiry', true ),
+					"times_to_rebill"  => get_post_meta( $cart_row['prodid'], '_wpsc_rebill_number', true )
 				)
 			);
-
+			
 			$this->cart_items[] = $new_cart_item;
 		}
 	}
