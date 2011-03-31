@@ -1,10 +1,10 @@
 === WP e-Commerce ===
-Contributors: Dan Milward, Tom Howard, Jeffry Ghazally, Chris Beavan, Allen Han
-Donate link: http://www.instinct.co.nz/e-commerce
-Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, ecommerce 
-Requires at least: 2.7
-Tested up to: 2.9
-Stable tag: 3.7.5.3
+Contributors: mufasa, jghazally, valentinas, mychelle
+Donate link: http://getshopped.org
+Tags: e-commerce, wp-e-commerce, shop, cart, paypal, authorize, stock control, ecommerce, shipping, tax
+Requires at least: 3.0
+Tested up to: 3.1
+Stable tag: 3.7.8
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
@@ -19,7 +19,11 @@ Perfect for:
 * Bands & Record Labels
 * Clothing Companies
 * Crafters & Artists
-* Books, DVDs & MP3 files 
+* Books, DVDs & MP3 files
+* Memberships
+* Ticketing
+
+For more information visit [http://getshopped.org](http://getshopped.org "http://getshopped.org")
 
 == Installation ==
 
@@ -28,14 +32,20 @@ Perfect for:
 
 = Updating =
 
-Simply copy the new files across and replace the old files saving saving ones you've modified. If you have product images uploaded then do not overwrite the product_images folder or images folder. If you have downloadable products for sale do not overwrite the files folder.
-
-When updating it is important that you do not overwrite the entire images folder. Instead you should copy over the contents of the new images folder into the existing images folder on your server - saving all the exiting product images you may have already uploaded.
-
-If you experience database errors try de-activating and re-activating your plugin. 
+Before updating please make a backup of your existing files and database. Just in case.
+After upgrading from earlier versions look for link "Update Store". This will update your database structure to work with new version.
 
 
 == Changelog == 
+= 3.8 =
+* Utilize custom post types for products
+* Utilize custom taxonomy for categories and variations
+* Database optimization
+* Redesigned taxes and shipping systems
+* New user interface
+* Integrates with WordPress Media Manager
+* Better template integration for designers
+* Optimized for ticketing (Tikipress)
 
 = 3.7.5.3 =
 * Support for WordPress 2.9 canonical URLs for Products and Categories
@@ -93,26 +103,15 @@ If you experience database errors try de-activating and re-activating your plugi
 
 == Frequently Asked Questions ==
 
-= Where do I find DropShop and Grid View =
-
-From the BlogShop of course http://www.instinct.co.nz/shop/
-
 = How do I customize WP e-Commerce =
 
-First of all you should check out the presentation settings which are in the Shop Options page.
+First of all you should check out the Presentation settings which are in the Settings->Store page.
 
-Advanced users can edit the CSS (and do just about anything). Not so advanced users can contact Instinct and either purchase professional support.
+Advanced users can edit the CSS (and do just about anything). Not so advanced users can hire WP consultants developers and designers from [http://getshopped.org/resources/wp-consultants/](http://getshopped.org/resources/wp-consultants/ "http://getshopped.org/resources/wp-consultants/").
 
 == Screenshots ==
 
-We're taking this one step further. 
-
-Check out our flickr guides online
-www.flickr.com/photos/danmilward/sets/72157594425079473/detail/
-
-== Readme Validator ==
-
-This readme was made using:
-wordpress.org/extend/plugins/about/validator/
-
-Totally totally cool tool!!
+1. Products list in WordPress backend
+2. Edit Product screen
+3. Single product page
+4. Checkout page
