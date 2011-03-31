@@ -1,4 +1,4 @@
-# Translation of WP e-Commerce in Lithuanian
+# Translation of WP e-Commerce in Turkish
 # This file is distributed under the same license as the WP e-Commerce package.
 msgid ""
 msgstr ""
@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: GlotPress/0.1\n"
 "Project-Id-Version: WP e-Commerce\n"
 "POT-Creation-Date: \n"
@@ -35,7 +35,7 @@ msgstr ""
 
 #: wpsc-core/wpsc-functions.php:240
 msgid "Please backup your website before updating!"
-msgstr ""
+msgstr "Lütfen, güncellemeden önce internet sayfanızı güncelleyin!"
 
 #: wpsc-admin/display-update.page.php:75
 msgid "Note: It looks like you have custom permalinks, you will need to refresh your permalinks <a href=\"%s\">here</a>"
@@ -47,7 +47,7 @@ msgstr ""
 
 #: wpsc-theme/wpsc-cart_widget.php:77
 msgid "Visit Shop"
-msgstr "Užeiti į parduotuvę"
+msgstr ""
 
 #: wpsc-admin/admin.php:903
 msgid "Due to a problem in WordPress Permalinks and Custom Post Types, WP e-Commerce encourages you to refresh your permalinks a second time. (for a more geeky explanation visit <a href=\"%s\">trac</a>)"
@@ -65,16 +65,14 @@ msgstr ""
 msgid "%d topic"
 msgid_plural "%d topics"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: wpsc-theme/wpsc-user-log.php:162
 msgid "Login &raquo;"
-msgstr "Prisijungti &raquo;"
+msgstr ""
 
 #: wpsc-admin/includes/settings-pages/general.php:61
 msgid "Select: <a href=\"%1$s\"  class=\"wpsc_select_all\" title=\"All\">All</a> <a href=\"%1$s\" class=\"wpsc_select_none\" title=\"None\">None</a>"
-msgstr ""
+msgstr "Select: <a href=\"%1$s\"  class=\"wpsc_select_all\" title=\"Tümü\">Tümü</a> <a href=\"%1$s\" class=\"wpsc_select_none\" title=\"Hiçbiri\">Hiçbiri</a>"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:95
 #: wpsc-includes/checkout.class.php:844
@@ -85,113 +83,103 @@ msgstr ""
 msgctxt "dashboard widget"
 msgid "Product"
 msgid_plural "Products"
-msgstr[0] "Prekė"
-msgstr[1] "Prekės"
-msgstr[2] "Prekių"
+msgstr[0] "Ürünler"
 
 #: wpsc-admin/includes/display-items-functions.php:943
 msgid "Variation set"
-msgstr "Variantų rinkinys"
+msgstr ""
 
 #: wpsc-core/wpsc-functions.php:319
 msgctxt "slug, part of url"
 msgid "tagged"
-msgstr "zyme"
+msgstr ""
 
 #: wpsc-core/wpsc-functions.php:353
 msgid "Add New Variation/Set"
-msgstr "Pridėti naują variantą/rinkinį"
+msgstr ""
 
 #: wpsc-admin/admin-form-functions.php:221
 msgctxt "dashboard widget"
 msgid "Category"
 msgid_plural "Categories"
-msgstr[0] "Kategorija"
-msgstr[1] "Kategorijos"
-msgstr[2] "Kategorijų"
+msgstr[0] "Kategoriler"
 
 #: wpsc-admin/admin-form-functions.php:213
 msgctxt "dashboard widget"
 msgid "Sale"
 msgid_plural "Sales"
-msgstr[0] "Pardavimas"
-msgstr[1] "Pardavimai"
-msgstr[2] "Pardavimų"
+msgstr[0] "Satış"
 
 #: wpsc-admin/admin-form-functions.php:235
 msgctxt "dashboard widget"
 msgid "Variation"
 msgid_plural "Variations"
-msgstr[0] "Variantas"
-msgstr[1] "Variantai"
-msgstr[2] "Variantų"
+msgstr[0] ""
 
 #: wpsc-admin/display-sales-logs.php:346
 msgid "Status: All"
-msgstr "Visi"
+msgstr "Durum: Tümü"
 
 #: wpsc-admin/display-sales-logs.php:322
 msgid "Three Months"
-msgstr "Trys mėnesiai"
+msgstr "Üç Ay"
 
 #: wpsc-admin/display-sales-logs.php:321
 msgctxt "all sales"
 msgid "All"
-msgstr "Visi"
+msgstr "Tüm"
 
 #: wpsc-admin/display-sales-logs.php:418
 msgid "%s Item"
 msgid_plural "%s Items"
-msgstr[0] "%s prekė"
-msgstr[1] "%s prekės"
-msgstr[2] "%s prekių"
+msgstr[0] "%s Ürün"
 
 #: wpsc-admin/display-sales-logs.php:52
 msgid "Amount"
-msgstr "Suma"
+msgstr "Miktar"
 
 #: wpsc-admin/display-sales-logs.php:50
 msgid "Date / Time"
-msgstr "Data / Laikas"
+msgstr "Tarih / Saat"
 
 #: wpsc-admin/display-sales-logs.php:49
 msgid "Order ID"
-msgstr "Užsakymo ID"
+msgstr "Sipariş No"
 
 #: wpsc-admin/admin.php:498
 #: wpsc-admin/admin.php:525
 msgctxt "the total value of sales in dashboard widget"
 msgid "Sales"
-msgstr "Pardavimų suma"
+msgstr "Satış"
 
 #: wpsc-admin/admin.php:513
 #: wpsc-admin/admin.php:542
 msgid "Avg Order"
-msgstr "Vid. užsakymas"
+msgstr "Sipariş Ortalaması"
 
 #: wpsc-admin/admin-form-functions.php:74
 msgid "Logic"
-msgstr ""
+msgstr "Mantık"
 
 #: wpsc-admin/admin-form-functions.php:71
 msgid "Property"
-msgstr ""
+msgstr "Özellik"
 
 #: wpsc-admin/includes/settings-pages/checkout.php:11
 msgid "Type"
-msgstr ""
+msgstr "Türü"
 
 #: wpsc-admin/includes/settings-pages/checkout.php:12
 msgid "Unique Names"
-msgstr ""
+msgstr "Benzersiz İsim"
 
 #: wpsc-includes/product-template.php:680
 msgid "Read the rest of this entry &raquo;"
-msgstr ""
+msgstr "Bu iletinin devamını okuyun"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:38
 msgid "Billing Address"
-msgstr ""
+msgstr "Fatura Adresi"
 
 #: wpsc-shipping/usps_20.php:213
 msgid "Advanced Rates:"
@@ -199,20 +187,20 @@ msgstr ""
 
 #: wpsc-admin/admin-form-functions.php:354
 msgid "Manual Payment"
-msgstr ""
+msgstr "Manuel Ödeme"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:36
 msgid "Billing First Name"
-msgstr ""
+msgstr "Fatura Adı"
 
 #: wpsc-shipping/ups_20.php:232
 msgid "Insure shipment against cart total"
-msgstr ""
+msgstr "Sepetinizdeki ürünleri sevkiyat esnasında sigortalayın"
 
 #: wpsc-admin/includes/settings-pages/checkout.php:190
 #: wpsc-admin/admin.php:385
 msgid "Select a Unique Name"
-msgstr ""
+msgstr "Benzersiz bir kullanıcı adı ​​seçin"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:68
 msgid "Sales Upgrade Fix"
@@ -224,7 +212,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/general.php:150
 msgid "Preview:"
-msgstr ""
+msgstr "Önizleme:"
 
 #: wpsc-admin/includes/settings-pages/shipping.php:162
 msgid "Sales over or equal to: %1$s<input type=\"text\" size=\"6\" name=\"wpsc_options[shipping_discount_value]\" value=\"%2$s\" id=\"shipping_discount_value\" /> will receive free shipping."
@@ -232,32 +220,26 @@ msgstr ""
 
 #: wpsc-admin/display-coupons.php:342
 msgid "Free Shipping"
-msgstr ""
+msgstr "Ücretsiz Gönderi"
 
 #: wpsc-admin/display-options-settings.page.php:276
 msgid "%s Setting options updated."
 msgid_plural " %s Settings options updated."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: wpsc-admin/display-options-settings.page.php:286
 msgid "%s Shipping option updated."
 msgid_plural "%s Shipping option updated."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: wpsc-admin/admin-form-functions.php:64
 msgid "Conditions"
-msgstr ""
+msgstr "Koşullar"
 
 #: wpsc-admin/includes/display-items-functions.php:280
 msgid "%s of them is reserved for pending or recently completed orders."
 msgid_plural "%s of them are reserved for pending or recently completed orders."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: wpsc-admin/includes/display-items-functions.php:995
 #: wpsc-admin/includes/display-items-functions.php:1118
@@ -266,15 +248,15 @@ msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:715
 msgid "Merchant Notes:"
-msgstr ""
+msgstr "Satıcı Notları:"
 
 #: wpsc-admin/admin-form-functions.php:117
 msgid "Add Conditions"
-msgstr ""
+msgstr "Koşulları Ekle"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:39
 msgid "Billing City"
-msgstr ""
+msgstr "Fatura için İl"
 
 #: wpsc-shipping/usps_20.php:220
 msgid "This setting will provide rates based on the dimensions from eacy item in your cart"
@@ -286,39 +268,39 @@ msgstr ""
 
 #: wpsc-shipping/usps_20.php:224
 msgid "Select Services"
-msgstr ""
+msgstr "Hizmetleri Seç"
 
 #: wpsc-shipping/ups_20.php:244
 msgid "Singular Shipping"
-msgstr ""
+msgstr "Tekli Ürün Gönderimi"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1235
 msgid "All Products"
-msgstr ""
+msgstr "Tüm Ürünler"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:37
 msgid "Billing Last Name"
-msgstr ""
+msgstr "Fatura Soyadınız"
 
 #: wpsc-admin/display-upgrades.page.php:88
 msgid "Name:"
-msgstr ""
+msgstr "Adı:"
 
 #: wpsc-admin/display-sales-logs.php:448
 msgid "Send Custom Message"
-msgstr "Išsiųsti pranešimą apie siuntos numerį"
+msgstr "Özel Mesaj Gönder"
 
 #: wpsc-admin/display-upgrades.page.php:92
 msgid "API Key:"
-msgstr ""
+msgstr "API Anahtarı:"
 
 #: wpsc-admin/includes/settings-pages/checkout.php:9
 msgid "Drag"
-msgstr ""
+msgstr "Sürükle"
 
 #: wpsc-shipping/usps_20.php:196
 msgid "Don't have a USPS API account ? "
-msgstr ""
+msgstr "Bir USPS API anahtarınız yok mu?"
 
 #: wpsc-shipping/ups_20.php:247
 msgid "Rate each quantity of items in a cart as its own package using dimensions on product"
@@ -326,23 +308,23 @@ msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:748
 msgid "Prohibited <a href=\"http://checkout.google.com/support/sell/bin/answer.py?answer=75724\">by Google?</a>"
-msgstr ""
+msgstr "<a href=\"http://checkout.google.com/support/sell/bin/answer.py?answer=75724\">Google</a> tarafından yasaklandı mı?"
 
 #: wpsc-admin/includes/display-items-functions.php:855
 msgid "Your preview for this product:"
-msgstr ""
+msgstr "Bu ürün için önizleme:"
 
 #: wpsc-admin/display-sales-logs.php:524
 msgid "Update Notes"
-msgstr ""
+msgstr "Notları Güncelle"
 
 #: wpsc-admin/includes/settings-pages/checkout.php:185
 msgid "more options"
-msgstr ""
+msgstr "daha fazla seçenek"
 
 #: wpsc-admin/includes/settings-pages/checkout.php:13
 msgid "Mandatory"
-msgstr ""
+msgstr "Zorunlu"
 
 #: wpsc-admin/includes/display-items-functions.php:1059
 msgid "Custom thumbnail size for this image on the main Product Page"
@@ -350,57 +332,57 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1238
 msgid "Per Product"
-msgstr ""
+msgstr "Herbir Ürün İçin"
 
 #: wpsc-admin/includes/display-items-functions.php:966
 #: wpsc-admin/includes/display-items-functions.php:996
 #: wpsc-admin/includes/display-items-functions.php:1119
 msgid "Use as Product Thumbnail"
-msgstr ""
+msgstr "Ürün küçük resmi olarak kullanın"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:35
 msgid "Select an Option"
-msgstr ""
+msgstr "Birini seçin"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:41
 msgid "Billing Country"
-msgstr ""
+msgstr "Fatura Ülkesi"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:42
 msgid "Billing Email"
-msgstr ""
+msgstr "Fatura için e-posta"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:43
 msgid "Billing Phone"
-msgstr ""
+msgstr "Fatura için telefon"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:44
 msgid "Billing Post Code"
-msgstr ""
+msgstr "Fatura için posta kodu"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:45
 msgid "Shipping First Name"
-msgstr ""
+msgstr "Gönderilenin Adı"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:46
 msgid "Shipping Last Name"
-msgstr ""
+msgstr "Gönderilenin Soyadı"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:48
 msgid "Shipping City"
-msgstr ""
+msgstr "Nakliyenin Yapılacağı İl"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:49
 msgid "Shipping State"
-msgstr ""
+msgstr "Nakliyenin Yapılacağı Bölge/Eyalet"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:50
 msgid "Shipping Country"
-msgstr ""
+msgstr "Sevkiyatın Gerçekleştirileceği Ülke"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:51
 msgid "Shipping Post Code"
-msgstr ""
+msgstr "Nakliye Posta Kodu"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:69
 msgid "Upgrading to WP e-Commerce 3.7 and later requires you to run this fix once.The following Boxes corresponds to the form fields in your current checkout page.  All you have to do is select from the drop-down menu box what each of the following fields represent. Sorry for any inconvenience caused, but we're sure you'll agree that the new purchase logs are worth this minor hassle."
@@ -436,7 +418,7 @@ msgstr ""
 
 #: wpsc-shipping/usps_20.php:256
 msgid "International Package Type"
-msgstr ""
+msgstr "Uluslararası Paket Türü"
 
 #: wpsc-shipping/usps_20.php:279
 msgid "First Class Mail Type"
@@ -448,340 +430,334 @@ msgstr ""
 
 #: wpsc-shipping/tablerate.php:72
 msgid "Add Layer"
-msgstr ""
+msgstr "Katman Ekle"
 
 #: wpsc-merchants/paypal-express.merchant.php:639
 msgid "Country:"
-msgstr ""
+msgstr "Ülke:"
 
 #: wpsc-merchants/paypal-express.merchant.php:256
 msgid "API Username"
-msgstr ""
+msgstr "API Adı"
 
 #: wpsc-merchants/paypal-express.merchant.php:277
 msgid "Server Type"
-msgstr ""
+msgstr "Sunucu Türü"
 
 #: wpsc-merchants/paypal-express.merchant.php:423
 #: wpsc-merchants/paypal-express.merchant.php:602
 msgid "Error Number:"
-msgstr ""
+msgstr "Hata numarası:"
 
 #: wpsc-merchants/paypal-express.merchant.php:298
 msgid "Convert to"
-msgstr ""
+msgstr "Dönüştür"
 
 #: wpsc-merchants/paypal-pro.merchant.php:412
 msgid "Visa"
-msgstr ""
+msgstr "Visa"
 
 #: wpsc-merchants/paypal-express.merchant.php:263
 msgid "API Password"
-msgstr ""
+msgstr "API Şifresi"
 
 #: wpsc-merchants/paypal-pro.merchant.php:381
 msgid "Credit Card Expiry *"
-msgstr ""
+msgstr "Kredi Kartı Son Kullanma Tarihi *"
 
 #: wpsc-merchants/paypal-express.merchant.php:431
 msgid "Long Message:"
-msgstr ""
+msgstr "Uzun Mesaj:"
 
 #: wpsc-merchants/paypal-pro.merchant.php:413
 msgid "MasterCard"
-msgstr ""
+msgstr "MasterCard"
 
 #: wpsc-merchants/paypal-pro.merchant.php:414
 msgid "Discover"
-msgstr ""
+msgstr "Keşfet"
 
 #: wpsc-core/js/tinymce3/window.php:145
 msgid "[preview] Preview In Here [/preview]"
-msgstr ""
+msgstr "[preview] Burada Önizle [/preview]"
 
 #: wpsc-merchants/paypal-express.merchant.php:12
 msgid "PayPal Express Checkout 2.0"
-msgstr ""
+msgstr "PayPal Ekspres Ödeme 2.0"
 
 #: wpsc-merchants/paypal-pro.merchant.php:375
 msgid "Credit Card Number *"
-msgstr ""
+msgstr "Kredi Kartı Numarası *"
 
 #: wpsc-theme/wpsc-cart_widget.php:67
 msgid "Empty Your Cart"
-msgstr ""
+msgstr "Sepetiniz Boşaltın"
 
 #: wpsc-merchants/paypal-express.merchant.php:281
 msgid "Production"
-msgstr ""
+msgstr "Üretim"
 
 #: wpsc-merchants/paypal-express.merchant.php:270
 msgid "API Signature"
-msgstr ""
+msgstr "API İmzası"
 
 #: wpsc-merchants/paypal-express.merchant.php:622
 msgid "City:"
-msgstr ""
+msgstr "Şehir:"
 
 #: wpsc-merchants/paypal-express.merchant.php:628
 msgid "State:"
-msgstr ""
+msgstr "Bölge/Eyalet:"
 
 #: wpsc-merchants/paypal-express.merchant.php:633
 msgid "Postal code:"
-msgstr ""
+msgstr "Posta kodu:"
 
 #: wpsc-merchants/paypal-pro.merchant.php:415
 msgid "Amex"
-msgstr ""
+msgstr "Amex"
 
 #: wpsc-merchants/paypal-pro.merchant.php:404
 msgid "CVV *"
-msgstr ""
+msgstr "CVV *"
 
 #: wpsc-merchants/paypal-pro.merchant.php:409
 msgid "Card Type *"
-msgstr ""
+msgstr "Kart Türü *"
 
 #: wpsc-merchants/paypal-express.merchant.php:18
 msgid "PayPal Express"
-msgstr ""
+msgstr "PayPal Ekspres"
 
 #: wpsc-merchants/paypal-express.merchant.php:280
 msgid "Sandbox (For testing)"
-msgstr ""
+msgstr "Sandbox (test için)"
 
 #: wpsc-merchants/paypal-express.merchant.php:378
 msgid "The PayPal API has returned an error!"
-msgstr ""
+msgstr "PayPal API bir hata verdi!"
 
 #: wpsc-merchants/paypal-express.merchant.php:616
 msgid "Street 2:"
-msgstr ""
+msgstr "Cadde/Sokak 2:"
 
 #: wpsc-merchants/paypal-express.merchant.php:610
 msgid "Street 1:"
-msgstr ""
+msgstr "Cadde/Sokak 1:"
 
 #: wpsc-merchants/paypal-express.merchant.php:606
 msgid "Shipping Address:"
-msgstr ""
+msgstr "Nakliye Adresi:"
 
 #: wpsc-merchants/paypal-express.merchant.php:427
 msgid "Short Message:"
-msgstr ""
+msgstr "Kısa Mesaj:"
 
 #: wpsc-admin/includes/settings-pages/import.php:86
 msgid "Stock Quantity Limit"
-msgstr "Prekės kiekis sandėlyje"
+msgstr "Stok Limiti"
 
 #: wpsc-admin/includes/settings-pages/import.php:163
 msgid "Success, your <a href='%s'>products</a> have been upload."
-msgstr "Jūsų <a href='%s'>prekės</a> sėkmingai atnaujintos."
+msgstr "<a href='%s'>Ürünleriniz</a> yüklenmesi başarı ile gerçekleşmiştir."
 
 #: wpsc-admin/includes/settings-pages/import.php:84
 msgid "Weight Unit"
-msgstr "Svorio vienetas"
+msgstr "Ağırlık Birimi"
 
 #: wpsc-admin/includes/settings-pages/import.php:64
 msgid "Column (%s)"
-msgstr "Stulpelis (%s)"
+msgstr "Sütun (%s)"
 
 #: wpsc-admin/includes/settings-pages/import.php:85
 msgid "Stock Quantity"
-msgstr "Kiekis sandėlyje"
+msgstr "Stok"
 
 #: wpsc-admin/includes/settings-pages/import.php:105
 msgid "There was an error while uploading your csv file."
-msgstr "Įkeliant CSV failą įvyko klaida."
+msgstr "CSV dosyası yüklenirken bir hata oluştu."
 
 #: wpsc-includes/ajax.functions.php:85
 msgid "Sorry, but there is only %s of this item in stock."
 msgid_plural "Sorry, but there are only %s of this item in stock."
-msgstr[0] "Atsiprašome, bet šios prekės liko tik %s vienetas."
-msgstr[1] "Atsiprašome, bet šios prekės liko tik %s vienetai."
-msgstr[2] "Atsiprašome, bet šios prekės liko tik %s vienetų."
+msgstr[0] "Üzgünüz, ama bu üründen stokta sadece %s adet mevcuttur."
 
 #: wpsc-admin/display-options-settings.page.php:116
 msgctxt "Marketing settings tab in Settings->Store page"
 msgid "Marketing"
-msgstr "Marketingas"
+msgstr "Pazarlama"
 
 #: wpsc-admin/admin-form-functions.php:227
 msgid "Pending sale"
 msgid_plural "Pending sales"
-msgstr[0] "Nepatvirtintas pardavimas"
-msgstr[1] "Nepatvirtinti pardavimai"
-msgstr[2] "Nepatvirtintų pardavimų"
+msgstr[0] "Beklemedeki satışlar"
 
 #: wpsc-admin/admin-form-functions.php:241
 msgid "Closed sale"
 msgid_plural "Closed sales"
-msgstr[0] "Pabaigtas pardavimas"
-msgstr[1] "Pabaigti pardavimai"
-msgstr[2] "Pabaigtų pardavimų"
+msgstr[0] "Tamamlanmış Satış"
 
 #: wpsc-admin/display-options-settings.page.php:112
 msgctxt "Taxes settings tab in Settings->Store page"
 msgid "Taxes"
-msgstr "Mokesčiai"
+msgstr "Vergiler"
 
 #: wpsc-admin/display-options-settings.page.php:110
 msgctxt "Presentation settings tab in Settings->Store page"
 msgid "Presentation"
-msgstr "Išvaizda"
+msgstr "Görünüm"
 
 #: wpsc-admin/display-options-settings.page.php:117
 msgctxt "Import settings tab in Settings->Store page"
 msgid "Import"
-msgstr "Importavimas"
+msgstr ""
 
 #: wpsc-admin/display-options-settings.page.php:114
 msgctxt "Payments settings tab in Settings->Store page"
 msgid "Payments"
-msgstr "Mokėjimai"
+msgstr "Ödemeler"
 
 #: wpsc-admin/display-options-settings.page.php:113
 msgctxt "Shipping settings tab in Settings->Store page"
 msgid "Shipping"
-msgstr "Pristatymas"
+msgstr "Nakliye"
 
 #: wpsc-admin/display-options-settings.page.php:115
 msgctxt "Checkout settings tab in Settings->Store page"
 msgid "Checkout"
-msgstr "Užsakymas"
+msgstr "Ödeme"
 
 #: wpsc-admin/admin.php:778
 msgid "Last four months of sales on a per product basis:"
-msgstr "Paskutinių keturių mėnesių populiariausios prekės:"
+msgstr ""
 
 #: wpsc-admin/display-options-settings.page.php:109
 msgctxt "General settings tab in Settings->Store page"
 msgid "General"
-msgstr "Bendri"
+msgstr "Genel"
 
 #: wpsc-admin/display-options-settings.page.php:111
 msgctxt "Admin settings tab in Settings->Store page"
 msgid "Admin"
-msgstr "Administravimo"
+msgstr "Yönetici"
 
 #: wpsc-updates/currency_list.php:204
 msgid "SDD"
-msgstr ""
+msgstr "SDD"
 
 #: wpsc-updates/currency_list.php:211
 msgid "TWD"
-msgstr ""
+msgstr "TWD"
 
 #: wpsc-updates/currency_list.php:190
 msgid "STD"
-msgstr ""
+msgstr "STD"
 
 #: wpsc-updates/currency_list.php:208
 msgid "SEK"
-msgstr ""
+msgstr "SEK"
 
 #: wpsc-updates/currency_list.php:240
 msgid "YUN"
-msgstr ""
+msgstr "YUN"
 
 #: wpsc-updates/currency_list.php:241
 msgid "ZMK"
-msgstr ""
+msgstr "ZMK"
 
 #: wpsc-updates/currency_list.php:230
 msgid "UZS"
-msgstr ""
+msgstr "UZS"
 
 #: wpsc-updates/currency_list.php:181
 msgid "RUR"
-msgstr ""
+msgstr "RUR"
 
 #: wpsc-updates/currency_list.php:156
 #: wpsc-updates/currency_list.php:175
 #: wpsc-updates/currency_list.php:237
 msgid "XPF"
-msgstr ""
+msgstr "XPF"
 
 #: wpsc-updates/currency_list.php:158
 msgid "NIC"
-msgstr ""
+msgstr "NIC"
 
 #: wpsc-updates/currency_list.php:160
 msgid "NGN"
-msgstr ""
+msgstr "NGN"
 
 #: wpsc-updates/currency_list.php:165
 msgid "OMR"
-msgstr ""
+msgstr "OMR"
 
 #: wpsc-updates/currency_list.php:166
 msgid "PKR"
-msgstr ""
+msgstr "PKR"
 
 #: wpsc-updates/currency_list.php:169
 msgid "PGK"
-msgstr ""
+msgstr "PGK"
 
 #: wpsc-updates/currency_list.php:170
 msgid "PYG"
-msgstr ""
+msgstr "PYG"
 
 #: wpsc-updates/currency_list.php:171
 msgid "PEN"
-msgstr ""
+msgstr "PEN"
 
 #: wpsc-updates/currency_list.php:172
 msgid "PHP"
-msgstr ""
+msgstr "PHP"
 
 #: wpsc-updates/currency_list.php:174
 msgid "PLN"
-msgstr ""
+msgstr "PLN"
 
 #: wpsc-updates/currency_list.php:178
 msgid "QAR"
-msgstr ""
+msgstr "QAR"
 
 #: wpsc-updates/currency_list.php:180
 msgid "RON"
-msgstr ""
+msgstr "RON"
 
 #: wpsc-updates/currency_list.php:182
 msgid "RWF"
-msgstr ""
+msgstr "RWF"
 
 #: wpsc-updates/currency_list.php:183
 msgid "SHP"
-msgstr ""
+msgstr "SHP"
 
 #: wpsc-updates/currency_list.php:188
 msgid "WST"
-msgstr ""
+msgstr "WST"
 
 #: wpsc-updates/currency_list.php:189
 msgid "ITL"
-msgstr ""
+msgstr "ITL"
 
 #: wpsc-updates/currency_list.php:191
 msgid "SAR"
-msgstr ""
+msgstr "SAR"
 
 #: wpsc-updates/currency_list.php:193
 msgid "SCR"
-msgstr ""
+msgstr "SCR"
 
 #: wpsc-updates/currency_list.php:194
 msgid "SLL"
-msgstr ""
+msgstr "SLL"
 
 #: wpsc-updates/currency_list.php:195
 msgid "SGD"
-msgstr ""
+msgstr "SGD"
 
 #: wpsc-updates/currency_list.php:197
 msgid "SIT"
-msgstr ""
+msgstr "SIT"
 
 #: wpsc-updates/currency_list.php:199
 msgid "SOD"
@@ -789,67 +765,67 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:200
 msgid "ZAR"
-msgstr ""
+msgstr "ZAR"
 
 #: wpsc-updates/currency_list.php:203
 msgid "LKR"
-msgstr ""
+msgstr "LKR"
 
 #: wpsc-updates/currency_list.php:205
 msgid "SRG"
-msgstr ""
+msgstr "SRG"
 
 #: wpsc-updates/currency_list.php:207
 msgid "SZL"
-msgstr ""
+msgstr "SZL"
 
 #: wpsc-updates/currency_list.php:210
 msgid "SYP"
-msgstr ""
+msgstr "SYP"
 
 #: wpsc-updates/currency_list.php:212
 msgid "TJR"
-msgstr ""
+msgstr "TJR"
 
 #: wpsc-updates/currency_list.php:213
 msgid "TZS"
-msgstr ""
+msgstr "TZS"
 
 #: wpsc-updates/currency_list.php:214
 msgid "THB"
-msgstr ""
+msgstr "THB"
 
 #: wpsc-updates/currency_list.php:217
 msgid "TOP"
-msgstr ""
+msgstr "TOP"
 
 #: wpsc-updates/currency_list.php:218
 msgid "TTD"
-msgstr ""
+msgstr "TTD"
 
 #: wpsc-updates/currency_list.php:219
 msgid "TND"
-msgstr ""
+msgstr "TND"
 
 #: wpsc-updates/currency_list.php:220
 msgid "TRL"
-msgstr ""
+msgstr "TL"
 
 #: wpsc-updates/currency_list.php:221
 msgid "TMM"
-msgstr ""
+msgstr "TMM"
 
 #: wpsc-updates/currency_list.php:225
 msgid "UGS"
-msgstr ""
+msgstr "UGS"
 
 #: wpsc-updates/currency_list.php:226
 msgid "UAG"
-msgstr ""
+msgstr "UAG"
 
 #: wpsc-updates/currency_list.php:227
 msgid "AED"
-msgstr ""
+msgstr "AED"
 
 #: wpsc-updates/currency_list.php:228
 msgid "UYP"
@@ -857,80 +833,80 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:231
 msgid "VUV"
-msgstr ""
+msgstr "VUV"
 
 #: wpsc-updates/currency_list.php:233
 msgid "VUB"
-msgstr ""
+msgstr "VUB"
 
 #: wpsc-updates/currency_list.php:234
 msgid "VND"
-msgstr ""
+msgstr "VND"
 
 #: wpsc-updates/currency_list.php:239
 msgid "YER"
-msgstr ""
+msgstr "YER"
 
 #: wpsc-updates/currency_list.php:242
 msgid "ZWD"
-msgstr ""
+msgstr "ZWD"
 
 #: wpsc-updates/currency_list.php:168
 msgid "PAB"
-msgstr ""
+msgstr "PAB"
 
 #: wpsc-admin/display-update.page.php:68
 msgid "Updating Product Files..."
-msgstr "Atnaujinami prekių failai..."
+msgstr "Ürün Dosyaları Güncelleniyor ..."
 
 #: wpsc-admin/includes/display-items-functions.php:132
 msgid "This Product has variations, to edit the price please use the <a href=\"#variation_control\">Variation Controls</a> below."
-msgstr "Ši prekė turi kelis variantus. Kainą pakeisti galite <a href=\"#variation_control\">variantų blokelyje</a>, esančiame apačioje."
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:574
 msgid "Pounds"
-msgstr "Svarai"
+msgstr "Pound"
 
 #: wpsc-taxes/controllers/taxes_controller.class.php:600
 msgid "All Markets"
-msgstr "Visi regionai"
+msgstr ""
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:443
 msgid "I agree to The <a class='thickbox' target='_blank' href='%s' class='termsandconds'>Terms and Conditions</a>"
-msgstr "Sutinku su <a class='thickbox' target='_blank' href='%s' class='termsandconds'>taisyklėmis ir sąlygomis</a>"
+msgstr ""
 
 #: wpsc-admin/display-items.page.php:143
 msgid " oz."
-msgstr "uncijos"
+msgstr "oz."
 
 #: wpsc-admin/display-update.page.php:60
 msgid "Updating Categories..."
-msgstr "Atnaujinamos kategorijos..."
+msgstr "Kategoriler Güncelleniyor ..."
 
 #: wpsc-admin/includes/display-items-functions.php:575
 msgid "Ounces"
-msgstr "Uncijos"
+msgstr "Ons"
 
 #: wpsc-admin/display-update.page.php:73
 msgid "WP e-Commerce updated successfully!"
-msgstr "Wp e-Commerce atnaujinta sėkmingai!"
+msgstr ""
 
 #: wpsc-admin/display-items.page.php:140
 msgid " lbs."
-msgstr "svarai"
+msgstr "lbs."
 
 #: wpsc-admin/display-update.page.php:62
 msgid "Updating Variations..."
-msgstr "Atnaujinami variantai..."
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:806
 msgctxt "External product link target"
 msgid "Default (set by theme)"
-msgstr "Numatyta (nustatyta temos)"
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:763
 msgid "Use Default"
-msgstr "Numatyta parinktis"
+msgstr "Varsayılanı Kullanın"
 
 #: wpsc-admin/display-items.page.php:146
 msgid " g"
@@ -942,46 +918,46 @@ msgstr "kg"
 
 #: wpsc-admin/display-update.page.php:66
 msgid "Updating Child Products..."
-msgstr "Atnaujinami prekių variantai..."
+msgstr ""
 
 #: wpsc-admin/display-items.page.php:278
 msgctxt "Show all [category name]"
 msgid "Show All %s"
-msgstr "Rodyti visas %s"
+msgstr ""
 
 #: wpsc-admin/display-update.page.php:64
 msgid "Updating Products..."
-msgstr "Atnaujinamos prekės"
+msgstr ""
 
 #: wpsc-admin/display-update.page.php:70
 msgid "Updating Database..."
-msgstr "Atnaujinama duomenų bazė..."
+msgstr "Veritabanı güncelleniyor ..."
 
 #: wpsc-admin/admin.php:296
 msgid "Off Site Product link"
-msgstr "Išorinė nuoroda į prekę"
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:149
 msgid "+ New Currency"
-msgstr "+ Nauja valiuta"
+msgstr "+ Yeni Para Birimi"
 
 #: wpsc-admin/includes/display-items-functions.php:197
 msgid "+ Add level"
-msgstr "+ Pridėti lygį"
+msgstr "+ Seviye Ekle"
 
 #: wpsc-admin/includes/display-items-functions.php:576
 msgid "Grams"
-msgstr "Gramai"
+msgstr "Gram"
 
 #: wpsc-admin/includes/display-items-functions.php:577
 msgid "Kilograms"
-msgstr "Kilogramai"
+msgstr "Kilogram"
 
 #: wpsc-admin/includes/display-items-functions.php:589
 #: wpsc-admin/includes/display-items-functions.php:602
 #: wpsc-admin/includes/display-items-functions.php:615
 msgid "inches"
-msgstr "coliai"
+msgstr "inç"
 
 #: wpsc-admin/includes/display-items-functions.php:590
 #: wpsc-admin/includes/display-items-functions.php:603
@@ -993,116 +969,116 @@ msgstr "cm"
 #: wpsc-admin/includes/display-items-functions.php:604
 #: wpsc-admin/includes/display-items-functions.php:617
 msgid "meter"
-msgstr "metrai"
+msgstr "metre"
 
 #: wpsc-admin/includes/display-items-functions.php:807
 msgid "Open link in the same window"
-msgstr "Atidaryti nuorodą tame pačiame lange"
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:808
 msgid "Open link in a new window"
-msgstr "Atidaryti nuorodą naujame lange"
+msgstr "Yeni bir pencerede aç"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:927
 msgid "Show Product Count per Product Category"
-msgstr "Rodyti prekių kiekį kategorijose"
+msgstr ""
 
 #: wpsc-core/wpsc-functions.php:268
 msgctxt "admin menu: add new product"
 msgid "Add New"
-msgstr "Pridėti naują"
+msgstr ""
 
 #: wpsc-includes/processing.functions.php:126
 msgid "Remaining stock of %s is 0. Product was unpublished."
-msgstr "Prekės %s nebeliko sandėlyje. Prekė išimta iš prekybos."
+msgstr ""
 
 #: wpsc-admin/includes/settings-pages/import.php:48
 msgid "Select if you would like to import your products in as Drafts or Publish them right away."
-msgstr "Pasirinkite ar norite importuoti prekes kaip juodraščius ar iškart padaryti jas matomas lankytojams."
+msgstr ""
 
 #: wpsc-includes/ajax.functions.php:87
 msgid "Sorry, but the item \"%s\" is out of stock."
-msgstr "Atsiprašome, bet \"%s\" yra išparduota."
+msgstr ""
 
 #: wpsc-admin/includes/settings-pages/import.php:39
 msgid "For each column, select the field it corresponds to in 'Belongs to'. You can upload as many products as you like."
-msgstr "Kiekvienam stulpeliui parinkite atitinkamą lauką. Galite įkelti neribotą kiekį prekių."
+msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:877
 msgid "Show Product Category Description"
-msgstr "Rodyti prekių kategorijos aprašymą"
+msgstr "Ürün Kategorileri için Açıklama Göster"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:873
 msgid "Product Category Settings"
-msgstr "Prekių kategorijų nustatymai"
+msgstr "Ürün Kategorisi Ayarları"
 
 #: wpsc-includes/processing.functions.php:126
 msgid "%s is out of stock"
-msgstr "Prekės %s nebeliko sandėlyje"
+msgstr "%s stoklarda tükendi"
 
 #: wpsc-admin/includes/display-items-functions.php:1044
 msgid "This is the Thumbnail size that will be displayed on the Single Product page. You can change the default sizes under your store settings"
-msgstr "Čia nurodytas produkto paveikslėlio dydis bus rodomas Atskiro Produkto puslapyje. Šį dydį galite pakeisti parduotuvės nustatymuose (Nustatymai -> Parduotuvė)."
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:1041
 msgid "Single Product Page Thumbnail:"
-msgstr "Atskiro produkto puslapio paveikslėlis:"
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:1057
 msgid "Products Page Thumbnail Size:"
-msgstr "Produktų puslapio paveikslėlio dydis:"
+msgstr ""
 
 #: wpsc-core/wpsc-functions.php:267
 msgctxt "post type singular name"
 msgid "Product"
-msgstr "Prekė"
+msgstr "Ürün"
 
 #: wpsc-core/wpsc-functions.php:266
 msgctxt "post type name"
 msgid "Products"
-msgstr "Prekės"
+msgstr "Ürünler"
 
 #: wpsc-admin/includes/settings-pages/import.php:44
 msgid "Product Status"
-msgstr "Prekės būsena"
+msgstr "Ürün Durumu"
 
 #: wpsc-admin/includes/settings-pages/import.php:93
 msgid "Please select a category you would like to place all products from this CSV into"
-msgstr "Pasirinkite kategoriją, kuriai norite priskirti visus produktus iš šio CSV failo"
+msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:901
 msgid "Show Product Category Thumbnails"
-msgstr "Rodyti prekių kategorijų paveikslėlius"
+msgstr "Ürün Kategorisi Resimlerini Göster"
 
 #: wpsc-admin/includes/display-items-functions.php:212
 #: wpsc-admin/includes/display-items-functions.php:225
 msgid "and above"
-msgstr "ir daugiau"
+msgstr "ve üzeri"
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:197
 msgid " &nbsp; Shipping: %s\n"
-msgstr "&nbsp; Pristatymas: %s\n"
+msgstr ""
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:193
 msgid " - Shipping: %s\n"
-msgstr " - Pristatymas: %s\n"
+msgstr ""
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:257
 msgid "Purchase # %s\n"
-msgstr "Užsakymo numeris %s\n"
+msgstr ""
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:235
 msgid "Total Shipping: %s\n"
-msgstr "Iš viso už pristatymą: %s\n"
+msgstr ""
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:237
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:255
 msgid "Total: %s\n"
-msgstr "Iš viso: %s\n"
+msgstr ""
 
 #: wpsc-updates/currency_list.php:85
 msgid "CUP"
-msgstr ""
+msgstr "CUP"
 
 #: wpsc-updates/currency_list.php:54
 #: wpsc-updates/currency_list.php:79
@@ -1113,11 +1089,11 @@ msgstr ""
 #: wpsc-updates/currency_list.php:185
 #: wpsc-updates/currency_list.php:187
 msgid "XCD"
-msgstr ""
+msgstr "XCD"
 
 #: wpsc-updates/currency_list.php:86
 msgid "HRK"
-msgstr ""
+msgstr "HRK"
 
 #: wpsc-updates/currency_list.php:3
 #: wpsc-updates/currency_list.php:13
@@ -1142,92 +1118,92 @@ msgstr ""
 #: wpsc-updates/currency_list.php:202
 #: wpsc-updates/currency_list.php:232
 msgid "&#8364;"
-msgstr ""
+msgstr "€"
 
 #: wpsc-updates/currency_list.php:77
 msgid "TPE"
-msgstr ""
+msgstr "TPE"
 
 #: wpsc-updates/currency_list.php:80
 msgid "DJF"
-msgstr ""
+msgstr "DJF"
 
 #: wpsc-updates/currency_list.php:82
 msgid "CDF"
-msgstr ""
+msgstr "CDF"
 
 #: wpsc-updates/currency_list.php:83
 msgid "CZK"
-msgstr ""
+msgstr "CZK"
 
 #: wpsc-updates/currency_list.php:84
 msgid "CYP"
-msgstr ""
+msgstr "CYP"
 
 #: wpsc-shipping/australiapost.php:117
 msgid "5. If no product dimensions are defined, then default package dimensions of 100mm x 100mm x 100mm will be used."
-msgstr "5. Jeigu nenurodytas prekės paketo dydis, tai bus naudojamas numatytasis dydis, kuris yra 100mm x 100mm x 100mm."
+msgstr ""
 
 #: wpsc-updates/currency_list.php:24
 msgid "KRW"
-msgstr ""
+msgstr "KRW"
 
 #: wpsc-updates/currency_list.php:23
 msgid "KWD"
-msgstr ""
+msgstr "KWD"
 
 #: wpsc-updates/currency_list.php:75
 msgid "EGP"
-msgstr ""
+msgstr "EGP"
 
 #: wpsc-updates/currency_list.php:31
 msgid "¥"
-msgstr ""
+msgstr "¥"
 
 #: wpsc-updates/currency_list.php:21
 msgid "LAK"
-msgstr ""
+msgstr "LAK"
 
 #: wpsc-updates/currency_list.php:20
 msgid "LVL"
-msgstr ""
+msgstr "LVL"
 
 #: wpsc-updates/currency_list.php:58
 msgid "GIP"
-msgstr ""
+msgstr "GIP"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:310
 msgid "Your order will be shipped to the billing address"
-msgstr "Jūsų užsakymas bus išsiųstas aukščiau nurodytu adresu."
+msgstr "Siparişiniz fatura adresine sevk edilecektir"
 
 #: wpsc-updates/currency_list.php:15
 #: wpsc-updates/currency_list.php:209
 msgid "CHF"
-msgstr ""
+msgstr "CHF"
 
 #: wpsc-updates/currency_list.php:14
 msgid "LTL"
-msgstr ""
+msgstr "LTL"
 
 #: wpsc-updates/currency_list.php:16
 msgid "LYD"
-msgstr ""
+msgstr "Lyd"
 
 #: wpsc-updates/currency_list.php:8
 msgid "MYR"
-msgstr ""
+msgstr "MYR"
 
 #: wpsc-updates/currency_list.php:18
 msgid "LSL"
-msgstr ""
+msgstr "LSL"
 
 #: wpsc-updates/currency_list.php:11
 msgid "MOP"
-msgstr ""
+msgstr "MOP"
 
 #: wpsc-updates/currency_list.php:9
 msgid "MWK"
-msgstr ""
+msgstr "MWK"
 
 #: wpsc-updates/currency_list.php:12
 msgid "MKD"
@@ -1240,65 +1216,65 @@ msgstr ""
 #: wpsc-updates/currency_list.php:97
 #: wpsc-updates/currency_list.php:100
 msgid "XAF"
-msgstr ""
+msgstr "XAF"
 
 #: wpsc-updates/currency_list.php:67
 msgid "FJD"
-msgstr ""
+msgstr "FJD"
 
 #: wpsc-updates/currency_list.php:69
 msgid "FKP"
-msgstr ""
+msgstr "FKP"
 
 #: wpsc-updates/currency_list.php:70
 msgid "ETB"
-msgstr ""
+msgstr "ETB"
 
 #: wpsc-updates/currency_list.php:36
 msgid "ILS"
-msgstr ""
+msgstr "ILS"
 
 #: wpsc-updates/currency_list.php:38
 msgid "IQD"
-msgstr ""
+msgstr "IQD"
 
 #: wpsc-updates/currency_list.php:39
 msgid "IDR"
-msgstr ""
+msgstr "IDR"
 
 #: wpsc-updates/currency_list.php:25
 msgid "KPW"
-msgstr ""
+msgstr "KPW"
 
 #: wpsc-updates/currency_list.php:41
 msgid "INR"
-msgstr ""
+msgstr "INR"
 
 #: wpsc-updates/currency_list.php:40
 msgid "IRR"
-msgstr ""
+msgstr "IRR"
 
 #: wpsc-updates/currency_list.php:44
 msgid "HKD"
-msgstr ""
+msgstr "HKD"
 
 #: wpsc-updates/currency_list.php:61
 msgid "GEL"
-msgstr ""
+msgstr "GEL"
 
 #: wpsc-updates/currency_list.php:56
 #: wpsc-updates/currency_list.php:68
 #: wpsc-updates/currency_list.php:81
 msgid "DKK"
-msgstr ""
+msgstr "DKK"
 
 #: wpsc-updates/currency_list.php:87
 msgid "CRC"
-msgstr ""
+msgstr "CRC"
 
 #: wpsc-updates/currency_list.php:59
 msgid "GHC"
-msgstr ""
+msgstr "GHC"
 
 #: wpsc-updates/currency_list.php:76
 msgid "ECS"
@@ -1306,7 +1282,7 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:42
 msgid "ISK"
-msgstr ""
+msgstr "ISK"
 
 #: wpsc-updates/currency_list.php:26
 #: wpsc-updates/currency_list.php:46
@@ -1316,15 +1292,15 @@ msgstr ""
 #: wpsc-updates/currency_list.php:162
 #: wpsc-updates/currency_list.php:223
 msgid "AUD"
-msgstr ""
+msgstr "YTL"
 
 #: wpsc-updates/currency_list.php:27
 msgid "KES"
-msgstr ""
+msgstr "KES"
 
 #: wpsc-updates/currency_list.php:28
 msgid "KZT"
-msgstr ""
+msgstr "KZT"
 
 #: wpsc-updates/currency_list.php:3
 #: wpsc-updates/currency_list.php:13
@@ -1349,61 +1325,61 @@ msgstr ""
 #: wpsc-updates/currency_list.php:202
 #: wpsc-updates/currency_list.php:232
 msgid "€"
-msgstr ""
+msgstr "€"
 
 #: wpsc-updates/currency_list.php:4
 msgid "MTL"
-msgstr ""
+msgstr "MTL"
 
 #: wpsc-theme/wpsc-single_product.php:140
 #: wpsc-theme/wpsc-grid_view.php:89
 #: wpsc-theme/wpsc-products_page.php:172
 msgid "Old Price"
-msgstr "Sena kaina"
+msgstr "Eski fiyatı"
 
 #: wpsc-shipping/weightrate.php:49
 msgid "Total weight <br />(<abbr alt=\"You must enter the weight here in pounds, regardless of what you used on your products\" title=\"You must enter the weight here in pounds, regardless of what you used on your products\">in pounds</abbr>)"
-msgstr "Visas svoris <br />(<abbr alt=\"Čia svorį įvesti turite svarais, nepriklausomai nuo to kokį svorio vienetą naudojate savo prekėms\" title=\"Čia svorį įvesti turite svarais, nepriklausomai nuo to kokį svorio vienetą naudojate savo prekėms\">svarais</abbr>)"
+msgstr ""
 
 #: wpsc-admin/includes/settings-pages/general.php:58
 msgid "The Target Markets feature has been disabled because you have the Suhosin PHP extension installed on this server. If you need to use the Target Markets feature then disable the suhosin extension, if you can not do this, you will need to contact your hosting provider."
-msgstr "Tikslinės rinkos parinkimo galimybė buvo išjungta, nes jūsų serveryje yra įdiegtas Suhosin PHP extension. Norėdami naudoti tikslinės rinkos parinkimo galimybę turite išjungti Suhosin PHP extension, jei negalite ar nežinote kaip tai padaryti - susisiekite su savo serverio administratoriumi."
+msgstr ""
 
 #: wpsc-updates/currency_list.php:2
 msgid "MRO"
-msgstr ""
+msgstr "MRO"
 
 #: wpsc-updates/currency_list.php:43
 msgid "HUF"
-msgstr ""
+msgstr "HUF"
 
 #: wpsc-updates/currency_list.php:74
 msgid "SVC"
-msgstr ""
+msgstr "SVC"
 
 #: wpsc-updates/currency_list.php:47
 msgid "HTG"
-msgstr ""
+msgstr "HTG"
 
 #: wpsc-updates/currency_list.php:45
 msgid "HNL"
-msgstr ""
+msgstr "HNL"
 
 #: wpsc-updates/currency_list.php:52
 msgid "QTQ"
-msgstr ""
+msgstr "QTQ"
 
 #: wpsc-updates/currency_list.php:50
 msgid "GNF"
-msgstr ""
+msgstr "GNF"
 
 #: wpsc-updates/currency_list.php:49
 msgid "GWP"
-msgstr ""
+msgstr "GWP"
 
 #: wpsc-updates/currency_list.php:48
 msgid "GYD"
-msgstr ""
+msgstr "GYD"
 
 #: wpsc-updates/currency_list.php:88
 #: wpsc-updates/currency_list.php:157
@@ -1411,67 +1387,67 @@ msgstr ""
 #: wpsc-updates/currency_list.php:173
 #: wpsc-updates/currency_list.php:216
 msgid "NZD"
-msgstr ""
+msgstr "NZD"
 
 #: wpsc-updates/currency_list.php:90
 msgid "KMF"
-msgstr ""
+msgstr "KMF"
 
 #: wpsc-updates/currency_list.php:91
 msgid "COP"
-msgstr ""
+msgstr "COP"
 
 #: wpsc-updates/currency_list.php:94
 msgid "CLP"
-msgstr ""
+msgstr "CLP"
 
 #: wpsc-updates/currency_list.php:95
 msgid "CNY"
-msgstr ""
+msgstr "CNY"
 
 #: wpsc-updates/currency_list.php:98
 msgid "KYD"
-msgstr ""
+msgstr "KYD"
 
 #: wpsc-updates/currency_list.php:99
 msgid "CVE"
-msgstr ""
+msgstr "CVE"
 
 #: wpsc-updates/currency_list.php:101
 msgid "CAD"
-msgstr ""
+msgstr "CAD"
 
 #: wpsc-updates/currency_list.php:102
 msgid "KHR"
-msgstr ""
+msgstr "KHR"
 
 #: wpsc-updates/currency_list.php:103
 msgid "BIF"
-msgstr ""
+msgstr "Bif"
 
 #: wpsc-updates/currency_list.php:105
 msgid "BGL"
-msgstr ""
+msgstr "BGL"
 
 #: wpsc-updates/currency_list.php:110
 msgid "BWP"
-msgstr ""
+msgstr "BWP"
 
 #: wpsc-updates/currency_list.php:112
 msgid "BOB"
-msgstr ""
+msgstr "BOB"
 
 #: wpsc-updates/currency_list.php:113
 msgid "BTN"
-msgstr ""
+msgstr "BTN"
 
 #: wpsc-updates/currency_list.php:114
 msgid "BMD"
-msgstr ""
+msgstr "BMD"
 
 #: wpsc-updates/currency_list.php:118
 msgid "BYB"
-msgstr ""
+msgstr "BYB"
 
 #: wpsc-updates/currency_list.php:119
 msgid "BBD"
@@ -1479,63 +1455,63 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:120
 msgid "BDT"
-msgstr ""
+msgstr "BDT"
 
 #: wpsc-updates/currency_list.php:121
 msgid "BHD"
-msgstr ""
+msgstr "BHD"
 
 #: wpsc-updates/currency_list.php:122
 msgid "BSD"
-msgstr ""
+msgstr "BSD"
 
 #: wpsc-updates/currency_list.php:123
 msgid "AZM"
-msgstr ""
+msgstr "AZM"
 
 #: wpsc-updates/currency_list.php:125
 msgid "AWG"
-msgstr ""
+msgstr "AWG"
 
 #: wpsc-updates/currency_list.php:126
 msgid "AMD"
-msgstr ""
+msgstr "AMD"
 
 #: wpsc-updates/currency_list.php:129
 msgid "ATA"
-msgstr ""
+msgstr "ATA"
 
 #: wpsc-updates/currency_list.php:131
 msgid "AON"
-msgstr ""
+msgstr "AON"
 
 #: wpsc-updates/currency_list.php:134
 msgid "DZD"
-msgstr ""
+msgstr "DZD"
 
 #: wpsc-updates/currency_list.php:135
 msgid "ALL"
-msgstr ""
+msgstr "ALL"
 
 #: wpsc-updates/currency_list.php:136
 msgid "AFA"
-msgstr ""
+msgstr "AFA"
 
 #: wpsc-updates/currency_list.php:140
 msgid "MUR"
-msgstr ""
+msgstr "MUR"
 
 #: wpsc-updates/currency_list.php:142
 msgid "MXN"
-msgstr ""
+msgstr "MXN"
 
 #: wpsc-updates/currency_list.php:144
 msgid "MDL"
-msgstr ""
+msgstr "MDL"
 
 #: wpsc-updates/currency_list.php:146
 msgid "MNT"
-msgstr ""
+msgstr "MNT"
 
 #: wpsc-updates/currency_list.php:148
 #: wpsc-updates/currency_list.php:238
@@ -1544,11 +1520,11 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:150
 msgid "MMK"
-msgstr ""
+msgstr "MMK"
 
 #: wpsc-updates/currency_list.php:151
 msgid "NAD"
-msgstr ""
+msgstr "NAD"
 
 #: wpsc-updates/currency_list.php:155
 msgid "ANG"
@@ -1556,11 +1532,11 @@ msgstr ""
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:308
 msgid "Same as billing address:"
-msgstr "Toks pats kaip ir apmokėjimo adresas:"
+msgstr "Fatura adresi ile aynı:"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:66
 msgid "Error: some files could not be copied. Please make sure that theme folder is writable."
-msgstr "Klaida: kai kurių failų nepavyko nukopijuoti. Įsitikinkite kad leidžiama rašyti į temos aplankalą."
+msgstr ""
 
 #: wpsc-updates/currency_list.php:3
 #: wpsc-updates/currency_list.php:13
@@ -1585,7 +1561,7 @@ msgstr "Klaida: kai kurių failų nepavyko nukopijuoti. Įsitikinkite kad leidž
 #: wpsc-updates/currency_list.php:202
 #: wpsc-updates/currency_list.php:232
 msgid "EUR"
-msgstr ""
+msgstr "EUR"
 
 #: wpsc-updates/currency_list.php:5
 #: wpsc-updates/currency_list.php:17
@@ -1641,7 +1617,7 @@ msgstr ""
 #: wpsc-updates/currency_list.php:236
 #: wpsc-updates/currency_list.php:242
 msgid "$"
-msgstr ""
+msgstr "$"
 
 #: wpsc-updates/currency_list.php:5
 #: wpsc-updates/currency_list.php:17
@@ -1712,7 +1688,7 @@ msgstr ""
 #: wpsc-updates/currency_list.php:235
 #: wpsc-updates/currency_list.php:236
 msgid "USD"
-msgstr ""
+msgstr "USD"
 
 #: wpsc-updates/currency_list.php:6
 #: wpsc-updates/currency_list.php:33
@@ -1722,23 +1698,23 @@ msgstr ""
 #: wpsc-updates/currency_list.php:192
 #: wpsc-updates/currency_list.php:215
 msgid "XOF"
-msgstr ""
+msgstr "XOF"
 
 #: wpsc-updates/currency_list.php:7
 msgid "MVR"
-msgstr ""
+msgstr "MVR"
 
 #: wpsc-updates/currency_list.php:10
 msgid "MGF"
-msgstr ""
+msgstr "MGF"
 
 #: wpsc-updates/currency_list.php:17
 msgid "LRD"
-msgstr ""
+msgstr "LRD"
 
 #: wpsc-updates/currency_list.php:19
 msgid "LBP"
-msgstr ""
+msgstr "LBP"
 
 #: wpsc-updates/currency_list.php:22
 msgid "KGS"
@@ -1746,7 +1722,7 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:29
 msgid "JOD"
-msgstr ""
+msgstr "JOD"
 
 #: wpsc-updates/currency_list.php:30
 #: wpsc-updates/currency_list.php:35
@@ -1755,7 +1731,7 @@ msgstr ""
 #: wpsc-updates/currency_list.php:201
 #: wpsc-updates/currency_list.php:224
 msgid "£"
-msgstr ""
+msgstr "£"
 
 #: wpsc-updates/currency_list.php:30
 #: wpsc-updates/currency_list.php:35
@@ -1773,7 +1749,7 @@ msgstr ""
 #: wpsc-updates/currency_list.php:201
 #: wpsc-updates/currency_list.php:224
 msgid "GBP"
-msgstr ""
+msgstr "GBP"
 
 #: wpsc-updates/currency_list.php:31
 msgid "&#165;"
@@ -1781,35 +1757,35 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:31
 msgid "JPY"
-msgstr ""
+msgstr "JPY"
 
 #: wpsc-updates/currency_list.php:32
 msgid "JMD"
-msgstr ""
+msgstr "JMD"
 
 #: wpsc-updates/currency_list.php:62
 msgid "GMD"
-msgstr ""
+msgstr "GMD"
 
 #: wpsc-updates/currency_list.php:71
 msgid "EEK"
-msgstr ""
+msgstr "EEK"
 
 #: wpsc-updates/currency_list.php:72
 msgid "ERN"
-msgstr ""
+msgstr "ERN"
 
 #: wpsc-updates/currency_list.php:78
 msgid "DOP"
-msgstr ""
+msgstr "DOP"
 
 #: wpsc-updates/currency_list.php:106
 msgid "BND"
-msgstr ""
+msgstr "BND"
 
 #: wpsc-updates/currency_list.php:108
 msgid "BRL"
-msgstr ""
+msgstr "BRL"
 
 #: wpsc-updates/currency_list.php:109
 #: wpsc-updates/currency_list.php:164
@@ -1819,89 +1795,89 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:111
 msgid "BAM"
-msgstr ""
+msgstr "BAM"
 
 #: wpsc-updates/currency_list.php:116
 msgid "BZD"
-msgstr ""
+msgstr "BZD"
 
 #: wpsc-updates/currency_list.php:127
 msgid "ARS"
-msgstr ""
+msgstr "ARS"
 
 #: wpsc-updates/currency_list.php:149
 msgid "MZM"
-msgstr ""
+msgstr "MZM"
 
 #: wpsc-updates/currency_list.php:153
 msgid "NPR"
-msgstr ""
+msgstr "NPR"
 
 #: wpsc-admin/display-sales-logs.php:539
 msgid "Additional Checkout Fields"
-msgstr "Papildomi laukai prekių krepšelyje"
+msgstr "Ek Ödeme Alanları"
 
 #: wpsc-admin/display-sales-logs.php:517
 msgid "Order Notes"
-msgstr "Užsakymo pastabos"
+msgstr "Sipariş Notları"
 
 #: wpsc-admin/display-sales-logs.php:497
 msgid "Cart Items with Custom Messages"
-msgstr "Prekės su papildoma informacija iš pirkėjo"
+msgstr ""
 
 #: wpsc-admin/display-sales-logs.php:490
 msgid "Cart Items with Custom Files"
-msgstr "Prekės su papildomais failais iš pirkėjo"
+msgstr ""
 
 #: wpsc-admin/display-sales-logs.php:485
 msgid "Users Custom Fields"
-msgstr "Papildomi varotojo laukai"
+msgstr "Kullanıcı Özel Alanlar"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:443
 #: wpsc-core/wpsc-installer.php:754
 #: wpsc-admin/includes/purchlogs_upgrade.php:47
 #: wpsc-admin/display-sales-logs.php:154
 msgid "Shipping Address"
-msgstr "Pristatymo adresas"
+msgstr "Nakliye Adresi"
 
 #: wpsc-admin/includes/display-items-functions.php:847
 msgid "Select all downloadable files for %s"
-msgstr "Pasirinkite visus failus skirtus %s"
+msgstr ""
 
 #: wpsc-includes/checkout.class.php:750
 msgid "Please enter a valid card number."
-msgstr ""
+msgstr "Lütfen, geçerli bir kart numarasını girin."
 
 #: wpsc-admin/includes/display-items-functions.php:1254
 msgid "Stock:"
-msgstr "Kiekis:"
+msgstr "Stok:"
 
 #: wpsc-admin/includes/display-items-functions.php:185
 #: wpsc-admin/includes/display-items-functions.php:1262
 msgid "Price:"
-msgstr "Kaina"
+msgstr "Fiyatı:"
 
 #: wpsc-admin/includes/display-items-functions.php:1270
 msgid "Sale Price:"
-msgstr "Išpardavimo kaina:"
+msgstr "Satış Fiyatı:"
 
 #: wpsc-admin/includes/display-items-functions.php:249
 #: wpsc-admin/includes/display-items-functions.php:1238
 msgid "SKU:"
-msgstr ""
+msgstr "SKU:"
 
 #: wpsc-admin/admin.php:849
 msgid "Error: you don't have required permissions to edit this product"
-msgstr ""
+msgstr "Hata: Bu ürünü düzenlemek için gerekli yetkilere sahip değilsiniz"
 
 #: wpsc-admin/admin.php:269
 #: wpsc-admin/admin.php:355
 msgid "Unsaved changes have been detected. Click OK to lose these changes and continue."
-msgstr ""
+msgstr "Kaydedilmemiş değişiklikler tespit edilmiştir. Değişiklikleri kaydetmeden devam etmek için Tamam'ı tıklayın."
 
 #: wpsc-admin/includes/display-items-functions.php:1246
 msgid "Weight:"
-msgstr "Svoris:"
+msgstr "Ağırlık:"
 
 #: wpsc-includes/checkout.class.php:760
 msgid "Please enter a valid expiry date."
@@ -1910,7 +1886,7 @@ msgstr ""
 #: wpsc-includes/checkout.class.php:768
 #: wpsc-includes/checkout.class.php:778
 msgid "Please enter a valid CVV."
-msgstr ""
+msgstr "Lütfen geçerli bir CVV girin."
 
 #: wpsc-core/wpsc-installer.php:159
 msgid ""
@@ -1922,39 +1898,39 @@ msgstr ""
 #: wpsc-core/wpsc-functions.php:325
 msgctxt "taxonomy general name"
 msgid "Categories"
-msgstr "Kategorijos"
+msgstr ""
 
 #: wpsc-includes/product-template.php:134
 #: wpsc-includes/product-template.php:189
 msgid "First Page"
-msgstr "Pirmas puslapis"
+msgstr "İlk Sayfa"
 
 #: wpsc-includes/product-template.php:140
 #: wpsc-includes/product-template.php:142
 #: wpsc-includes/product-template.php:195
 #: wpsc-includes/product-template.php:197
 msgid "&lt; Previous"
-msgstr "&lt; Ankstesnis"
+msgstr "&lt; Önceki"
 
 #: wpsc-includes/product-template.php:180
 #: wpsc-includes/product-template.php:235
 msgid "Next Page"
-msgstr "Sekantis puslapis"
+msgstr "Sonraki Sayfa"
 
 #: wpsc-includes/product-template.php:184
 #: wpsc-includes/product-template.php:239
 msgid "Last Page"
-msgstr "Paskutinis puslapis"
+msgstr "Son Sayfa"
 
 #: wpsc-includes/product-template.php:184
 #: wpsc-includes/product-template.php:239
 msgid "Last &raquo;"
-msgstr "Paskutinis &raquo;"
+msgstr "Son &raquo;"
 
 #: wpsc-includes/product-template.php:180
 #: wpsc-includes/product-template.php:235
 msgid "Next &gt;"
-msgstr "Sekantis &gt;"
+msgstr "Sonraki &gt;"
 
 #: wpsc-includes/product-template.php:150
 #: wpsc-includes/product-template.php:152
@@ -1963,31 +1939,31 @@ msgstr "Sekantis &gt;"
 #: wpsc-includes/product-template.php:207
 #: wpsc-includes/product-template.php:224
 msgid "Page %s"
-msgstr "%s puslapis"
+msgstr "Sayfa %s"
 
 #: wpsc-includes/product-template.php:134
 #: wpsc-includes/product-template.php:189
 msgid "&laquo; First"
-msgstr "&laquo; Pirmas"
+msgstr "&laquo; İlk"
 
 #: wpsc-includes/product-template.php:140
 #: wpsc-includes/product-template.php:142
 #: wpsc-includes/product-template.php:195
 #: wpsc-includes/product-template.php:197
 msgid "Previous Page"
-msgstr "Ankstesnis puslapis"
+msgstr "Önceki Sayfa"
 
 #: wpsc-admin/admin.php:890
 msgid "Error updating product"
-msgstr "Klaida atnaujinant produktą"
+msgstr "Ürün güncellemesinde sorun çıktı"
 
 #: wpsc-admin/includes/display-items-functions.php:350
 msgid "Taxable Amount"
-msgstr "Apmokestinama suma"
+msgstr "Vergilendirilebilir Miktar"
 
 #: wpsc-admin/includes/display-items-functions.php:338
 msgid "This product is not taxable."
-msgstr "Šis produktas neapmokestinamas."
+msgstr "Bu ürün vergilendirilemez."
 
 #: wpsc-admin/includes/settings-pages/admin.php:144
 msgid "Note: The Tracking Subject, is the subject for The Tracking Message email. The Tracking Message is the message e-mailed to users when you click 'Email buyer' on the sales log. This option is only available for purchases with the status of 'Job Dispatched'. Tags you can use in the email message section are %trackid% and %shop_name%"
@@ -2011,7 +1987,7 @@ msgstr ""
 
 #: wpsc-admin/includes/save-data.functions.php:475
 msgid "Select"
-msgstr "Pasirinkti"
+msgstr "Seçin"
 
 #: wpsc-admin/includes/save-data.functions.php:509
 msgid "Category requires additional checkout form fields"
@@ -2020,19 +1996,19 @@ msgstr ""
 #: wpsc-admin/includes/save-data.functions.php:149
 #: wpsc-admin/includes/save-data.functions.php:409
 msgid "Category Image"
-msgstr ""
+msgstr "Kategori Resim"
 
 #: wpsc-admin/includes/save-data.functions.php:414
 msgid "You can set an image for the category here.  If one exists, check the box to delete."
-msgstr ""
+msgstr "Burada kategori için bir resim ayarlayabilirsiniz. Bir resim mevcutsa, silmek için onay kutusunu işaretleyin."
 
 #: wpsc-admin/includes/save-data.functions.php:420
 msgid "Thumbnail Size"
-msgstr ""
+msgstr "Küçük resim boyutu"
 
 #: wpsc-admin/includes/save-data.functions.php:434
 msgid "Display Category Shortcode"
-msgstr ""
+msgstr "Kategori Kısa Adını Göster"
 
 #: wpsc-admin/includes/save-data.functions.php:438
 msgid "Shortcodes are used to display a particular category or group within any WordPress page or post."
@@ -2044,24 +2020,24 @@ msgstr ""
 
 #: wpsc-core/wpsc-functions.php:334
 msgid "New Product Category Name"
-msgstr ""
+msgstr "Yeni Ürün Kategori Adı"
 
 #: wpsc-core/wpsc-functions.php:328
 msgid "All Product Categories"
-msgstr "Visos kategorijos"
+msgstr "Tüm Ürün Kategorileri"
 
 #: wpsc-core/wpsc-functions.php:330
 msgid "Parent Product Category:"
-msgstr ""
+msgstr "Ürün Üst-Kategorisi:"
 
 #: wpsc-core/wpsc-functions.php:331
 msgid "Edit Product Category"
-msgstr "Redaguoti prekių kategoriją"
+msgstr "Ürün Kategorisini Düzenle"
 
 #: wpsc-core/wpsc-functions.php:326
 msgctxt "taxonomy singular name"
 msgid "Product Category"
-msgstr ""
+msgstr "Ürün Kategorisi"
 
 #: wpsc-core/wpsc-functions.php:329
 msgid "Parent Product Category"
@@ -2069,11 +2045,11 @@ msgstr ""
 
 #: wpsc-core/wpsc-functions.php:332
 msgid "Update Product Category"
-msgstr ""
+msgstr "Ürün Kategorisini Güncelle"
 
 #: wpsc-core/wpsc-functions.php:333
 msgid "Add New Product Category"
-msgstr "Pridėti naują kategoriją"
+msgstr "Yeni Ürün Kategorisi Ekle"
 
 #: wpsc-core/wpsc-functions.php:327
 msgid "Search Product Categories"
@@ -2082,7 +2058,7 @@ msgstr ""
 #: wpsc-admin/display-items.page.php:104
 #: wpsc-admin/display-items.page.php:110
 msgid "Drag to a new position"
-msgstr ""
+msgstr "Yeni bir konuma sürükleyin"
 
 #: wpsc-admin/includes/display-items-functions.php:791
 msgid "If this product is for sale on another website enter the link here. For instance if your product is an MP3 file for sale on iTunes you could put the link here. This option overrides the buy now and add to cart links and takes you to the site linked here. You can also customise the Buy Now text and choose to open the link in a new window."
@@ -2098,29 +2074,29 @@ msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:610
 msgid "Length"
-msgstr "Ilgis"
+msgstr "Uzunluk"
 
 #: wpsc-core/wpsc-functions.php:271
 msgid "New Product"
-msgstr "Naujas produktas"
+msgstr "Yeni Ürün"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:560
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:250
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:251
 msgid "Total Tax"
-msgstr "Mokesčiai"
+msgstr "Toplam Vergi"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:261
 msgid "Signing up is free and easy! please fill out your details your registration will happen automatically as you checkout. Don't forget to use your details to login with next time!"
-msgstr ""
+msgstr "Kaydolma ücretsiz ve kolay! Lütfen bilgilerinizi doldurun. Ödemeniz gerçekleşir gerçekleşmez, kayıt işleminiz de tamamlanacaktır. Bir sonraki alışverişinizde bu kullanıcı bilgileri ile giriş yapabilirsiniz!"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:48
 msgid "Advanced Theme Settings"
-msgstr ""
+msgstr "Gelişmiş Tema Ayarları"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:539
 msgid "Show list of categories"
-msgstr "Rodyti kategorijų sąrašą"
+msgstr "Kategorilerin Listesini Göster"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:977
 msgid "Note: Anytime you update any of the thumbnail settings, WPeC will automatically resize all of your thumbnails for you.  Depending on how many images you have, this could take awhile."
@@ -2128,7 +2104,7 @@ msgstr ""
 
 #: wpsc-core/wpsc-functions.php:274
 msgid "No products found"
-msgstr "Produktų nerasta"
+msgstr "Hiçbir ürün bulunamadı"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:742
 msgid "Display Featured Product above Product Pages"
@@ -2151,7 +2127,7 @@ msgstr ""
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:225
 msgid "Sign in"
-msgstr ""
+msgstr "Giriş yapın"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:231
 msgid "If you have bought from us before please sign in here to purchase"
@@ -2159,11 +2135,11 @@ msgstr ""
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:250
 msgid "Join up now"
-msgstr ""
+msgstr "Şimdi Katıl"
 
 #: wpsc-core/wpsc-functions.php:275
 msgid "No products found in Trash"
-msgstr ""
+msgstr "Çöp kutusunda ürün bulunmuyor"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:56
 msgid "You did not specify any template files to be moved."
@@ -2195,7 +2171,7 @@ msgstr "Dobra"
 
 #: wpsc-updates/currency_list.php:191
 msgid "Saudi Arabia"
-msgstr "Saudo Arabija"
+msgstr "Suudi Arabistan"
 
 #: wpsc-updates/currency_list.php:191
 msgid "Saudi Riyal"
@@ -2203,39 +2179,39 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:192
 msgid "Senegal"
-msgstr "Senegalas"
+msgstr "Senegal"
 
 #: wpsc-updates/currency_list.php:193
 msgid "Seychelles"
-msgstr "Seišeliai"
+msgstr "Seyşel Adaları"
 
 #: wpsc-updates/currency_list.php:193
 msgid "Seychelles Rupee"
-msgstr "Seišelių rupija"
+msgstr "Seyşel Rupisi"
 
 #: wpsc-updates/currency_list.php:194
 msgid "Sierra Leone"
-msgstr "Siera Leonė"
+msgstr "Sierra Leone"
 
 #: wpsc-updates/currency_list.php:194
 msgid "Sierra Leone Leone"
-msgstr ""
+msgstr "Sierra Leone Leone"
 
 #: wpsc-updates/currency_list.php:195
 msgid "Singapore"
-msgstr "Singapūras"
+msgstr "Singapur"
 
 #: wpsc-updates/currency_list.php:195
 msgid "Singapore Dollar"
-msgstr "Singapūro doleris"
+msgstr "Singapur Doları"
 
 #: wpsc-updates/currency_list.php:196
 msgid "Slovakia"
-msgstr "Slovakija"
+msgstr "Slovakya"
 
 #: wpsc-updates/currency_list.php:197
 msgid "Slovenia"
-msgstr "Slovėnija"
+msgstr "Slovenya"
 
 #: wpsc-updates/currency_list.php:197
 msgid "Slovenian Tolar"
@@ -2243,19 +2219,19 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:198
 msgid "Solomon Islands"
-msgstr ""
+msgstr "Solomon Adaları"
 
 #: wpsc-updates/currency_list.php:198
 msgid "Solomon Islands Dollar"
-msgstr ""
+msgstr "Solomon Adaları Doları"
 
 #: wpsc-updates/currency_list.php:199
 msgid "Somalia"
-msgstr ""
+msgstr "Somali"
 
 #: wpsc-updates/currency_list.php:199
 msgid "Somali Shilling"
-msgstr ""
+msgstr "Somali Şilini"
 
 #: wpsc-updates/currency_list.php:200
 msgid "South Africa"
@@ -2263,115 +2239,115 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:200
 msgid "South African Rand"
-msgstr ""
+msgstr "Güney Afrika Randı"
 
 #: wpsc-updates/currency_list.php:201
 msgid "South Georgia & South Sandwich Islands"
-msgstr ""
+msgstr "Güney Georgia ve Güney Sandwich Adaları"
 
 #: wpsc-updates/currency_list.php:202
 msgid "Spain"
-msgstr ""
+msgstr "İspanya"
 
 #: wpsc-updates/currency_list.php:203
 msgid "Sri Lanka"
-msgstr ""
+msgstr "Sri Lanka"
 
 #: wpsc-updates/currency_list.php:203
 msgid "Sri Lanka Rupee"
-msgstr ""
+msgstr "Sri Lanka Rupisi"
 
 #: wpsc-updates/currency_list.php:204
 msgid "Sudan"
-msgstr ""
+msgstr "Sudan"
 
 #: wpsc-updates/currency_list.php:204
 msgid "Sudanese Dinar"
-msgstr ""
+msgstr "Sudan Dinarı"
 
 #: wpsc-updates/currency_list.php:205
 msgid "Suriname"
-msgstr ""
+msgstr "Surinam"
 
 #: wpsc-updates/currency_list.php:205
 msgid "Surinam Guilder"
-msgstr ""
+msgstr "Surinam Florini"
 
 #: wpsc-updates/currency_list.php:206
 msgid "Svalbard and Jan Mayen Islands"
-msgstr ""
+msgstr "Svalbard ve Jan Mayen Adaları"
 
 #: wpsc-updates/currency_list.php:207
 msgid "Swaziland"
-msgstr ""
+msgstr "Svaziland"
 
 #: wpsc-updates/currency_list.php:207
 msgid "Swaziland Lilangeni"
-msgstr ""
+msgstr "Svaziland Lilangeni"
 
 #: wpsc-updates/currency_list.php:208
 msgid "Sweden"
-msgstr ""
+msgstr "Isveç"
 
 #: wpsc-updates/currency_list.php:208
 msgid "Swedish Krona"
-msgstr ""
+msgstr "İsveç Kronu"
 
 #: wpsc-updates/currency_list.php:209
 msgid "Switzerland"
-msgstr ""
+msgstr "Isviçre"
 
 #: wpsc-updates/currency_list.php:210
 msgid "Syria"
-msgstr ""
+msgstr "Suriye"
 
 #: wpsc-updates/currency_list.php:210
 msgid "Syrian Pound"
-msgstr ""
+msgstr "Suriye Lirası"
 
 #: wpsc-updates/currency_list.php:211
 msgid "Taiwan"
-msgstr ""
+msgstr "Tayvan"
 
 #: wpsc-updates/currency_list.php:211
 msgid "Taiwan Dollar"
-msgstr ""
+msgstr "Tayvan Doları"
 
 #: wpsc-updates/currency_list.php:212
 msgid "Tajikistan"
-msgstr ""
+msgstr "Tacikistan"
 
 #: wpsc-updates/currency_list.php:212
 msgid "Tajik Ruble"
-msgstr ""
+msgstr "Tacik Rublesi"
 
 #: wpsc-updates/currency_list.php:213
 msgid "Tanzania"
-msgstr ""
+msgstr "Tanzanya"
 
 #: wpsc-updates/currency_list.php:213
 msgid "Tanzanian Shilling"
-msgstr ""
+msgstr "Tanzanya Şilini"
 
 #: wpsc-updates/currency_list.php:214
 msgid "Thailand"
-msgstr ""
+msgstr "Tayland"
 
 #: wpsc-updates/currency_list.php:214
 msgid "Thai Baht"
-msgstr ""
+msgstr "Tayland Bahtı"
 
 #: wpsc-updates/currency_list.php:215
 msgid "Togo"
-msgstr ""
+msgstr "Togo"
 
 #: wpsc-updates/currency_list.php:216
 msgid "Tokelau"
-msgstr ""
+msgstr "Tokelau"
 
 #: wpsc-updates/currency_list.php:217
 msgid "Tonga"
-msgstr ""
+msgstr "Tonga"
 
 #: wpsc-updates/currency_list.php:217
 msgid "Tongan Pa&#699;anga"
@@ -2379,183 +2355,183 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:218
 msgid "Trinidad and Tobago"
-msgstr ""
+msgstr "Trinidad ve Tobago"
 
 #: wpsc-updates/currency_list.php:218
 msgid "Trinidad and Tobago Dollar"
-msgstr ""
+msgstr "Trinidad ve Tobago Doları"
 
 #: wpsc-updates/currency_list.php:219
 msgid "Tunisia"
-msgstr ""
+msgstr "Tunus"
 
 #: wpsc-updates/currency_list.php:219
 msgid "Tunisian Dollar"
-msgstr ""
+msgstr "Tunus Doları"
 
 #: wpsc-updates/currency_list.php:220
 msgid "Turkey"
-msgstr ""
+msgstr "Türkiye"
 
 #: wpsc-updates/currency_list.php:220
 msgid "Turkish Lira"
-msgstr ""
+msgstr "Türk Lirası"
 
 #: wpsc-updates/currency_list.php:221
 msgid "Turkmenistan"
-msgstr ""
+msgstr "Türkmenistan"
 
 #: wpsc-updates/currency_list.php:221
 msgid "Manat"
-msgstr ""
+msgstr "Manat"
 
 #: wpsc-updates/currency_list.php:222
 msgid "Turks and Caicos Islands"
-msgstr ""
+msgstr "Turks ve Caicos Adaları"
 
 #: wpsc-updates/currency_list.php:223
 msgid "Tuvalu"
-msgstr ""
+msgstr "Tuvalu"
 
 #: wpsc-updates/currency_list.php:224
 msgid "U.K."
-msgstr ""
+msgstr "İngiltere"
 
 #: wpsc-updates/currency_list.php:225
 msgid "Uganda"
-msgstr ""
+msgstr "Uganda"
 
 #: wpsc-updates/currency_list.php:225
 msgid "Uganda Shilling"
-msgstr "Ugandos šilingas"
+msgstr "Uganda Şilini"
 
 #: wpsc-updates/currency_list.php:226
 msgid "Ukraine"
-msgstr ""
+msgstr "Ukrayna"
 
 #: wpsc-updates/currency_list.php:226
 msgid "Ukraine Hryvnia"
-msgstr ""
+msgstr "Ukrayna Grivnası"
 
 #: wpsc-updates/currency_list.php:227
 msgid "United Arab Emirates"
-msgstr ""
+msgstr "Birleşik Arap Emirlikleri"
 
 #: wpsc-updates/currency_list.php:227
 msgid "Arab Emirates Dirham"
-msgstr ""
+msgstr "Arap Emirlikleri Dirhemi"
 
 #: wpsc-updates/currency_list.php:228
 msgid "Uruguay"
-msgstr ""
+msgstr "Uruguay"
 
 #: wpsc-updates/currency_list.php:228
 msgid "Uruguayan Peso"
-msgstr ""
+msgstr "Uruguay Pezosu"
 
 #: wpsc-updates/currency_list.php:229
 msgid "USA Minor Outlying Islands"
-msgstr ""
+msgstr "ABD Minor Outlying Islands"
 
 #: wpsc-updates/currency_list.php:230
 msgid "Uzbekistan"
-msgstr ""
+msgstr "Özbekistan"
 
 #: wpsc-updates/currency_list.php:230
 msgid "Uzbekistan Sum"
-msgstr ""
+msgstr "Özbekistan Sumu"
 
 #: wpsc-updates/currency_list.php:231
 msgid "Vanuatu"
-msgstr ""
+msgstr "Vanuatu"
 
 #: wpsc-updates/currency_list.php:231
 msgid "Vanuatu Vatu"
-msgstr ""
+msgstr "Vanuatu Vatu"
 
 #: wpsc-updates/currency_list.php:232
 msgid "Vatican"
-msgstr ""
+msgstr "Vatikan"
 
 #: wpsc-updates/currency_list.php:233
 msgid "Venezuela"
-msgstr ""
+msgstr "Venezuela"
 
 #: wpsc-updates/currency_list.php:233
 msgid "Venezuelan Bolivar"
-msgstr ""
+msgstr "Venezüella Bolivarı"
 
 #: wpsc-updates/currency_list.php:234
 msgid "Vietnam"
-msgstr ""
+msgstr "Vietnam"
 
 #: wpsc-updates/currency_list.php:234
 msgid "Vietnamese Dong"
-msgstr ""
+msgstr "Vietnam Dongu"
 
 #: wpsc-updates/currency_list.php:235
 msgid "Virgin Islands (British)"
-msgstr ""
+msgstr "Virgin Adaları (İngiliz)"
 
 #: wpsc-updates/currency_list.php:236
 msgid "Virgin Islands (USA)"
-msgstr ""
+msgstr "Virgin Adaları (ABD)"
 
 #: wpsc-updates/currency_list.php:237
 msgid "Wallis and Futuna Islands"
-msgstr ""
+msgstr "Wallis ve Futuna Adaları"
 
 #: wpsc-updates/currency_list.php:238
 msgid "Western Sahara"
-msgstr ""
+msgstr "Batı Sahara"
 
 #: wpsc-updates/currency_list.php:239
 msgid "Yemen"
-msgstr ""
+msgstr "Yemen"
 
 #: wpsc-updates/currency_list.php:239
 msgid "Yemeni Rial"
-msgstr ""
+msgstr "Yemen Riyali"
 
 #: wpsc-updates/currency_list.php:240
 msgid "Yugoslavia"
-msgstr ""
+msgstr "Yugoslavya"
 
 #: wpsc-updates/currency_list.php:240
 msgid "Yugoslav New Dinar"
-msgstr ""
+msgstr "Yugoslav Dinarı"
 
 #: wpsc-updates/currency_list.php:241
 msgid "Zambia"
-msgstr ""
+msgstr "Zambiya"
 
 #: wpsc-updates/currency_list.php:241
 msgid "Zambian Kwacha"
-msgstr ""
+msgstr "Zambiya Kwachası"
 
 #: wpsc-updates/currency_list.php:242
 msgid "Zimbabwe"
-msgstr ""
+msgstr "Zimbabve"
 
 #: wpsc-updates/currency_list.php:242
 msgid "Zimbabwe Dollar"
-msgstr ""
+msgstr "Zimbabve Doları"
 
 #: wpsc-updates/currency_list.php:2
 msgid "Mauritania"
-msgstr ""
+msgstr "Moritanya"
 
 #: wpsc-widgets/category_widget.php:133
 msgid "Show Categories"
-msgstr ""
+msgstr "Kategorileri Göster"
 
 #: wpsc-shipping/australiapost.php:47
 msgid "Australia Post"
-msgstr ""
+msgstr "Australia Post"
 
 #: wp-shopping-cart.php:152
 msgid "Looks like you're running an older version of WordPress, you need to be running at least WordPress 3.0 to use WP e-Commerce 3.8"
-msgstr "Norėdami naudoti WP e-Commerce 3.8 įskiepį, turi įdiegti bent 3.0 WordPress versiją."
+msgstr "Görünüşe göre WordPress'in eski bir sürümünü çalıştırıyorsunuz, WP e-Commerce 3.8 sürümünü kullanmak için WordPress 3.0 ve üstü bir versyion kullanmanız gerekmektedir."
 
 #: wpsc-updates/currency_list.php:3
 #: wpsc-updates/currency_list.php:13
@@ -2580,7 +2556,7 @@ msgstr "Norėdami naudoti WP e-Commerce 3.8 įskiepį, turi įdiegti bent 3.0 Wo
 #: wpsc-updates/currency_list.php:202
 #: wpsc-updates/currency_list.php:232
 msgid "Euro"
-msgstr "Euras"
+msgstr "Euro"
 
 #: wp-shopping-cart.php:152
 msgid "WP e-Commerce 3.8 not compatible"
@@ -2600,18 +2576,16 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:3
 msgid "Martinique (French)"
-msgstr ""
+msgstr "Martinik (Fransızca)"
 
 #: wpsc-shipping/australiapost.php:363
 msgid "%1$s (estimated delivery time: %2$d business day)"
 msgid_plural "%1$s (estimated delivery time: %2$d business days)"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: wpsc-shipping/australiapost.php:58
 msgid "Express Post International"
-msgstr ""
+msgstr "Express Post International"
 
 #: wpsc-shipping/australiapost.php:54
 msgid "Standard Parcel Post"
@@ -2619,7 +2593,7 @@ msgstr ""
 
 #: wpsc-shipping/australiapost.php:55
 msgid "Express Post"
-msgstr ""
+msgstr "Express Post"
 
 #: wpsc-shipping/australiapost.php:101
 msgid "You must set your base postcode above before this shipping module will work."
@@ -2631,7 +2605,7 @@ msgstr ""
 
 #: wpsc-shipping/australiapost.php:112
 msgid "Notes:"
-msgstr "Pastabos:"
+msgstr "Notlar:"
 
 #: wpsc-shipping/australiapost.php:113
 msgid "1. The actual services quoted to the customer during checkout will depend on the destination country. Not all methods are available to all destinations."
@@ -2639,7 +2613,7 @@ msgstr ""
 
 #: wpsc-admin/admin.php:624
 msgid "Financial Year End"
-msgstr "Financinių metų pabaiga"
+msgstr "Mali Yıl Sonu"
 
 #: wpsc-shipping/australiapost.php:96
 msgid "This shipping module only works if the base country in settings, region is set to Australia."
@@ -2651,11 +2625,11 @@ msgstr ""
 
 #: wpsc-shipping/australiapost.php:57
 msgid "Sea Mail"
-msgstr "Jūros paštas"
+msgstr "Sea Mail"
 
 #: wpsc-shipping/australiapost.php:56
 msgid "Air Mail"
-msgstr "Oro paštas"
+msgstr "Air Mail"
 
 #: wpsc-shipping/australiapost.php:114
 msgid "2. Each product must have a valid weight configured. When editing a product, use the weight field.)."
@@ -2663,19 +2637,19 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:2
 msgid "Mauritanian Ouguiya"
-msgstr ""
+msgstr "Moritanya Ouguiyası"
 
 #: wpsc-updates/currency_list.php:4
 msgid "Malta"
-msgstr ""
+msgstr "Malta"
 
 #: wpsc-updates/currency_list.php:4
 msgid "Maltese Lira"
-msgstr ""
+msgstr "Malta Lirası"
 
 #: wpsc-updates/currency_list.php:5
 msgid "Marshall Islands"
-msgstr ""
+msgstr "Marshall Adaları"
 
 #: wpsc-updates/currency_list.php:5
 #: wpsc-updates/currency_list.php:53
@@ -2691,11 +2665,11 @@ msgstr ""
 #: wpsc-updates/currency_list.php:235
 #: wpsc-updates/currency_list.php:236
 msgid "US Dollar"
-msgstr ""
+msgstr "Amerikan Doları"
 
 #: wpsc-updates/currency_list.php:6
 msgid "Mali"
-msgstr ""
+msgstr "Mali"
 
 #: wpsc-updates/currency_list.php:6
 #: wpsc-updates/currency_list.php:33
@@ -2705,160 +2679,160 @@ msgstr ""
 #: wpsc-updates/currency_list.php:192
 #: wpsc-updates/currency_list.php:215
 msgid "CFA Franc BCEAO"
-msgstr ""
+msgstr "CFA Frangı BCEAO"
 
 #: wpsc-updates/currency_list.php:7
 msgid "Maldives"
-msgstr ""
+msgstr "Maldivler"
 
 #: wpsc-updates/currency_list.php:7
 msgid "Maldive Rufiyaa"
-msgstr ""
+msgstr "Maldiv Rufiyaası"
 
 #: wpsc-updates/currency_list.php:8
 msgid "Malaysia"
-msgstr ""
+msgstr "Malezya"
 
 #: wpsc-updates/currency_list.php:8
 msgid "Malaysian Ringgit"
-msgstr ""
+msgstr "Malezya Ringiti"
 
 #: wpsc-updates/currency_list.php:9
 msgid "Malawi"
-msgstr ""
+msgstr "Malawi"
 
 #: wpsc-updates/currency_list.php:9
 msgid "Malawi Kwacha"
-msgstr ""
+msgstr "Malavi Kwacha"
 
 #: wpsc-updates/currency_list.php:10
 msgid "Madagascar"
-msgstr ""
+msgstr "Madagaskar"
 
 #: wpsc-updates/currency_list.php:10
 msgid "Malagasy Franc"
-msgstr ""
+msgstr "Madagaskar Frangı"
 
 #: wpsc-updates/currency_list.php:11
 msgid "Macau"
-msgstr ""
+msgstr "Makao"
 
 #: wpsc-updates/currency_list.php:11
 msgid "Macau Pataca"
-msgstr ""
+msgstr "Makao Pataca"
 
 #: wpsc-updates/currency_list.php:12
 msgid "Macedonia"
-msgstr ""
+msgstr "Makedonya"
 
 #: wpsc-updates/currency_list.php:12
 msgid "Denar"
-msgstr ""
+msgstr "Denar"
 
 #: wpsc-updates/currency_list.php:13
 msgid "Luxembourg"
-msgstr ""
+msgstr "Lüksemburg"
 
 #: wpsc-updates/currency_list.php:14
 msgid "Lithuania"
-msgstr "Lietuva"
+msgstr "Litvanya"
 
 #: wpsc-updates/currency_list.php:14
 msgid "Lithuanian Litas"
-msgstr "Lietuvos litas"
+msgstr "Litvanya Litası"
 
 #: wpsc-updates/currency_list.php:15
 msgid "Liechtenstein"
-msgstr ""
+msgstr "Liechtenstein"
 
 #: wpsc-updates/currency_list.php:15
 #: wpsc-updates/currency_list.php:209
 msgid "Swiss Franc"
-msgstr ""
+msgstr "İsviçre Frangı"
 
 #: wpsc-updates/currency_list.php:16
 msgid "Libya"
-msgstr ""
+msgstr "Libya"
 
 #: wpsc-updates/currency_list.php:16
 msgid "Libyan Dinar"
-msgstr ""
+msgstr "Libya Dinarı"
 
 #: wpsc-updates/currency_list.php:17
 msgid "Liberia"
-msgstr ""
+msgstr "Liberya"
 
 #: wpsc-updates/currency_list.php:17
 msgid "Liberian Dollar"
-msgstr ""
+msgstr "Liberyalı Dolar"
 
 #: wpsc-updates/currency_list.php:18
 msgid "Lesotho"
-msgstr ""
+msgstr "Lesotho"
 
 #: wpsc-updates/currency_list.php:18
 msgid "Lesotho Loti"
-msgstr ""
+msgstr "Lesotho Lotisi"
 
 #: wpsc-updates/currency_list.php:19
 msgid "Lebanon"
-msgstr ""
+msgstr "Lübnan"
 
 #: wpsc-updates/currency_list.php:19
 msgid "Lebanese Pound"
-msgstr ""
+msgstr "Lübnan Lirası"
 
 #: wpsc-updates/currency_list.php:20
 msgid "Latvia"
-msgstr "Latvija"
+msgstr "Letonya"
 
 #: wpsc-updates/currency_list.php:20
 msgid "Latvian Lats"
-msgstr "Latvijos latas"
+msgstr "Letonya Yanalı"
 
 #: wpsc-updates/currency_list.php:21
 msgid "Laos"
-msgstr ""
+msgstr "Laos"
 
 #: wpsc-updates/currency_list.php:21
 msgid "Lao Kip"
-msgstr ""
+msgstr "Lao Kipi"
 
 #: wpsc-updates/currency_list.php:22
 msgid "Kyrgyzstan"
-msgstr ""
+msgstr "Kırgızistan"
 
 #: wpsc-updates/currency_list.php:22
 msgid "Som"
-msgstr ""
+msgstr "Som"
 
 #: wpsc-updates/currency_list.php:23
 msgid "Kuwait"
-msgstr ""
+msgstr "Kuveyt"
 
 #: wpsc-updates/currency_list.php:23
 msgid "Kuwaiti Dinar"
-msgstr ""
+msgstr "Kuveyt Dinarı"
 
 #: wpsc-updates/currency_list.php:24
 msgid "Korea, South"
-msgstr ""
+msgstr "Güney Kore"
 
 #: wpsc-updates/currency_list.php:24
 msgid "Korean Won"
-msgstr ""
+msgstr "Kore Wonu"
 
 #: wpsc-updates/currency_list.php:25
 msgid "Korea, North"
-msgstr ""
+msgstr "Kuzey Kore"
 
 #: wpsc-updates/currency_list.php:25
 msgid "North Korean Won"
-msgstr ""
+msgstr "Kuzey Kore Wonu"
 
 #: wpsc-updates/currency_list.php:26
 msgid "Kiribati"
-msgstr ""
+msgstr "Kiribati"
 
 #: wpsc-updates/currency_list.php:26
 #: wpsc-updates/currency_list.php:46
@@ -2869,35 +2843,35 @@ msgstr ""
 #: wpsc-updates/currency_list.php:162
 #: wpsc-updates/currency_list.php:223
 msgid "Australian Dollar"
-msgstr ""
+msgstr "Avustralya Doları"
 
 #: wpsc-updates/currency_list.php:27
 msgid "Kenya"
-msgstr ""
+msgstr "Kenya"
 
 #: wpsc-updates/currency_list.php:27
 msgid "Kenyan Shilling"
-msgstr ""
+msgstr "Kenya Şilini"
 
 #: wpsc-updates/currency_list.php:28
 msgid "Kazakhstan"
-msgstr ""
+msgstr "Kazakistan"
 
 #: wpsc-updates/currency_list.php:28
 msgid "Kazakhstan Tenge"
-msgstr ""
+msgstr "Kazakistan Tengesi"
 
 #: wpsc-updates/currency_list.php:29
 msgid "Jordan"
-msgstr ""
+msgstr "Ürdün"
 
 #: wpsc-updates/currency_list.php:29
 msgid "Jordanian Dinar"
-msgstr ""
+msgstr "Ürdün Dinarı"
 
 #: wpsc-updates/currency_list.php:30
 msgid "Jersey"
-msgstr ""
+msgstr "Jersey"
 
 #: wpsc-updates/currency_list.php:30
 #: wpsc-updates/currency_list.php:35
@@ -2906,229 +2880,229 @@ msgstr ""
 #: wpsc-updates/currency_list.php:201
 #: wpsc-updates/currency_list.php:224
 msgid "Pound Sterling"
-msgstr ""
+msgstr "Pound Sterling"
 
 #: wpsc-updates/currency_list.php:31
 msgid "Japan"
-msgstr ""
+msgstr "Japonya"
 
 #: wpsc-updates/currency_list.php:31
 msgid "Japanese Yen"
-msgstr ""
+msgstr "Japon Yeni"
 
 #: wpsc-updates/currency_list.php:32
 msgid "Jamaica"
-msgstr ""
+msgstr "Jamaika"
 
 #: wpsc-updates/currency_list.php:32
 msgid "Jamaican Dollar"
-msgstr ""
+msgstr "Jamaika Doları"
 
 #: wpsc-updates/currency_list.php:33
 msgid "Ivory Coast"
-msgstr ""
+msgstr "Fildişi Sahili"
 
 #: wpsc-updates/currency_list.php:34
 msgid "Italy"
-msgstr ""
+msgstr "İtalya"
 
 #: wpsc-updates/currency_list.php:35
 msgid "Isle of Man"
-msgstr ""
+msgstr "Isle of Man"
 
 #: wpsc-updates/currency_list.php:36
 msgid "Israel"
-msgstr ""
+msgstr "İsrail"
 
 #: wpsc-updates/currency_list.php:36
 msgid "Israeli New Shekel"
-msgstr ""
+msgstr "İsrail Şekeli"
 
 #: wpsc-updates/currency_list.php:37
 msgid "Ireland"
-msgstr ""
+msgstr "İrlanda"
 
 #: wpsc-updates/currency_list.php:38
 msgid "Iraq"
-msgstr ""
+msgstr "Irak"
 
 #: wpsc-updates/currency_list.php:38
 msgid "Iraqi Dinar"
-msgstr ""
+msgstr "Irak Dinarı"
 
 #: wpsc-updates/currency_list.php:39
 msgid "Indonesia"
-msgstr ""
+msgstr "Endonezya"
 
 #: wpsc-updates/currency_list.php:39
 msgid "Indonesian Rupiah"
-msgstr ""
+msgstr "Endonezya Rupiası"
 
 #: wpsc-updates/currency_list.php:40
 msgid "Iran"
-msgstr ""
+msgstr "İran"
 
 #: wpsc-updates/currency_list.php:40
 msgid "Iranian Rial"
-msgstr ""
+msgstr "İran Riyali"
 
 #: wpsc-updates/currency_list.php:41
 msgid "India"
-msgstr ""
+msgstr "Hindistan"
 
 #: wpsc-updates/currency_list.php:41
 msgid "Indian Rupee"
-msgstr ""
+msgstr "Hint Rupisi"
 
 #: wpsc-updates/currency_list.php:42
 msgid "Iceland"
-msgstr "Islandija"
+msgstr "İzlanda"
 
 #: wpsc-updates/currency_list.php:42
 msgid "Iceland Krona"
-msgstr ""
+msgstr "İzlanda Kronu"
 
 #: wpsc-updates/currency_list.php:43
 msgid "Hungary"
-msgstr ""
+msgstr "Macaristan"
 
 #: wpsc-updates/currency_list.php:43
 msgid "Hungarian Forint"
-msgstr ""
+msgstr "Macar Forinti"
 
 #: wpsc-updates/currency_list.php:44
 msgid "Hong Kong"
-msgstr ""
+msgstr "Hong Kong"
 
 #: wpsc-updates/currency_list.php:44
 msgid "Hong Kong Dollar"
-msgstr ""
+msgstr "Hong Kong Doları"
 
 #: wpsc-updates/currency_list.php:45
 msgid "Honduras"
-msgstr ""
+msgstr "Honduras"
 
 #: wpsc-updates/currency_list.php:45
 msgid "Honduran Lempira"
-msgstr ""
+msgstr "Honduras Lempirası"
 
 #: wpsc-updates/currency_list.php:46
 msgid "Heard Island and McDonald Islands"
-msgstr ""
+msgstr "Heard Adası ve McDonald Adaları"
 
 #: wpsc-updates/currency_list.php:47
 msgid "Haiti"
-msgstr ""
+msgstr "Haiti"
 
 #: wpsc-updates/currency_list.php:47
 msgid "Haitian Gourde"
-msgstr ""
+msgstr "Haiti Gourdesi"
 
 #: wpsc-updates/currency_list.php:48
 msgid "Guyana"
-msgstr ""
+msgstr "Guyana"
 
 #: wpsc-updates/currency_list.php:48
 msgid "Guyana Dollar"
-msgstr ""
+msgstr "Guyana Doları"
 
 #: wpsc-updates/currency_list.php:49
 msgid "Guinea Bissau"
-msgstr ""
+msgstr "Gine Bissau"
 
 #: wpsc-updates/currency_list.php:49
 msgid "Guinea-Bissau Peso"
-msgstr ""
+msgstr "Gine-Bissau Pezosu"
 
 #: wpsc-updates/currency_list.php:50
 msgid "Guinea"
-msgstr ""
+msgstr "Gine"
 
 #: wpsc-updates/currency_list.php:50
 msgid "Guinea Franc"
-msgstr ""
+msgstr "Gine Frangı"
 
 #: wpsc-updates/currency_list.php:51
 msgid "Guernsey"
-msgstr ""
+msgstr "Guernsey"
 
 #: wpsc-updates/currency_list.php:52
 msgid "Guatemala"
-msgstr ""
+msgstr "Guatemala"
 
 #: wpsc-updates/currency_list.php:52
 msgid "Guatemalan Quetzal"
-msgstr ""
+msgstr "Guatemala Quetzal"
 
 #: wpsc-updates/currency_list.php:53
 msgid "Guam (USA)"
-msgstr ""
+msgstr "Guam (ABD)"
 
 #: wpsc-updates/currency_list.php:54
 msgid "Grenada"
-msgstr ""
+msgstr "Grenada"
 
 #: wpsc-updates/currency_list.php:54
 msgid "East Carribean Dollar"
-msgstr ""
+msgstr "Doğu Karayip Doları"
 
 #: wpsc-updates/currency_list.php:55
 msgid "Guadeloupe (French)"
-msgstr ""
+msgstr "Guadeloupe (Fransız)"
 
 #: wpsc-updates/currency_list.php:56
 msgid "Greenland"
-msgstr ""
+msgstr "Grönland"
 
 #: wpsc-updates/currency_list.php:56
 #: wpsc-updates/currency_list.php:68
 #: wpsc-updates/currency_list.php:81
 msgid "Danish Krone"
-msgstr ""
+msgstr "Danimarka Kronu"
 
 #: wpsc-updates/currency_list.php:57
 msgid "Greece"
-msgstr ""
+msgstr "Yunanistan"
 
 #: wpsc-updates/currency_list.php:58
 msgid "Gibraltar"
-msgstr ""
+msgstr "Cebelitarık"
 
 #: wpsc-updates/currency_list.php:58
 msgid "Gibraltar Pound"
-msgstr ""
+msgstr "Cebelitarık Lirası"
 
 #: wpsc-updates/currency_list.php:59
 msgid "Ghana"
-msgstr ""
+msgstr "Gana"
 
 #: wpsc-updates/currency_list.php:59
 msgid "Ghanaian Cedi"
-msgstr ""
+msgstr "Gana Cedisi"
 
 #: wpsc-updates/currency_list.php:60
 msgid "Germany"
-msgstr ""
+msgstr "Almanya"
 
 #: wpsc-updates/currency_list.php:61
 msgid "Georgia"
-msgstr ""
+msgstr "Gürcistan"
 
 #: wpsc-updates/currency_list.php:61
 msgid "Georgian Lari"
-msgstr ""
+msgstr "Gürcistan Larisi"
 
 #: wpsc-updates/currency_list.php:62
 msgid "Gambia"
-msgstr ""
+msgstr "Gambiya"
 
 #: wpsc-updates/currency_list.php:62
 msgid "Gambian Dalasi"
-msgstr ""
+msgstr "Gambiya Dalasi"
 
 #: wpsc-updates/currency_list.php:63
 msgid "Gabon"
-msgstr ""
+msgstr "Gabon"
 
 #: wpsc-updates/currency_list.php:63
 #: wpsc-updates/currency_list.php:73
@@ -3137,111 +3111,111 @@ msgstr ""
 #: wpsc-updates/currency_list.php:97
 #: wpsc-updates/currency_list.php:100
 msgid "CFA Franc BEAC"
-msgstr ""
+msgstr "CFA Frangı BEAC"
 
 #: wpsc-updates/currency_list.php:64
 msgid "French Southern Territories"
-msgstr ""
+msgstr "Fransız Güney Toprakları"
 
 #: wpsc-updates/currency_list.php:65
 msgid "France"
-msgstr ""
+msgstr "Fransa"
 
 #: wpsc-updates/currency_list.php:66
 msgid "Finland"
-msgstr ""
+msgstr "Finlandiya"
 
 #: wpsc-updates/currency_list.php:67
 msgid "Fiji"
-msgstr ""
+msgstr "Fiji"
 
 #: wpsc-updates/currency_list.php:67
 msgid "Fiji Dollar"
-msgstr ""
+msgstr "Fiji Doları"
 
 #: wpsc-updates/currency_list.php:68
 msgid "Faroe Islands"
-msgstr ""
+msgstr "Faroe Adaları"
 
 #: wpsc-updates/currency_list.php:69
 msgid "Falkland Islands"
-msgstr ""
+msgstr "Falkland Adaları"
 
 #: wpsc-updates/currency_list.php:69
 msgid "Falkland Islands Pound"
-msgstr ""
+msgstr "Falkland Adaları Lirası"
 
 #: wpsc-updates/currency_list.php:70
 msgid "Ethiopia"
-msgstr ""
+msgstr "Etiyopya"
 
 #: wpsc-updates/currency_list.php:70
 msgid "Ethiopian Birr"
-msgstr ""
+msgstr "Ethiopian Birr"
 
 #: wpsc-updates/currency_list.php:71
 msgid "Estonia"
-msgstr "Estija"
+msgstr "Estonya"
 
 #: wpsc-updates/currency_list.php:71
 msgid "Estonian Kroon"
-msgstr "Estijos krona"
+msgstr "Estonya Kronu"
 
 #: wpsc-updates/currency_list.php:72
 msgid "Eritrea"
-msgstr ""
+msgstr "Eritre"
 
 #: wpsc-updates/currency_list.php:72
 msgid "Eritrean Nakfa"
-msgstr ""
+msgstr "Eritre Nakfası"
 
 #: wpsc-updates/currency_list.php:73
 msgid "Equatorial Guinea"
-msgstr ""
+msgstr "Ekvator Ginesi"
 
 #: wpsc-updates/currency_list.php:74
 msgid "El Salvador"
-msgstr ""
+msgstr "El Salvador"
 
 #: wpsc-updates/currency_list.php:74
 msgid "El Salvador Colon"
-msgstr ""
+msgstr "El Salvador Colon"
 
 #: wpsc-updates/currency_list.php:75
 msgid "Egypt"
-msgstr ""
+msgstr "Mısır"
 
 #: wpsc-updates/currency_list.php:75
 msgid "Egyptian Pound"
-msgstr ""
+msgstr "Mısır Lirası"
 
 #: wpsc-updates/currency_list.php:76
 msgid "Ecuador"
-msgstr ""
+msgstr "Ekvador"
 
 #: wpsc-updates/currency_list.php:76
 msgid "Ecuador Sucre"
-msgstr ""
+msgstr "Ekvador Sucresi"
 
 #: wpsc-updates/currency_list.php:77
 msgid "East Timor"
-msgstr ""
+msgstr "Doğu Timor"
 
 #: wpsc-updates/currency_list.php:77
 msgid "Timor Escudo"
-msgstr ""
+msgstr "Timor Esküdosu"
 
 #: wpsc-updates/currency_list.php:78
 msgid "Dominican Republic"
-msgstr ""
+msgstr "Dominik Cumhuriyeti"
 
 #: wpsc-updates/currency_list.php:78
 msgid "Dominican Peso"
-msgstr ""
+msgstr "Dominik Pezosu"
 
 #: wpsc-updates/currency_list.php:79
 msgid "Dominica"
-msgstr ""
+msgstr "Dominika"
 
 #: wpsc-updates/currency_list.php:79
 #: wpsc-updates/currency_list.php:128
@@ -3251,71 +3225,71 @@ msgstr ""
 #: wpsc-updates/currency_list.php:185
 #: wpsc-updates/currency_list.php:187
 msgid "East Caribbean Dollar"
-msgstr ""
+msgstr "Doğu Karayip Doları"
 
 #: wpsc-updates/currency_list.php:80
 msgid "Djibouti"
-msgstr ""
+msgstr "Cibuti"
 
 #: wpsc-updates/currency_list.php:80
 msgid "Djibouti Franc"
-msgstr ""
+msgstr "Cibuti Frangı"
 
 #: wpsc-updates/currency_list.php:81
 msgid "Denmark"
-msgstr ""
+msgstr "Danimarka"
 
 #: wpsc-updates/currency_list.php:82
 msgid "Democratic Republic of Congo"
-msgstr ""
+msgstr "Demokratik Kongo Cumhuriyeti"
 
 #: wpsc-updates/currency_list.php:82
 msgid "Francs"
-msgstr ""
+msgstr "Frank"
 
 #: wpsc-updates/currency_list.php:83
 msgid "Czech Rep."
-msgstr ""
+msgstr "Çek Cumhuriyeti"
 
 #: wpsc-updates/currency_list.php:83
 msgid "Czech Koruna"
-msgstr ""
+msgstr "Çek Korunası"
 
 #: wpsc-updates/currency_list.php:84
 msgid "Cyprus"
-msgstr ""
+msgstr "Kıbrıs"
 
 #: wpsc-updates/currency_list.php:84
 msgid "Cyprus Pound"
-msgstr ""
+msgstr "Kıbrıs Lirası"
 
 #: wpsc-updates/currency_list.php:85
 msgid "Cuba"
-msgstr ""
+msgstr "Küba"
 
 #: wpsc-updates/currency_list.php:85
 msgid "Cuban Peso"
-msgstr ""
+msgstr "Küba Pezosu"
 
 #: wpsc-updates/currency_list.php:86
 msgid "Croatia"
-msgstr ""
+msgstr "Hırvatistan"
 
 #: wpsc-updates/currency_list.php:86
 msgid "Croatian Kuna"
-msgstr ""
+msgstr "Hırvat Kunası"
 
 #: wpsc-updates/currency_list.php:87
 msgid "Costa Rica"
-msgstr ""
+msgstr "Kostarika"
 
 #: wpsc-updates/currency_list.php:87
 msgid "Costa Rican Colon"
-msgstr ""
+msgstr "Kosta Rika Kolonu"
 
 #: wpsc-updates/currency_list.php:88
 msgid "Cook Islands"
-msgstr ""
+msgstr "Cook Adaları"
 
 #: wpsc-updates/currency_list.php:88
 #: wpsc-updates/currency_list.php:157
@@ -3323,201 +3297,201 @@ msgstr ""
 #: wpsc-updates/currency_list.php:173
 #: wpsc-updates/currency_list.php:216
 msgid "New Zealand Dollar"
-msgstr ""
+msgstr "Yeni Zelanda Doları"
 
 #: wpsc-updates/currency_list.php:89
 msgid "Congo"
-msgstr ""
+msgstr "Kongo"
 
 #: wpsc-updates/currency_list.php:90
 msgid "Comoros"
-msgstr ""
+msgstr "Komorlar"
 
 #: wpsc-updates/currency_list.php:90
 msgid "Comoros Franc"
-msgstr ""
+msgstr "Komorlar Frangı"
 
 #: wpsc-updates/currency_list.php:91
 msgid "Colombia"
-msgstr ""
+msgstr "Kolombiya"
 
 #: wpsc-updates/currency_list.php:91
 msgid "Colombian Peso"
-msgstr ""
+msgstr "Kolombiya Pezosu"
 
 #: wpsc-updates/currency_list.php:92
 msgid "Cocos (Keeling) Islands"
-msgstr ""
+msgstr "Cocos (Keeling) Adaları"
 
 #: wpsc-updates/currency_list.php:93
 msgid "Christmas Island"
-msgstr ""
+msgstr "Christmas Adası"
 
 #: wpsc-updates/currency_list.php:94
 msgid "Chile"
-msgstr ""
+msgstr "Şili"
 
 #: wpsc-updates/currency_list.php:94
 msgid "Chilean Peso"
-msgstr ""
+msgstr "Şili Pezosu"
 
 #: wpsc-updates/currency_list.php:95
 msgid "China"
-msgstr ""
+msgstr "Çin"
 
 #: wpsc-updates/currency_list.php:95
 msgid "Yuan Renminbi"
-msgstr ""
+msgstr "Yuan Renminbi"
 
 #: wpsc-updates/currency_list.php:96
 msgid "Chad"
-msgstr ""
+msgstr "Çad"
 
 #: wpsc-updates/currency_list.php:97
 msgid "Central African Republic"
-msgstr ""
+msgstr "Orta Afrika Cumhuriyeti"
 
 #: wpsc-updates/currency_list.php:98
 msgid "Cayman Islands"
-msgstr ""
+msgstr "Cayman Adaları"
 
 #: wpsc-updates/currency_list.php:98
 msgid "Cayman Islands Dollar"
-msgstr ""
+msgstr "Cayman Adaları Doları"
 
 #: wpsc-updates/currency_list.php:99
 msgid "Cape Verde"
-msgstr ""
+msgstr "Cape Verde"
 
 #: wpsc-updates/currency_list.php:99
 msgid "Cape Verde Escudo"
-msgstr ""
+msgstr "Cape Verde Esküdosu"
 
 #: wpsc-updates/currency_list.php:100
 msgid "Cameroon"
-msgstr ""
+msgstr "Kamerun"
 
 #: wpsc-updates/currency_list.php:101
 msgid "Canada"
-msgstr ""
+msgstr "Kanada"
 
 #: wpsc-updates/currency_list.php:101
 msgid "Canadian Dollar"
-msgstr ""
+msgstr "Kanada Doları"
 
 #: wpsc-updates/currency_list.php:102
 msgid "Cambodia"
-msgstr ""
+msgstr "Kamboçya"
 
 #: wpsc-updates/currency_list.php:102
 msgid "Kampuchean Riel"
-msgstr ""
+msgstr "Kampuchean Riel"
 
 #: wpsc-updates/currency_list.php:103
 msgid "Burundi"
-msgstr ""
+msgstr "Burundi"
 
 #: wpsc-updates/currency_list.php:103
 msgid "Burundi Franc"
-msgstr ""
+msgstr "Burundi Frangı"
 
 #: wpsc-updates/currency_list.php:104
 msgid "Burkina Faso"
-msgstr ""
+msgstr "Burkina Faso"
 
 #: wpsc-updates/currency_list.php:105
 msgid "Bulgaria"
-msgstr ""
+msgstr "Bulgaristan"
 
 #: wpsc-updates/currency_list.php:105
 msgid "Bulgarian Lev"
-msgstr ""
+msgstr "Bulgar Levası"
 
 #: wpsc-updates/currency_list.php:106
 msgid "Brunei Darussalam"
-msgstr ""
+msgstr "Brunei Sultanlığı"
 
 #: wpsc-updates/currency_list.php:106
 msgid "Brunei Dollar"
-msgstr ""
+msgstr "Brunei Doları"
 
 #: wpsc-updates/currency_list.php:107
 msgid "British Indian Ocean Territory"
-msgstr ""
+msgstr "İngiliz Hint Okyanusu Teritoryası"
 
 #: wpsc-updates/currency_list.php:108
 msgid "Brazil"
-msgstr ""
+msgstr "Brezilya"
 
 #: wpsc-updates/currency_list.php:108
 msgid "Brazilian Real"
-msgstr ""
+msgstr "Brezilya Reali"
 
 #: wpsc-updates/currency_list.php:109
 msgid "Bouvet Island"
-msgstr ""
+msgstr "Bouvet Adası"
 
 #: wpsc-updates/currency_list.php:109
 #: wpsc-updates/currency_list.php:164
 #: wpsc-updates/currency_list.php:206
 msgid "Norwegian Krone"
-msgstr ""
+msgstr "Norveç Kronu"
 
 #: wpsc-updates/currency_list.php:110
 msgid "Botswana"
-msgstr ""
+msgstr "Botsvana"
 
 #: wpsc-updates/currency_list.php:110
 msgid "Botswana Pula"
-msgstr ""
+msgstr "Botsvana Pula"
 
 #: wpsc-updates/currency_list.php:111
 msgid "Bosnia-Herzegovina"
-msgstr ""
+msgstr "Bosna-Hersek"
 
 #: wpsc-updates/currency_list.php:111
 msgid "Marka"
-msgstr ""
+msgstr "Marka"
 
 #: wpsc-updates/currency_list.php:112
 msgid "Bolivia"
-msgstr ""
+msgstr "Bolivya"
 
 #: wpsc-updates/currency_list.php:112
 msgid "Boliviano"
-msgstr ""
+msgstr "Boliviano"
 
 #: wpsc-updates/currency_list.php:113
 msgid "Bhutan"
-msgstr ""
+msgstr "Bhutan"
 
 #: wpsc-updates/currency_list.php:113
 msgid "Bhutan Ngultrum"
-msgstr ""
+msgstr "Bhutan Ngultrum"
 
 #: wpsc-updates/currency_list.php:114
 msgid "Bermuda"
-msgstr ""
+msgstr "Bermuda"
 
 #: wpsc-updates/currency_list.php:114
 msgid "Bermudian Dollar"
-msgstr ""
+msgstr "Bermuda Doları"
 
 #: wpsc-updates/currency_list.php:115
 msgid "Benin"
-msgstr ""
+msgstr "Benin"
 
 #: wpsc-updates/currency_list.php:116
 msgid "Belize"
-msgstr ""
+msgstr "Belize"
 
 #: wpsc-updates/currency_list.php:116
 msgid "Belize Dollar"
-msgstr ""
+msgstr "Belize Doları"
 
 #: wpsc-updates/currency_list.php:117
 msgid "Belgium"
-msgstr ""
+msgstr "Belçika"
 
 #: wpsc-updates/currency_list.php:118
 msgid "Belarus"
@@ -3525,466 +3499,466 @@ msgstr ""
 
 #: wpsc-updates/currency_list.php:118
 msgid "Belarussian Ruble"
-msgstr ""
+msgstr "Belarus Rublesi"
 
 #: wpsc-updates/currency_list.php:119
 msgid "Barbados"
-msgstr ""
+msgstr "Barbados"
 
 #: wpsc-updates/currency_list.php:119
 msgid "Barbados Dollar"
-msgstr ""
+msgstr "Barbados Doları"
 
 #: wpsc-updates/currency_list.php:120
 msgid "Bangladesh"
-msgstr ""
+msgstr "Bangladeş"
 
 #: wpsc-updates/currency_list.php:120
 msgid "Bangladeshi Taka"
-msgstr ""
+msgstr "Bangladeş Takası"
 
 #: wpsc-updates/currency_list.php:121
 msgid "Bahrain"
-msgstr ""
+msgstr "Bahreyn"
 
 #: wpsc-updates/currency_list.php:121
 msgid "Bahraini Dinar"
-msgstr ""
+msgstr "Bahreyn Dinarı"
 
 #: wpsc-updates/currency_list.php:122
 msgid "Bahamas"
-msgstr ""
+msgstr "Bahamalar"
 
 #: wpsc-updates/currency_list.php:122
 msgid "Bahamian Dollar"
-msgstr ""
+msgstr "Bahama Doları"
 
 #: wpsc-updates/currency_list.php:123
 msgid "Azerbaijan"
-msgstr ""
+msgstr "Azerbeycan"
 
 #: wpsc-updates/currency_list.php:123
 msgid "Azerbaijanian Manat"
-msgstr ""
+msgstr "Azerbaycan Manatı"
 
 #: wpsc-updates/currency_list.php:124
 msgid "Austria"
-msgstr ""
+msgstr "Avusturya"
 
 #: wpsc-updates/currency_list.php:125
 msgid "Aruba"
-msgstr ""
+msgstr "Aruba"
 
 #: wpsc-updates/currency_list.php:125
 msgid "Aruban Guilder"
-msgstr ""
+msgstr "Aruba Florini"
 
 #: wpsc-updates/currency_list.php:126
 msgid "Armenia"
-msgstr ""
+msgstr "Ermenistan"
 
 #: wpsc-updates/currency_list.php:126
 msgid "Armenian Dram"
-msgstr ""
+msgstr "Ermeni Dramı"
 
 #: wpsc-updates/currency_list.php:127
 msgid "Argentina"
-msgstr ""
+msgstr "Arjantin"
 
 #: wpsc-updates/currency_list.php:127
 msgid "Argentine Peso"
-msgstr ""
+msgstr "Arjantin Pezosu"
 
 #: wpsc-updates/currency_list.php:128
 msgid "Antigua and Barbuda"
-msgstr ""
+msgstr "Antigua ve Barbuda"
 
 #: wpsc-updates/currency_list.php:129
 msgid "Antarctica"
-msgstr ""
+msgstr "Antarktika"
 
 #: wpsc-updates/currency_list.php:129
 msgid "Dollar"
-msgstr ""
+msgstr "Dolar"
 
 #: wpsc-updates/currency_list.php:130
 msgid "Anguilla"
-msgstr ""
+msgstr "Anguilla"
 
 #: wpsc-updates/currency_list.php:131
 msgid "Angola"
-msgstr ""
+msgstr "Angora"
 
 #: wpsc-updates/currency_list.php:131
 msgid "Angolan New Kwanza"
-msgstr ""
+msgstr "Angola Yeni Kvanzası"
 
 #: wpsc-updates/currency_list.php:132
 msgid "Andorra"
-msgstr ""
+msgstr "Andorra"
 
 #: wpsc-updates/currency_list.php:133
 msgid "American Samoa"
-msgstr ""
+msgstr "Amerikan Samoası"
 
 #: wpsc-updates/currency_list.php:134
 msgid "Algeria"
-msgstr ""
+msgstr "Cezayir"
 
 #: wpsc-updates/currency_list.php:134
 msgid "Algerian Dinar"
-msgstr ""
+msgstr "Cezayir Dinarı"
 
 #: wpsc-updates/currency_list.php:135
 msgid "Albania"
-msgstr ""
+msgstr "Arnavutluk"
 
 #: wpsc-updates/currency_list.php:135
 msgid "Albanian Lek"
-msgstr ""
+msgstr "Arnavutluk Leki"
 
 #: wpsc-updates/currency_list.php:136
 msgid "Afghanistan"
-msgstr ""
+msgstr "Afganistan"
 
 #: wpsc-updates/currency_list.php:136
 msgid "Afghanistan Afghani"
-msgstr ""
+msgstr "Afganistan Afganisi"
 
 #: wpsc-updates/currency_list.php:137
 msgid "USA"
-msgstr ""
+msgstr "ABD"
 
 #: wpsc-updates/currency_list.php:138
 msgid "Australia"
-msgstr ""
+msgstr "Avustralya"
 
 #: wpsc-updates/currency_list.php:139
 msgid "Great Britain"
-msgstr ""
+msgstr "İngiltere"
 
 #: wpsc-updates/currency_list.php:140
 msgid "Mauritius"
-msgstr ""
+msgstr "Mauritius"
 
 #: wpsc-updates/currency_list.php:140
 msgid "Mauritius Rupee"
-msgstr ""
+msgstr "Mauritius Rupisi"
 
 #: wpsc-updates/currency_list.php:141
 msgid "Mayotte"
-msgstr ""
+msgstr "Mayotte"
 
 #: wpsc-updates/currency_list.php:142
 msgid "Mexico"
-msgstr ""
+msgstr "Meksika"
 
 #: wpsc-updates/currency_list.php:142
 msgid "Mexican Nuevo Peso"
-msgstr ""
+msgstr "Meksika Pezosu"
 
 #: wpsc-updates/currency_list.php:143
 msgid "Micronesia"
-msgstr ""
+msgstr "Mikronezya"
 
 #: wpsc-updates/currency_list.php:144
 msgid "Moldova"
-msgstr ""
+msgstr "Moldova"
 
 #: wpsc-updates/currency_list.php:144
 msgid "Moldovan Leu"
-msgstr ""
+msgstr "Moldova Leusu"
 
 #: wpsc-updates/currency_list.php:145
 msgid "Monaco"
-msgstr ""
+msgstr "Monako"
 
 #: wpsc-updates/currency_list.php:146
 msgid "Mongolia"
-msgstr ""
+msgstr "Moğolistan"
 
 #: wpsc-updates/currency_list.php:146
 msgid "Mongolian Tugrik"
-msgstr ""
+msgstr "Moğol Tugriki"
 
 #: wpsc-updates/currency_list.php:147
 msgid "Montserrat"
-msgstr ""
+msgstr "Montserrat"
 
 #: wpsc-updates/currency_list.php:148
 msgid "Morocco"
-msgstr ""
+msgstr "Fas"
 
 #: wpsc-updates/currency_list.php:148
 #: wpsc-updates/currency_list.php:238
 msgid "Moroccan Dirham"
-msgstr ""
+msgstr "Fas Dirhemi"
 
 #: wpsc-updates/currency_list.php:149
 msgid "Mozambique"
-msgstr ""
+msgstr "Mozambik"
 
 #: wpsc-updates/currency_list.php:149
 msgid "Mozambique Metical"
-msgstr ""
+msgstr "Mozambik Meticali"
 
 #: wpsc-updates/currency_list.php:150
 msgid "Myanmar"
-msgstr ""
+msgstr "Myanmar"
 
 #: wpsc-updates/currency_list.php:150
 msgid "Myanmar Kyat"
-msgstr ""
+msgstr "Myanmar Kyat"
 
 #: wpsc-updates/currency_list.php:151
 msgid "Namibia"
-msgstr ""
+msgstr "Namibya"
 
 #: wpsc-updates/currency_list.php:151
 msgid "Namibian Dollar"
-msgstr ""
+msgstr "Namibya Doları"
 
 #: wpsc-updates/currency_list.php:152
 msgid "Nauru"
-msgstr ""
+msgstr "Nauru"
 
 #: wpsc-updates/currency_list.php:153
 msgid "Nepal"
-msgstr ""
+msgstr "Nepal"
 
 #: wpsc-updates/currency_list.php:153
 msgid "Nepalese Rupee"
-msgstr ""
+msgstr "Nepal Rupisi"
 
 #: wpsc-updates/currency_list.php:154
 msgid "Netherlands"
-msgstr ""
+msgstr "Hollanda"
 
 #: wpsc-updates/currency_list.php:155
 msgid "Netherlands Antilles"
-msgstr ""
+msgstr "Hollanda Antilleri"
 
 #: wpsc-updates/currency_list.php:155
 msgid "Netherlands Antillean Guilder"
-msgstr ""
+msgstr "Hollanda Antil Florini"
 
 #: wpsc-updates/currency_list.php:156
 msgid "New Caledonia (French)"
-msgstr ""
+msgstr "Yeni Kaledonya (Fransız)"
 
 #: wpsc-updates/currency_list.php:156
 #: wpsc-updates/currency_list.php:175
 #: wpsc-updates/currency_list.php:237
 msgid "CFP Franc"
-msgstr ""
+msgstr "CFP Frangı"
 
 #: wpsc-updates/currency_list.php:157
 msgid "New Zealand"
-msgstr "Naujoji Zelandija"
+msgstr "Yeni Zelanda"
 
 #: wpsc-updates/currency_list.php:158
 msgid "Nicaragua"
-msgstr ""
+msgstr "Nikaragua"
 
 #: wpsc-updates/currency_list.php:158
 msgid "Nicaraguan Cordoba Oro"
-msgstr ""
+msgstr "Nikaragua Cordoba Orosu"
 
 #: wpsc-updates/currency_list.php:159
 msgid "Niger"
-msgstr ""
+msgstr "Nijer"
 
 #: wpsc-updates/currency_list.php:160
 msgid "Nigeria"
-msgstr ""
+msgstr "Nijerya"
 
 #: wpsc-updates/currency_list.php:160
 msgid "Nigerian Naira"
-msgstr ""
+msgstr "Nijerya Nairası"
 
 #: wpsc-updates/currency_list.php:161
 msgid "Niue"
-msgstr ""
+msgstr "Niue"
 
 #: wpsc-updates/currency_list.php:162
 msgid "Norfolk Island"
-msgstr ""
+msgstr "Norfolk Adası"
 
 #: wpsc-updates/currency_list.php:163
 msgid "Northern Mariana Islands"
-msgstr ""
+msgstr "Kuzey Mariana Adaları"
 
 #: wpsc-updates/currency_list.php:164
 msgid "Norway"
-msgstr ""
+msgstr "Norveç"
 
 #: wpsc-updates/currency_list.php:165
 msgid "Oman"
-msgstr ""
+msgstr "Umman"
 
 #: wpsc-updates/currency_list.php:165
 msgid "Omani Rial"
-msgstr ""
+msgstr "Umman Riyali"
 
 #: wpsc-updates/currency_list.php:166
 msgid "Pakistan"
-msgstr ""
+msgstr "Pakistan"
 
 #: wpsc-updates/currency_list.php:166
 msgid "Pakistan Rupee"
-msgstr ""
+msgstr "Pakistan Rupisi"
 
 #: wpsc-updates/currency_list.php:167
 msgid "Palau"
-msgstr ""
+msgstr "Palau"
 
 #: wpsc-updates/currency_list.php:168
 msgid "Panama"
-msgstr ""
+msgstr "Panama"
 
 #: wpsc-updates/currency_list.php:168
 msgid "Panamanian Balboa"
-msgstr ""
+msgstr "Panama Balboa"
 
 #: wpsc-updates/currency_list.php:169
 msgid "Papua New Guinea"
-msgstr ""
+msgstr "Papua Yeni Gine"
 
 #: wpsc-updates/currency_list.php:169
 msgid "Papua New Guinea Kina"
-msgstr ""
+msgstr "Papua Yeni Gine Kinası"
 
 #: wpsc-updates/currency_list.php:170
 msgid "Paraguay"
-msgstr ""
+msgstr "Paraguay"
 
 #: wpsc-updates/currency_list.php:170
 msgid "Paraguay Guarani"
-msgstr ""
+msgstr "Paraguay Guarani"
 
 #: wpsc-updates/currency_list.php:171
 msgid "Peru"
-msgstr ""
+msgstr "Peru"
 
 #: wpsc-updates/currency_list.php:171
 msgid "Peruvian Nuevo Sol"
-msgstr ""
+msgstr "Peru Nuevo Solu"
 
 #: wpsc-updates/currency_list.php:172
 msgid "Philippines"
-msgstr ""
+msgstr "Filipinler"
 
 #: wpsc-updates/currency_list.php:172
 msgid "Philippine Peso"
-msgstr ""
+msgstr "Filipin Pezosu"
 
 #: wpsc-updates/currency_list.php:173
 msgid "Pitcairn Island"
-msgstr ""
+msgstr "Pitcairn Adası"
 
 #: wpsc-updates/currency_list.php:174
 msgid "Poland"
-msgstr ""
+msgstr "Polonya"
 
 #: wpsc-updates/currency_list.php:174
 msgid "Polish Zloty"
-msgstr ""
+msgstr "Polonya Zlotisi"
 
 #: wpsc-updates/currency_list.php:175
 msgid "Polynesia (French)"
-msgstr ""
+msgstr "Polinezya (Fransız)"
 
 #: wpsc-updates/currency_list.php:176
 msgid "Portugal"
-msgstr ""
+msgstr "Portekiz"
 
 #: wpsc-updates/currency_list.php:177
 msgid "Puerto Rico"
-msgstr ""
+msgstr "Porto Riko"
 
 #: wpsc-updates/currency_list.php:178
 msgid "Qatar"
-msgstr ""
+msgstr "Katar"
 
 #: wpsc-updates/currency_list.php:178
 msgid "Qatari Rial"
-msgstr ""
+msgstr "Katar Riyali"
 
 #: wpsc-updates/currency_list.php:179
 msgid "Reunion (French)"
-msgstr ""
+msgstr "Reunion (Fransız)"
 
 #: wpsc-updates/currency_list.php:180
 msgid "Romania"
-msgstr ""
+msgstr "Romanya"
 
 #: wpsc-updates/currency_list.php:180
 msgid "Romanian Leu"
-msgstr ""
+msgstr "Romen Leyi"
 
 #: wpsc-updates/currency_list.php:181
 msgid "Russia"
-msgstr ""
+msgstr "Rusya"
 
 #: wpsc-updates/currency_list.php:181
 msgid "Russian Ruble"
-msgstr ""
+msgstr "Rus Rublesi"
 
 #: wpsc-updates/currency_list.php:182
 msgid "Rwanda"
-msgstr ""
+msgstr "Ruanda"
 
 #: wpsc-updates/currency_list.php:182
 msgid "Rwanda Franc"
-msgstr ""
+msgstr "Ruanda Frangı"
 
 #: wpsc-updates/currency_list.php:183
 msgid "Saint Helena"
-msgstr ""
+msgstr "Saint Helena"
 
 #: wpsc-updates/currency_list.php:183
 msgid "St. Helena Pound"
-msgstr ""
+msgstr "St Helena Pound"
 
 #: wpsc-updates/currency_list.php:184
 msgid "Saint Kitts & Nevis Anguilla"
-msgstr ""
+msgstr "Saint Kitts ve Nevis Anguilla"
 
 #: wpsc-updates/currency_list.php:185
 msgid "Saint Lucia"
-msgstr ""
+msgstr "Saint Lucia"
 
 #: wpsc-updates/currency_list.php:186
 msgid "Saint Pierre and Miquelon"
-msgstr ""
+msgstr "Saint Pierre ve Miquelon"
 
 #: wpsc-updates/currency_list.php:187
 msgid "Saint Vincent & Grenadines"
-msgstr ""
+msgstr "Saint Vincent ve Grenadinler"
 
 #: wpsc-updates/currency_list.php:188
 msgid "Samoa"
-msgstr ""
+msgstr "Samoa"
 
 #: wpsc-updates/currency_list.php:188
 msgid "Samoan Tala"
-msgstr ""
+msgstr "Samoan Tala"
 
 #: wpsc-updates/currency_list.php:189
 msgid "San Marino"
-msgstr "San Marinas"
+msgstr "San Marino"
 
 #: wpsc-updates/currency_list.php:189
 msgid "Italian Lira"
-msgstr ""
+msgstr "İtalyan Lirası"
 
 #: wpsc-updates/currency_list.php:190
 msgid "Sao Tome and Principe"
-msgstr ""
+msgstr "Sao Tome ve Principe"
 
 #: wpsc-includes/product-template.php:1522
 msgid "Save"
-msgstr "Išsaugoti"
+msgstr "Kaydet"
 
 #: wpsc-core/js/tinymce3/window.php:45
 msgid "Premium Upgrades"
@@ -3998,31 +3972,31 @@ msgstr ""
 #: wpsc-widgets/category_widget.php:151
 #: wpsc-widgets/latest_product_widget.php:103
 msgid "Width:"
-msgstr "Plotis:"
+msgstr "Genişlik:"
 
 #: wpsc-widgets/specials_widget.php:104
 msgid "Show Description"
-msgstr "Rodyti aprašymą"
+msgstr "Açıklamayı Göster"
 
 #: wpsc-admin/includes/settings-pages/checkout.php:14
 msgid "Trash"
-msgstr "Šiukšlės"
+msgstr "Çöp Kutusu"
 
 #: wpsc-admin/display-upgrades.page.php:73
 msgid "You don't have any Upgrades yet!"
-msgstr "Kol kas atnaujinimų nėra!"
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:295
 msgid "If this Product runs out of stock set status to Unpublished & email site owner"
-msgstr "Jei šis produkto atsargos sandėlyje pasibaigė, pakeisti statusą į \"Nepublikuojamas\" ir išsiųsti elektroninį laišką puslapio savininkui."
+msgstr ""
 
 #: wpsc-admin/includes/products.php:177
 msgid "View &#8220;%s&#8221;"
-msgstr "Žiūrėti &#8220;%s&#8221; "
+msgstr ""
 
 #: wpsc-includes/processing.functions.php:353
 msgid " does not support products without a weight set. Please either disable shipping for this product or give it a weight"
-msgstr "nepalaikomi produktai kuriuose nenurodytas svoris. Prašome arba išjungti šio produkto pristatymą, arba priskirti jam svorį."
+msgstr ""
 
 #: wpsc-admin/includes/save-data.functions.php:429
 msgid "Shortcodes and Template Tags"
@@ -4030,40 +4004,40 @@ msgstr ""
 
 #: wpsc-admin/admin-form-functions.php:149
 msgid "Update Coupon"
-msgstr "Atnaujinti kuponą"
+msgstr "İndirim Kuponunu Güncelle"
 
 #: wpsc-admin/display-coupons.php:141
 #: wpsc-includes/purchaselogs.class.php:21
 msgid "Add New"
-msgstr "Pridėti naują"
+msgstr "Yeni Ekle"
 
 #: wpsc-core/wpsc-functions.php:126
 msgid "Incomplete Sale"
-msgstr "Nepilnas pardavimas"
+msgstr "Tamamlanmamış Satış"
 
 #: wpsc-core/wpsc-functions.php:154
 msgid "Payment Declined"
-msgstr "Mokėjimas atmestas"
+msgstr "Ödeme Reddedildi"
 
 #: wpsc-core/wpsc-installer.php:293
 msgid "Product Category"
-msgstr "Produkto kategorija"
+msgstr "Ürün Kategorisi"
 
 #: wpsc-theme/wpsc-user-log.php:147
 msgid "Username:"
-msgstr "Vartotojo vardas:"
+msgstr "Kullanıcı adı:"
 
 #: wpsc-core/js/tinymce3/window.php:112
 msgid "All Categories"
-msgstr "Visos kategorijos"
+msgstr "Tüm Kategoriler"
 
 #: wpsc-merchants/paypal-express.merchant.php:295
 msgid "Your website is using a currency not accepted by PayPal, select an accepted currency using the drop down menu bellow. Buyers on your site will still pay in your local currency however we will convert the currency and send the order through to PayPal using the currency you choose below."
-msgstr "Jūsų puslapis naudoja valiutą kurios PayPal nepriima. Pasirinkite tinkamą valiutą iš žemiau esančio sąrašo. Pirkėjai jūsų puslapyje vis tiek mokės Jūsų vietine valiuta, tačiau mes konvertuosime valiutą ir išsiųsime užsakymą per PayPal naudodami žemiau pasirinktą valiutą."
+msgstr ""
 
 #: wpsc-shipping/ups_20.php:107
 msgid "UPS Express Box"
-msgstr "UPS Express Box"
+msgstr "UPS Express Kutusu"
 
 #: wpsc-shipping/ups_20.php:131
 msgid "Dropoff Type"
@@ -4071,51 +4045,49 @@ msgstr ""
 
 #: wpsc-shipping/ups_20.php:207
 msgid "Use Testing Environment"
-msgstr "Naudoti testinę aplinką"
+msgstr ""
 
 #: wpsc-shipping/usps_20.php:203
 msgid "Use Test Server:"
-msgstr "Naudoti testinį serverį:"
+msgstr "Deneme Sunucusu Kullan:"
 
 #: wpsc-theme/wpsc-cart_widget.php:49
 msgid "%d item"
 msgid_plural "%d items"
-msgstr[0] "%d prekė"
-msgstr[1] "%d prekės"
-msgstr[2] "%d prekių"
+msgstr[0] ""
 
 #: wpsc-theme/wpsc-cart_widget.php:67
 msgid "Clear cart"
-msgstr "Išvalyti krepšelį"
+msgstr "Sepeti Temizle"
 
 #: wpsc-theme/wpsc-grid_view.php:79
 #: wpsc-theme/wpsc-products_page.php:224
 msgid "Sale"
-msgstr ""
+msgstr "Satış"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:44
 msgid "No Image"
-msgstr "Nėra paveiksliuko"
+msgstr "Resim Yok"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:88
 msgid "Enter coupon code"
-msgstr "Įveskite kupono kodą"
+msgstr "Kupon kodunu girin"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:159
 msgid " - Choose a Shipping Rate"
-msgstr " - Pasirinkite pristatymo būdą"
+msgstr ""
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:453
 msgid "Review and purchase"
-msgstr "Peržiūrėti ir pirkti"
+msgstr ""
 
 #: wpsc-theme/wpsc-single_product.php:89
 msgid "Select a file from your computer to include with this purchase."
-msgstr "Pasirinkti failą iš kompiuterio kuris bus pridedamas prie pirkinio."
+msgstr ""
 
 #: wpsc-widgets/product_tag_widget.php:19
 msgid "Product Tags Widget"
-msgstr ""
+msgstr "Ürün Etiket Gereci"
 
 #: wpsc-widgets/shopping_cart_widget.php:143
 msgid "Use Sliding Cart:"
@@ -4123,11 +4095,11 @@ msgstr ""
 
 #: wpsc-admin/admin.php:567
 msgid "Sales by Month"
-msgstr "Pardavimai pagal mėnesius"
+msgstr "Aylık Satışlar"
 
 #: wpsc-core/wpsc-functions.php:273
 msgid "Search Products"
-msgstr "Ieškoti produktų"
+msgstr "Ürünlerde Ara"
 
 #: wpsc-admin/display-items.page.php:214
 #: wpsc-admin/display-items.page.php:347
@@ -4137,7 +4109,7 @@ msgstr ""
 #: wpsc-admin/admin.php:305
 #: wpsc-admin/display-sales-logs.php:222
 msgid "Taxes"
-msgstr "Mokesčiai"
+msgstr "Vergiler"
 
 #: wpsc-admin/display-sales-logs.php:352
 msgid "There are no purchase logs for your selection, please try again."
@@ -4146,27 +4118,27 @@ msgstr ""
 #: wpsc-admin/display-sales-logs.php:56
 #: wpsc-admin/display-sales-logs.php:440
 msgid "Tracking ID"
-msgstr "Sekimo ID"
+msgstr ""
 
 #: wpsc-admin/display-update.page.php:40
 msgid "WP e-Commerce is almost ready."
-msgstr "WP e-Commerce beveik paruošta."
+msgstr "WP e-Commerce neredeyse hazır."
 
 #: wpsc-admin/includes/display-items-functions.php:201
 msgid "Quantity In Cart"
-msgstr "Kiekis krepšelyje"
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:396
 msgid "You must first save this Product as a Draft before adding variations"
-msgstr "Prieš pridedant variantų turite išsaugoti produktą kaip juodraštį"
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:729
 msgid "Users can personalize this Product by leaving a message on single product page"
-msgstr "Vartotojai gali personalizuoti produktą palikdami žinutę produkto puslapyje"
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:761
 msgid "Enable Comments"
-msgstr "Įjungti komentarus"
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:799
 msgid "External Link Text"
@@ -4178,7 +4150,7 @@ msgstr ""
 
 #: wpsc-admin/includes/products.php:71
 msgid "(no title)"
-msgstr "(be pavadinimo)"
+msgstr "(başlık yok)"
 
 #: wpsc-admin/includes/settings-pages/admin.php:139
 msgid "Track and Trace settings"
@@ -4186,11 +4158,11 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/checkout.php:83
 msgid "Force users to use SSL"
-msgstr "Priversti vartotojus naudoti SSL"
+msgstr ""
 
 #: wpsc-admin/includes/settings-pages/general.php:85
 msgid "Currency Type"
-msgstr ""
+msgstr "Döviz Cinsi"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:170
 msgid "Show list of product categories"
@@ -4243,7 +4215,7 @@ msgstr ""
 
 #: wpsc-includes/rss_template.php:7
 msgid "WP e-Commerce"
-msgstr ""
+msgstr "WP e-Commerce"
 
 #: wpsc-includes/variations.class.php:176
 #: wpsc-includes/variations.class.php:179
@@ -4258,19 +4230,19 @@ msgstr ""
 #: wpsc-admin/display-items.page.php:45
 #: wpsc-admin/display-items.page.php:61
 msgid "Sale Price"
-msgstr "Išpardavimo kaina"
+msgstr "Satış Fiyatı"
 
 #: wpsc-admin/admin.php:155
 msgid "Store Sales"
-msgstr "Pardavimai"
+msgstr ""
 
 #: wpsc-admin/admin.php:158
 msgid "Update Store"
-msgstr "Atnaujinti parduotuvę"
+msgstr ""
 
 #: wpsc-admin/admin.php:158
 msgid "Store Update"
-msgstr "Parduotuvės atnaujinimas"
+msgstr "Mağaza Güncellemesi"
 
 #: wpsc-admin/admin.php:160
 msgid "Store Upgrades"
@@ -4279,11 +4251,11 @@ msgstr ""
 #: wpsc-admin/admin.php:168
 #: wpsc-admin/display-options-settings.page.php:16
 msgid "Store Settings"
-msgstr "Parduotuvės nustatymai"
+msgstr "Mağaza Ayarları"
 
 #: wpsc-admin/admin.php:168
 msgid "Store"
-msgstr "Parduotuvė"
+msgstr "Mağaza"
 
 #: wpsc-admin/admin.php:173
 msgid "Store Debug"
@@ -4291,7 +4263,7 @@ msgstr ""
 
 #: wpsc-admin/admin.php:176
 msgid "For More Information"
-msgstr "Daugiau informacijos"
+msgstr ""
 
 #: wpsc-admin/admin.php:213
 msgid "Product Tracking Email"
@@ -4306,19 +4278,19 @@ msgstr ""
 
 #: wpsc-admin/admin.php:521
 msgid "Total Income"
-msgstr "Bendros pajamos"
+msgstr "Toplam Gelir"
 
 #: wpsc-admin/admin.php:564
 msgid "Getshopped News"
-msgstr "Getshopped naujienos"
+msgstr "Getshopped Haberleri"
 
 #: wpsc-admin/admin.php:565
 msgid "Sales Summary"
-msgstr "Pardavimų suvestinė"
+msgstr "Satış Özeti"
 
 #: wpsc-admin/admin.php:682
 msgid "Revenue"
-msgstr "Apyvarta"
+msgstr "Gelir"
 
 #: wpsc-admin/ajax-and-init.php:158
 msgid "Sorry, for some reason, we couldn't duplicate this product because it could not be found in the database, check there for this ID: "
@@ -4340,15 +4312,15 @@ msgstr ""
 #: wpsc-admin/display-coupons.php:172
 #: wpsc-admin/admin-form-functions.php:33
 msgid "Free shipping"
-msgstr "Nemokamas pristatymas"
+msgstr "Ücretsiz nakliye"
 
 #: wpsc-admin/display-coupons.php:192
 msgid "Activate coupon on creation."
-msgstr "Aktyvuoti kuponą sukūrimo metu."
+msgstr ""
 
 #: wpsc-admin/display-coupons.php:202
 msgid "Deactivate coupon after it has been used."
-msgstr "Išjungti kuponą, kai jis bus panaudotas."
+msgstr ""
 
 #: wpsc-admin/display-coupons.php:212
 msgid "This coupon affects each product at checkout."
@@ -4367,17 +4339,17 @@ msgstr ""
 #: wpsc-admin/display-coupons.php:225
 #: wpsc-admin/admin-form-functions.php:124
 msgid "Total quantity"
-msgstr ""
+msgstr "Toplam Miktar"
 
 #: wpsc-admin/display-coupons.php:226
 #: wpsc-admin/admin-form-functions.php:125
 msgid "Subtotal amount"
-msgstr ""
+msgstr "Ara Toplam miktarı"
 
 #: wpsc-admin/display-coupons.php:231
 #: wpsc-admin/admin-form-functions.php:129
 msgid "Is equal to"
-msgstr ""
+msgstr "Eşittir"
 
 #: wpsc-admin/display-coupons.php:232
 #: wpsc-admin/admin-form-functions.php:130
@@ -4387,7 +4359,7 @@ msgstr ""
 #: wpsc-admin/display-coupons.php:233
 #: wpsc-admin/admin-form-functions.php:131
 msgid "Is less than"
-msgstr ""
+msgstr "daha az"
 
 #: wpsc-admin/display-coupons.php:234
 #: wpsc-admin/admin-form-functions.php:132
@@ -4411,7 +4383,7 @@ msgstr ""
 
 #: wpsc-admin/display-coupons.php:238
 msgid "In Category"
-msgstr ""
+msgstr "Kategorisinde"
 
 #: wpsc-admin/display-coupons.php:283
 msgid "Add New Condition"
@@ -4425,7 +4397,7 @@ msgstr ""
 #: wpsc-admin/includes/save-data.functions.php:348
 #: wpsc-admin/admin.php:310
 msgid "Advanced Settings"
-msgstr "Papildomi nustatymai"
+msgstr "Gelişmiş Ayarlar"
 
 #: wpsc-admin/includes/save-data.functions.php:233
 #: wpsc-admin/includes/save-data.functions.php:455
@@ -4436,7 +4408,7 @@ msgstr ""
 #: wpsc-admin/includes/save-data.functions.php:475
 #: wpsc-admin/includes/save-data.functions.php:513
 msgid "None"
-msgstr ""
+msgstr "Hiçbiri"
 
 #: wpsc-admin/includes/save-data.functions.php:305
 #: wpsc-admin/includes/save-data.functions.php:530
@@ -4474,19 +4446,15 @@ msgstr ""
 msgid "%s Setting option deleted."
 msgid_plural "%s Setting option deleted."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: wpsc-admin/display-options-settings.page.php:291
 msgid "%s Checkout field added."
 msgid_plural "%s Checkout fields added."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%s ödeme alanı ekledi."
 
 #: wpsc-admin/display-options-settings.page.php:296
 msgid "Thumbnails regenerated."
-msgstr ""
+msgstr "Küçük resimler tekrar oluşturuldu."
 
 #: wpsc-admin/display-options-settings.page.php:303
 msgid "Settings successfully updated."
@@ -4496,22 +4464,16 @@ msgstr ""
 msgid "%s Purchase Log updated."
 msgid_plural "%s Purchase Logs updated."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: wpsc-admin/display-sales-logs.php:73
 msgid "%s product not updated, somebody is editing it."
 msgid_plural "%s products not updated, somebody is editing them."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: wpsc-admin/display-sales-logs.php:78
 msgid "%s Purchase Log deleted."
 msgid_plural "%s Purchase Logs deleted."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%s Satış Kaydı silindi."
 
 #: wpsc-admin/display-sales-logs.php:118
 msgid "Downloads for this log have been released."
@@ -4526,7 +4488,7 @@ msgstr ""
 #: wpsc-admin/display-sales-logs.php:146
 #: wpsc-includes/checkout.class.php:143
 msgid "Tax Included"
-msgstr "Mokesčiai įskaičiuoti"
+msgstr ""
 
 #: wpsc-admin/display-update.page.php:40
 msgid "You must <a href=\"%1$s\">update your database</a> to import all of your products."
@@ -4534,7 +4496,7 @@ msgstr ""
 
 #: wpsc-admin/display-update.page.php:55
 msgid "Update WP e-Commerce"
-msgstr ""
+msgstr "WP e-Commerce Uygulamasını Güncelle"
 
 #: wpsc-admin/display-update.page.php:83
 msgid "Your WP e-Commerce database needs to be updated for WP e-Commerce 3.8.  To perform this update, press the button below.  It is highly recommended that you back up your database before performing this update."
@@ -4546,19 +4508,19 @@ msgstr ""
 
 #: wpsc-admin/display-upgrades.page.php:58
 msgid "Enter your API Username and API Key below."
-msgstr ""
+msgstr "Aşağıya API Kullanıcı Adı ve Anahtarınızı giriniz."
 
 #: wpsc-core/wpsc-functions.php:272
 msgid "View Product"
-msgstr ""
+msgstr "Ürünü Görüntüle"
 
 #: wpsc-admin/admin.php:303
 msgid "Price Control"
-msgstr "Kainos nustatymai"
+msgstr "Fiyat Kontrolü"
 
 #: wpsc-admin/includes/display-items-functions.php:133
 msgid "Price: %s and above."
-msgstr "Kaina: nuo %s"
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:202
 msgid "Discounted Price"
@@ -4566,11 +4528,11 @@ msgstr ""
 
 #: wpsc-admin/admin.php:304
 msgid "Stock Control"
-msgstr "Kiekio valdymas"
+msgstr "Stok Kontrolü"
 
 #: wpsc-admin/includes/display-items-functions.php:259
 msgid "I have limited stock for this Product"
-msgstr "Šios prekės kiekis ribotas."
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:269
 msgid "This Product has variations, to edit the quantity please use the Variation Controls below."
@@ -4580,20 +4542,18 @@ msgstr ""
 msgid "%s variant item in stock."
 msgid_plural "%s variant items in stock."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: wpsc-admin/includes/display-items-functions.php:272
 msgid "Quantity:"
-msgstr "Kiekis:"
+msgstr "Miktar:"
 
 #: wpsc-admin/includes/display-items-functions.php:287
 msgid "Notify site owner and unpublish this Product if stock runs out"
-msgstr "Pranešti svetainės savininkui kai šios prekės nebeliks sandėlyje ir išimti prekę iš prekybos kol nebus papildytas jos kiekis."
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:289
 msgid "If stock runs out, this Product will not be available on the shop unless you untick this box or add more stock."
-msgstr "Jeigu prekių nebeliks sandėlyje, tai pirkėjai negalės nusipirkti šio produkto, tol, kol šis langelis bus pažymėtas, or kol nepridėsite daugiau prekių."
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:326
 #: wpsc-taxes/controllers/taxes_controller.class.php:315
@@ -4610,11 +4570,11 @@ msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:889
 msgid "Upload Image%s"
-msgstr "Įkelti nuotrauką%s"
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:1010
 msgid "Full Size"
-msgstr ""
+msgstr "Tam Boyut"
 
 #: wpsc-admin/includes/display-items-functions.php:1030
 msgid "(%d&nbsp;&times;&nbsp;%d)"
@@ -4642,15 +4602,15 @@ msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:824
 msgid "Manage Product Images"
-msgstr ""
+msgstr "Ürün Resimlerinin Yönet"
 
 #: wpsc-admin/includes/display-items-functions.php:845
 msgid "Upload New File"
-msgstr ""
+msgstr "Yeni Dosya Yükle"
 
 #: wpsc-admin/includes/products.php:91
 msgid "Unpublished"
-msgstr ""
+msgstr "Yayınlanmamış"
 
 #: wpsc-admin/includes/products.php:94
 msgid "Y/m/d g:i:s A"
@@ -4666,7 +4626,7 @@ msgstr ""
 
 #: wpsc-admin/includes/products.php:113
 msgid "Published"
-msgstr ""
+msgstr "Yayımlandı"
 
 #: wpsc-admin/includes/products.php:116
 msgid "Missed schedule"
@@ -4674,11 +4634,11 @@ msgstr ""
 
 #: wpsc-admin/includes/products.php:118
 msgid "Scheduled"
-msgstr ""
+msgstr "Takvimli"
 
 #: wpsc-admin/includes/products.php:120
 msgid "Last Modified"
-msgstr ""
+msgstr "Son Değişiklik"
 
 #: wpsc-admin/includes/products.php:133
 msgid "Edit &#8220;%s&#8221;"
@@ -4686,11 +4646,11 @@ msgstr ""
 
 #: wpsc-admin/includes/products.php:168
 msgid "Edit this product"
-msgstr ""
+msgstr "Bu ürünü düzenle"
 
 #: wpsc-admin/includes/products.php:169
 msgid "Quick Edit"
-msgstr ""
+msgstr "Hızlı Düzenle"
 
 #: wpsc-admin/includes/products.php:174
 msgid "Preview &#8220;%s&#8221;"
@@ -4699,16 +4659,16 @@ msgstr ""
 #: wpsc-admin/includes/products.php:177
 #: wpsc-admin/includes/products.php:371
 msgid "View"
-msgstr ""
+msgstr "Görünüm"
 
 #: wpsc-admin/includes/products.php:300
 #: wpsc-admin/display-items.page.php:206
 msgid "Uncategorized"
-msgstr "Be kategorijos"
+msgstr ""
 
 #: wpsc-admin/includes/products.php:318
 msgid "No Tags"
-msgstr "Be žymų"
+msgstr "Etiket Yok"
 
 #: wpsc-admin/includes/products.php:349
 msgid "%s pending"
@@ -4717,12 +4677,12 @@ msgstr ""
 #: wpsc-admin/includes/products.php:352
 msgctxt "comment count"
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: wpsc-admin/includes/products.php:352
 msgctxt "comment count"
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: wpsc-admin/includes/products.php:352
 msgctxt "comment count"
@@ -4731,7 +4691,7 @@ msgstr ""
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:62
 msgid "Check Out Form Fields updated."
-msgstr ""
+msgstr "Ödeme Form Alanları Güncellendi"
 
 #: wpsc-admin/includes/settings-pages/checkout.php:103
 msgid "This can cause warnings for your users if you do not have a properly configured SSL certificate"
@@ -4739,7 +4699,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/checkout.php:111
 msgid "Form Fields"
-msgstr ""
+msgstr "Form Alanları"
 
 #: wpsc-admin/includes/settings-pages/checkout.php:115
 msgid "Select a Form Set"
@@ -4767,7 +4727,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/general.php:149
 msgid "Decimal separator"
-msgstr ""
+msgstr "Ondalık ayırıcı"
 
 #: wpsc-admin/includes/settings-pages/import.php:12
 msgid "<p>You can import your products from a comma delimited text file.</p><p>An example of a csv import file would look like this: </p><p>Description, Additional Description, Product Name, Price, SKU, weight, weight unit, stock quantity, is limited quantity</p>"
@@ -4795,7 +4755,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/marketing.php:74
 msgid "Display Facebook Like"
-msgstr ""
+msgstr "Facebook Like'ı Göster"
 
 #: wpsc-admin/includes/settings-pages/marketing.php:77
 msgid "Adds the Facebook Like button on your single products page."
@@ -4827,11 +4787,11 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:309
 msgid "Show Stock Availability"
-msgstr ""
+msgstr "Stok Durumu Göster"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:585
 msgid "Drag &amp; Drop"
-msgstr ""
+msgstr "Sürükle & Bırak"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1027
 msgid "Choosing \"Yes\" means that thumbnails are cropped to exact dimensions (normally thumbnails are proportional)"
@@ -4851,7 +4811,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1089
 msgid "Colorbox"
-msgstr ""
+msgstr "Renk Kutucuğu"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1090
 msgid "Thickbox"
@@ -4871,7 +4831,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/taxes.php:37
 msgid "Product Specific Tax"
-msgstr ""
+msgstr "Ürüne Özel Vergi"
 
 #: wpsc-admin/includes/settings-pages/taxes.php:43
 msgid "Add per product tax to tax percentage if product has a specific tax rate"
@@ -4891,11 +4851,11 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/taxes.php:69
 msgid "Apply tax to Billing Address"
-msgstr ""
+msgstr "Fatura Adresi için Vergi Uygula"
 
 #: wpsc-admin/includes/settings-pages/taxes.php:77
 msgid "Apply tax to Shipping Address"
-msgstr ""
+msgstr "Nakliye Adresi için vergi hesapla"
 
 #: wpsc-admin/includes/settings-pages/taxes.php:87
 msgid "Apply tax when Billing Country is the same as Tax Rate"
@@ -4907,11 +4867,11 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/taxes.php:100
 msgid "Tax Rates"
-msgstr ""
+msgstr "Vergi Oranları"
 
 #: wpsc-admin/includes/settings-pages/taxes.php:145
 msgid "Add New Tax Rate"
-msgstr ""
+msgstr "Yeni Vergi Oranı ekle"
 
 #: wpsc-admin/includes/settings-pages/taxes.php:150
 msgid "Tax Bands"
@@ -4931,11 +4891,11 @@ msgstr ""
 
 #: wpsc-core/js/tinymce3/window.php:55
 msgid "Select Category: "
-msgstr "Pasirinkite kategoriją:"
+msgstr "Kategori Seçin:"
 
 #: wpsc-core/js/tinymce3/window.php:69
 msgid "Number of products per Page: "
-msgstr "Prekių kiekis puslapyje:"
+msgstr "Sayfa başına ürün sayısı:"
 
 #: wpsc-core/js/tinymce3/window.php:72
 msgid "Select the number of products you would like to display per page."
@@ -4963,7 +4923,7 @@ msgstr ""
 
 #: wpsc-core/js/tinymce3/window.php:123
 msgid "Number of Products"
-msgstr ""
+msgstr "Ürün sayısı"
 
 #: wpsc-core/js/tinymce3/window.php:126
 msgid "Number of Products to be displayed in the slider."
@@ -4987,7 +4947,7 @@ msgstr ""
 
 #: wpsc-core/js/tinymce3/window.php:158
 msgid "Select a Product"
-msgstr "Pasirinkite prekę"
+msgstr "Ürün Seç"
 
 #: wpsc-core/js/tinymce3/window.php:167
 msgid "Select the product you would like to create a shortcode for."
@@ -4999,7 +4959,7 @@ msgstr ""
 
 #: wpsc-core/js/tinymce3/window.php:177
 msgid "Add a buy now button"
-msgstr ""
+msgstr "Hemen al butonu ekle"
 
 #: wpsc-core/js/tinymce3/window.php:178
 msgid "This adds a paypal buy now button for the product selected, this will take your customer straight to PayPal."
@@ -5007,7 +4967,7 @@ msgstr ""
 
 #: wpsc-core/js/tinymce3/window.php:185
 msgid "Add an add to cart button"
-msgstr ""
+msgstr "Sepete ekle butonu ekle"
 
 #: wpsc-core/js/tinymce3/window.php:186
 msgid "This adds an add to cart button for the product selected."
@@ -5015,7 +4975,7 @@ msgstr ""
 
 #: wpsc-core/js/tinymce3/window.php:193
 msgid "Add product"
-msgstr "Pridėti prekę"
+msgstr "Ürün ekleyin"
 
 #: wpsc-core/js/tinymce3/window.php:194
 msgid "This will add the selected product to your page."
@@ -5024,12 +4984,12 @@ msgstr ""
 #: wpsc-core/wpsc-functions.php:306
 msgctxt "taxonomy general name"
 msgid "Product Tags"
-msgstr "Prekių žymos"
+msgstr "Ürün Etiketleri"
 
 #: wpsc-core/wpsc-functions.php:307
 msgctxt "taxonomy singular name"
 msgid "Product Tag"
-msgstr ""
+msgstr "Ürün Etiketi"
 
 #: wpsc-core/wpsc-functions.php:308
 msgid "Product Search Tags"
@@ -5037,19 +4997,19 @@ msgstr ""
 
 #: wpsc-core/wpsc-functions.php:309
 msgid "All Product Tags"
-msgstr ""
+msgstr "Tüm Ürün Etiketleri"
 
 #: wpsc-core/wpsc-functions.php:310
 msgid "Edit Tag"
-msgstr ""
+msgstr "Etiket Düzenle"
 
 #: wpsc-core/wpsc-functions.php:311
 msgid "Update Tag"
-msgstr ""
+msgstr "Etiketi Güncelle"
 
 #: wpsc-core/wpsc-functions.php:312
 msgid "Add new Product Tag"
-msgstr ""
+msgstr "Yeni ürün etiketi ekle"
 
 #: wpsc-core/wpsc-functions.php:313
 msgid "New Product Tag Name"
@@ -5058,7 +5018,7 @@ msgstr ""
 #: wpsc-core/wpsc-functions.php:345
 msgctxt "taxonomy general name"
 msgid "Variations"
-msgstr "Variantai"
+msgstr ""
 
 #: wpsc-core/wpsc-functions.php:346
 msgctxt "taxonomy singular name"
@@ -5099,7 +5059,7 @@ msgstr ""
 
 #: wpsc-core/wpsc-installer.php:745
 msgid "Your billing/contact details"
-msgstr "Kontaktiniai duomenys"
+msgstr ""
 
 #: wpsc-includes/ajax.functions.php:414
 msgid "Variation not in stock"
@@ -5110,7 +5070,7 @@ msgstr ""
 #: wpsc-theme/wpsc-products_page.php:161
 #: wpsc-includes/ajax.functions.php:417
 msgid "Product in stock"
-msgstr "Prekė yra sandėlyje"
+msgstr "Stoktaki Ürün"
 
 #: wpsc-includes/ajax.functions.php:536
 msgid "%s cannot be shipped to %s. To continue with your transaction please remove this product from the list below."
@@ -5118,11 +5078,11 @@ msgstr ""
 
 #: wpsc-includes/ajax.functions.php:948
 msgid "Invalid Image parameters"
-msgstr ""
+msgstr "Geçersiz resim parametreleri"
 
 #: wpsc-includes/form-display.functions.php:173
 msgid "File(s) attached: "
-msgstr "Prisegti failai:"
+msgstr ""
 
 #: wpsc-includes/form-display.functions.php:190
 msgid "There are no files attached to this product.  Upload a new file or select from other product files."
@@ -5130,7 +5090,7 @@ msgstr ""
 
 #: wpsc-includes/product-template.php:129
 msgid "Pages: "
-msgstr "Puslapiai:"
+msgstr "Sayfa:"
 
 #: wpsc-includes/product-template.php:405
 msgid " from %s"
@@ -5150,7 +5110,7 @@ msgstr ""
 
 #: wpsc-merchants/paypal-express.merchant.php:656
 msgid "Confirm Payment"
-msgstr ""
+msgstr "Ödemeyi Onayla"
 
 #: wpsc-merchants/paypal-pro.merchant.php:147
 msgid "There was a problem connecting to the payment gateway."
@@ -5162,7 +5122,7 @@ msgstr ""
 
 #: wpsc-shipping/ups_20.php:165
 msgid "Customer Type"
-msgstr ""
+msgstr "Müşteri Türü"
 
 #: wpsc-shipping/ups_20.php:220
 msgid "Show UPS negotiated rates"
@@ -5170,7 +5130,7 @@ msgstr ""
 
 #: wpsc-shipping/ups_20.php:254
 msgid "UPS Preferred Services"
-msgstr ""
+msgstr "UPS Tercihli Hizmetler"
 
 #: wpsc-shipping/ups_20.php:275
 msgid "All services used if no services selected"
@@ -5178,28 +5138,28 @@ msgstr ""
 
 #: wpsc-shipping/ups_20.php:279
 msgid "UPS Account #"
-msgstr ""
+msgstr "UPS # Hesabı"
 
 #: wpsc-shipping/ups_20.php:285
 msgid "UPS Username"
-msgstr ""
+msgstr "UPS Adı"
 
 #: wpsc-shipping/ups_20.php:291
 msgid "UPS Password"
-msgstr ""
+msgstr "UPS Şifresi"
 
 #: wpsc-shipping/ups_20.php:297
 msgid "UPS XML API Key"
-msgstr ""
+msgstr "UPS XML API Anahtarı"
 
 #: wpsc-shipping/ups_20.php:301
 msgid "Don't have an API login/ID ?"
-msgstr ""
+msgstr "API kullanıcı ID'niz yok mu?"
 
 #: wpsc-shipping/ups_20.php:302
 #: wpsc-shipping/usps_20.php:198
 msgid "Click Here"
-msgstr ""
+msgstr "Tıklayın"
 
 #: wpsc-shipping/ups_20.php:304
 msgid "* For Negotiated rates, you must enter a UPS account number and select \"Show UPS negotiated rates\" "
@@ -5208,7 +5168,7 @@ msgstr ""
 #: wpsc-taxes/controllers/taxes_controller.class.php:309
 #: wpsc-taxes/controllers/taxes_controller.class.php:320
 msgid "Disabled"
-msgstr ""
+msgstr "Etkin Değil"
 
 #: wpsc-taxes/controllers/taxes_controller.class.php:325
 msgid "No Tax Bands Setup. Set Tax Bands up in <a href=\"options-general.php?page=wpsc-settings&tab=taxes\">Settings &gt; Taxes</a>"
@@ -5225,32 +5185,32 @@ msgstr ""
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:326
 #: wpsc-admin/includes/purchlogs_upgrade.php:40
 msgid "Billing State"
-msgstr ""
+msgstr "Fatura için Ülke"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:638
 msgid "Purchase #"
-msgstr ""
+msgstr "Satın Al #"
 
 #: wpsc-theme/wpsc-single_product.php:95
 #: wpsc-theme/wpsc-grid_view.php:109
 #: wpsc-theme/wpsc-products_page.php:128
 msgid "Product Options"
-msgstr "Prekės parametrai"
+msgstr "Ürün Seçenekleri"
 
 #: wpsc-theme/wpsc-grid_view.php:131
 msgid "Sorry, sold out!"
-msgstr "Atsiprašome, išparduota!"
+msgstr ""
 
 #: wpsc-theme/wpsc-list_view.php:83
 #: wpsc-theme/wpsc-single_product.php:132
 #: wpsc-theme/wpsc-products_page.php:163
 msgid "Product not in stock"
-msgstr "Prekė išparduota"
+msgstr "Ürün stokta yok"
 
 #: wpsc-theme/wpsc-single_product.php:144
 #: wpsc-theme/wpsc-products_page.php:176
 msgid "You save"
-msgstr "Sutaupote"
+msgstr "Kazancınız"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:97
 msgid "Cost before shipping:"
@@ -5258,11 +5218,11 @@ msgstr ""
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:353
 msgid "Enter your email address"
-msgstr "Įveskite savo el. pašto adresą"
+msgstr "E-posta adresinizi girin"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:391
 msgid "How did you find us"
-msgstr "Kaip Jūs mus suradote"
+msgstr "Bize nasıl ulaştınız"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:394
 msgid "Word of mouth"
@@ -5274,7 +5234,7 @@ msgstr ""
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:396
 msgid "Internet"
-msgstr ""
+msgstr "İnternet"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:397
 msgid "Existing Customer"
@@ -5282,23 +5242,23 @@ msgstr ""
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:408
 msgid "Payment Type"
-msgstr "Mokėjimo būdas"
+msgstr "Ödeme Türü"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:497
 msgid "Purchase"
-msgstr "Pirkti"
+msgstr "Satın Al"
 
 #: wpsc-theme/wpsc-single_product.php:79
 msgid "Personalize Your Product"
-msgstr "Individualizuokite savo prekę"
+msgstr "Ürününüzü Kişiselleştirin"
 
 #: wpsc-theme/wpsc-user-log.php:16
 msgid "Purchase History"
-msgstr "Atlikti užsakymai"
+msgstr "Satınalma Geçmişi"
 
 #: wpsc-theme/wpsc-user-log.php:17
 msgid "Your Details"
-msgstr "Jūsų duomenys"
+msgstr "Bilgileriniz"
 
 #: wpsc-theme/wpsc-user-log.php:18
 msgid "Your Downloads"
@@ -5306,11 +5266,11 @@ msgstr ""
 
 #: wpsc-theme/wpsc-user-log.php:151
 msgid "Password:"
-msgstr "Slaptažodis:"
+msgstr "Şifre:"
 
 #: wpsc-theme/wpsc-user-log.php:157
 msgid "Remember me"
-msgstr "Prisiminti mane"
+msgstr "Beni hatırlat"
 
 #: wpsc-widgets/admin_menu_widget.php:18
 msgid "Admin Menu Widget"
@@ -5319,7 +5279,7 @@ msgstr ""
 #: wpsc-widgets/category_widget.php:153
 #: wpsc-widgets/latest_product_widget.php:105
 msgid "Height:"
-msgstr "Aukštis:"
+msgstr "Yükseklik:"
 
 #: wpsc-widgets/donations_widget.php:19
 msgid "Donations Widget"
@@ -5327,7 +5287,7 @@ msgstr ""
 
 #: wpsc-widgets/latest_product_widget.php:15
 msgid "Latest Products Widget"
-msgstr "Naujausių prekių blokelis"
+msgstr ""
 
 #: wpsc-widgets/price_range_widget.php:19
 msgid "Price Range Widget"
@@ -5335,11 +5295,11 @@ msgstr ""
 
 #: wpsc-widgets/shopping_cart_widget.php:19
 msgid "Shopping Cart Widget"
-msgstr "Pirkinių krepšelio blokelis"
+msgstr "Alışveriş Sepeti Gereci"
 
 #: wpsc-widgets/specials_widget.php:19
 msgid "Product Specials Widget"
-msgstr ""
+msgstr "Ürüne Özel Gereç"
 
 #: wpsc-widgets/specials_widget.php:195
 msgid "From"
@@ -5347,21 +5307,21 @@ msgstr ""
 
 #: wpsc-core/js/tinymce3/window.php:43
 msgid "Category"
-msgstr "Kategorija"
+msgstr "Katagori"
 
 #: wpsc-core/js/tinymce3/window.php:102
 #: wpsc-admin/display-upgrades.page.php:43
 msgid "Product Slider"
-msgstr "Prekių slinkiklis"
+msgstr ""
 
 #: wpsc-core/js/tinymce3/window.php:108
 msgid "Select Category"
-msgstr "Pasirinkite kategoriją"
+msgstr "Kategori Seçin"
 
 #: wpsc-core/js/tinymce3/window.php:58
 #: wpsc-core/js/tinymce3/window.php:111
 msgid "No Category"
-msgstr "Kategorijos nėra"
+msgstr "Kategori mevcut değil"
 
 #: wpsc-merchants/chronopay.php:449
 #: wpsc-merchants/paypal-standard.merchant.php:615
@@ -5375,16 +5335,16 @@ msgstr "Kategorijos nėra"
 #: wpsc-admin/includes/settings-pages/gateway.php:105
 #: wpsc-admin/includes/settings-pages/gateway.php:139
 msgid "Update &raquo;"
-msgstr "Atnaujinti &raquo;"
+msgstr ""
 
 #: wpsc-merchants/paypal-standard.merchant.php:170
 msgid "Your Subscription"
-msgstr "Jūsų prenumerata"
+msgstr ""
 
 #: wpsc-merchants/paypal-standard.merchant.php:580
 #: wpsc-merchants/paypal-express.merchant.php:293
 msgid "Currency Converter"
-msgstr "Valiutos keitiklis"
+msgstr "Döviz Çevirici"
 
 #: wpsc-merchants/paypal-standard.merchant.php:583
 msgid "Your website uses <strong>%s</strong>. This currency is not supported by PayPal, please  select a currency using the drop down menu below. Buyers on your site will still pay in your local currency however we will send the order through to Paypal using the currency you choose below."
@@ -5392,19 +5352,19 @@ msgstr ""
 
 #: wpsc-merchants/paypal-pro.merchant.php:327
 msgid "API Username:"
-msgstr ""
+msgstr "API Adı:"
 
 #: wpsc-merchants/paypal-pro.merchant.php:335
 msgid "API Password:"
-msgstr ""
+msgstr "API Şifresi:"
 
 #: wpsc-merchants/paypal-pro.merchant.php:343
 msgid "API Signature:"
-msgstr ""
+msgstr "API İmzası:"
 
 #: wpsc-merchants/paypal-pro.merchant.php:351
 msgid "Test Mode Enabled:"
-msgstr ""
+msgstr "Test Modu Etkin:"
 
 #: wpsc-merchants/testmode.merchant.php:46
 msgid "Enter the payment instructions that you wish to display to your customers when they make a purchase"
@@ -5421,12 +5381,12 @@ msgstr ""
 #: wpsc-theme/wpsc-shopping_cart_page.php:482
 #: wpsc-shipping/tablerate.php:50
 msgid "Total Price"
-msgstr "Iš viso"
+msgstr "Toplam fiyat"
 
 #: wpsc-shipping/tablerate.php:50
 #: wpsc-shipping/weightrate.php:49
 msgid "Shipping Price"
-msgstr "Pristatymo kaina"
+msgstr "Nakliye Fiyatı"
 
 #: wpsc-shipping/ups_20.php:104
 msgid "Your Packaging"
@@ -5434,11 +5394,11 @@ msgstr ""
 
 #: wpsc-shipping/ups_20.php:103
 msgid "UPS Letter"
-msgstr ""
+msgstr "UPS Mektubu"
 
 #: wpsc-shipping/ups_20.php:108
 msgid "UPS Express Box - Small"
-msgstr ""
+msgstr "UPS Express Kutusu - Küçük"
 
 #: wpsc-shipping/ups_20.php:109
 msgid "UPS Express Box - Medium"
@@ -5454,7 +5414,7 @@ msgstr ""
 
 #: wpsc-shipping/ups_20.php:106
 msgid "UPS Pak"
-msgstr ""
+msgstr "UPS Pak"
 
 #: wpsc-shipping/ups_20.php:113
 msgid "Destination Type"
@@ -5462,59 +5422,59 @@ msgstr ""
 
 #: wpsc-shipping/ups_20.php:124
 msgid "Residential Address"
-msgstr ""
+msgstr "İkamet Adresi"
 
 #: wpsc-shipping/ups_20.php:125
 msgid "Commercial Address"
-msgstr ""
+msgstr "İş Adresi"
 
 #: wpsc-shipping/ups_20.php:187
 msgid "Packaging"
-msgstr ""
+msgstr "Paketleme"
 
 #: wpsc-shipping/usps_20.php:190
 msgid "USPS ID"
-msgstr ""
+msgstr "USPS ID"
 
 #: wpsc-theme/wpsc-cart_widget.php:12
 #: wpsc-theme/wpsc-shopping_cart_page.php:18
 msgid "Product"
-msgstr "Prekė"
+msgstr "Ürün"
 
 #: wpsc-theme/wpsc-cart_widget.php:13
 msgid "Qty"
-msgstr "Kiekis"
+msgstr "Mik"
 
 #: wpsc-theme/wpsc-cart_widget.php:58
 msgid "Postage &amp; Tax "
-msgstr "Pristatymas"
+msgstr ""
 
 #: wpsc-includes/display.functions.php:153
 msgid "Go to Checkout"
-msgstr "Apmokėti"
+msgstr "onaya gidiniz"
 
 #: wpsc-theme/wpsc-cart_widget.php:76
 msgid "Your shopping cart is empty"
-msgstr "Jūsų prekių krepšelis tuščias"
+msgstr "Alisveris sepetini bos"
 
 #: wpsc-theme/wpsc-cart_widget.php:77
 msgid "Visit the shop"
-msgstr "Eiti į prekių puslapį"
+msgstr "dükkani ziyaret edin"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1171
 msgid "Page Number position"
-msgstr ""
+msgstr "Sayfa numarası yeri"
 
 #: wpsc-theme/wpsc-list_view.php:132
 #: wpsc-theme/wpsc-single_product.php:187
 msgid "This product has sold out."
-msgstr "Prekė išparduota."
+msgstr "This product has sold out."
 
 #: wpsc-theme/wpsc-list_view.php:145
 #: wpsc-theme/wpsc-grid_view.php:158
 #: wpsc-theme/wpsc-products_page.php:230
 msgid "There are no products in this group."
-msgstr "Šio grupėje prekių nėra."
+msgstr "Bu grupta hiçbir ürün bulunmamaktadır."
 
 #: wpsc-theme/wpsc-list_view.php:122
 #: wpsc-theme/wpsc-single_product.php:177
@@ -5523,45 +5483,45 @@ msgstr "Šio grupėje prekių nėra."
 #: wpsc-includes/product-template.php:734
 #: wpsc-includes/display.functions.php:178
 msgid "Buy Now"
-msgstr "Pirkti dabar"
+msgstr ""
 
 #: wpsc-theme/wpsc-list_view.php:128
 #: wpsc-theme/wpsc-single_product.php:183
 #: wpsc-theme/wpsc-grid_view.php:138
 #: wpsc-theme/wpsc-products_page.php:199
 msgid "Updating cart..."
-msgstr "Krepšelis atnaujinamas..."
+msgstr "Sepetiniz güncelleniyor ..."
 
 #: wpsc-theme/wpsc-single_product.php:136
 #: wpsc-theme/wpsc-products_page.php:167
 #: wpsc-widgets/donations_widget.php:164
 msgid "Donation"
-msgstr ""
+msgstr "Bağış"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:15
 msgid "Please review your order"
-msgstr "Peržiūrėkite savo užsakymą"
+msgstr ""
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:60
 #: wpsc-theme/wpsc-shopping_cart_page.php:92
 msgid "Update"
-msgstr "Atnaujinti"
+msgstr "Onay"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:73
 msgid "Remove"
-msgstr "Pašalinti"
+msgstr "Yer degistir"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:85
 msgid "Coupon is not valid."
-msgstr "Kuponas negalioja."
+msgstr "Kupon geçerli değil."
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:123
 msgid "Calculate Shipping Price"
-msgstr "Apskaičiuoti pristatymo kainą"
+msgstr "Kargonun gidecegi ülkeyi seçiniz:"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:127
 msgid "Please choose a country below to calculate your shipping costs"
-msgstr "Pasirinkite šalį, kad galėtume apskaičiuoti pristatymo kainą"
+msgstr ""
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:135
 msgid "Please provide a Zipcode and click Calculate in order to continue."
@@ -5573,33 +5533,33 @@ msgstr ""
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:252
 msgid "Username"
-msgstr "Vartotojo vardas"
+msgstr "Kullanıcı Adı"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:255
 msgid "Password"
-msgstr "Slaptažodis"
+msgstr "Şifre"
 
 #: wpsc-admin/includes/settings-pages/admin.php:102
 msgid "Terms and Conditions"
-msgstr "taisyklėmis ir sąlygomis "
+msgstr "Ifade ve sartlar"
 
 #: wpsc-theme/wpsc-single_product.php:80
 msgid "Complete this form to include a personalized message with your purchase."
-msgstr "Užpildykite formą apačioje, jei norite pridėti papildomą žinutę prie savo užsakymo."
+msgstr ""
 
 #: wpsc-theme/wpsc-single_product.php:88
 msgid "Upload a File"
-msgstr "Įkelti failą"
+msgstr "Bir Dosya Yükle"
 
 #: wpsc-updates/updating_tasks.php:4
 msgid ""
 "Your purchase from %shop_name% has just been dispatched. It should arrive soon. To keep track of your products status a tracking id has been attached. \\r\\n"
 " your tracking id is: %trackid%"
-msgstr "Jūsų prekės iš %shop_name% buvo išsiųstos. Jas turėtumėte gauti kelių dienų bėgyje. Tam kad galėtumėte sekti užsakymo eigą mes jums sukūrėme prekių sekimo kodą. Prekių sekimo kodas: %trackid%"
+msgstr ""
 
 #: wpsc-updates/updating_tasks.php:7
 msgid "Your Order from %shop_name% has been dispatched"
-msgstr "Jūsų užsakymas iš %shop_name% buvo išsiųstas."
+msgstr ""
 
 #: wpsc-widgets/admin_menu_widget.php:21
 #: wpsc-widgets/admin_menu_widget.php:41
@@ -5608,7 +5568,7 @@ msgstr ""
 
 #: wpsc-admin/display-items.page.php:34
 msgid "Categories"
-msgstr "Kategorijos"
+msgstr "Kategoriler"
 
 #: wpsc-widgets/category_widget.php:128
 #: wpsc-widgets/donations_widget.php:95
@@ -5619,7 +5579,7 @@ msgstr "Kategorijos"
 #: wpsc-widgets/shopping_cart_widget.php:137
 #: wpsc-widgets/product_tag_widget.php:84
 msgid "Title:"
-msgstr "Pavadinimas:"
+msgstr "Başlık:"
 
 #: wpsc-widgets/category_widget.php:17
 msgid "Product Grouping Widget"
@@ -5628,36 +5588,36 @@ msgstr ""
 #: wpsc-widgets/category_widget.php:19
 #: wpsc-widgets/category_widget.php:34
 msgid "Product Categories"
-msgstr "Prekių kategorijos"
+msgstr "Ürün Kategorileri"
 
 #: wpsc-widgets/latest_product_widget.php:16
 #: wpsc-widgets/latest_product_widget.php:31
 msgid "Latest Products"
-msgstr "Naujausios prekės"
+msgstr "Son Ürünler"
 
 #: wpsc-widgets/latest_product_widget.php:92
 #: wpsc-widgets/specials_widget.php:99
 msgid "Number of products to show:"
-msgstr "Rodomas prekių kiekis:"
+msgstr "Gösterilecek ürün adedi:"
 
 #: wpsc-widgets/price_range_widget.php:22
 #: wpsc-widgets/price_range_widget.php:41
 msgid "Price Range"
-msgstr ""
+msgstr "Fiyat Aralığı"
 
 #: wpsc-widgets/price_range_widget.php:136
 msgid "Show All"
-msgstr "Rodyti viską"
+msgstr "Tümünü göster"
 
 #: wpsc-widgets/product_tag_widget.php:22
 #: wpsc-widgets/product_tag_widget.php:41
 msgid "Product Tags"
-msgstr "Prekių žymos"
+msgstr "Ürün Etiketleri"
 
 #: wpsc-widgets/shopping_cart_widget.php:78
 #: wpsc-widgets/shopping_cart_widget.php:83
 msgid "Loading..."
-msgstr "Kraunasi..."
+msgstr "Yükleniyor ..."
 
 #: wpsc-widgets/specials_widget.php:22
 #: wpsc-widgets/specials_widget.php:41
@@ -5667,7 +5627,7 @@ msgstr ""
 #: wpsc-core/js/tinymce3/window.php:44
 #: wpsc-core/wpsc-functions.php:277
 msgid "Products"
-msgstr "Prekės"
+msgstr "Ürünler"
 
 #: wpsc-admin/display-sales-logs.php:37
 msgid "Sales"
@@ -5675,15 +5635,15 @@ msgstr ""
 
 #: wpsc-admin/admin.php:295
 msgid "Variations"
-msgstr ""
+msgstr "Fiyat farki seçenekleri"
 
 #: wpsc-admin/display-upgrades.page.php:56
 msgid "Upgrades"
-msgstr ""
+msgstr "Yükseltmeler"
 
 #: wpsc-admin/admin.php:566
 msgid "Sales by Quarter"
-msgstr "Pardavimai per ketvirtį"
+msgstr "Çeyrek Dönem Satışları"
 
 #: wpsc-admin/ajax-and-init.php:547
 msgid "The administrator has unlocked your file"
@@ -5699,24 +5659,24 @@ msgstr ""
 
 #: wpsc-admin/includes/save-data.functions.php:71
 msgid "Image"
-msgstr "Paveikslėlis"
+msgstr "Resim"
 
 #: wpsc-admin/display-sales-logs.php:289
 msgid "Bulk Actions"
-msgstr "Veiksmai"
+msgstr "Çoklu Eylemler"
 
 #: wpsc-admin/includes/settings-pages/import.php:52
 msgid "Publish"
-msgstr "Skelbti"
+msgstr "Yayımla"
 
 #: wpsc-admin/includes/settings-pages/import.php:53
 msgid "Draft"
-msgstr "Juodraštis"
+msgstr "Taslak"
 
 #: wpsc-admin/includes/purchlogs_upgrade.php:100
 #: wpsc-admin/display-sales-logs.php:298
 msgid "Apply"
-msgstr "Pritaikyti"
+msgstr ""
 
 #: wpsc-admin/display-options-settings.page.php:195
 msgid "To configure a shipping module select one on the left."
@@ -5724,88 +5684,88 @@ msgstr ""
 
 #: wpsc-admin/display-sales-logs.php:162
 msgid "Shipping Options"
-msgstr ""
+msgstr "Nakliye Seçenekleri"
 
 #: wpsc-admin/display-sales-logs.php:165
 msgid "Shipping Method:"
-msgstr "Pristatymo būdas:"
+msgstr "Nakliye Yöntemi:"
 
 #: wpsc-admin/display-sales-logs.php:166
 msgid "Shipping Option:"
-msgstr ""
+msgstr "Nakliye Seçeneği:"
 
 #: wpsc-admin/display-sales-logs.php:168
 msgid "Tracking ID:"
-msgstr "Sekimo kodas:"
+msgstr ""
 
 #: wpsc-admin/display-sales-logs.php:169
 msgid "Shipping Status:"
-msgstr "Pristatymo būsena:"
+msgstr "Gönderi Durumu:"
 
 #: wpsc-admin/display-sales-logs.php:170
 msgid "Track History:"
-msgstr "Sekimo istorija:"
+msgstr ""
 
 #: wpsc-admin/display-sales-logs.php:177
 msgid "Billing Details"
-msgstr ""
+msgstr "Fatura Ayrıntıları"
 
 #: wpsc-admin/display-sales-logs.php:178
 msgid "Purchase Log Date:"
-msgstr "Pirkimo data:"
+msgstr "Satış Kaydı Tarihi:"
 
 #: wpsc-admin/display-sales-logs.php:179
 msgid "Purchase Number:"
-msgstr "Pirkimo numeris:"
+msgstr ""
 
 #: wpsc-admin/display-sales-logs.php:180
 msgid "Buyers Name:"
-msgstr "Pirkėjo vardas:"
+msgstr "Alıcı Adı:"
 
 #: wpsc-admin/display-sales-logs.php:181
 msgid "Address:"
-msgstr "Adresas:"
+msgstr "Adres:"
 
 #: wpsc-admin/display-sales-logs.php:183
 msgid "Phone:"
-msgstr "Telefonas:"
+msgstr "Telefon:"
 
 #: wpsc-admin/display-sales-logs.php:184
 msgid "Email:"
-msgstr "El. paštas:"
+msgstr "E-posta:"
 
 #: wpsc-admin/display-sales-logs.php:185
 msgid "Payment Method:"
-msgstr "Mokėjimo būdas:"
+msgstr "Ödeme Yöntemi:"
 
 #: wpsc-admin/display-sales-logs.php:187
 msgid "How User Found Us:"
-msgstr "Kaip klientas mus atrado:"
+msgstr "Kullanıcı bize nasıl ulaştı:"
 
 #: wpsc-admin/display-sales-logs.php:194
 msgid "Items Ordered"
-msgstr "Užsakytos prekės"
+msgstr "Sipariş Edilen Ürünler"
 
 #: wpsc-admin/display-sales-logs.php:241
 msgid "Order Status:"
-msgstr "Užsakymo būsena:"
+msgstr "Sipariş Durumu:"
 
 #: wpsc-admin/display-sales-logs.php:261
 msgid "Actions"
-msgstr "Veiksmai"
+msgstr ""
 
 #: wpsc-admin/display-sales-logs.php:266
 msgid "View Packing Slip"
-msgstr "Pakavimo etiketė"
+msgstr ""
 
 #: wpsc-admin/display-sales-logs.php:268
 msgid "Resend Receipt to Buyer"
-msgstr "Iš naujo išsiųsti kvitą pirkėjui"
+msgstr ""
 
 #: wpsc-admin/display-sales-logs.php:270
 #: wpsc-admin/display-sales-logs.php:432
 msgid "Delete this log"
-msgstr "Ištrinti šį užsakymą"
+msgstr "Bu logu sil"
 
 #: wpsc-admin/display-sales-logs.php:270
 #: wpsc-admin/display-sales-logs.php:432
@@ -5820,28 +5780,28 @@ msgstr ""
 
 #: wpsc-admin/display-sales-logs.php:272
 msgid "Go Back"
-msgstr "Atgal"
+msgstr "Geri git"
 
 #: wpsc-admin/includes/save-data.functions.php:273
 #: wpsc-admin/includes/save-data.functions.php:496
 msgid "Checkout Settings"
-msgstr ""
+msgstr "Ödeme Ayarları"
 
 #: wpsc-admin/display-sales-logs.php:300
 msgid "View:"
-msgstr "Rodymas:"
+msgstr ""
 
 #: wpsc-admin/display-sales-logs.php:349
 msgid "Filter"
-msgstr "Filtras"
+msgstr "Filtre"
 
 #: wpsc-admin/display-sales-logs.php:369
 msgid "Total:"
-msgstr "Iš viso:"
+msgstr "Toplam:"
 
 #: wpsc-admin/display-sales-logs.php:383
 msgid "Download CSV"
-msgstr ""
+msgstr "CSV indir"
 
 #: wpsc-admin/display-sales-logs.php:393
 msgid ""
@@ -5851,7 +5811,7 @@ msgstr ""
 
 #: wpsc-admin/display-sales-logs.php:460
 msgid "Search Logs"
-msgstr ""
+msgstr "Arama Kayıtları"
 
 #: wpsc-admin/display-upgrades.page.php:9
 msgid "WP e-Commerce Upgrades"
@@ -5863,13 +5823,13 @@ msgstr ""
 
 #: wpsc-admin/display-upgrades.page.php:15
 msgid "Pure Gold"
-msgstr ""
+msgstr "Saf altın"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:808
 #: wpsc-admin/includes/settings-pages/presentation.php:813
 #: wpsc-admin/display-upgrades.page.php:22
 msgid "DropShop"
-msgstr ""
+msgstr "DropShop"
 
 #: wpsc-admin/display-upgrades.page.php:29
 msgid "MP3 Player"
@@ -5886,7 +5846,7 @@ msgstr ""
 #: wpsc-admin/display-upgrades.page.php:77
 #: wpsc-admin/display-upgrades.page.php:86
 msgid "API Key Reset"
-msgstr ""
+msgstr "API Anahtarını Sıfırla"
 
 #: wpsc-admin/display-upgrades.page.php:80
 msgid "Enter your API name and key to release it from an old site that you no longer use."
@@ -5894,7 +5854,7 @@ msgstr ""
 
 #: wpsc-admin/display-upgrades.page.php:97
 msgid "Reset API Key"
-msgstr ""
+msgstr "API Anahtarını Sıfırla"
 
 #: wpsc-admin/display-upgrades.page.php:59
 msgid "For more information visit our documentation page."
@@ -5910,11 +5870,11 @@ msgstr ""
 
 #: wpsc-core/wpsc-functions.php:270
 msgid "Edit Product"
-msgstr "Redaguoti prekę"
+msgstr "Ürün Düzenle"
 
 #: wpsc-admin/includes/settings-pages/import.php:78
 msgid "Product Name"
-msgstr ""
+msgstr "Ürün adi"
 
 #: wpsc-admin/includes/display-items-functions.php:249
 msgid "Stock Keeping Unit"
@@ -5923,7 +5883,7 @@ msgstr ""
 #: wpsc-admin/includes/settings-pages/import.php:80
 #: wpsc-admin/admin.php:306
 msgid "Additional Description"
-msgstr ""
+msgstr "Ilave tanim"
 
 #: wpsc-admin/includes/display-items-functions.php:192
 msgid "This is a donation, checking this box populates the donations widget."
@@ -5931,11 +5891,11 @@ msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:195
 msgid "Table Rate Price"
-msgstr "Kuo daugiau perki, tuo mažiau moki (arba atvirkščiai)"
+msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:293
 msgid "Stock Qty"
-msgstr "Kiekis"
+msgstr "Stok Miktarı"
 
 #: wpsc-admin/includes/settings-pages/import.php:83
 #: wpsc-admin/includes/display-items-functions.php:569
@@ -5943,7 +5903,7 @@ msgstr "Kiekis"
 #: wpsc-admin/display-items.page.php:29
 #: wpsc-admin/display-items.page.php:58
 msgid "Weight"
-msgstr "Svoris"
+msgstr "Ağırlık"
 
 #: wpsc-admin/includes/display-items-functions.php:626
 msgid "Flat Rate Settings"
@@ -5951,11 +5911,11 @@ msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:631
 msgid "Local Shipping Fee"
-msgstr ""
+msgstr "Yerel kargo ücreti"
 
 #: wpsc-admin/includes/display-items-functions.php:640
 msgid "International Shipping Fee"
-msgstr ""
+msgstr "Uluslararasi kargo ücreti"
 
 #: wpsc-admin/includes/display-items-functions.php:686
 msgid "Custom Meta"
@@ -5968,11 +5928,11 @@ msgstr ""
 #: wpsc-admin/includes/display-items-functions.php:697
 #: wpsc-admin/admin-form-functions.php:77
 msgid "Value"
-msgstr ""
+msgstr "Değer"
 
 #: wpsc-admin/includes/display-items-functions.php:721
 msgid "These notes are only available here."
-msgstr ""
+msgstr "Bu notlar sadece burada geçerlidir."
 
 #: wpsc-admin/includes/display-items-functions.php:726
 msgid "Personalisation Options"
@@ -5984,19 +5944,19 @@ msgstr ""
 
 #: wpsc-admin/includes/display-items-functions.php:795
 msgid "External Link"
-msgstr ""
+msgstr "Dış Bağlantı"
 
 #: wpsc-admin/admin.php:308
 msgid "Product Images"
-msgstr ""
+msgstr "Ürün resimleri"
 
 #: wpsc-admin/admin.php:307
 msgid "Product Download"
-msgstr ""
+msgstr "Ürün indir"
 
 #: wpsc-admin/includes/display-items-functions.php:846
 msgid "Max Upload Size"
-msgstr ""
+msgstr "Azami Yükleme Boyutu"
 
 #: wpsc-admin/includes/display-items-functions.php:852
 msgid "Select an MP3 file to upload as a preview"
@@ -6004,7 +5964,7 @@ msgstr ""
 
 #: wpsc-admin/includes/products.php:174
 msgid "Preview"
-msgstr ""
+msgstr "Öngörünüm"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:976
 msgid "Thumbnail Settings"
@@ -6030,23 +5990,23 @@ msgstr ""
 #: wpsc-includes/purchaselogs.class.php:325
 #: wpsc-includes/purchaselogs.class.php:864
 msgid "N/A"
-msgstr "nenustatyta"
+msgstr "N / A"
 
 #: wpsc-admin/includes/product-functions.php:435
 msgid "Could not update product in the database"
-msgstr ""
+msgstr "Veritabanında ürün güncellemesi yapılamadı"
 
 #: wpsc-admin/includes/product-functions.php:452
 msgid "Could not insert product into the database"
-msgstr ""
+msgstr "Ürün veritabanına eklenemedi"
 
 #: wpsc-admin/includes/settings-pages/admin.php:7
 msgid "Admin Settings"
-msgstr ""
+msgstr "Yönetici Ayarları"
 
 #: wpsc-admin/includes/settings-pages/admin.php:13
 msgid "Max downloads per file"
-msgstr ""
+msgstr "Bir dosyanin en fazla indirilme siniri"
 
 #: wpsc-admin/includes/settings-pages/admin.php:35
 msgid "Lock downloads to IP address"
@@ -6062,7 +6022,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/admin.php:76
 msgid "Purchase Log Email"
-msgstr ""
+msgstr "Alisveris kayir emaili"
 
 #: wpsc-admin/includes/settings-pages/admin.php:84
 msgid "Purchase Receipt - Reply Address"
@@ -6074,11 +6034,11 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/admin.php:110
 msgid "Custom Messages"
-msgstr ""
+msgstr "Özel Mesajlar"
 
 #: wpsc-admin/includes/settings-pages/admin.php:113
 msgid "Tags can be used"
-msgstr ""
+msgstr "Kullanılabilir etiketler"
 
 #: wpsc-admin/includes/settings-pages/admin.php:134
 msgid "Admin Report"
@@ -6094,7 +6054,7 @@ msgstr ""
 
 #: wpsc-admin/display-debug.page.php:42
 msgid "Update Page URLs"
-msgstr ""
+msgstr "Sayfa URL'lerini Güncelle"
 
 #: wpsc-admin/display-debug.page.php:45
 msgid "Fix Product Group Permalinks"
@@ -6114,7 +6074,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/checkout.php:112
 msgid "Here you can customise the forms to be displayed in your checkout page. The checkout page is where you collect important user information that will show up in your purchase logs i.e. the buyers address, and name..."
-msgstr ""
+msgstr "Görünen onaylama sayfasini buradan ayarlayabilirsiniz"
 
 #: wpsc-admin/includes/settings-pages/checkout.php:208
 msgid "This will be the Email address that the Purchase Reciept is sent to."
@@ -6122,17 +6082,17 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/checkout.php:226
 msgid "Add New Form Field"
-msgstr ""
+msgstr "Forma yeni alan ekle"
 
 #: wpsc-admin/includes/settings-pages/gateway.php:40
 msgid "Please Select A Payment Gateway"
-msgstr ""
+msgstr "Ödeme yönetimi seçiniz Lütfen"
 
 #: wpsc-admin/includes/settings-pages/general.php:8
 #: wpsc-admin/includes/settings-pages/shipping.php:58
 #: wpsc-admin/includes/settings-pages/gateway.php:68
 msgid "General Settings"
-msgstr ""
+msgstr "Genel Ayarlar"
 
 #: wpsc-admin/includes/settings-pages/gateway.php:70
 msgid "Activate the payment gateways that you want to make available to your customers by selecting them below."
@@ -6140,11 +6100,11 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/gateway.php:110
 msgid "We Recommend"
-msgstr ""
+msgstr "Tavsiyemiz"
 
 #: wpsc-admin/display-options-settings.page.php:224
 msgid "Display Name"
-msgstr ""
+msgstr "İsmi Göster"
 
 #: wpsc-admin/display-options-settings.page.php:254
 msgid "The text that people see when making a purchase"
@@ -6152,7 +6112,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/general.php:15
 msgid "Base Country/Region"
-msgstr ""
+msgstr "Daimi ülke"
 
 #: wpsc-admin/includes/settings-pages/general.php:43
 msgid "Select your primary business location."
@@ -6160,35 +6120,35 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/taxes.php:12
 msgid "Tax Settings"
-msgstr ""
+msgstr "Vergi Ayarları"
 
 #: wpsc-admin/includes/settings-pages/general.php:82
 msgid "Currency Settings"
-msgstr ""
+msgstr "Geçerli ayarlar"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:163
 msgid "Show All Products"
-msgstr "Rodyti visas prekes"
+msgstr "Tüm Ürünleri Göster"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:216
 msgid "Button Settings"
-msgstr ""
+msgstr "Düğme Ayarları"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:220
 msgid "Button Type"
-msgstr ""
+msgstr "Buton Türü"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:252
 msgid "Hide \"Add to cart\" button"
-msgstr ""
+msgstr "\"Sepete Ekle\" butonunu gizle"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:274
 msgid "Product Settings"
-msgstr ""
+msgstr "Ürün Ayarları"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:318
 msgid "Display Fancy Purchase Notifications"
-msgstr ""
+msgstr "İmgeli Satınalma Bildirimlerini Göster"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:364
 msgid "Disable link in Title"
@@ -6204,7 +6164,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:417
 msgid "Product Page Settings"
-msgstr ""
+msgstr "Ürün Sayfası Ayarları"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:420
 msgid "Product Display"
@@ -6216,11 +6176,11 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:507
 msgid "Products Per Row"
-msgstr ""
+msgstr "Satır Başına Ürün Sayısı"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:511
 msgid "Show images only"
-msgstr ""
+msgstr "Sadece resimleri göster"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:519
 msgid "Display Description"
@@ -6228,7 +6188,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:523
 msgid "Display \"Add To Cart\" Button"
-msgstr ""
+msgstr "\"Add To Cart\" Butonunu Göster"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:527
 msgid "Display \"More Details\" Button"
@@ -6236,15 +6196,15 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:576
 msgid "Sort Product By"
-msgstr ""
+msgstr "Ürünlere Göre Sırala"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:587
 msgid "Time Uploaded"
-msgstr ""
+msgstr "Yükleme Süresi"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:593
 msgid "Show Breadcrumbs"
-msgstr ""
+msgstr "Breadcrumbs'ı Göster"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:618
 msgid "Product Groups/Products Display"
@@ -6260,7 +6220,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:667
 msgid "Show Search"
-msgstr ""
+msgstr "Aramayı Göster"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:708
 msgid "Show Advanced Search"
@@ -6268,7 +6228,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:711
 msgid "Use Live Search"
-msgstr ""
+msgstr "Anında Arama Özelliğini Kullanın"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:721
 msgid "Replace Page Title With Product/Category Name"
@@ -6276,21 +6236,21 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:765
 msgid "Shopping Cart Settings"
-msgstr ""
+msgstr "Alışveriş Sepeti Ayarları"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:794
 msgid "Page"
-msgstr ""
+msgstr "sayfa"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:798
 #: wpsc-admin/includes/settings-pages/presentation.php:802
 msgid "Widget"
-msgstr ""
+msgstr "pencere"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:802
 #: wpsc-admin/includes/settings-pages/presentation.php:812
 msgid "You need to enable the widgets plugin to use this"
-msgstr ""
+msgstr "bunun için geçerli bir pencerenizin olmasi gerekir"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:812
 #: wpsc-admin/includes/settings-pages/presentation.php:813
@@ -6299,7 +6259,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:818
 msgid "Manual"
-msgstr ""
+msgstr "Elle"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:827
 msgid "Show Dropshop on every page"
@@ -6315,7 +6275,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:838
 msgid "Use dark Dropshop style"
-msgstr ""
+msgstr "Dark Dropshop stili kullanın"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:841
 msgid "Crafty"
@@ -6333,16 +6293,16 @@ msgstr ""
 #: wpsc-admin/includes/settings-pages/presentation.php:981
 #: wpsc-admin/includes/display-items-functions.php:1010
 msgid "Default Product Thumbnail Size"
-msgstr ""
+msgstr "Varsayilan ürün resimcik boyutu"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:990
 msgid "Default Product Group Thumbnail Size"
-msgstr ""
+msgstr "varsayilan katagori resimcik boyutu"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:999
 #: wpsc-admin/includes/display-items-functions.php:1010
 msgid "Single Product Image Size"
-msgstr ""
+msgstr "Tek Ürün Resim Boyutu"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1099
 msgid "Show Thumbnail Gallery"
@@ -6354,7 +6314,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1138
 msgid "Pagination settings"
-msgstr ""
+msgstr "Sayfalama ayarları"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1142
 msgid "Use Pagination"
@@ -6362,27 +6322,27 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1164
 msgid "number of products to show per page"
-msgstr ""
+msgstr "sayfa başına gösterilecek ürün adedi"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1176
 msgid "Top"
-msgstr ""
+msgstr "Üst"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1179
 msgid "Bottom"
-msgstr ""
+msgstr "Alt"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1182
 msgid "Both"
-msgstr ""
+msgstr "Her ikisi"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1189
 msgid "Comment Settings"
-msgstr ""
+msgstr "Yorum Ayarları"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1193
 msgid "Use IntenseDebate Comments"
-msgstr ""
+msgstr "IntenseDebate Comments'i Kullanın"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:1217
 msgid "IntenseDebate Account ID"
@@ -6418,11 +6378,11 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/shipping.php:126
 msgid "ShipWire Email"
-msgstr ""
+msgstr "ShipWire E-posta"
 
 #: wpsc-admin/includes/settings-pages/shipping.php:127
 msgid "ShipWire Password"
-msgstr ""
+msgstr "ShipWire Şifresi"
 
 #: wpsc-admin/includes/settings-pages/shipping.php:135
 msgid "Enable Free Shipping Discount"
@@ -6430,7 +6390,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/shipping.php:186
 msgid "Shipping Modules"
-msgstr ""
+msgstr "Gönderi Modülleri"
 
 #: wpsc-admin/includes/settings-pages/shipping.php:194
 msgid "Internal Shipping Calculators"
@@ -6446,7 +6406,7 @@ msgstr ""
 
 #: wpsc-includes/ajax.functions.php:79
 msgid "You just added \"[product_name]\" to your cart."
-msgstr "\"[product_name]\" sėkmingai pridėta į krepšelį."
+msgstr ""
 
 #: wpsc-includes/ajax.functions.php:82
 msgid "Sorry, but you cannot add zero items to your cart"
@@ -6458,32 +6418,32 @@ msgstr ""
 
 #: wpsc-includes/ajax.functions.php:522
 msgid "Please agree to the terms and conditions, otherwise we cannot process your order."
-msgstr "Norėdami tęsti apsipirkimą turite sutikti su taisyklėmis ir sąlygomis."
+msgstr ""
 
 #: wpsc-includes/ajax.functions.php:559
 msgid "Please enter a Zipcode and click calculate to proceed"
-msgstr ""
+msgstr "Bir Posta Kodu girin ve ardından hesaplamak için devam edin"
 
 #: wpsc-admin/admin-form-functions.php:376
 #: wpsc-includes/checkout.class.php:145
 msgid "Tax"
-msgstr ""
+msgstr "Vergi"
 
 #: wpsc-includes/display.functions.php:83
 msgid "People who bought this item also bought"
-msgstr ""
+msgstr "Bu ürünü satın alanlar ayrıca başka ürünler de satın aldı:"
 
 #: wpsc-includes/display.functions.php:134
 msgid "Updating"
-msgstr ""
+msgstr "Güncelleniyor"
 
 #: wpsc-includes/display.functions.php:154
 msgid "Continue Shopping"
-msgstr ""
+msgstr "Alışverişe Devam"
 
 #: wpsc-admin/ajax-and-init.php:1091
 msgid "Choose a downloadable file for this product:"
-msgstr ""
+msgstr "Bu ürün için indirilebilir bir dosya seçin:"
 
 #: wpsc-includes/form-display.functions.php:209
 msgid "Choose a downloadable file for this variation"
@@ -6492,7 +6452,7 @@ msgstr ""
 #: wpsc-core/js/tinymce3/window.php:161
 #: wpsc-includes/form-display.functions.php:215
 msgid "No Product"
-msgstr ""
+msgstr "Ürün Yok"
 
 #: wpsc-includes/misc.functions.php:82
 msgid "<strong>ERROR</strong>: This email is already registered, please choose another one."
@@ -6500,7 +6460,7 @@ msgstr ""
 
 #: wpsc-includes/processing.functions.php:296
 msgid "This product has no available stock"
-msgstr ""
+msgstr "Bu ürün stoklarda mevcut değil"
 
 #: wpsc-includes/purchaselogs.class.php:565
 msgid "Release downloads locked to this IP address %s"
@@ -6512,7 +6472,7 @@ msgstr ""
 
 #: wpsc-includes/upgrades.php:122
 msgid "Visit upgrade homepage"
-msgstr ""
+msgstr "Ürün yükseltme sayfasını ziyaret et"
 
 #: wpsc-includes/upgrades.php:127
 msgid "Visit author homepage"
@@ -6527,7 +6487,7 @@ msgstr ""
 #: wpsc-admin/display-items.page.php:43
 #: wpsc-admin/display-items.page.php:59
 msgid "Stock"
-msgstr "Kiekis"
+msgstr "Stok"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:470
 #: wpsc-admin/includes/settings-pages/presentation.php:581
@@ -6542,12 +6502,12 @@ msgstr "Kiekis"
 #: wpsc-admin/display-sales-logs.php:135
 #: wpsc-taxes/controllers/taxes_controller.class.php:527
 msgid "Name"
-msgstr "Pavadinimas"
+msgstr "Isim"
 
 #: wpsc-admin/includes/settings-pages/import.php:79
 #: wpsc-admin/includes/display-items-functions.php:708
 msgid "Description"
-msgstr ""
+msgstr "Tarif"
 
 #: wpsc-admin/includes/save-data.functions.php:222
 #: wpsc-admin/includes/save-data.functions.php:424
@@ -6557,7 +6517,7 @@ msgstr ""
 #: wpsc-admin/includes/settings-pages/presentation.php:1127
 #: wpsc-admin/includes/display-items-functions.php:584
 msgid "Height"
-msgstr ""
+msgstr "Yükseklik"
 
 #: wpsc-admin/includes/save-data.functions.php:221
 #: wpsc-admin/includes/save-data.functions.php:423
@@ -6567,11 +6527,11 @@ msgstr ""
 #: wpsc-admin/includes/settings-pages/presentation.php:1126
 #: wpsc-admin/includes/display-items-functions.php:597
 msgid "Width"
-msgstr ""
+msgstr "En"
 
 #: wpsc-admin/includes/save-data.functions.php:413
 msgid "Delete Image"
-msgstr ""
+msgstr "Görüntüyü Sil"
 
 #: wpsc-admin/includes/save-data.functions.php:242
 #: wpsc-admin/includes/save-data.functions.php:464
@@ -6597,19 +6557,19 @@ msgstr ""
 #: wpsc-admin/includes/save-data.functions.php:157
 #: wpsc-admin/includes/save-data.functions.php:354
 msgid "Catalog View"
-msgstr ""
+msgstr "Katalog Görünümü"
 
 #: wpsc-admin/includes/save-data.functions.php:193
 #: wpsc-admin/includes/save-data.functions.php:390
 #: wpsc-includes/form-display.functions.php:9
 msgid "Please select"
-msgstr ""
+msgstr "Lütfen seçin"
 
 #: wpsc-admin/includes/save-data.functions.php:194
 #: wpsc-admin/includes/save-data.functions.php:391
 #: wpsc-admin/includes/settings-pages/presentation.php:472
 msgid "Default View"
-msgstr ""
+msgstr "Varsayilan"
 
 #: wpsc-admin/includes/save-data.functions.php:197
 #: wpsc-admin/includes/save-data.functions.php:199
@@ -6618,7 +6578,7 @@ msgstr ""
 #: wpsc-admin/includes/settings-pages/presentation.php:476
 #: wpsc-admin/includes/settings-pages/presentation.php:480
 msgid "List View"
-msgstr ""
+msgstr "Liste"
 
 #: wpsc-admin/includes/save-data.functions.php:202
 #: wpsc-admin/includes/save-data.functions.php:204
@@ -6635,7 +6595,7 @@ msgstr ""
 
 #: wpsc-admin/includes/save-data.functions.php:281
 msgid "This category requires additional checkout form fields"
-msgstr ""
+msgstr "Bu kategori, ödeme yapmak için ekstra form alanları gerektirir"
 
 #: wpsc-merchants/chronopay.php:436
 #: wpsc-merchants/paypal-standard.merchant.php:532
@@ -6677,7 +6637,7 @@ msgstr ""
 #: wpsc-admin/includes/settings-pages/shipping.php:149
 #: wpsc-admin/includes/display-items-functions.php:764
 msgid "Yes"
-msgstr ""
+msgstr "Evet"
 
 #: wpsc-merchants/chronopay.php:437
 #: wpsc-merchants/paypal-standard.merchant.php:533
@@ -6719,7 +6679,7 @@ msgstr ""
 #: wpsc-admin/includes/settings-pages/shipping.php:150
 #: wpsc-admin/includes/display-items-functions.php:765
 msgid "No"
-msgstr ""
+msgstr "Hayir"
 
 #: wpsc-admin/includes/settings-pages/checkout.php:205
 #: wpsc-admin/includes/display-items-functions.php:699
@@ -6734,11 +6694,11 @@ msgstr ""
 #: wpsc-shipping/tablerate.php:66
 #: wpsc-shipping/weightrate.php:58
 msgid "Delete"
-msgstr "Ištrinti"
+msgstr "Sil"
 
 #: wpsc-admin/includes/settings-pages/checkout.php:134
 msgid "Add"
-msgstr ""
+msgstr "Ekle"
 
 #: wpsc-theme/wpsc-products_page.php:211
 #: wpsc-admin/includes/settings-pages/shipping.php:236
@@ -6749,14 +6709,14 @@ msgstr ""
 #: wpsc-admin/display-coupons.php:382
 #: wpsc-includes/product-template.php:648
 msgid "Edit"
-msgstr ""
+msgstr "Degistir"
 
 #: wpsc-admin/display-coupons.php:152
 #: wpsc-admin/display-coupons.php:296
 #: wpsc-admin/admin-form-functions.php:13
 #: wpsc-admin/display-sales-logs.php:212
 msgid "Coupon Code"
-msgstr ""
+msgstr "Kupon Kodu"
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:240
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:245
@@ -6766,19 +6726,19 @@ msgstr ""
 #: wpsc-admin/admin-form-functions.php:14
 #: wpsc-admin/display-sales-logs.php:215
 msgid "Discount"
-msgstr ""
+msgstr "Indirim"
 
 #: wpsc-admin/display-coupons.php:154
 #: wpsc-admin/display-coupons.php:298
 #: wpsc-admin/admin-form-functions.php:15
 msgid "Start"
-msgstr ""
+msgstr "Başla"
 
 #: wpsc-admin/display-coupons.php:155
 #: wpsc-admin/display-coupons.php:299
 #: wpsc-admin/admin-form-functions.php:16
 msgid "Expiry"
-msgstr ""
+msgstr "Sona erme"
 
 #: wpsc-admin/display-coupons.php:157
 #: wpsc-admin/display-coupons.php:200
@@ -6791,45 +6751,45 @@ msgstr ""
 #: wpsc-admin/display-coupons.php:300
 #: wpsc-admin/admin-form-functions.php:18
 msgid "Active"
-msgstr ""
+msgstr "Aktif"
 
 #: wpsc-admin/display-coupons.php:159
 #: wpsc-admin/display-coupons.php:210
 #: wpsc-admin/display-coupons.php:301
 #: wpsc-admin/admin-form-functions.php:19
 msgid "Apply On All Products"
-msgstr ""
+msgstr "Tüm Ürünlere Uygula"
 
 #: wpsc-admin/admin-form-functions.php:166
 msgid "Settings"
-msgstr ""
+msgstr "Ayarlar"
 
 #: wpsc-admin/admin-form-functions.php:170
 msgid "Shop Settings"
-msgstr ""
+msgstr "Mağaza Ayarları"
 
 #: wpsc-admin/admin-form-functions.php:171
 msgid "Money and Payment"
-msgstr ""
+msgstr "Fiyat ve Ödeme"
 
 #: wpsc-admin/admin-form-functions.php:172
 msgid "Checkout Page Settings"
-msgstr ""
+msgstr "Ödeme Sayfası Ayarları"
 
 #: wpsc-admin/admin.php:485
 #: wpsc-admin/admin.php:896
 msgid "Current Month"
-msgstr "Šį mėnesį"
+msgstr "Geçerli Ay"
 
 #: wpsc-admin/admin.php:681
 #: wpsc-admin/admin.php:781
 #: wpsc-admin/admin-form-functions.php:200
 msgid "At a Glance"
-msgstr "Suvestinė"
+msgstr "Bir Bakışta"
 
 #: wpsc-core/wpsc-functions.php:269
 msgid "Add New Product"
-msgstr "Pridėti naują prekę"
+msgstr "Yeni Ürün Ekle"
 
 #: wpsc-admin/admin-form-functions.php:251
 #: wpsc-admin/admin-form-functions.php:264
@@ -6841,9 +6801,7 @@ msgstr ""
 #: wpsc-admin/admin-form-functions.php:265
 msgid "Order"
 msgid_plural "Orders"
-msgstr[0] "Užsakymas"
-msgstr[1] "Užsakymai"
-msgstr[2] "Užsakymų"
+msgstr[0] "Siparis"
 
 #: wpsc-core/wpsc-installer.php:750
 #: wpsc-core/wpsc-installer.php:759
@@ -6856,20 +6814,20 @@ msgstr ""
 #: wpsc-core/wpsc-installer.php:757
 #: wpsc-admin/admin-form-functions.php:339
 msgid "Address"
-msgstr ""
+msgstr "Addres"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:86
 #: wpsc-core/wpsc-installer.php:764
 #: wpsc-admin/admin-form-functions.php:340
 msgid "Phone"
-msgstr ""
+msgstr "Tel"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:73
 #: wpsc-core/wpsc-installer.php:753
 #: wpsc-admin/admin.php:411
 #: wpsc-admin/admin-form-functions.php:341
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: wpsc-theme/wpsc-list_view.php:108
 #: wpsc-theme/wpsc-single_product.php:119
@@ -6880,7 +6838,7 @@ msgstr ""
 #: wpsc-admin/display-sales-logs.php:137
 #: wpsc-includes/display.functions.php:44
 msgid "Quantity"
-msgstr "Kiekis"
+msgstr "Miktar"
 
 #: wpsc-theme/wpsc-single_product.php:142
 #: wpsc-theme/functions/wpsc-user_log_functions.php:478
@@ -6900,7 +6858,7 @@ msgstr "Kiekis"
 #: wpsc-admin/admin-form-functions.php:373
 #: wpsc-admin/display-sales-logs.php:138
 msgid "Price"
-msgstr "Kaina"
+msgstr "Fiyat"
 
 #: wpsc-theme/wpsc-single_product.php:151
 #: wpsc-theme/functions/wpsc-user_log_functions.php:486
@@ -6912,20 +6870,20 @@ msgstr "Kaina"
 #: wpsc-admin/display-sales-logs.php:139
 #: wpsc-admin/display-sales-logs.php:229
 msgid "Shipping"
-msgstr "Pristatymas"
+msgstr "Nakliye"
 
 #: wpsc-admin/admin-form-functions.php:455
 msgid "This users cart was empty"
-msgstr ""
+msgstr "Kullanici sepeti bos"
 
 #: wpsc-admin/display-coupons.php:32
 msgid "Thanks, the coupon has been added."
-msgstr ""
+msgstr "Teşekkürler, kupon eklendi."
 
 #: wpsc-admin/display-coupons.php:139
 #: wpsc-admin/admin.php:165
 msgid "Coupons"
-msgstr "Kuponai"
+msgstr "Kuponlar"
 
 #: wpsc-admin/includes/settings-pages/marketing.php:59
 msgid "Display Cross Sales"
@@ -6933,7 +6891,7 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/marketing.php:64
 msgid "Show Share This (Social Bookmarks)"
-msgstr ""
+msgstr "(Sosyal Bookmarks) Share This öğesini göster"
 
 #: wpsc-admin/includes/settings-pages/marketing.php:69
 msgid "Display How Customer Found Us Survey"
@@ -6947,43 +6905,43 @@ msgstr ""
 #: wpsc-core/wpsc-installer.php:746
 #: wpsc-core/wpsc-installer.php:755
 msgid "First Name"
-msgstr ""
+msgstr "Adınız"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:66
 msgid "Please enter a valid name"
-msgstr ""
+msgstr "Geçerli bir isim girin"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:69
 #: wpsc-core/wpsc-installer.php:747
 #: wpsc-core/wpsc-installer.php:756
 msgid "Last Name"
-msgstr ""
+msgstr "Soyadı"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:70
 msgid "Please enter a valid surname"
-msgstr ""
+msgstr "geçerli bir soyisim girin"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:74
 msgid "Please enter a valid email address"
-msgstr ""
+msgstr "geçerli bir e-mail girin"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:77
 msgid "Address 1"
-msgstr ""
+msgstr "Addres 1"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:78
 msgid "Address 2"
-msgstr ""
+msgstr "Addres 2"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:79
 msgid "Please enter a valid address"
-msgstr ""
+msgstr "geçerli bir adres girin"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:82
 #: wpsc-core/wpsc-installer.php:749
 #: wpsc-core/wpsc-installer.php:758
 msgid "City"
-msgstr ""
+msgstr "Ilçe"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:83
 msgid "Please enter your town or city."
@@ -6991,18 +6949,18 @@ msgstr ""
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:87
 msgid "Please enter a valid phone number"
-msgstr ""
+msgstr "geçerli bir telefon girin"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:90
 #: wpsc-core/wpsc-installer.php:751
 #: wpsc-core/wpsc-installer.php:760
 #: wpsc-admin/admin.php:412
 msgid "Country"
-msgstr ""
+msgstr "Il"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:91
 msgid "Please select your country from the list."
-msgstr ""
+msgstr "Lütfen listeden ülkenizi seçin."
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:109
 msgid "Thanks, your changes have been saved."
@@ -7010,16 +6968,16 @@ msgstr ""
 
 #: wpsc-theme/wpsc-user-log.php:38
 msgid "Save Profile"
-msgstr "Atnaujinti profilį"
+msgstr "Profili Kaydet"
 
 #: wpsc-core/js/tinymce3/window.php:207
 msgid "Insert"
-msgstr ""
+msgstr "Ekle"
 
 #: wpsc-core/js/tinymce3/window.php:203
 #: wpsc-admin/includes/products.php:137
 msgid "Cancel"
-msgstr ""
+msgstr "İptal"
 
 #: wpsc-merchants/library/google_shipping_country.php:7
 msgid "Google Shipping Country"
@@ -7029,17 +6987,17 @@ msgstr ""
 #: wpsc-admin/includes/settings-pages/checkout.php:225
 #: wpsc-admin/includes/tax_and_shipping.php:66
 msgid "Save Changes"
-msgstr ""
+msgstr "Degisiklikleri kaydet"
 
 #: wpsc-widgets/donations_widget.php:22
 #: wpsc-widgets/donations_widget.php:49
 #: wpsc-widgets/donations_widget.php:87
 msgid "Product Donations"
-msgstr ""
+msgstr "Ürün Bağışları"
 
 #: wpsc-theme/wpsc-products_page.php:112
 msgid "More Details"
-msgstr ""
+msgstr "Diger ayrintilar"
 
 #: wpsc-theme/wpsc-list_view.php:124
 #: wpsc-theme/wpsc-single_product.php:179
@@ -7049,55 +7007,55 @@ msgstr ""
 #: wpsc-admin/includes/settings-pages/presentation.php:237
 #: wpsc-includes/display.functions.php:216
 msgid "Add To Cart"
-msgstr "Pridėti į krepšelį"
+msgstr "Sepete ekle"
 
 #: wpsc-includes/product-template.php:1460
 msgid "Avg. Customer Rating"
-msgstr ""
+msgstr "Satis Ilgisi"
 
 #: wpsc-includes/product-template.php:1466
 msgid "Your Rating"
-msgstr ""
+msgstr "Ilginiz"
 
 #: wpsc-includes/product-template.php:1467
 msgid "Saved"
-msgstr ""
+msgstr "kaydedildi"
 
 #: wpsc-core/wpsc-functions.php:131
 msgid "Order Received"
-msgstr "Užsakymas gautas"
+msgstr "Fatura yollandi"
 
 #: wpsc-core/wpsc-functions.php:136
 msgid "Accepted Payment"
-msgstr "Apmokėjimas gautas"
+msgstr "Ödeme girisi"
 
 #: wpsc-core/wpsc-functions.php:142
 msgid "Job Dispatched"
-msgstr ""
+msgstr "Is yamandi"
 
 #: wpsc-core/wpsc-functions.php:148
 msgid "Closed Order"
-msgstr "Užsakymas užbaigtas"
+msgstr "Siparis kapatildi"
 
 #: wpsc-widgets/category_widget.php:142
 #: wpsc-widgets/latest_product_widget.php:98
 #: wpsc-widgets/specials_widget.php:106
 #: wpsc-admin/includes/settings-pages/presentation.php:1035
 msgid "Show Thumbnails"
-msgstr ""
+msgstr "Resimcik göster"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:768
 msgid "Cart Location"
-msgstr ""
+msgstr "Sepet yeri"
 
 #: wpsc-admin/includes/display-items-functions.php:153
 #: wpsc-admin/includes/display-items-functions.php:173
 msgid "Currency type"
-msgstr ""
+msgstr "geçerli tip"
 
 #: wpsc-admin/includes/settings-pages/presentation.php:279
 msgid "Show Product Ratings"
-msgstr ""
+msgstr "ürüne olan ilgi"
 
 #: wpsc-updates/updating_tasks.php:390
 #: wpsc-updates/updating_tasks.php:397
@@ -7112,16 +7070,16 @@ msgstr ""
 
 #: wpsc-core/wpsc-installer.php:204
 msgid "Products Page"
-msgstr ""
+msgstr "Ürünler sayfasi"
 
 #: wpsc-theme/wpsc-cart_widget.php:64
 #: wpsc-core/wpsc-installer.php:210
 msgid "Checkout"
-msgstr "Užsakyti"
+msgstr "Onayla"
 
 #: wpsc-core/wpsc-installer.php:216
 msgid "Transaction Results"
-msgstr ""
+msgstr "Aktarim sonuçlari"
 
 #: wpsc-core/wpsc-installer.php:222
 msgid "Your Account"
@@ -7130,11 +7088,11 @@ msgstr ""
 #: wpsc-core/wpsc-installer.php:752
 #: wpsc-core/wpsc-installer.php:761
 msgid "Postal Code"
-msgstr ""
+msgstr "Posta kodu"
 
 #: wpsc-theme/wpsc-shopping_cart_page.php:258
 msgid "E-mail"
-msgstr ""
+msgstr "E-posta"
 
 #: wpsc-widgets/shopping_cart_widget.php:22
 #: wpsc-widgets/shopping_cart_widget.php:60
@@ -7143,26 +7101,26 @@ msgstr ""
 #: wpsc-includes/shopping_cart_functions.php:52
 #: wpsc-includes/shopping_cart_functions.php:69
 msgid "Shopping Cart"
-msgstr "Prekių krepšelis"
+msgstr "Alışveriş Sepeti"
 
 #: wpsc-admin/includes/tax_and_shipping.php:16
 msgid "GST/Tax Rate"
-msgstr ""
+msgstr "KDV orani"
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:299
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:300
 msgid "Thank you, your purchase is pending, you will be sent an email once the order clears."
-msgstr "Ačiū, jūsų užsakymas laukia apmokėjimo. Kai tik gausime apmokėjimą pranešime jums elektroniniu paštu."
+msgstr ""
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:181
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:182
 msgid "Click to download"
-msgstr ""
+msgstr "Indirmek için tiklayin"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:559
 #: wpsc-theme/wpsc-shopping_cart_page.php:459
 msgid "Total Shipping"
-msgstr "Pristatymo kaina"
+msgstr "Kargo toplami"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:490
 #: wpsc-theme/wpsc-cart_widget.php:52
@@ -7170,102 +7128,102 @@ msgstr "Pristatymo kaina"
 #: wpsc-admin/display-sales-logs.php:141
 #: wpsc-admin/display-sales-logs.php:234
 msgid "Total"
-msgstr "Suma"
+msgstr "Toplam"
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:261
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:262
 msgid "Your Transaction ID"
-msgstr ""
+msgstr "sizin Yollanma ID"
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:263
 msgid "Transaction ID"
-msgstr ""
+msgstr "Yollanma ID"
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:302
 msgid "Order Pending: Payment Required"
-msgstr "Užsakymas gautas ir laukia apmokėjimo"
+msgstr ""
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:304
 #: wpsc-admin/includes/settings-pages/admin.php:123
 msgid "Purchase Receipt"
-msgstr ""
+msgstr "Alisveris alindi"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:582
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:311
 msgid "Customer Details"
-msgstr "Pirkėjo duomenys"
+msgstr "Satici ayrintilari"
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:335
 msgid "Delivery State"
-msgstr "Pristatymo valstija"
+msgstr ""
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:350
 msgid "Purchase Report"
-msgstr "Pirkimo ataskaita"
+msgstr "Alisveris raporu"
 
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:103
 #: wpsc-theme/functions/wpsc-transaction_results_functions.php:104
 msgid "The Transaction was successful"
-msgstr "Transakcija sėkminga"
+msgstr "Talebiniz iletildi"
 
 #: wpsc-theme/wpsc-transaction_results.php:24
 #: wpsc-theme/wpsc-shopping_cart_page.php:10
 msgid "Oops, there is nothing in your cart."
-msgstr "Deja, jūsų krepšelyje nieko nėra"
+msgstr "Sepetinizde ürün bulunmamaktadır."
 
 #: wpsc-theme/wpsc-transaction_results.php:24
 #: wpsc-theme/wpsc-shopping_cart_page.php:10
 msgid "Please visit our shop"
-msgstr "Kviečiame aplankyti mūsų parduotuvę"
+msgstr "Lütfen mağazamızı ziyaret edin"
 
 #: wpsc-theme/wpsc-user-log.php:50
 msgid "File Names"
-msgstr "Failų pavadinimai"
+msgstr "Dosya isimleri"
 
 #: wpsc-theme/wpsc-user-log.php:51
 msgid "Downloads Left"
-msgstr "Likę atsisiuntimai"
+msgstr "Kalan İndirmeler"
 
 #: wpsc-theme/wpsc-user-log.php:52
 #: wpsc-theme/wpsc-user-log.php:104
 #: wpsc-admin/display-items.page.php:37
 msgid "Date"
-msgstr "Data"
+msgstr "Tarih"
 
 #: wpsc-theme/wpsc-user-log.php:88
 msgid "You have not purchased any downloadable products yet."
-msgstr "Jūs nesate nusipirkę atsisiunčiamų produktų"
+msgstr ""
 
 #: wpsc-theme/wpsc-user-log.php:103
 #: wpsc-admin/display-sales-logs.php:54
 msgid "Status"
-msgstr "Statusas"
+msgstr "Durum"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:637
 #: wpsc-theme/wpsc-user-log.php:109
 msgid "Payment Method"
-msgstr "Mokėjimo būdas"
+msgstr "Ödeme yöntemi"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:372
 #: wpsc-admin/display-sales-logs.php:53
 msgid "Details"
-msgstr "Detalės"
+msgstr "Ayrintilar"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:421
 msgid "Order Status"
-msgstr "Pirkimo būsena"
+msgstr "Fatura durumu"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:460
 msgid "Order Details"
-msgstr "Užsakymas"
+msgstr "Sipariş Detayları"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:482
 msgid "GST"
-msgstr ""
+msgstr "GST"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:561
 msgid "Final Total"
-msgstr ""
+msgstr "Genel toplam"
 
 #: wpsc-theme/functions/wpsc-user_log_functions.php:640
 msgid "Transaction Id"
@@ -7273,39 +7231,39 @@ msgstr ""
 
 #: wpsc-theme/wpsc-user-log.php:122
 msgid "No transactions for this month."
-msgstr "Nėra duomenų apie šio mėnesio pirkimus."
+msgstr "Bu ay işlem yapılmadı."
 
 #: wpsc-theme/wpsc-user-log.php:135
 msgid "There have not been any purchases yet."
-msgstr ""
+msgstr "Hiçbir alisveris bulunamadi."
 
 #: wpsc-theme/wpsc-user-log.php:143
 msgid "You must be logged in to use this page. Please use the form below to login to your account."
-msgstr ""
+msgstr "Bu sayfayı kullanabilmek için giriş yapmalısınız. hesabınıza giriş yapmak için lütfen aşağıdaki formu kullanınız."
 
 #: wpsc-admin/admin.php:410
 msgid "Text"
-msgstr ""
+msgstr "Yazi"
 
 #: wpsc-admin/admin.php:413
 msgid "Textarea"
-msgstr ""
+msgstr "Yazi alani"
 
 #: wpsc-admin/admin.php:414
 msgid "Heading"
-msgstr ""
+msgstr "Baslik"
 
 #: wpsc-admin/admin.php:415
 msgid "Coupon"
-msgstr ""
+msgstr "Kupon"
 
 #: wpsc-admin/admin.php:420
 msgid "Label"
-msgstr ""
+msgstr "Etiket"
 
 #: wpsc-admin/admin.php:421
 msgid "Label Description"
-msgstr ""
+msgstr "Etiket Açıklaması"
 
 #: wpsc-admin/admin.php:422
 msgid "Item Number"
@@ -7317,7 +7275,7 @@ msgstr ""
 
 #: wpsc-admin/admin.php:424
 msgid "Product Code"
-msgstr "Produkto kodas"
+msgstr "Ürün Kodu"
 
 #: wpsc-admin/admin.php:425
 msgid "PDF"
@@ -7327,45 +7285,45 @@ msgstr "PDF"
 #: wpsc-shipping/tablerate.php:61
 #: wpsc-shipping/weightrate.php:58
 msgid " and above"
-msgstr "ir daugiau"
+msgstr "ve üzeri"
 
 #: wpsc-admin/admin.php:428
 #: wpsc-shipping/tablerate.php:59
 msgid "If price is "
-msgstr "Jei kaina yra"
+msgstr "fiyat ise"
 
 #: wpsc-admin/admin.php:429
 #: wpsc-shipping/weightrate.php:58
 msgid "If weight is "
-msgstr "Jei svoris yra"
+msgstr "ağırlığı ise"
 
 #: wpsc-includes/misc.functions.php:67
 msgid "<strong>ERROR</strong>: Please enter a username."
-msgstr "<strong>KLAIDA</strong>: Įveskite vartotojo vardą."
+msgstr "<strong> HATA </strong>: Bir kullanıcı adı girin."
 
 #: wpsc-includes/misc.functions.php:77
 msgid "<strong>ERROR</strong>: Please type your e-mail address."
-msgstr "<strong>KLAIDA</strong>: įveskite savo el. pašto adresą."
+msgstr "<strong>HATA</strong>: Lütfen e-posta adresinizi yazın."
 
 #: wpsc-includes/misc.functions.php:79
 msgid "<strong>ERROR</strong>: The email address isn&#8217;t correct."
-msgstr "<strong>KLAIDA</strong>: neteisingas el. pašto adresas."
+msgstr "<strong> HATA </strong>: Bu e-posta adresi doğru değil."
 
 #: wpsc-includes/misc.functions.php:69
 msgid "<strong>ERROR</strong>: This username is invalid.  Please enter a valid username."
-msgstr "<strong>KLAIDA</strong>: vartotojo vardas netinkamas. Įveskite tinkamą vartotojo vardą."
+msgstr "<strong> HATA </strong>: Bu kullanıcı adı geçersiz. Geçerli bir kullanıcı adı girin."
 
 #: wpsc-includes/misc.functions.php:72
 msgid "<strong>ERROR</strong>: This username is already registered, please choose another one."
-msgstr "<strong>KLAIDA</strong>: toks vartotojo vardas jau užregistruotas, pasirinkite kitą."
+msgstr "<strong> HATA </strong>: Bu kullanıcı adı daha önce kullanılmış, lütfen başka bir kullanıcı adı seçiniz."
 
 #: wpsc-includes/misc.functions.php:90
 msgid "<strong>ERROR</strong>: Couldn&#8217;t register you... please contact the <a href=\"mailto:%s\">webmaster</a> !"
-msgstr "<strong>KLAIDA</strong>: nepavyko Jūsų užregistruoti... Prašome susisiekti su <a href=\"mailto:%s\">puslapio administratoriumi</a> !"
+msgstr ""
 
 #: wpsc-includes/ajax.functions.php:976
 #: wpsc-includes/ajax.functions.php:984
 #: wpsc-includes/ajax.functions.php:1052
 msgid "This download is no longer valid, Please contact the site administrator for more information."
-msgstr "Šis atsisiuntimas nebegalioja. Norėdami gauti daugiau informacijos susisiekite su puslapio administratoriumi."
+msgstr ""
 
