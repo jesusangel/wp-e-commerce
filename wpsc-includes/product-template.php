@@ -1589,7 +1589,7 @@ function wpsc_page_url() {
  */
 function wpsc_product_count() {
 	global $wp_query;
-	return count($wp_query->post);
+	return count($wp_query->posts);
 }
 
 //The following code was removed from WP 3.8, present in 3.7 - Not sure why it was removed and not refactored. (JS)

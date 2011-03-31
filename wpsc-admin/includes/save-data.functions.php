@@ -626,7 +626,7 @@ function wpsc_save_category_set($category_id, $tt_id) {
 				$unselectedCountries = array_diff($countryList, $_POST['countrylist2']);
 				//find the countries that are selected
 				$selectedCountries = array_intersect($countryList, $_POST['countrylist2']);
-				 wpsc_update_categorymeta( $category_id,   'target_market', $selectedCountries); 
+				wpsc_update_categorymeta( $category_id,   'target_market', $selectedCountries); 
 			}
 			
 		}elseif(!isset($_POST['countrylist2'])){
