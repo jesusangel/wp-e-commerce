@@ -6,11 +6,16 @@
 */
 function wpsc_uses_coupons() {
 	global $wpsc_coupons;
-	return $wpsc_coupons->uses_coupons();
+	if(empty($wpsc_coupons)){
+		$wpsc_coupons = new wpsc_coupons();
+	}
+	if(is_object($wpsc_coupons)) {
+		return $wpsc_coupons->uses_coupons();
+	}
+	return false;
 }
 function wpsc_coupons_error(){
 	global $wpsc_coupons;
-	//exit('<pre>'.print_r($wpsc_coupons, true).'</pre>');
 	if(isset($wpsc_coupons->errormsg) && $wpsc_coupons->errormsg == false){
 		return true;
 	}else{
@@ -112,7 +117,7 @@ class wpsc_coupons {
 			if ($this->is_percentage == '2'){
 				return $wpsc_cart->calculate_total_shipping();	
 			}
-
+			
 			// $this->is_percentage == '1' means "%" discount
 			if ($this->is_percentage == '1') {
 			  
@@ -136,16 +141,16 @@ class wpsc_coupons {
 		
 			//Loop throught all products in the shopping cart, apply coupons on the ones match the conditions. 
 			$cart  =& $wpsc_cart->have_cart_items();
-			
 				foreach ($wpsc_cart->cart_items as $key => $item) {
 					
-					$product_data = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$item->product_id}'");
+					$product_data = $wpdb->get_results("SELECT * FROM ". $wpdb->posts ." WHERE id='{$item->product_id}'");
 					$product_data = $product_data[0];
 				
 					$match = true;
 					foreach ($this->conditions as $c) {
 						
 						//Check if all the condictions are returning true, so it's an ALL logic, if anyone want to implement a ANY logic please do.
+					
 						if (!$this->compare_logic($c, $item)) {
 							$match = false;
 							break;
@@ -169,12 +174,10 @@ class wpsc_coupons {
 							if($this->every_product == 1){
 								$return += $item->discount;
 							}else{
-								//exit('<pre>'.print_r($this,true).'</pre>');
 								return $item->discount;
 							}
 						}
-
-					// This product is NOT eligible for discount
+					// This product is not eligible for discount
 					}else{
 						$this->discount = 0;
 						$item->discount = $this->discount;
@@ -196,10 +199,10 @@ class wpsc_coupons {
 	 * @return bool True if all conditions are matched, False otherwise.
 	 */
 	function compare_logic($c, $product_obj) {
-		global $wpdb, $wpsc_cart;
+		global $wpdb;
 		
 		if ($c['property'] == 'item_name') {
-			$product_data = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$product_obj->product_id}'");
+			$product_data = $wpdb->get_results("SELECT * FROM " . $wpdb->posts . " WHERE id='{$product_obj->product_id}'");
 			$product_data = $product_data[0];
 		
 			switch($c['logic']) {
@@ -243,14 +246,6 @@ class wpsc_coupons {
 				if (!empty($match))
 					return true;
 				break;
-				
-				case 'category'://Checks if the product is in the category value
-					$category_flag = in_array( $c['value'] , $product_obj->category_id_list);
-					if ($category_flag == 1) { 
-						$match = array($category_flag);
-						return true; 
-						}
-				break;				
 				
 				default:
 				return false;
@@ -296,19 +291,11 @@ class wpsc_coupons {
 				if (!empty($match))
 					return true;
 				break;
-				
-				case 'category'://Checks if the product to see if its in the category
-				preg_match("/".$c['value']."$/",$product_obj->quantity, $match);
-				if (!empty($match))
-					return true;
-				break;				
-				
 				default:
 				return false;
 			}
 		} else if ($c['property'] == 'total_quantity'){
-			$total_quantity = wpsc_cart_item_count();
-			//exit('Quantity :'.$total_quantity);
+			$total_quantity = $product_obj->quantity;
 			switch($c['logic']) {
 				case 'equal'://Checks if the quantity of products in the cart equals condition value
 				if ($total_quantity == $c['value'])
@@ -331,7 +318,6 @@ class wpsc_coupons {
 		
 		} else if ($c['property'] == 'subtotal_amount'){
 			$subtotal = wpsc_cart_total(false);
-			//exit('<pre>'.print_r($subtotal,true).'</pre>');
 			switch($c['logic']) {
 				case 'equal'://Checks if the subtotal of products in the cart equals condition value
 				if ($subtotal == $c['value'])
@@ -339,14 +325,12 @@ class wpsc_coupons {
 				break;
 				
 				case 'greater'://Checks if the subtotal of the cart is greater than the condition value
-			//	exit('triggered here'.$subtotal.'>'.$c['value']);
 				if ($subtotal > $c['value'])
 					return true;
 				break;
 				
 				case 'less'://Checks if the subtotal of the cart is less than the condition value
 				if ($subtotal < $c['value']){
-					//exit('<pre>'.print_r($product_obj->cart->subtotal, true).'</pre>cValue'.$c['value']);
 					return true;
 				}else{
 					return false;

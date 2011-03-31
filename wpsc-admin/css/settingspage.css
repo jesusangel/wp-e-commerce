@@ -1,127 +1,127 @@
 table#wpsc_checkout_list{
-width:100%;
+	width:100%;
 }
 th#trash{
-width:40px;
+	width:40px;
 }
 th#drag{
-width:29px;
+	width:29px;
 }
 tr.wpsc_grey{
-background-color: #ededed;
+	background-color: #ededed;
 }
 td.drag a:hover{
 
-/*background-image: url(../../images/roll-over-drag.jpg);
-background-repeat: no-repeat;
-background-position: center;*/
-cursor: move;
+	/*background-image: url(../../images/roll-over-drag.jpg);
+	background-repeat: no-repeat;
+	background-position: center;*/
+	cursor: move;
 }
 th#mandatory{
-width:65px;
+	width:65px;
 }
 #wpsc_checkout_list th#name{
-width:180px;
+	width:180px;
 }
 td.mandatorycol{
-text-align: center;
+	text-align: center;
 }
 tr.checkout-placeholder {
 	border-width: 1px;
 	border-style: dashed;
- 	 z-index: 900;
+	z-index: 900;
 	border-color: #bbb;
 	background-color: #f5f5f5;
-  margin: -2px 0 0 -2px;
+	margin: -2px 0 0 -2px;
 }
 #wpsc_checkout_list tbody {
 	width: 700px;
 	border-collapse:collapse;
 }
 
+/* Removed to prevent overlapping the Contextual Help tab
 #wpsc_options {
-	border-color:#EBEBEB rgb(204, 204, 204) rgb(204, 204, 204) rgb(235, 235, 235);
-	border-style:solid;
-	border-width:1px;
-	margin:0pt 15% 0pt 15px;
-	padding:2px;
-  position: relative;
+	position: relative;
 }
+*/
 
 #wpsc_options a.about_this_page {
- position: absolute;
- top: 10px;
- right: 12px;
+	position: absolute;
+	top: 10px;
+	right: 12px;
 }
 
 #wpsc_options_page {
 	padding: 0px 0px 0px 5px;
 }
 
-table#gateway_options tr td{
-  padding: 0 0 8px 2px;
-  vertical-align: top;
+#options_presentation{
+	min-width:850px;
 }
-td.gateway_settings {
-  padding-top: 0px !important;
-  width:90%;
-  width:394px;
+
+table#gateway_options tr td {
+	padding: 0;
+	vertical-align: top;
+}
+table#gateway_options tr td.gateway_settings {
+	padding: 0 0 8px 8px;
+	width:394px;
 }
 td.gateway_settings input[type=text]{
-width: 200px;
+	width: 200px;
 }
 tr.rate_row td input[type=text]{
-width:50px;
+	width:50px;
 }
 div.wpsc_newlayer input[type=text]{
-width:50px;
+	width:50px;
 }
 td.gateway_settings textarea{
-width:100%;
+	width:100%;
 }
 td.gateway_settings h4{
-margin-top:0;
+	margin-top:0;
 }
 
 .wpsc_shipping_options{
-  border-top: 1px solid #e9e9e9;
+	border-top: 1px solid #e9e9e9;
 
 }
 td.select_gateway p {
-  margin: 0px 15px 4px 5px;
+	margin: 0px 15px 4px 5px;
 }
 
 div#wpsc_shipwire_setting, div#shipping_discount_value {
-  display: none;
+	display: none;
 }
 
 table#gateway_options {
-margin:0;
-width:100%;
+	margin:0;
+	width:100%;
 }
 /* admin checkout page css */
-div#form_field_form_container{ padding: 0px; margin: 0px; }  
+div#form_field_form_container{ padding: 0px; margin: 0px; }
 
-div#form_field_form_container div, div#form_field_form_container div table{  padding: 0px;  margin: 0px;  width: 100%;  border-collapse: collapse; }  
+div#form_field_form_container div, div#form_field_form_container div table{  padding: 0px;  margin: 0px;  width: 100%;  border-collapse: collapse; }
 table#form_field_table tr td.namecol{ }
-  
+
 table#form_field_table tr *.namecol{ width: 170px; padding-right: 8px; }
 table#form_field_table tr *.namecol input{ width: 160px; }
-  
+
 table#form_field_table tr *.typecol{ width: 120px; }
 table#form_field_table tr *.typecol select{ width: 115px; }
-  
+
 table#form_field_table tr *.mandatorycol{ width: 90px; text-align: center; }
 table#form_field_table tr *.mandatorycol input{ }
-  
+
 table#form_field_table tr *.logdisplaycol{ width: 70px; text-align: center; }
 table#form_field_table tr *.logdisplaycol input{ }
-  
+
 table#form_field_table tr *.ordercol{ width: 70px; text-align: center; }
 table#form_field_table tr *.ordercol input{ }
-  
+
 table#form_field_table tr th{ padding-left: 0px; padding-right: 0px;  }
-  
+
 .flag_email{
 	width:16px;
 	float:right;
@@ -134,62 +134,58 @@ table#form_field_table tr th{ padding-left: 0px; padding-right: 0px;  }
 	border-bottom:1px solid #dfdfdf;
 }
 
-#wpsc_settings_nav_bar{
+#wpsc_settings_nav_bar {
 	width:100%;
 }
 
-#wpsc_settings_nav_bar ul{
-	width:100%;
+#wpsc_settings_nav_bar ul {
+	width: 98%;
 	border-bottom: 1px solid #DFDFDF;
-	float:left;
-	margin:0 auto;
-	padding-left:0;
-	margin-top: -1px;
+	float: left;
+	margin: 10px auto 0;
+	padding-left: 15px;
 }
 #wpsc_settings_nav_bar ul li a{
 	margin-bottom:-1px;
 }
 
+#wpsc_settings_nav_bar ul li a.current {
+	background-color: #f9f9f9 !important;
+	border-bottom-color: transparent !important;
+}
+
 h3.form_group {
-  clear: both;
+	clear: both;
 }
 h3.form_group a{
 	color: #000;
 }
 div.product_and_button_settings {
-  width: 450px;
-  float: left;
-  
+	width: 450px;
+	float: left;
+
 }
 
-div.themes_and_appearance {
+div#themes_and_appearance {
 	border: 1px solid #DFDFDF;
-  width: 254px;
-  padding: 11px 12px;
-  margin:30px 0px 0px -58px;
-  float: left;
+	width: 360px;
+	float: left;
 }
 
-
-div.themes_and_appearance h4{
-  margin: 0px 0px 0px 0px;
-  
-}
-
-div.themes_and_appearance p {
-  font-size: 11px;
+div#themes_and_appearance p {
+	font-size: 11px;
 }
 
 span.display-path {
-color:#666666;
+	color:#666666;
 }
 
-div.themes_and_appearance ol {
-  font-size: 11px;
-  list-style-type:decimal;
-  list-style-position:inside;
+div#themes_and_appearance ol {
+	font-size: 11px;
+	list-style-type:decimal;
+	list-style-position:inside;
 }
 
-div.themes_and_appearance ol li {
-  font-size: 11px;
+div#themes_and_appearance ol li {
+	font-size: 11px;
 }
