@@ -1279,7 +1279,16 @@ case 'sale_price' :
 </fieldset>
 <?php
 }
+
+/* 
+ * Remove bulk edit as it is broken,
+ * ToDo : Fix Bulk Edit for Products
+ */
+function wpsc_remove_bulk_edit($options){
+	unset($options['edit']);
+	return $options;
+}
 add_action( 'quick_edit_custom_box', 'wpsc_quick_edit_boxes', 10, 2 );
 add_action( 'save_post', 'wpsc_save_quickedit_box' );
-
+add_action( 'bulk_actions-edit-wpsc-product', 'wpsc_remove_bulk_edit');
 ?>
