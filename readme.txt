@@ -6,7 +6,7 @@ Requires at least: 3.0
 Tested up to: 3.1.1
 Stable tag: 3.8.5
 
-WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
+WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind.
 
 == Description ==
 
