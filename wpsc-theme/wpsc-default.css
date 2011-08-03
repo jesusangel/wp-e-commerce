@@ -354,7 +354,7 @@ table.list_productdisplay .quantity_container {
 	display:inline;	
 }
 
-#content, #content input.wpsc_buy_button{
+#content input.wpsc_buy_button{
 	font-size: 12px;
 }
 
