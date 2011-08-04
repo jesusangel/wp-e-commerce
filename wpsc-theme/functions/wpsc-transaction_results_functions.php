@@ -53,7 +53,7 @@ function wpsc_transaction_theme() {
 			case 'dps':
 				$sessionid = decrypt_dps_response();
 			break;
-			//paystation was not updating the purchase logs for successful payment - this is ugly as need to have the databse update done in one place by all gatways on a sucsessful transaction hook not some within the gateway and some within here and some not at all??? This is getting a major overhaul but for here and now it just needs to work for the gold cart people!
+					//paystation was not updating the purchase logs for successful payment - this is ugly as need to have the databse update done in one place by all gatways on a sucsessful transaction hook not some within the gateway and some within here and some not at all??? This is getting a major overhaul but for here and now it just needs to work for the gold cart people!
 			case 'paystation':
 				$ec = $_GET['ec'];
 				$result= $_GET['em'];
@@ -62,9 +62,9 @@ function wpsc_transaction_theme() {
 						$processed_id = '3';					
 				
 				if($result == 'Insufficient Funds' && $ec == 5){
-						$processed_id = '6';
+					$processed_id = '6';
 				
-				$payment_instructions = printf( __( 'Sorry your transaction was not accepted due to insufficient funds <br /><a href="%1$s">Click here to go back to checkout page</a>.', 'wpsc' ), get_option( "shopping_cart_url" ) );
+					$payment_instructions = printf( __( 'Sorry your transaction was not accepted due to insufficient funds <br /><a href="%1$s">Click here to go back to checkout page</a>.', 'wpsc' ), get_option( "shopping_cart_url" ) );
 				}
 				if($processed_id){
 					$wpdb->update( WPSC_TABLE_PURCHASE_LOGS, array('processed' => $processed_id),array('sessionid'=>$sessionid), array('%f') );

@@ -115,7 +115,6 @@ Author URI: http://instinct.co.nz
 .default_product_display .productcol {
 	vertical-align: middle;
 	min-height: 50px;
-	overflow: auto;
 }
 
 .default_product_display h2.prodtitle, #content .default_product_display h2.prodtitle {
