@@ -64,7 +64,7 @@ Features:
 * Integrates with Google Base
 * Integrates with Campaign Monitor for advanced email marketing
 * Integrates with Intense Debate for shared comments
-* Mail Chimp integration coming soon 
+* Mail Chimp integration coming soon
 
 = Search Engine Optimization =
 * 100% Search Engine Friendly
@@ -156,6 +156,9 @@ After upgrading from earlier versions look for link "Update Store". This will up
 
 
 == Changelog ==
+= 3.8.6.1 =
+Fix: Security vulnerability in chronopay.
+
 = 3.8.6 =
 * New: Filter for 'wpsc_display_product_multicurrency'.
 * New: Additional filters for compatibility with WPML.
