@@ -3,7 +3,7 @@
   * Plugin Name: WP e-Commerce
   * Plugin URI: http://getshopped.org/
   * Description: A plugin that provides a WordPress Shopping Cart. See also: <a href="http://getshopped.org" target="_blank">GetShopped.org</a> | <a href="http://getshopped.org/forums/" target="_blank">Support Forum</a> | <a href="http://docs.getshopped.org/" target="_blank">Documentation</a>
-  * Version: 3.8.6.1
+  * Version: 3.8.7-beta
   * Author: Instinct Entertainment
   * Author URI: http://getshopped.org/
   **/
@@ -158,7 +158,7 @@ class WP_eCommerce {
 		wpsc_install();
 
 	}
-	
+
 	public function deactivate() {
 		foreach ( wp_get_schedules() as $cron => $schedule ) {
 			wp_clear_scheduled_hook( "wpsc_{$cron}_cron_task" );
