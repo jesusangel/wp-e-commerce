@@ -122,7 +122,7 @@ class WPSC_Update_Progress
 		if ( $this->eta == 0 )
 			echo __( 'Under a minute', 'wpsc' );
 		else
-			printf( _n( '%d minute', '%d minutes', $this->eta, 'wpsc' ), $this->eta );
+			printf( _n( '%d minute', '%d minutes', $this->eta ), $this->eta );
 		echo '</div>';
 	}
 	
@@ -186,7 +186,7 @@ function wpsc_update_step( $i, $total ) {
 		if ( $eta == 0 )
 			echo __( 'Under a minute', 'wpsc' );
 		else
-			printf( _n( '%d minute', '%d minutes', $eta, 'wpsc' ), $eta );
+			printf( _n( '%d minute', '%d minutes', $eta ), $eta );
 		echo '</div>';
 		$milestone = $now;
 	}

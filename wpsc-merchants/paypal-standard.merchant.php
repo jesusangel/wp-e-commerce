@@ -339,7 +339,7 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 		$paypal_url = get_option('paypal_multiple_url');
 		$received_values = array();
 		$received_values['cmd'] = '_notify-validate';
-  		$received_values += stripslashes_deep ($_POST);
+  		$received_values += $_POST;
 		$options = array(
 			'timeout' => 5,
 			'body' => $received_values,
@@ -631,7 +631,7 @@ function form_paypal_multiple() {
 	if($current_currency != $store_currency_data['code']) {
 		$output .= "
   <tr>
-      <td colspan='2'><strong class='form_group'>" . __( 'Currency Converter', 'wpsc' ) . "</td>
+      <td colspan='2'><strong class='form_group'>".__('Currency Converter')."</td>
   </tr>
   <tr>
 		<td colspan='2'>".sprintf(__('Your website uses <strong>%s</strong>. This currency is not supported by PayPal, please  select a currency using the drop down menu below. Buyers on your site will still pay in your local currency however we will send the order through to Paypal using the currency you choose below.', 'wpsc'), $store_currency_data['currency'])."</td>

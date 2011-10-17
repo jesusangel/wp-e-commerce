@@ -34,9 +34,13 @@ function wpsc_install() {
 
 	$table_name    = $wpdb->prefix . "wpsc_product_list";
 	$first_install = false;
+	$result        = mysql_list_tables( DB_NAME );
+	$tables        = array();
 
-	if( $wpdb->get_var("SHOW TABLES LIKE '$table_name'") !== $table_name ) {
-		// Table doesn't exist
+	while ( $row = mysql_fetch_row( $result ) )
+		$tables[] = $row[0];
+
+	if ( !in_array( $table_name, $tables ) ) {
 		$first_install = true;
 		add_option( 'wpsc_purchaselogs_fixed', true );
 	}
