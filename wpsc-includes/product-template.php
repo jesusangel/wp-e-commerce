@@ -409,7 +409,7 @@ function wpsc_the_product_price( $no_decimals = false, $only_normal_price = fals
 	global $wpsc_query, $wpsc_variations, $wpdb;
 	$product_id = get_the_ID();
 	if ( ! empty( $wpsc_variations->first_variations ) ) {
-		$from_text = apply_filters( 'wpsc_product_variation_text', __(' from ','wpsc') );
+		$from_text = apply_filters( 'wpsc_product_variation_text', ' from ' );
 		$output = wpsc_product_variation_price_available( $product_id, __( " {$from_text} %s", 'wpsc' ), $only_normal_price );
 	} else {
 		$price = $full_price = get_post_meta( $product_id, '_wpsc_price', true );
