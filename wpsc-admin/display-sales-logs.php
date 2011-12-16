@@ -33,25 +33,25 @@ function wpsc_display_sales_logs() {
 function wpsc_update_purchase_logs_3dot8() {
 	if ( _wpsc_purchlogs_need_update() )
 		wpsc_update_purchase_logs();
-
+	
 	?>
 		<div class="wrap">
-			<h2><?php echo esc_html( __('Sales', 'wpsc') ); ?> </h2>
-			<p><?php printf( __( 'Your purchase logs have been updated! <a href="%s">Click here</a> to return.'), remove_query_arg( 'subpage' ) ); ?></p>
+			<h2><?php echo esc_html( __('Sales', 'wpsc') ); ?> </h2>	
+			<p><?php printf( __( 'Your purchase logs have been updated! <a href="%s">Click here</a> to return.' , 'wpsc' ), remove_query_arg( 'subpage' ) ); ?></p>
 		</div>
 	<?php
 }
 
 function _wpsc_purchlogs_need_update() {
 	global $wpdb;
-
+	
 	if ( get_option( '_wpsc_purchlogs_3.8_updated' ) )
 		return false;
-
+	
 	$c = $wpdb->get_var( "SELECT COUNT(*) FROM " . WPSC_TABLE_PURCHASE_LOGS . " WHERE plugin_version IN ('3.6', '3.7')" );
 	if ( $c > 0 )
 		return true;
-
+	
 	update_option( '_wpsc_purchlogs_3.8_updated', true );
 	return false;
 }
@@ -119,7 +119,7 @@ function _wpsc_purchlogs_need_update() {
 				<div class='error' style='padding:8px;line-spacing:8px;'><span ><?php printf( __('It has been detected that some of your purchase logs were not updated properly when you upgrade to WP e-Commerce %s. Please <a href="%s">click here</a> to fix this problem.', 'wpsc'), WPSC_VERSION, add_query_arg( 'subpage', 'update-purchase-logs-3.8' ) ); ?></span></div>
 			<?php
 		}
-
+		
       ///// end of update message section //////?>
       <div id='dashboard-widgets' style='min-width: 825px;'>
          <?php /* end of sidebar start of main column */ ?>
@@ -297,9 +297,9 @@ function _wpsc_purchlogs_need_update() {
             <?php endif; ?>
 <img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/printer.png' alt='printer icon' />&ensp;<a href='<?php echo add_query_arg('wpsc_admin_action','wpsc_display_invoice'); ?>'><?php _e('View Packing Slip', 'wpsc'); ?></a>
 
-<br /><br class='small' /><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/email_go.png' alt='email icon' />&ensp;<a href='<?php echo add_query_arg('email_buyer_id',absint( $_GET['purchaselog_id'] ) ); ?>'><?php _e('Resend Receipt to Buyer', 'wpsc'); ?></a>
+<br /><br class='small' /><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/email_go.png' alt='email icon' />&ensp;<a href='<?php echo add_query_arg( 'email_buyer_id', absint( $_GET['purchaselog_id'] ) ); ?>'><?php _e('Resend Receipt to Buyer', 'wpsc'); ?></a>
 
-<br /><br class='small' /><a class='submitdelete' title='<?php echo esc_attr(__( 'Delete this log', 'wpsc' )); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".absint( $_GET['purchaselog_id'] ), 'delete_purchlog_' . absint( $_GET['purchaselog_id'] ) ); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete.",'wpsc'),  wpsc_purchaselog_details_date() )) ?>') ) { return true;}return false;"><img src='<?php echo WPSC_CORE_IMAGES_URL . "/cross.png"; ?>' alt='delete icon' />               &nbsp;<?php _e('Remove this record', 'wpsc') ?></a>
+<br /><br class='small' /><a class='submitdelete' title='<?php echo esc_attr(__( 'Delete this log', 'wpsc' )); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=" . absint ( $_GET['purchaselog_id'] ), 'delete_purchlog_' . absint( $_GET['purchaselog_id'] ) ); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete.",'wpsc'),  wpsc_purchaselog_details_date() )) ?>') ) { return true;}return false;"><img src='<?php echo WPSC_CORE_IMAGES_URL . "/cross.png"; ?>' alt='delete icon' />               &nbsp;<?php _e('Remove this record', 'wpsc') ?></a>
 
 <br /><br class='small' />&emsp;&ensp;    <a href='<?php echo $page_back ?>'><?php _e('Go Back', 'wpsc'); ?></a>
 <br /><br />
@@ -310,7 +310,7 @@ function _wpsc_purchlogs_need_update() {
    <?php
 
  }
-
+    
  function wpsc_purchaselogs_displaylist(){
    global $purchlogs;
   ?>
@@ -328,19 +328,19 @@ function _wpsc_purchlogs_need_update() {
       <input type='hidden' value='purchlog_bulk_modify' name='wpsc_admin_action2' />
       <input type="submit" value="<?php _e('Apply', 'wpsc'); ?>" name="doaction" id="doaction" class="button-secondary action" />
       <?php /* View functions for purchlogs */?>
-      <label for='view_purchlogs_by'><?php _e('View:'); ?></label>
+      <label for='view_purchlogs_by'><?php _e( 'View:', 'wpsc' ); ?></label>
 
       <select id='view_purchlogs_by' name='view_purchlogs_by'>
 <?php
        $date_is_selected['3mnths'] = '';
        $date_is_selected['all'] = '';
 		if( !isset($_GET['view_purchlogs_by']) )
-			 $_GET['view_purchlogs_by'] = '';
+			 $_GET['view_purchlogs_by'] = '';           
         switch($_GET['view_purchlogs_by']) {
                case 'all':
                   $date_is_selected['all'] = 'selected="selected"';
                break;
-
+              
                default:
                case '3mnths':
                case '':
@@ -402,7 +402,7 @@ function _wpsc_purchlogs_need_update() {
                         'rss_key'         => 'key',
                          'start_timestamp'   => $purchlogs->current_start_timestamp,
                          'end_timestamp'  => $purchlogs->current_end_timestamp);
-
+                         
          $piggy_url = 'http://www.bravenewcode.com/store/plugins/piggy/?utm_source=affiliate-6331&utm_medium=affiliates&utm_campaign=wpec#1';
       ?>
       <br />
@@ -438,7 +438,12 @@ function _wpsc_purchlogs_need_update() {
       <td><?php echo wpsc_the_purch_item_id(); ?></td><!-- purchase ID -->
       <td><?php echo wpsc_the_purch_item_date(); ?></td> <!--Date -->
       <td><?php echo wpsc_the_purch_item_name(); ?></td> <!--Name/email -->
-      <td><?php echo wpsc_currency_display( wpsc_the_purch_item_price() ); ?></td><!-- Amount -->
+      <td>
+	<?php 
+	    echo wpsc_currency_display( wpsc_the_purch_item_price() ); 
+	    do_action( 'wpsc_additional_sales_amount_info', wpsc_purchaselog_details_id() );
+	?>
+      </td><!-- Amount -->
       <td><a href='<?php echo htmlentities(add_query_arg('purchaselog_id', wpsc_the_purch_item_id()), ENT_QUOTES, 'UTF-8') ; ?>'><?php
       $number_of_items = wpsc_the_purch_item_details();
       printf( _n( '%s Item', '%s Items', $number_of_items, 'wpsc' ), $number_of_items );
@@ -482,7 +487,7 @@ function _wpsc_purchlogs_need_update() {
    ?>
    <form  action='' method='post'>
       <input type='hidden' name='wpsc_admin_action' value='purchlogs_search' />
-      <input type='text' value='<?php if(isset($_POST['purchlogs_searchbox'])) echo $_POST['purchlogs_searchbox']; ?>' name='purchlogs_searchbox' id='purchlogs_searchbox' />
+      <input type='text' value='<?php if(isset($_POST['purchlogs_searchbox'])) echo esc_attr( $_POST['purchlogs_searchbox'] ); ?>' name='purchlogs_searchbox' id='purchlogs_searchbox' />
       <input type="submit" value="<?php _e('Search Logs', 'wpsc'); ?>"  class="button-secondary action" />
    </form>
    <?php
@@ -546,7 +551,7 @@ function wpsc_purchlogs_notes() {
             <input type='hidden' name='wpsc_admin_action' value='purchlogs_update_notes' />
             <input type="hidden" name="wpsc_purchlogs_update_notes_nonce" id="wpsc_purchlogs_update_notes_nonce" value="<?php echo wp_create_nonce( 'wpsc_purchlogs_update_notes' ); ?>" />
             <input type='hidden' name='purchlog_id' value='<?php echo absint( $_GET['purchaselog_id'] ); ?>' />
-            <p><textarea name="purchlog_notes" rows="3" wrap="virtual" id="purchlog_notes" style="width:100%;"><?php if ( isset($_POST['purchlog_notes']) ) { echo stripslashes($_POST['purchlog_notes']); } else { echo wpsc_display_purchlog_notes(); } ?></textarea></p>
+            <p><textarea name="purchlog_notes" rows="3" wrap="virtual" id="purchlog_notes" style="width:100%;"><?php if ( isset($_POST['purchlog_notes']) ) { echo stripslashes( esc_textarea( $_POST['purchlog_notes'] ) ); } else { echo wpsc_display_purchlog_notes(); } ?></textarea></p>
             <p><input class="button" type="submit" name="button" id="button" value="<?php _e( 'Update Notes', 'wpsc' ); ?>" /></p>
          </form>
       </div>

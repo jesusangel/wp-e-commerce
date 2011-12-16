@@ -6,12 +6,13 @@
 */
 function wpsc_uses_coupons() {
 	global $wpsc_coupons;
-	if(empty($wpsc_coupons)){
+	
+	if( empty( $wpsc_coupons ) )
 		$wpsc_coupons = new wpsc_coupons();
-	}
-	if(is_object($wpsc_coupons)) {
+
+	if( is_object( $wpsc_coupons ) )
 		return $wpsc_coupons->uses_coupons();
-	}
+
 	return false;
 }
 function wpsc_coupons_error(){
@@ -43,6 +44,12 @@ class wpsc_coupons {
 	var $end_date;
 	var $use_once;
 	var $is_used;
+	//used x times is the new condition where a 
+	//user can set how many times the coupon can be used 
+	//$free_shipping_details - this is so the user can limit the free shipping to country and regions
+	//since 3.8.5
+	var $use_x_times;
+	var $free_shipping_details;
 	
 	var $discount;
 		//for error message
@@ -56,47 +63,48 @@ class wpsc_coupons {
 	 * @return bool True if coupon code exists, False otherwise.
 	 */
 	function wpsc_coupons($code = ''){
-		global $wpdb;
+	    global $wpdb;
 	
-		if ($code == '') {
+		if ( empty( $code ) )
+			return false;
+
+		$this->code = $code;
+
+		$coupon_data = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` WHERE coupon_code = %s LIMIT 1", $code ) , ARRAY_A );
+
+		if ( ( $coupon_data == '' ) || ( $coupon_data == null ) || ( strtotime( $coupon_data['expiry'] ) < time() ) ) {
+			$this->errormsg = false;
 			return false;
 		} else {
-			$this->code = $wpdb->escape($code);
-			
-			$coupon_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` WHERE coupon_code='$code' LIMIT 1", ARRAY_A);
-			
-			if (($coupon_data == '') || ($coupon_data == null) || (strtotime($coupon_data['expiry']) < time()) ) {
-				$this->errormsg = false;
-				return false;
-			} else {
-				$coupon_data = array_merge( array(
-					'value' => '',
-					'is-percentage' => '',
-					'condition' => '',
-					'is-used' => '',
-					'active' => '',
-					'use-once' => '',
-					'use-x-times' => '',
-					'free-shipping' => '',
-					'start' => '',
-					'expiry' => '',
-					'every_product' => '',
-				), $coupon_data );
+			$coupon_data = array_merge( array(
+				'value' => '',
+				'is-percentage' => '',
+				'condition' => '',
+				'is-used' => '',
+				'active' => '',
+				'use-once' => '',
+				'use-x-times' => '',
+				'free-shipping' => '',
+				'start' => '',
+				'expiry' => '',
+				'every_product' => ''
+			), $coupon_data );
 
-				$this->value = $coupon_data['value'];
-				$this->is_percentage = $coupon_data['is-percentage'];
-				$this->conditions = unserialize($coupon_data['condition']);
-				$this->is_used = $coupon_data['is-used'];
-				$this->active = $coupon_data['active'];
-				$this->use_once = $coupon_data['use-once'];
-				$this->start_date = $coupon_data['start'];
-				$this->end_date = $coupon_data['expiry'];
-				$this->every_product = $coupon_data['every_product'];
-				$this->errormsg = true;
-				$valid = $this->validate_coupon();
-				return $valid;
-			}
-		}
+			$this->value = $coupon_data['value'];
+			$this->is_percentage = $coupon_data['is-percentage'];
+			$this->conditions = unserialize($coupon_data['condition']);
+			$this->is_used = $coupon_data['is-used'];
+			$this->active = $coupon_data['active'];
+			$this->use_once = $coupon_data['use-once'];
+			$this->start_date = $coupon_data['start'];
+			$this->end_date = $coupon_data['expiry'];
+			$this->every_product = $coupon_data['every_product'];
+			$this->errormsg = true;
+			$valid = $this->validate_coupon();
+			
+			return $valid;
+	    }
+		
 	}
 	
 	/**
@@ -123,7 +131,7 @@ class wpsc_coupons {
 		global $wpdb, $wpsc_cart;
 		
 		$wpsc_cart->clear_cache();
-				
+		
 		$return = 0;
 		
 		// $this->is_percentage == '2' means "Free Shipping"
@@ -229,7 +237,7 @@ class wpsc_coupons {
 		if ($c['property'] == 'item_name') {
 			$product_data = $wpdb->get_results("SELECT * FROM " . $wpdb->posts . " WHERE id='{$product_obj->product_id}'");
 			$product_data = $product_data[0];
-		
+			
 			switch($c['logic']) {
 				case 'equal': //Checks if the product name is exactly the same as the condition value
 				if ($product_data->post_title == $c['value']) {
@@ -284,6 +292,14 @@ class wpsc_coupons {
 					return true;
 				break;
 				
+				case 'category'://Checks if the product name is in the set category
+				$product_categories = wp_get_post_terms($product_data->ID, 'wpsc_product_category');
+				foreach ($product_categories as $product_cat){
+					if($product_cat->name == $c['value'])
+						return true;
+				}
+				break;
+				
 				default:
 				return false;
 			}
@@ -332,7 +348,7 @@ class wpsc_coupons {
 				return false;
 			}
 		} else if ($c['property'] == 'total_quantity'){
-			$total_quantity = $product_obj->quantity;
+			$total_quantity = wpsc_cart_item_count();
 			switch($c['logic']) {
 				case 'equal'://Checks if the quantity of products in the cart equals condition value
 				if ($total_quantity == $c['value'])

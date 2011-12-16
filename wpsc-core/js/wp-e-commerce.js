@@ -488,12 +488,12 @@ function set_shipping_country(html_form_id, form_id){
 
 jQuery(document).ready(function(){
 	jQuery('.wpsc_checkout_table input, .wpsc_checkout_table textarea').each(function(){
+	    
 		var real_value = jQuery(this).val();
 		value = jQuery('label[for="'+jQuery(this).attr('id')+'"]').html();
 		if(null != value){
 			value = value.replace(/<span class="?asterix"?>\*<\/span>/i,'');
 		}
-		
 		if( jQuery.fn.inlineFieldLabel )
 		    jQuery(this).inlineFieldLabel({label:jQuery.trim(value)});
 		if(real_value != '')

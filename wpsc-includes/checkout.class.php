@@ -9,42 +9,6 @@
  * @package wp-e-commerce
  * @subpackage wpsc-checkout-classes
  */
-function wpsc_kill_xss( $string ) {
-	if ( get_magic_quotes_gpc ( ) ) {
-		$string = stripslashes( $string );
-	}
-	$string = str_replace( array( "&amp;", "&lt;", "&gt;" ), array( "&amp;amp;", "&amp;lt;", "&amp;gt;" ), $string );
-	// fix &entitiy\n;
-	$string = preg_replace( '#(&\#*\w+)[\x00-\x20]+;#u', "$1;", $string );
-	$string = preg_replace( '#(&\#x*)([0-9A-F]+);*#iu', "$1$2;", $string );
-	$string = html_entity_decode( $string, ENT_COMPAT, "UTF-8" );
-
-	// remove any attribute starting with "on" or xmlns
-	$string = preg_replace( '#(<[^>]+[\x00-\x20\"\'\/])(on|xmlns)[^>]*>#iUu', "$1>", $string );
-
-	// remove javascript: and vbscript: protocol
-	$string = preg_replace( '#([a-z]*)[\x00-\x20\/]*=[\x00-\x20\/]*([\`\'\"]*)[\x00-\x20\/]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu', '$1=$2nojavascript...', $string );
-	$string = preg_replace( '#([a-z]*)[\x00-\x20\/]*=[\x00-\x20\/]*([\`\'\"]*)[\x00-\x20\/]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu', '$1=$2novbscript...', $string );
-	$string = preg_replace( '#([a-z]*)[\x00-\x20\/]*=[\x00-\x20\/]*([\`\'\"]*)[\x00-\x20\/]*-moz-binding[\x00-\x20]*:#Uu', '$1=$2nomozbinding...', $string );
-	$string = preg_replace( '#([a-z]*)[\x00-\x20\/]*=[\x00-\x20\/]*([\`\'\"]*)[\x00-\x20\/]*data[\x00-\x20]*:#Uu', '$1=$2nodata...', $string );
-
-	//remove any style attributes, IE allows too much stupid things in them, eg.
-	//<span style="width: expression(alert('Ping!'));"></span>
-	// and in general you really don't want style declarations in your UGC
-
-	$string = preg_replace( '#(<[^>]+[\x00-\x20\"\'\/])style[^>]*>#iUu', "$1>", $string );
-
-	//remove namespaced elements (we do not need them...)
-	$string = preg_replace( '#</*\w+:\w[^>]*>#i', "", $string );
-	//remove really unwanted tags
-
-	do {
-		$oldstring = $string;
-		$string = preg_replace( '#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i', "", $string );
-	} while ( $oldstring != $string );
-
-	return $string;
-}
 
 /**
  * wpsc has regions checks to see whether a country has regions or not
@@ -56,7 +20,7 @@ function wpsc_kill_xss( $string ) {
  */
 function wpsc_has_regions($country){
 	global $wpdb;
-	$country_data = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `isocode` IN('" . $country . "') LIMIT 1", ARRAY_A );
+	$country_data = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `isocode` IN(%s) LIMIT 1", $country ), ARRAY_A );
 	if ($country_data['has_regions'] == 1)
 		return true;
 	else
@@ -93,7 +57,7 @@ function wpsc_check_purchase_processed($processed){
 function wpsc_get_buyers_email($purchase_id){
 	global $wpdb;
 	$email_form_field = $wpdb->get_results( "SELECT `id`,`type` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `checkout_order` ASC LIMIT 1", ARRAY_A );
-	$email = $wpdb->get_var( "SELECT `value` FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id`=" . $purchase_id . " AND `form_id` = '" . $email_form_field[0]['id'] . "' LIMIT 1" );
+	$email = $wpdb->get_var( $wpdb->prepare( "SELECT `value` FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id` = %d AND `form_id` = '" . $email_form_field[0]['id'] . "' LIMIT 1", $purchase_id ) );
 	return $email;
 
 }
@@ -107,7 +71,7 @@ function wpsc_get_buyers_email($purchase_id){
 function wpsc_google_checkout_submit() {
 	global $wpdb, $wpsc_cart, $current_user;
 	$wpsc_checkout = new wpsc_checkout();
-	$purchase_log_id = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `sessionid` IN('" . $_SESSION['wpsc_sessionid'] . "') LIMIT 1" );
+	$purchase_log_id = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `sessionid` IN(%s) LIMIT 1", $_SESSION['wpsc_sessionid'] );
 	get_currentuserinfo();
 	if ( $current_user->display_name != '' ) {
 		foreach ( $wpsc_checkout->checkout_items as $checkoutfield ) {
@@ -402,7 +366,7 @@ function wpsc_checkout_form_field() {
 function wpsc_shipping_region_list( $selected_country, $selected_region, $shippingdetails = false ) {
 	global $wpdb;
 	$output = '';
-	$region_data = $wpdb->get_results( "SELECT `regions`.* FROM `" . WPSC_TABLE_REGION_TAX . "` AS `regions` INNER JOIN `" . WPSC_TABLE_CURRENCY_LIST . "` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('" . $wpdb->escape( $selected_country ) . "')", ARRAY_A );
+	$region_data = $wpdb->get_results( $wpdb->prepare( "SELECT `regions`.* FROM `" . WPSC_TABLE_REGION_TAX . "` AS `regions` INNER JOIN `" . WPSC_TABLE_CURRENCY_LIST . "` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN(%s)", $selected_country ), ARRAY_A );
 	$js = '';
 	if ( !$shippingdetails ) {
 		$js = "onchange='submit_change_country();'";
@@ -521,7 +485,7 @@ class wpsc_checkout {
 	 */
 	function wpsc_checkout( $checkout_set = 0 ) {
 		global $wpdb;
-		$this->checkout_items = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1'  AND `checkout_set`='" . $checkout_set . "' ORDER BY `checkout_order`;" );
+		$this->checkout_items = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1'  AND `checkout_set`= %s ORDER BY `checkout_order`;", $checkout_set ) );
 
 		$category_list = wpsc_cart_item_categories( true );
 		$additional_form_list = array( );
@@ -584,7 +548,7 @@ class wpsc_checkout {
 	 */
 	function get_checkout_options( $id ) {
 		global $wpdb;
-		$sql = 'SELECT `options` FROM `' . WPSC_TABLE_CHECKOUT_FORMS . '` WHERE `id`=' . $id;
+		$sql = $wpdb->prepare( 'SELECT `options` FROM `' . WPSC_TABLE_CHECKOUT_FORMS . '` WHERE `id` = %d', $id );
 		$options = $wpdb->get_var( $sql );
 		$options = unserialize( $options );
 		return $options;
@@ -642,7 +606,7 @@ class wpsc_checkout {
 
 			case "delivery_country":
 				if ( wpsc_uses_shipping ( ) ) {
-					$country_name = $wpdb->get_var( "SELECT `country` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `isocode`='" . $_SESSION['wpsc_delivery_country'] . "' LIMIT 1" );
+					$country_name = $wpdb->get_var( $wpdb->prepare( "SELECT `country` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `isocode`= %s LIMIT 1", $_SESSION['wpsc_delivery_country'] ) );
 					$output = "<input title='" . $this->checkout_item->unique_name . "' type='hidden' id='" . $this->form_element_id() . "' class='shipping_country' name='collected_data[{$this->checkout_item->id}]' value='" . esc_attr( $_SESSION['wpsc_delivery_country'] ) . "' size='4' /><span class='shipping_country_name'>" . $country_name . "</span> ";
 				} else {
 					$checkoutfields = true;
@@ -653,7 +617,7 @@ class wpsc_checkout {
 				$options = $this->get_checkout_options( $this->checkout_item->id );
 				if ( $options != '' ) {
 					$output = "<select name='collected_data[{$this->checkout_item->id}]" . $an_array . "'>";
-					$output .= "<option value='-1'>" . __( 'Select an Option', 'wpsc' ) . "</option>";
+					$output .= "<option value='-1'>" . _x( 'Select an Option', 'Dropdown default when called within checkout class' , 'wpsc' ) . "</option>";
 					foreach ( (array)$options as $label => $value ) {
 						$value = esc_attr(str_replace( ' ', '', $value ) );
 						$output .="<option " . selected( $value, $saved_form_data, false ) . " value='" . esc_attr( $value ) . "'>" . esc_html( $label ) . "</option>\n\r";
@@ -883,22 +847,80 @@ class wpsc_checkout {
 							$shipping_state = $value[1];
 
 					$value = $value[0];
-					$prepared_query = $wpdb->prepare( "INSERT INTO `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value );
+					$prepared_query = $wpdb->insert(
+								    WPSC_TABLE_SUBMITED_FORM_DATA,
+								    array(
+									'log_id' => $purchase_id,
+									'form_id' => $form_data->id,
+									'value' => $value
+								    ),
+								    array(
+									'%d',
+									'%d',
+									'%s'
+								    )
+								);
 				} else {
 					foreach ( (array)$value as $v ) {
-						$prepared_query = $wpdb->prepare( "INSERT INTO `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $v );
-					}
+					    $prepared_query = $wpdb->insert(
+								    WPSC_TABLE_SUBMITED_FORM_DATA,
+								    array(
+									'log_id' => $purchase_id,
+									'form_id' => $form_data->id,
+									'value' => $v
+								    ),
+								    array(
+									'%d',
+									'%d',
+									'%s'
+								    )
+								);					}
 				}
 			} else {
-				$prepared_query = $wpdb->prepare( "INSERT INTO `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value );
+			    $prepared_query = $wpdb->insert(
+							WPSC_TABLE_SUBMITED_FORM_DATA,
+							array(
+							    'log_id' => $purchase_id,
+							    'form_id' => $form_data->id,
+							    'value' => $value
+							),
+							array(
+							    '%d',
+							    '%d',
+							    '%s'
+							)
+						    );
 			}
-			$wpdb->query( $prepared_query );
 		}
 
 		// update the states
-		$wpdb->query( $wpdb->prepare( "INSERT INTO `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $shipping_state_id, $shipping_state ) );
-		$wpdb->query( $wpdb->prepare( "INSERT INTO `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $billing_state_id, $billing_state ) );
-	}
+		$wpdb->insert(
+			    WPSC_TABLE_SUBMITED_FORM_DATA,
+			    array(
+				'log_id' => $purchase_id,
+				'form_id' => $shipping_state_id,
+				'value' => $shipping_state
+			    ),
+			    array(
+				'%d',
+				'%d',
+				'%s'
+			    )
+			);
+		$wpdb->insert(
+			    WPSC_TABLE_SUBMITED_FORM_DATA,
+			    array(
+				'log_id' => $purchase_id,
+				'form_id' => $billing_state_id,
+				'value' => $billing_state
+			    ),
+			    array(
+				'%d',
+				'%d',
+				'%s'
+			    )
+			);
+	    }
 
 	/**
 	 * Function that checks how many checkout fields are stored in checkout form fields table
@@ -1136,6 +1158,10 @@ class wpsc_gateways {
 
 	function wpsc_gateways() {
 		global $nzshpcrt_gateways;
+
+		foreach ( WPSC_Payment_Gateways::get_active_gateways() as $gateway_name ) {
+			$this->wpsc_gateways[] = WPSC_Payment_Gateways::get_meta( $gateway_name );
+		}
 
 		$gateway_options = get_option( 'custom_gateway_options' );
 		foreach ( $nzshpcrt_gateways as $gateway ) {

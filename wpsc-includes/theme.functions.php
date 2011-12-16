@@ -280,15 +280,12 @@ function wpsc_get_template_file_url( $file = '' ) {
 			}
 		}
 
+		if( is_ssl() && !strstr( $file_url, 'https' ) ) $file_url =  str_replace('http', 'https', $file_url);
+
 		// Save the transient and update it every 12 hours
 		if ( !empty( $file_url ) )
 			set_transient( WPEC_TRANSIENT_THEME_URL_PREFIX . $file, $file_url, 60 * 60 * 12 );
-	}else{
-		delete_transient(WPEC_TRANSIENT_THEME_URL_PREFIX . $file);
-		wpsc_get_template_file_url($file);
 	}
-
-        if( is_ssl() && !strstr( $file_url, 'https' ) ) $file_url =  str_replace('http', 'https', $file_url);
 
 	// Return filtered result
 	return apply_filters( WPEC_TRANSIENT_THEME_URL_PREFIX . $file, $file_url );
@@ -564,6 +561,8 @@ function wpsc_enqueue_user_script_and_css() {
 			}
 		}
 
+		$siteurl = get_option( 'siteurl' );
+
 		$remote_protocol = is_ssl() ? 'https://' : 'http://';
 		
 		if( get_option( 'wpsc_share_this' ) == 1 )
@@ -604,7 +603,7 @@ function wpsc_enqueue_user_script_and_css() {
 		function wpsc_legacy_add_mp3_preview( $product_id, &$product_data ) {
 			global $wpdb;
 			if ( function_exists( 'listen_button' ) ) {
-				$file_data = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_PRODUCT_FILES . "` WHERE `id`='" . $product_data['file'] . "' LIMIT 1", ARRAY_A );
+				$file_data = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `" . WPSC_TABLE_PRODUCT_FILES . "` WHERE `id` = %d LIMIT 1", $product_data['file'] ), ARRAY_A );
 				if ( $file_data != null ) {
 					echo listen_button( $file_data['idhash'], $file_data['id'] );
 				}
@@ -1065,6 +1064,11 @@ function wpsc_all_products_on_page(){
 			array_push( $templates, "taxonomy-product_tag-{$tax_term}.php", 'taxonomy-product_tag.php' );
 		}
 
+
+		// Attempt to use the [productspage]'s custom page template as a higher priority than the normal page.php template
+		if ( false !== $productspage_page_template = get_post_meta($products_page_id, '_wp_page_template', true) )
+			array_push( $templates, $productspage_page_template );
+
 		array_push( $templates, 'page.php', 'single.php' );
 
 		if ( is_single() )
@@ -1163,7 +1167,7 @@ function wpsc_show_categories( $content ) {
 add_shortcode('showcategories', 'wpsc_show_categories');
 function wpec_get_the_post_id_by_shortcode($shortcode){
 	global $wpdb;
-	$sql = "SELECT `ID` FROM `{$wpdb->posts}` WHERE `post_type` IN('page','post') AND `post_content` LIKE '%$shortcode%' LIMIT 1";
+	$sql = "SELECT `ID` FROM `{$wpdb->posts}` WHERE `post_type` IN('page','post') AND `post_content` LIKE '%" . like_escape( $shortcode ) . "%' LIMIT 1";
 	$page_id = $wpdb->get_var($sql);
 	return apply_filters( 'wpec_get_the_post_id_by_shortcode', $page_id );
 }

@@ -380,7 +380,7 @@ function wpsc_product_variation_price_available( $product_id, $from_text = false
 	}
 
 	sort( $prices );
-	$price = apply_filters( 'wpsc_do_convert_price', $prices[0] );
+	$price = apply_filters( 'wpsc_do_convert_price', $prices[0], $product_id );
 	$price = wpsc_currency_display( $price, array( 'display_as_html' => false ) );
 
 	if ( $prices[0] == $prices[count( $prices ) - 1] )
@@ -424,7 +424,7 @@ function wpsc_the_product_price( $no_decimals = false, $only_normal_price = fals
 		if ( $no_decimals == true )
 			$price = array_shift( explode( ".", $price ) );
 
-		$price = apply_filters( 'wpsc_do_convert_price', $price );
+		$price = apply_filters( 'wpsc_do_convert_price', $price, $product_id );
 		$args = array(
 			'display_as_html' => false,
 			'display_decimal_point' => ! $no_decimals
@@ -1049,7 +1049,7 @@ function wpsc_product_postage_and_packaging() {
 
 	$product_meta = get_post_meta( $id, '_wpsc_product_metadata', true );
 	if ( isset(  $product_meta['shipping'] ) && is_array( $product_meta['shipping'] ) &&  1 != $product_meta['no_shipping'])
-		return wpsc_currency_display( $product_meta['shipping']['local'] );
+		return wpsc_currency_display( apply_filters( 'wpsc_product_postage_and_packaging', $product_meta['shipping']['local'] ) );
 	else
 		return wpsc_currency_display( 0 );
 
@@ -1517,7 +1517,7 @@ function wpsc_product_rater() {
 
 function wpsc_product_existing_rating( $product_id ) {
 	global $wpdb;
-	$get_average = $wpdb->get_results( "SELECT AVG(`rated`) AS `average`, COUNT(*) AS `count` FROM `" . WPSC_TABLE_PRODUCT_RATING . "` WHERE `productid`='" . $product_id . "'", ARRAY_A );
+	$get_average = $wpdb->get_results( $wpdb->prepare( "SELECT AVG(`rated`) AS `average`, COUNT(*) AS `count` FROM `" . WPSC_TABLE_PRODUCT_RATING . "` WHERE `productid`= %d ", $product_id ), ARRAY_A );
 	$average = floor( $get_average[0]['average'] );
 	$count = $get_average[0]['count'];
 	$output  = "  <span class='votetext'>";
@@ -1574,7 +1574,8 @@ function wpsc_currency_sign() {
 	global $wpdb;
 	$currency_sign_location = get_option( 'currency_sign_location' );
 	$currency_type = get_option( 'currency_type' );
-	$currency_symbol = $wpdb->get_var( "SELECT `symbol_html` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `id`='" . $currency_type . "' LIMIT 1" );
+	$currency_symbol = $wpdb->get_var( $wpdb->prepare( "SELECT `symbol_html` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `id` = %d LIMIT 1", $currency_type ) );
+	
 	return $currency_symbol;
 }
 
@@ -1750,7 +1751,7 @@ function gold_cart_display_gallery(){
 	return function_exists('gold_shpcrt_display_gallery');
 }
 
-function wpsc_you_save($args = null){
+function wpsc_you_save( $args = null ){
 
 	$defaults = array(
 		'product_id' => false,
@@ -1764,11 +1765,11 @@ function wpsc_you_save($args = null){
 	global $wpdb;
 
 	if ( ! $product_id )
-		if(function_exists('wpsc_the_product_id')){
+		if( function_exists( 'wpsc_the_product_id' ) ){
 			//select the variation ID with lowest price
 			$product_id = $wpdb->get_var('SELECT `posts`.`id` FROM ' . $wpdb->posts . ' `posts` JOIN ' . $wpdb->postmeta . ' `postmeta` ON `posts`.`id` = `postmeta`.`post_id` WHERE `posts`.`post_parent` = ' . wpsc_the_product_id() . ' AND `posts`.`post_type` = "wpsc-product" AND `posts`.`post_status` = "inherit" AND `postmeta`.`meta_key`="_wpsc_price" ORDER BY (`postmeta`.`meta_value`)+0 ASC LIMIT 1');
-			if(!$product_id)
-				$product_id=wpsc_the_product_id();
+			if( ! $product_id )
+				$product_id = wpsc_the_product_id();
 		}
 
 	if ( ! $product_id )

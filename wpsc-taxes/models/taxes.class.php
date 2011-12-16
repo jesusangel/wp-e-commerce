@@ -87,7 +87,7 @@ class wpec_taxes {
 		//initialize return variable
 		// use wpsc_tax_rate hook to provide your own tax solution
 		$returnable = apply_filters( 'wpsc_tax_rate', false, $this, $country_code, $region_code );
-		
+
 		if ( $returnable !== false )
 			return $returnable;
 
@@ -152,7 +152,7 @@ class wpec_taxes {
 
 		return $returnable;
 	} // wpec_taxes_get_band_from_name
-	
+
 	/**
 	 * @author: Jeremy Smith
 	 * @description: wpec_taxes_get_band_from_index - retrieves the tax band for the given name
@@ -191,7 +191,7 @@ class wpec_taxes {
 		//get the tax band and tax rate
 		$tax_band = $this->wpec_taxes_get_band_from_index( $taxes_band_index );
 		$rate_array = $this->wpec_taxes_get_rate( $country_code, $region_code );
-		
+
 		//set the tax rate depending on product rate settings
 		if(isset($tax_band['rate']))
 			switch ( $this->wpec_taxes_get_product() ) {
@@ -252,9 +252,9 @@ class wpec_taxes {
 	 *                              Default action is to not include an order by statement.
 	 * @return: array, int, string or false
 	 * */
-	function wpec_taxes_get_country_information( $columns=false, $where=false, $order_by=false ) {
+	function wpec_taxes_get_country_information( $columns = false, $where = false, $order_by = false ) {
 		//check for all-markets
-		if('country' == $columns && 1 == count($where) && 'all-markets' == $where['isocode'])
+		if( 'country' == $columns && 1 == count( $where ) && 'all-markets' == $where['isocode'] )
 		{
 			$returnable = 'All Markets';
 		}
@@ -267,30 +267,35 @@ class wpec_taxes {
 			$columns = ($columns) ? $columns : array( '*' );
 
 			//change columns to array if not an array
-			if ( !is_array( $columns ) ) {
+			if ( ! is_array( $columns ) )
 				$columns = array( $columns );
-			}
+			
+			$columns = array_map( 'esc_sql', $columns );
 
 			//if where is set then formulate conditions
 			if ( $where ) {
 				foreach ( $where as $column => $condition ) {
-					$where_query[] = (is_numeric( $condition )) ? "{$column}={$condition}" : "{$column}='{$condition}'";
+					$condition = esc_sql( $condition );
+					$where_query[] = ( is_numeric( $condition ) ) ? "{$column}={$condition}" : "{$column}='{$condition}'";
 				}// foreach
 			}// if
+
 			//formulate query
 			$query = 'SELECT ' . implode( ',', $columns ) . ' FROM ' . WPSC_TABLE_CURRENCY_LIST;
-			if ( isset( $where_query ) ) {
+
+			if ( isset( $where_query ) )
 				$query .= ' WHERE ' . implode( ' AND ', $where_query );
-			}// if
+
 			//if order_by is set, add to query
 			if ( $order_by ) {
-				if ( !is_array( $order_by ) ) {
+				if ( ! is_array( $order_by ) )
 					$order_by = array( $order_by );
-				}
+
+				$order_by = array_map( 'esc_sql', $order_by );
 				$query .= ' ORDER BY ' . implode( ',', $order_by );
 			}// if
 
-			$returnable = (count( $columns ) > 1) ? $wpdb->get_results( $query, ARRAY_A ) : $wpdb->get_var( $query );
+			$returnable = ( count( $columns ) > 1 ) ? $wpdb->get_results( $query, ARRAY_A ) : $wpdb->get_var( $query );
 		}// if
 
 		//return the result
@@ -306,7 +311,7 @@ class wpec_taxes {
 	 *                            Default action is to retrieve the id column.
 	 * @return: int, string, or false
 	 * */
-	function wpec_taxes_get_region_information( $region_code, $column='id' ) {   
+	function wpec_taxes_get_region_information( $region_code, $column='id' ) {
 		//check for all markets ifset return the string 'All Markets'
 		if('all-markets' == $region_code)
 		{
@@ -315,7 +320,7 @@ class wpec_taxes {
 		else
 		{
 			global $wpdb;
-			$query = "SELECT {$column} FROM " . WPSC_TABLE_REGION_TAX . " WHERE code='{$region_code}'";
+			$query = $wpdb->prepare( "SELECT " . esc_sql( $column ) . " FROM " . WPSC_TABLE_REGION_TAX . " WHERE code = %s", $region_code );
 			$returnable = $wpdb->get_var( $query );
 		}// if
 
@@ -342,7 +347,8 @@ class wpec_taxes {
 		$result = $wpdb->get_results( $query, ARRAY_A );
 
 		//add the all markets option to the list
-		array_unshift($result, array('region_code'=>'all-markets', 'name'=>'All Markets'));
+		if ( ! empty( $result ) )
+			array_unshift($result, array('region_code'=>'all-markets', 'name'=>'All Markets'));
 
 		return $result;
 	} // wpec_taxes_get_regions
@@ -357,9 +363,9 @@ class wpec_taxes {
 	function wpec_taxes_get_region_code_by_id( $id ) {
 		//database connection
 		global $wpdb;
-		if(!empty($id)){
+		if( ! empty( $id ) ){
 			//get the region code
-			$query = 'SELECT code AS region_code FROM ' . WPSC_TABLE_REGION_TAX . " WHERE id=$id";
+			$query = $wpdb->prepare( 'SELECT code AS region_code FROM ' . WPSC_TABLE_REGION_TAX . " WHERE id = %d", $id );
 			return $wpdb->get_var( $query );
 		}
 		return false;

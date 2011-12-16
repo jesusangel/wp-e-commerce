@@ -12,14 +12,21 @@ require_once( WPSC_FILE_PATH . '/wpsc-includes/misc.functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/mimetype.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/cart.class.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/checkout.class.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/checkout-form.class.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/checkout-form-data.class.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/purchase-log.class.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/purchase-log.helpers.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/display.functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/theme.functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/shortcode.functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/coupons.class.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/country.class.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/category.functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/processing.functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/form-display.functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/merchant.class.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/payment-gateway.class.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/payment-gateway.helpers.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/meta.functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/productfeed.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/image_processing.php' );
@@ -32,6 +39,7 @@ require_once( WPSC_FILE_PATH . '/wpsc-includes/upgrades.php' );
 require_once( WPSC_CORE_JS_PATH . '/tinymce3/tinymce.php' );
 
 require_once( WPSC_FILE_PATH . '/wpsc-includes/currency_converter.inc.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/currency.helpers.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/shopping_cart_functions.php' );
 
 // Themes

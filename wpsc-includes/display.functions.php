@@ -59,65 +59,6 @@ function wpsc_buy_now_button( $product_id, $replaced_shortcode = false ) {
 	}
 }
 
-function wpsc_also_bought( $product_id ) {
-	/*
-	 * Displays products that were bought aling with the product defined by $product_id
-	 * most of it scarcely needs describing
-	 */
-	global $wpdb;
-
-	if ( get_option( 'wpsc_also_bought' ) == 0 ) {
-		//returns nothing if this is off
-		return '';
-	}
-
-
-	// to be made customiseable in a future release
-	$also_bought_limit = 3;
-	$element_widths = 96;
-	$image_display_height = 96;
-	$image_display_width = 96;
-
-	$output = '';
-	$also_bought = $wpdb->get_results( "SELECT `" . $wpdb->posts . "`.* FROM `" . WPSC_TABLE_ALSO_BOUGHT . "`, `" . $wpdb->posts . "` WHERE `selected_product`='" . $product_id . "' AND `" . WPSC_TABLE_ALSO_BOUGHT . "`.`associated_product` = `" . $wpdb->posts . "`.`id` AND `" . $wpdb->posts . "`.`post_status` IN('publish','protected') ORDER BY `" . WPSC_TABLE_ALSO_BOUGHT . "`.`quantity` DESC LIMIT $also_bought_limit", ARRAY_A );
-	if ( count( $also_bought ) > 0 ) {
-		$output .= "<h2 class='prodtitles wpsc_also_bought' >" . __( 'People who bought this item also bought', 'wpsc' ) . "</h2>";
-		$output .= "<div class='wpsc_also_bought'>";
-		foreach ( (array)$also_bought as $also_bought_data ) {
-			$output .= "<div class='wpsc_also_bought_item' style='width: " . $element_widths . "px;'>";
-			if ( get_option( 'show_thumbnails' ) == 1 ) {
-				if ( $also_bought_data['image'] != null ) {
-					$output .= "<a href='" . get_permalink($also_bought_data['ID']) . "' class='preview_link'  rel='" . str_replace( " ", "_", get_the_title($also_bought_data['ID']) ) . "'>";
-					$image_path = "index.php?productid=" . $also_bought_data['ID'] . "&amp;width=" . $image_display_width . "&amp;height=" . $image_display_height . "";
-
-					$output .= "<img src='$image_path' id='product_image_" . $also_bought_data['ID'] . "' class='product_image' style='margin-top: " . $margin_top . "px'/>";
-					$output .= "</a>";
-				} else {
-					if ( get_option( 'product_image_width' ) != '' ) {
-						$output .= "<img src='" . WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif' title='" . get_the_title($also_bought_data['ID']) . "' alt='" . $also_bought_data['name'] . "' width='$image_display_height' height='$image_display_height' id='product_image_" . $also_bought_data['ID'] . "' class='product_image' />";
-					} else {
-						$output .= "<img src='" . WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif' title='" . get_the_title($also_bought_data['ID']) . "' alt='" . htmlentities( stripslashes( get_the_title($also_bought_data['ID']) ), ENT_QUOTES, 'UTF-8' ) . "' id='product_image_" . $also_bought_data['ID'] . "' class='product_image' />";
-					}
-				}
-			}
-
-			$output .= "<a class='wpsc_product_name' href='" . get_permalink($also_bought_data['ID']) . "'>" . get_the_title($also_bought_data['ID']) . "</a>";
-			$price = get_product_meta($also_bought_data['ID'], 'price', true);
-			$special_price = get_product_meta($also_bought_data['ID'], 'special_price', true);
-			if(!empty($special_price)){
-				$output .= '<span style="text-decoration: line-through;">' . wpsc_currency_display( $price ) . '</span>';
-				$output .= wpsc_currency_display( $special_price );
-			} else {
-				$output .= wpsc_currency_display( $price );
-			}
-			$output .= "</div>";
-		}
-		$output .= "</div>";
-		$output .= "<br clear='all' />";
-	}
-	return $output;
-}
-
 /**
  * Get the URL of the loading animation image.
  * Can be filtered using the wpsc_loading_animation_url filter.
@@ -126,15 +67,15 @@ function wpsc_loading_animation_url() {
 	return apply_filters( 'wpsc_loading_animation_url', WPSC_CORE_THEME_URL . 'wpsc-images/indicator.gif' );
 }
 
-function fancy_notifications() {	
+function fancy_notifications() {
 	return wpsc_fancy_notifications( true );
 }
 function wpsc_fancy_notifications( $return = false ) {
 	static $already_output = false;
-	
+
 	if ( $already_output )
 		return '';
-	
+
 	$output = "";
 	if ( get_option( 'fancy_notifications' ) == 1 ) {
 		$output = "";
@@ -146,9 +87,9 @@ function wpsc_fancy_notifications( $return = false ) {
 		$output .= "  </div>\n\r";
 		$output .= "</div>\n\r";
 	}
-	
+
 	$already_output = true;
-	
+
 	if ( $return )
 		return $output;
 	else
@@ -196,7 +137,7 @@ function external_link( $product_id ) {
  */
 
 function wpsc_add_to_cart_button( $product_id, $return = false ) {
-	global $wpdb,$wpsc_variations;
+	global $wpdb, $wpsc_variations;
 	$output = '';
 	if ( $product_id > 0 ) {
 		// grab the variation form fields here
@@ -226,7 +167,7 @@ function wpsc_add_to_cart_button( $product_id, $return = false ) {
 				</form>
 			</div>
 		<?php
-		
+
 		if ( $return )
 			return ob_get_clean();
 	}
@@ -313,13 +254,13 @@ function wpsc_obtain_the_title() {
 			$full_product_name = $wpsc_title_data['product'][$product_name];
 		} else if ( $product_name != '' ) {
 			$product_id = $wp_query->post->ID;
-			$full_product_name = $wpdb->get_var( "SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`='{$product_id}' LIMIT 1" );
+			$full_product_name = $wpdb->get_var( $wpdb->prepare( "SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`= %d LIMIT 1", $product_id ) );
 			$wpsc_title_data['product'][$product_name] = $full_product_name;
 		} else {
 			if(isset($_REQUEST['product_id'])){
 				$product_id = absint( $_REQUEST['product_id'] );
-				$product_name = $wpdb->get_var( "SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`='{$product_id}' LIMIT 1" );
-				$full_product_name = $wpdb->get_var( "SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`='{$product_id}' LIMIT 1" );
+				$product_name = $wpdb->get_var( $wpdb->prepare( "SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`= %d LIMIT 1", $product_id ) );
+				$full_product_name = $wpdb->get_var( $wpdb->prepare( "SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`= %d LIMIT 1", $product_id ) );
 				$wpsc_title_data['product'][$product_name] = $full_product_name;
 			}else{
 				//This has to exist, otherwise we would have bailed earlier.
@@ -355,7 +296,7 @@ function wpsc_obtain_the_description() {
 
 	if ( is_numeric( $_GET['product_id'] ) ) {
 		$product_id = absint( $_GET['product_id'] );
-		$output = $wpdb->get_var( "SELECT `post_content` FROM `" . $wpdb->posts . "` WHERE `id`='{$product_id}' LIMIT 1" );
+		$output = $wpdb->get_var( $wpdb->prepare( "SELECT `post_content` FROM `" . $wpdb->posts . "` WHERE `id`= %d LIMIT 1", $product_id ) );
 	}
 	return $output;
 }

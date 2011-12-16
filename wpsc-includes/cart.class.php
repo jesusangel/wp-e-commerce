@@ -201,7 +201,7 @@ function wpsc_cart_has_shipping() {
 */
 function wpsc_cart_shipping() {
    global $wpsc_cart;
-   return wpsc_currency_display($wpsc_cart->calculate_total_shipping());
+   return wpsc_currency_display( $wpsc_cart->calculate_total_shipping() );
 }
 
 
@@ -375,9 +375,9 @@ function wpsc_google_checkout(){
 }
 function wpsc_empty_google_logs(){
    global $wpdb;
-   $sql="DELETE FROM  `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`=".$_SESSION['wpsc_sessionid'];
-   $wpdb->query($sql);
-   unset($_SESSION['wpsc_sessionid']);
+   $sql = $wpdb->prepare( "DELETE FROM  `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` = '%s'", $_SESSION['wpsc_sessionid'] );
+   $wpdb->query( $sql );
+   unset( $_SESSION['wpsc_sessionid'] );
 
 }
 /**
@@ -449,11 +449,11 @@ function wpsc_shipping_quote_name() {
 */
 function wpsc_shipping_quote_value($numeric = false) {
    global $wpsc_cart;
-   if($numeric == true) {
-      return $wpsc_cart->shipping_quote['value'];
-   } else {
-      return wpsc_currency_display($wpsc_cart->shipping_quote['value']);
-   }
+
+   $value = apply_filters( 'wpsc_shipping_quote_value', $wpsc_cart->shipping_quote['value'] );
+   
+   return ( $numeric ) ? $value : wpsc_currency_display( $value );
+
 }
 
 /**
@@ -723,7 +723,7 @@ class wpsc_cart {
       }
 
       if(($this->shipping_quotes != null) && (array_search($this->selected_shipping_option, array_keys($this->shipping_quotes)) === false)) {
-         $this->selected_shipping_option = array_pop(array_keys(array_slice($this->shipping_quotes,0,1)));
+         $this->selected_shipping_option = apply_filters ( 'wpsc_default_shipping_quote', array_pop( array_keys( array_slice ($this->shipping_quotes, 0, 1 ) ) ), $this->shipping_quotes );
       }
   }
 
@@ -800,7 +800,7 @@ class wpsc_cart {
 
       if($add_tax == true) {
          if(($country_data['has_regions'] == 1)) {
-            $region_data = $wpdb->get_row("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."` WHERE `".WPSC_TABLE_REGION_TAX."`.`country_id` IN('".$country_data['id']."') AND `".WPSC_TABLE_REGION_TAX."`.`id` IN('".$tax_region."') ",ARRAY_A) ;
+            $region_data = $wpdb->get_row( $wpdb->prepare( "SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."` WHERE `".WPSC_TABLE_REGION_TAX."`.`country_id` IN('%s') AND `".WPSC_TABLE_REGION_TAX."`.`id` IN('%s') ", $country_data['id'], $tax_region ), ARRAY_A) ;
             $tax_percentage =  $region_data['tax'];
          } else {
             $tax_percentage =  $country_data['tax'];
@@ -813,9 +813,7 @@ class wpsc_cart {
          $this->clear_cache();
          $this->tax_percentage = $tax_percentage;
 
-         foreach($this->cart_items as $key => $cart_item) {
-            $this->cart_items[$key]->refresh_item();
-         }
+         $this->wpsc_refresh_cart_items();
       }
   }
 
@@ -832,7 +830,7 @@ class wpsc_cart {
 
     if(($parameters['quantity'] > 0) && ($this->check_remaining_quantity($product_id, $parameters['variation_values'], $parameters['quantity']) == true)) {
          $new_cart_item = new wpsc_cart_item($product_id,$parameters, $this);
-         do_action('wpsc_set_cart_item' , $product_id , $parameters , $this);
+         do_action_ref_array( 'wpsc_set_cart_item' , array( $product_id , $parameters , &$this ) );
          $add_item = true;
          $edit_item = false;
          if((count($this->cart_items) > 0) && ($new_cart_item->is_donation != 1)) {
@@ -918,7 +916,7 @@ class wpsc_cart {
          $priceandstock_id = 0;
 
          if($stock > 0) {
-            $claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')");
+            $claimed_stock = $wpdb->get_var( $wpdb->prepare( "SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN(%d) AND `variation_stock_id` IN('%d')", $product_id, $priceandstock_id  ) );
             if(($claimed_stock + $quantity) <= $stock) {
                $output = true;
             } else {
@@ -956,7 +954,7 @@ class wpsc_cart {
 			$priceandstock_id = 0;
 
 			if ( $stock > 0 ) {
-				$claimed_stock = $wpdb->get_var( "SELECT SUM(`stock_claimed`) FROM `" . WPSC_TABLE_CLAIMED_STOCK . "` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')" );
+				$claimed_stock = $wpdb->get_var( $wpdb->prepare( "SELECT SUM(`stock_claimed`) FROM `" . WPSC_TABLE_CLAIMED_STOCK . "` WHERE `product_id` IN(%d) AND `variation_stock_id` IN(%d)", $product_id, $priceandstock_id ) );
 				$output = $stock - $claimed_stock;
 			}
 		}
@@ -1067,8 +1065,10 @@ class wpsc_cart {
       // Get tax only if it is included
       $tax = ( ! wpsc_tax_isincluded() ) ? $this->calculate_total_tax() : 0.00;
 
-      // Get coupon amount
-      $coupons_amount = $this->coupons_amount;
+      // Get coupon amount, note that no matter what float precision this
+      // coupon amount is, it's always saved to the database with rounded
+      // value anyways
+      $coupons_amount = round( $this->coupons_amount, 2 );
 
       // Calculate the total
       $total = ( ( $subtotal + $shipping + $tax ) > $coupons_amount ) ? ( $subtotal + $shipping + $tax - $coupons_amount ) : 0.00;
@@ -1120,19 +1120,17 @@ class wpsc_cart {
     * @access public
     * @return float returns the price as a floating point value
    */
-   function calculate_total_tax()
-   {
-      //uses new wpec_taxes functionality
-         $wpec_taxes_controller = new wpec_taxes_controller();
-         $taxes_total = $wpec_taxes_controller->wpec_taxes_calculate_total();
-         $this->total_tax = $taxes_total['total'];
-         if(isset($taxes_total['rate']))
-         {
-            $this->tax_percentage = $taxes_total['rate'];
-         }// if
+   function calculate_total_tax() {
 
-      return $this->total_tax;
-   }// calculate_total_tax
+      $wpec_taxes_controller = new wpec_taxes_controller();
+      $taxes_total = $wpec_taxes_controller->wpec_taxes_calculate_total();
+      $this->total_tax = $taxes_total['total'];
+      
+      if( isset( $taxes_total['rate'] ) )
+         $this->tax_percentage = $taxes_total['rate'];
+
+      return apply_filters( 'wpsc_calculate_total_tax', $this->total_tax );
+   }
 
 
 
@@ -1201,7 +1199,7 @@ class wpsc_cart {
     }else{
          $total = 0;
     }
-    return $total;
+    return apply_filters( 'wpsc_convert_total_shipping', $total );
   }
 
    /**
@@ -1475,10 +1473,10 @@ class wpsc_cart {
    /**
     * Applying Coupons
     */
-   function apply_coupons($couponAmount='', $coupons=''){
+   function apply_coupons( $coupons_amount = '', $coupon_name = '' ){
       $this->clear_cache();
-      $this->coupons_name = $coupons;
-      $this->coupons_amount = $couponAmount;
+      $this->coupons_name = $coupon_name;
+      $this->coupons_amount = apply_filters( 'wpsc_coupons_amount', $coupons_amount, $coupon_name );
       $this->calculate_total_price();
          if ( $this->total_price < 0 ) {
             $this->coupons_amount += $this->total_price;
@@ -1603,7 +1601,6 @@ function refresh_item() {
 	$this->stock = get_post_meta( $product_id, '_wpsc_stock', true );
 	$this->is_donation = get_post_meta( $product_id, '_wpsc_is_donation', true );
 
-
 	if ( isset( $special_price ) && $special_price > 0 && $special_price < $price )
 		$price = $special_price;
 	$priceandstock_id = 0;
@@ -1708,8 +1705,9 @@ function refresh_item() {
 
 	 // update the claimed stock here
 	$this->update_claimed_stock();
-        
+
     do_action_ref_array( 'wpsc_refresh_item', array( &$this ) );
+
 }
 
    /**
@@ -1833,14 +1831,16 @@ function refresh_item() {
    function save_to_db($purchase_log_id) {
       global $wpdb, $wpsc_shipping_modules;
 
-      $method = $this->cart->selected_shipping_method;
-	  $shipping = 0;
-      if( !empty($method) && method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
-         $shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
-      }
-      if($this->cart->has_total_shipping_discount()) {
-            $shipping = 0;
-      }
+	$method = $this->cart->selected_shipping_method;
+	$shipping = 0;
+
+	if( ! empty( $method ) && method_exists( $wpsc_shipping_modules[$method], "get_item_shipping" ) )
+	    $shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping( $this );
+
+	if( $this->cart->has_total_shipping_discount() )
+	    $shipping = 0;
+
+	$shipping = apply_filters( 'wpsc_item_shipping_amount_db', $shipping, $this );
 
       //initialize tax variables
       $tax = 0;
@@ -1854,30 +1854,43 @@ function refresh_item() {
          $tax_rate = $taxes['rate'];
          $tax = $taxes['tax'];
       }
+      $wpdb->insert(
+		WPSC_TABLE_CART_CONTENTS,
+		array(
+		    'prodid' => $this->product_id,
+		    'name' => $this->product_name,
+		    'purchaseid' => $purchase_log_id,
+		    'price' => $this->unit_price,
+		    'pnp' => $shipping,
+		    'tax_charged' => $tax,
+		    'gst' => $tax_rate,
+		    'quantity' => $this->quantity,
+		    'donation' => $this->is_donation,
+		    'no_shipping' => 0,
+		    'custom_message' => $this->custom_message,
+		    'files' => serialize($this->custom_file),
+		    'meta' => NULL
+		),
+		array(
+		    '%d',
+		    '%s',
+		    '%d',
+		    '%f',
+		    '%f',
+		    '%f',
+		    '%f',
+		    '%s',
+		    '%d',
+		    '%d',
+		    '%s',
+		    '%s',
+		    '%s'
+		)
+	      );
 
-      $wpdb->query($wpdb->prepare(
-      "INSERT INTO `".WPSC_TABLE_CART_CONTENTS."` (
-         `prodid`, `name`, `purchaseid`,  `price`, `pnp`,
-         `tax_charged`, `gst`, `quantity`, `donation`,
-         `no_shipping`, `custom_message`, `files`, `meta`
-      ) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '%s', NULL)",
-      $this->product_id,
-      $this->product_name,
-      $purchase_log_id,
-      $this->unit_price,
-      (float)$shipping,
-      (float)$tax,
-      (float)$tax_rate,
-      $this->quantity,
-      $this->is_donation,
-      $this->custom_message,
-      serialize($this->custom_file)
-      ));
-      $cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_CART_CONTENTS."` LIMIT 1");
+      $cart_id = $wpdb->get_var( "SELECT " . $wpdb->insert_id . " AS `id` FROM `".WPSC_TABLE_CART_CONTENTS."` LIMIT 1");
 
       wpsc_update_cartmeta($cart_id, 'sku', $this->sku);
-
-
 
        $downloads = get_option('max_downloads');
       if($this->is_downloadable == true) {
@@ -1889,25 +1902,40 @@ function refresh_item() {
             'post_status' => 'inherit'
          ));
          foreach($product_files as $file){
+
             // if the file is downloadable, check that the file is real
             $unique_id = sha1(uniqid(mt_rand(), true));
-            $wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` (
-               `product_id` , `fileid` ,
-               `purchid` , `cartid`,
-               `uniqueid`, `downloads`,
-               `active` , `datetime`
-            ) VALUES (
-               '{$this->product_id}', '{$file->ID}',
-               '{$purchase_log_id}', '{$cart_id}',
-               '{$unique_id}', '$downloads',
-               '0', NOW()
-            );");
 
-            $download_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` LIMIT 1");
+	    $wpdb->insert(
+			WPSC_TABLE_DOWNLOAD_STATUS,
+			array(
+			    'product_id' => $this->product_id,
+			    'fileid' => $file->ID,
+			    'purchid' => $purchase_log_id,
+			    'cartid' => $cart_id,
+			    'uniqueid' => $unique_id,
+			    'downloads' => $downloads,
+			    'active' => 0,
+			    'datetime' => date( 'Y-m-d H:i:s' )
+			),
+			array(
+			   '%d',
+			   '%d',
+			   '%d',
+			   '%d',
+			   '%s',
+			   '%s',
+			   '%d',
+			   '%s',
+		       )
+		   );
+
+            $download_id = $wpdb->get_var( "SELECT " . $wpdb->insert_id . " AS `id` FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` LIMIT 1");
             wpsc_update_meta($download_id, '_is_legacy', 'false', 'wpsc_downloads');
          }
 
       }
+
 
       do_action('wpsc_save_cart_item', $cart_id, $this->product_id);
    }

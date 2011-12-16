@@ -15,6 +15,7 @@ $conditions = maybe_unserialize($coupon['condition']);
   $output .= "   <th>".__('Start', 'wpsc')."</th>\n\r";
   $output .= "   <th>".__('Expiry', 'wpsc')."</th>\n\r";
   $output .= "   <th>".__('Use Once', 'wpsc')."</th>\n\r";
+  $output .= "   <th>".__('Limited Number', 'wpsc')."</th>\n\r";
   $output .= "   <th>".__('Active', 'wpsc')."</th>\n\r";
 	$output .= "   <th>".__('Apply On All Products', 'wpsc')."</th>\n\r";
   $output .= "   <th></th>\n\r";
@@ -44,6 +45,10 @@ $conditions = maybe_unserialize($coupon['condition']);
   $output .= "  <td>\n\r";
   $output .= "   <input type='hidden' value='0' name='edit_coupon[".$id."][use-once]' />\n\r";
   $output .= "   <input type='checkbox' value='1' ".(($coupon['use-once'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][use-once]' />\n\r";
+  $output .= "  </td>\n\r";
+  $output .= "  <td>\n\r";
+  $output .= "   <input type='hidden' value='0' name='edit_coupon[".$id."][use-x-times]' />\n\r";
+  $output .= "   <input type='text' size='4' value='".$coupon['use-x-times']."' name='edit_coupon[".$id."][use-x-times]' />\n\r";
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
   $output .= "   <input type='hidden' value='0' name='edit_coupon[".$id."][active]' />\n\r";
@@ -133,6 +138,7 @@ $output ='
 				<option value="not_contain">' . __( 'Does not contain', 'wpsc') . '</option>
 				<option value="begins">' . __( 'Begins with', 'wpsc') . '</option>
 				<option value="ends">' . __( 'Ends with', 'wpsc') . '</option>
+				<option value="category">' . __( 'In Category', 'wpsc') . '</option>
 			</select>
 			<span>
 				<input type="text" name="rules[value][]"/>
@@ -279,9 +285,10 @@ function wpsc_packing_slip( $purchase_id ) {
 
 				switch($form_field['type']) {
 					case 'country':
-
-						$delivery_region_count = $wpdb->get_var("SELECT COUNT(`regions`.`id`) FROM `".WPSC_TABLE_REGION_TAX."` AS `regions` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('".$wpdb->escape( $purch_data['billing_country'])."')");
-			
+						
+						$region_count_sql = $wpdb->prepare( "SELECT COUNT(`regions`.`id`) FROM `".WPSC_TABLE_REGION_TAX."` AS `regions` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('%s')", $purch_data['billing_country'] );
+						$delivery_region_count = $wpdb->get_var( $region_count_sql );
+						
 						if(is_numeric($purch_data['billing_region']) && ($delivery_region_count > 0)) 
 							echo "	<tr><td>".__('State', 'wpsc').":</td><td>".wpsc_get_region($purch_data['billing_region'])."</td></tr>\n\r";
 						
@@ -305,24 +312,12 @@ function wpsc_packing_slip( $purchase_id ) {
 					break;
 
 					default:				
-						if( $form_field['name'] == "Cupcakes") {
-							parse_str($rekeyed_input[$form_field['id']]['value'], $cupcakes );
-							
-							foreach( $cupcakes as $product_id => $quantity ) {
-								$product = get_post($product_id);
-								$string .= "(".$quantity.") ".$product->post_title.", ";
-							}
-							
-							$string = rtrim($string, ", ");
-							echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($string), ENT_QUOTES, 'UTF-8')."</td></tr>\n\r";
-						} else {
-							if ($form_field['name']=="State" && !empty($purch_data['billing_region']) || $form_field['name']=="State" && !empty($purch_data['billing_region']))
-								echo "";
-							else
-								echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".
-									( isset( $rekeyed_input[$form_field['id']] ) ? htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES, 'UTF-8') : '' ).
-									"</td></tr>\n\r";
-						}
+                                                                                                if ($form_field['name']=="State" && !empty($purch_data['billing_region']) || $form_field['name']=="State" && !empty($purch_data['billing_region']))
+                                                                                                        echo "";
+                                                                                                else
+                                                                                                        echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".
+                                                                                                                ( isset( $rekeyed_input[$form_field['id']] ) ? htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES, 'UTF-8') : '' ).
+                                                                                                                "</td></tr>\n\r";
 					break;
 				}
 

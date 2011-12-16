@@ -35,14 +35,14 @@ function wpsc_find_purchlog_status_name( $purchlog_status ) {
  */
 function wpsc_get_state_by_id( $id, $return_value ) {
 	global $wpdb;
-	$sql = "SELECT `" . $return_value . "` FROM `" . WPSC_TABLE_REGION_TAX . "` WHERE `id`=" . $id;
+	$sql = $wpdb->prepare( "SELECT " . esc_sql( $return_value ) . " FROM `" . WPSC_TABLE_REGION_TAX . "` WHERE `id`= %d", $id );
 	$value = $wpdb->get_var( $sql );
 	return $value;
 }
 
 function wpsc_country_has_state($country_code){
 	global $wpdb;
-	$country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`= '".$country_code."' LIMIT 1",ARRAY_A);
+	$country_data = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`= %s LIMIT 1", $country_code ), ARRAY_A );
 	return $country_data;
 }
 
@@ -104,6 +104,7 @@ function wpsc_add_new_user( $user_login, $user_pass, $user_email ) {
  * @return bool true or false
  */
 function wpsc_product_has_variations( $product_id ) {
+    	_deprecated_function( __FUNCTION__, '3.8', 'wpsc_have_variations()' );
 	global $wpdb;
 	if ( $product_id > 0 ) {
 		$variation_count = $wpdb->get_var( "SELECT COUNT(`id`) FROM `" . WPSC_TABLE_VARIATION_ASSOC . "` WHERE `type` IN('product') AND `associated_id` IN('{$product_id}')" );
@@ -210,66 +211,22 @@ function wpsc_set_aioseop_keywords( $data ) {
 
 add_filter( 'aioseop_keywords', 'wpsc_set_aioseop_keywords' );
 
-/**
- * wpsc_populate_also_bought_list function, runs on checking out, populates the also bought list.
- */
-function wpsc_populate_also_bought_list() {
-	global $wpdb, $wpsc_cart, $wpsc_coupons;
-	$new_also_bought_data = array( );
-	foreach ( $wpsc_cart->cart_items as $outer_cart_item ) {
-		$new_also_bought_data[$outer_cart_item->product_id] = array( );
-		foreach ( $wpsc_cart->cart_items as $inner_cart_item ) {
-			if ( $outer_cart_item->product_id != $inner_cart_item->product_id ) {
-				$new_also_bought_data[$outer_cart_item->product_id][$inner_cart_item->product_id] = $inner_cart_item->quantity;
-			} else {
-				continue;
-			}
-		}
-	}
-
-	$insert_statement_parts = array( );
-	foreach ( $new_also_bought_data as $new_also_bought_id => $new_also_bought_row ) {
-		$new_other_ids = array_keys( $new_also_bought_row );
-		$also_bought_data = $wpdb->get_results( "SELECT `id`, `associated_product`, `quantity` FROM `" . WPSC_TABLE_ALSO_BOUGHT . "` WHERE `selected_product` IN('$new_also_bought_id') AND `associated_product` IN('" . implode( "','", $new_other_ids ) . "')", ARRAY_A );
-		$altered_new_also_bought_row = $new_also_bought_row;
-
-		foreach ( (array)$also_bought_data as $also_bought_row ) {
-			$quantity = $new_also_bought_row[$also_bought_row['associated_product']] + $also_bought_row['quantity'];
-
-			unset( $altered_new_also_bought_row[$also_bought_row['associated_product']] );
-			$wpdb->query( "UPDATE `" . WPSC_TABLE_ALSO_BOUGHT . "` SET `quantity` = {$quantity} WHERE `id` = '{$also_bought_row['id']}' LIMIT 1;" );
-		}
-
-
-		if ( count( $altered_new_also_bought_row ) > 0 ) {
-			foreach ( $altered_new_also_bought_row as $associated_product => $quantity ) {
-				$insert_statement_parts[] = "(" . absint( $new_also_bought_id ) . "," . absint( $associated_product ) . "," . absint( $quantity ) . ")";
-			}
-		}
-	}
-
-	if ( count( $insert_statement_parts ) > 0 ) {
-		$insert_statement = "INSERT INTO `" . WPSC_TABLE_ALSO_BOUGHT . "` (`selected_product`, `associated_product`, `quantity`) VALUES " . implode( ",\n ", $insert_statement_parts );
-		$wpdb->query( $insert_statement );
-	}
-}
-
 function wpsc_get_country_form_id_by_type($type){
 	global $wpdb;
-	$sql = 'SELECT `id`	 FROM `'.WPSC_TABLE_CHECKOUT_FORMS.'` WHERE `type`="'.$type.'" LIMIT 1';
+	$sql = $wpdb->prepare( 'SELECT `id` FROM `'.WPSC_TABLE_CHECKOUT_FORMS.'` WHERE `type`= %s LIMIT 1', $type );
 	$id = $wpdb->get_var($sql);
 	return $id;
 }
 
 function wpsc_get_country( $country_code ) {
 	global $wpdb;
-	$country = $wpdb->get_var( "SELECT `country` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `isocode` IN ('" . $country_code . "') LIMIT 1" );
+	$country = $wpdb->get_var( $wpdb->prepare( "SELECT `country` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `isocode` IN (%s) LIMIT 1", $country_code ) );
 	return $country;
 }
 
-function wpsc_get_region( $region_code ) {
+function wpsc_get_region( $region_id ) {
 	global $wpdb;
-	$region = $wpdb->get_var( "SELECT `name` FROM `" . WPSC_TABLE_REGION_TAX . "` WHERE `id` IN('$region_code')" );
+	$region = $wpdb->get_var( $wpdb->prepare( "SELECT `name` FROM `" . WPSC_TABLE_REGION_TAX . "` WHERE `id` IN(%d)", $region_id ) );
 	return $region;
 }
 
@@ -287,7 +244,7 @@ function nzshpcrt_display_preview_image() {
 				$imagepath = WPSC_USER_UPLOADS_DIR . $image;
 			} else if ( $_GET['category_id'] ) {
 				$category_id = absint( $_GET['category_id'] );
-				$image = $wpdb->get_var( "SELECT `image` FROM `" . WPSC_TABLE_PRODUCT_CATEGORIES . "` WHERE `id` = '{$category_id}' LIMIT 1" );
+				$image = $wpdb->get_var( $wpdb->prepare( "SELECT `image` FROM `" . WPSC_TABLE_PRODUCT_CATEGORIES . "` WHERE `id` = %d LIMIT 1", $category_id ) );
 				if ( $image != '' ) {
 					$imagepath = WPSC_CATEGORY_DIR . $image;
 				}
@@ -733,5 +690,33 @@ function wpsc_check_memory_limit() {
 	}
 	return;
 }
+
+/* Thanks to: http://www.if-not-true-then-false.com/2009/format-bytes-with-php-b-kb-mb-gb-tb-pb-eb-zb-yb-converter */
+function byteFormat($bytes, $unit = "", $decimals = 2) {
+	$units = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3, 'TB' => 4, 
+			'PB' => 5, 'EB' => 6, 'ZB' => 7, 'YB' => 8);
+	$value = 0;
+	if ($bytes > 0) {
+		// Generate automatic prefix by bytes 
+		// If wrong prefix given
+		if (!array_key_exists($unit, $units)) {
+			$pow = floor(log($bytes)/log(1024));
+			$unit = array_search($pow, $units);
+		}
+ 
+		// Calculate byte value by prefix
+		$value = ($bytes/pow(1024,floor($units[$unit])));
+	}
+ 
+	// If decimals is not numeric or decimals is less than 0 
+	// then set default value
+	if (!is_numeric($decimals) || $decimals < 0) {
+		$decimals = 2;
+	}
+ 
+	// Format output
+	return sprintf('%.' . $decimals . 'f '.$unit, $value);
+  }
+
 
 ?>

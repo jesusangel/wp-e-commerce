@@ -145,7 +145,7 @@ class ash_ups {
             }
             </script>");
             $output .= "        <select id='drop_type' name='wpsc_ups_settings[DropoffType]' onChange='checkDropValue()' >\n\r";
-            
+
             $sel2_drop = "";
             if (empty($wpsc_ups_settings['DropoffType'])){
                 $sel2_drop = "01";
@@ -169,7 +169,7 @@ class ash_ups {
             $output .= "    <td>".__('Customer Type', 'wpsc')."</td>\n\r";
             $output .= "    <td>\n\r";
             $output .= "        <select id='cust_type' name='wpsc_ups_settings[CustomerType]' ".$cust." >\n\r";
-            
+
             $sel3_drop = "";
             if (empty($wpsc_ups_settings['CustomerType'])){
                 $sel3_drop = "01";
@@ -201,16 +201,11 @@ class ash_ups {
             $output .= "        </select>\n\r";
             $output .= "    </td>\n\r";
             $output .= "</tr>\n\r";
-
-            $selected_env = $wpsc_ups_settings['upsenvironment'];
-            if ($selected_env == "1"){
-                $env_test = "checked=\"checked\"";
-            }
             $output .= ("
                         <tr>
                             <td><label for=\"ups_env_test\" >".__('Use Testing Environment', 'wpsc')."</label></td>
                             <td>
-                                <input type=\"checkbox\" id=\"ups_env_test\" name=\"wpsc_ups_settings[upsenvironment]\" value=\"1\" ".$env_test." /><br />
+                                <input type=\"checkbox\" id=\"ups_env_test\" name=\"wpsc_ups_settings[upsenvironment]\" value=\"1\" ". checked( $wpsc_ups_settings['upsenvironment'], 1, false ) ." /><br />
                             </td>
                         </tr>
                         ");
@@ -248,7 +243,7 @@ class ash_ups {
                             <td><label for=\"ups_singular_shipping\" >".__('Singular Shipping', 'wpsc')." *</label></td>
                             <td>
                                 <input type=\"checkbox\" id=\"ups_singular_shipping\" name=\"wpsc_ups_settings[singular_shipping]\" value=\"1\" ".$singular_shipping." /><br />
-                                ".__('Rate each quantity of items in a cart as its own package using dimensions on product')."
+                                " . __( 'Rate each quantity of items in a cart as its own package using dimensions on product', 'wpsc' ) . "
                             </td>
                         </tr>
                         ");
@@ -368,7 +363,7 @@ class ash_ups {
             $pack["LargePackageIndicator"] = "";
         }
     }
-    
+
     private function _insured_value(&$pack, $package, $args){
         $monetary_value = $package->value;
         if ($package->insurance === TRUE){
@@ -380,16 +375,16 @@ class ash_ups {
                     "MonetaryValue" => $package->insured_amount
             );
         }
-        
+
     }
-    
+
     private function _declared_value(&$pack, $package, $args){
         $pack["PackageServiceOptions"]["DeclaredValue"] = array(
                 "CurrencyCode" => $args["currency"],
                 "MonetaryValue" => $args["cart_total"]
         );
     }
-    
+
     private function _build_shipment(&$Shipment, $args){
         $cart_shipment = $this->shipment;
 
@@ -500,9 +495,9 @@ class ash_ups {
                 $Shipper["Address"]["City"] = $args["shipr_city"];
             }
         }
-        
+
         $Shipment .= $this->array2xml(array("Shipper"=>$Shipper));
-        
+
         // The physical address the shipment is from (normally the same as billing)
         $ShipFrom=array(
             "Address"=>array(
@@ -519,7 +514,7 @@ class ash_ups {
         }
 
         $Shipment .= $this->array2xml(array("ShipFrom"=>$ShipFrom));
-        
+
         $ShipTo= array(
             "Address"=>array(
                 "StateProvinceCode"=>$args['dest_state'], // The Destination State
@@ -531,7 +526,7 @@ class ash_ups {
         if ($args['residential'] == '1'){ //ResidentialAddressIndicator orig - Indicator
             $ShipTo["Address"]["ResidentialAddressIndicator"] = "1";
         }
-        
+
         $Shipment .= $this->array2xml(array("ShipTo"=>$ShipTo));
 
         // If there is a specific service being requested then
@@ -546,7 +541,7 @@ class ash_ups {
                 $Shipment .=array("RateInformation"=>array("NegotiatedRatesIndicator" => ""));
             }
         }
-         
+
         if ((boolean)$args["singular_shipping"]){
             $this->_build_shipment($Shipment,$args);
         }else{
@@ -565,7 +560,7 @@ class ash_ups {
                     )
                 );
             }
-            
+
             $Shipment .= $this->array2xml($package);
         }
 
@@ -754,7 +749,7 @@ class ash_ups {
     function getQuote(){
         global $wpdb, $wpec_ash;
         if (!is_object($wpec_ash)){
-            $wpec_ash = new ASH();        
+            $wpec_ash = new ASH();
         }
 
 
@@ -766,7 +761,7 @@ class ash_ups {
         $wpsc_ups_settings = get_option("wpsc_ups_settings", array());
         // Get the wordpress shopping cart options
         $wpsc_options = get_option("wpsc_options");
-        
+
         // API Auth settings //
         $args['username'] = (array_key_exists('upsaccount',$wpsc_ups_settings)) ? $wpsc_ups_settings['upsusername'] : "";
         $args['password'] = (array_key_exists('upspassword',$wpsc_ups_settings)) ? $wpsc_ups_settings['upspassword'] : "";
@@ -781,18 +776,18 @@ class ash_ups {
         $args['DropoffType'] = $wpsc_ups_settings['DropoffType'];
         $args['packaging'] = $wpsc_ups_settings['48_container'];
         // Preferred Currency to display
-        $currency_data = $wpdb->get_row("SELECT `code`
+        $currency_data = $wpdb->get_row( $wpdb->prepare( "SELECT `code`
                                          FROM `".WPSC_TABLE_CURRENCY_LIST."`
-                                         WHERE `isocode`='".get_option("currency_type")."'
-                                         LIMIT 1", ARRAY_A) ;
+                                         WHERE `isocode`= %s
+                                         LIMIT 1", get_option( 'currency_type' ) ), ARRAY_A ) ;
         if ($currency_data){
             $args['currency'] = $currency_data['code'];
         }else{
             $args['currency'] = "USD";
         }
         // Shipping billing / account address
-        $origin_region_data = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`
-                                WHERE `".WPSC_TABLE_REGION_TAX."`.`id` = '".get_option('base_region')."' ",ARRAY_A);
+        $origin_region_data = $wpdb->get_results( $wpdb->prepare( "SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`
+                                WHERE `".WPSC_TABLE_REGION_TAX."`.`id` = %d ", get_option( 'base_region' ) ),ARRAY_A);
         $args['shipr_state']= (is_array($origin_region_data)) ? $origin_region_data[0]['code'] : "";
         $args['shipr_city'] = get_option('base_city');
         $args['shipr_ccode'] = get_option('base_country');
@@ -811,7 +806,7 @@ class ash_ups {
             // So, UPS is a little off the times
             $args['dest_ccode'] = "GB";
         }
-        
+
         // If ths zip code is provided via a form post use it!
 		$args['dest_pcode'] = '';
         if(isset($_POST['zipcode']) && ($_POST['zipcode'] != "Your Zipcode" && $_POST['zipcode'] != "YOURZIPCODE")) {
@@ -825,12 +820,12 @@ class ash_ups {
             // We cannot get a quote without a zip code so might as well return!
             return array();
         }
-        
+
         // If the region code is provided via a form post use it!
         if(isset($_POST['region']) && !empty($_POST['region'])) {
             $query = $wpdb->prepare( "SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`
                                 WHERE `".WPSC_TABLE_REGION_TAX."`.`id` = %d", $_POST['region'] );
-            $dest_region_data = $wpdb->get_results($query, ARRAY_A);
+            $dest_region_data = $wpdb->get_results( $query, ARRAY_A );
             $args['dest_state'] = (is_array($dest_region_data)) ? $dest_region_data[0]['code'] : "";
             $_SESSION['wpsc_state'] = $args['dest_state'];
         } else if(isset($_SESSION['wpsc_state'])) {
@@ -839,7 +834,7 @@ class ash_ups {
         } else{
             $args['dest_state'] = "";
         }
-        
+
         $shipping_cache_check['state'] = $args['dest_state'];
         $shipping_cache_check['zipcode'] = $args['dest_pcode'];
         $shipping_cache_check['weight'] = $args['weight'];
@@ -858,7 +853,7 @@ class ash_ups {
         // have a shipping quote!
         if(($_SESSION['wpsc_shipping_cache_check'] === $shipping_cache_check)
                 && ($_SESSION['wpsc_shipping_cache'][$this->internal_name] != null)) {
-            
+
             $rate_table = $_SESSION['wpsc_shipping_cache'][$this->internal_name];
             return $rate_table;
         }else{
@@ -888,11 +883,11 @@ class ash_ups {
                 }
             }
         }
-        
+
         $wpec_ash->cache_results($this->internal_name,
                                  $args["dest_ccode"], $args["dest_state"],
                                  $args["dest_pcode"], $rate_table, $this->shipment);
-        
+
         // return the final formatted array !
         return $rate_table;
     }

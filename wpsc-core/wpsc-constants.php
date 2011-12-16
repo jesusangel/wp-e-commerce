@@ -26,9 +26,9 @@ function wpsc_core_constants() {
 	if(!defined('WPSC_URL'))
 		define( 'WPSC_URL',       plugins_url( '', __FILE__ ) );
 	// Define Plugin version
-	define( 'WPSC_VERSION', '3.8.7.4' );
-	define( 'WPSC_MINOR_VERSION', '472259' );
-	define( 'WPSC_PRESENTABLE_VERSION', '3.8.7.4' );
+	define( 'WPSC_VERSION', '4.0-dev' );
+	define( 'WPSC_MINOR_VERSION', '463466' );
+	define( 'WPSC_PRESENTABLE_VERSION', '4.0-dev' );
 
 	// Define Debug Variables for developers
 	define( 'WPSC_DEBUG', false );
@@ -115,12 +115,15 @@ function wpsc_core_constants_table_names() {
 	// existing wordpress tables suitable for the data stored in them.
 	define( 'WPSC_TABLE_PURCHASE_LOGS',          "{$wp_table_prefix}wpsc_purchase_logs" );
 	define( 'WPSC_TABLE_CART_CONTENTS',          "{$wp_table_prefix}wpsc_cart_contents" );
-	define( 'WPSC_TABLE_SUBMITED_FORM_DATA',     "{$wp_table_prefix}wpsc_submited_form_data" );
+	define( 'WPSC_TABLE_SUBMITED_FORM_DATA',     "{$wp_table_prefix}wpsc_submited_form_data" ); // typo!
+	define( 'WPSC_TABLE_SUBMITTED_FORM_DATA',     "{$wp_table_prefix}wpsc_submited_form_data" );
 	define( 'WPSC_TABLE_CURRENCY_LIST',          "{$wp_table_prefix}wpsc_currency_list" );
 
 	// These tables may be needed in some situations, but are not vital to
 	// the core functionality of the plugin
 	define( 'WPSC_TABLE_CLAIMED_STOCK',          "{$wp_table_prefix}wpsc_claimed_stock" );
+
+	// @todo deprecate this at some point
 	define( 'WPSC_TABLE_ALSO_BOUGHT',            "{$wp_table_prefix}wpsc_also_bought" );
 
 	// This could be done using the posts table and the post meta table
@@ -152,6 +155,15 @@ function wpsc_core_constants_table_names() {
 	define( 'WPEC_TRANSIENT_THEME_PATH_PREFIX', 'wpsc_path_' );
 	define( 'WPEC_TRANSIENT_THEME_URL_PREFIX', 'wpsc_url_' );
 
+}
+
+function wpsc_core_constants_purchase_logs() {
+	define( 'WPSC_PAYMENT_STATUS_INCOMPLETE', 1 );
+	define( 'WPSC_PAYMENT_STATUS_RECEIVED'  , 2 );
+	define( 'WPSC_PAYMENT_STATUS_ACCEPTED'  , 3 );
+	define( 'WPSC_PAYMENT_STATUS_DISPATCHED', 4 );
+	define( 'WPSC_PAYMENT_STATUS_CLOSED'    , 5 );
+	define( 'WPSC_PAYMENT_STATUS_DECLINED'  , 6 );
 }
 
 /**

@@ -355,7 +355,7 @@ function wpsc_product_taxes_forms() {
 		}
 	}// if
 
-?>
+?>			<a name="wpsc_tax"></a>
             <p><?php echo $wpec_taxes_controller->wpec_taxes_display_tax_bands( $band_select_settings, $wpec_taxes_band ); ?></p>
 				<p>
 					<?php if ( !$wpec_taxes_controller->wpec_taxes_isincluded() ): ?>
@@ -384,35 +384,52 @@ function wpsc_product_variation_forms() {
 
 	$siteurl = get_option( 'siteurl' );
 	$output  = '';
-
-	// Get variation data from WP Terms
-	$product_term_data = wp_get_object_terms( $post->ID, 'wpsc-variation' );
-	if ( !empty( $product_term_data ) ) {
-		foreach ( $product_term_data as $product_term )
-			$product_terms[] = $product_term->term_id;
-	} else {
-		$product_terms = array();
-	}
 ?>
-				<?php if ( empty( $post->post_title ) ) : ?>
-					<p><?php _e( 'You must first save this Product as a Draft before adding variations', 'wpsc' ); ?></p>
-				<?php else : ?>
-				<div id="product_variations">
-			<div class="variation_checkboxes">
-				<?php
+	<a name="#wpsc_variation_metabox"></a>
+		<?php if ( empty( $post->post_title ) ) : ?>
+			<p><?php _e( 'You must first save this Product as a Draft before adding variations.', 'wpsc' ); ?></p>
+			<h4><a href="<?php echo get_admin_url(); ?>/edit-tags.php?taxonomy=wpsc-variation&post_type=wpsc-product" target="_blank">+ Add New Variation Set</a></h4>
+		<?php else : ?>
+			<div id="product_variations">
+				<p><a name='variation_control'>&nbsp;</a><?php _e( 'Select the Variation sets and then the corresponding Variants you want to add to this product.', 'wpsc' ) ?></p>
 
-				wp_terms_checklist( $post->ID, array(
-					'taxonomy'      => 'wpsc-variation',
-					'selected_cats' => $product_terms,
-					'walker'        => new WPSC_Walker_Variation_Checklist,
-					'checked_ontop' => false
-				) );
+				<ul class="variation_checkboxes">
+					<?php
 
-				?>
-			</div>
-                                <a class="preview button update_variations_action" href='#'><?php _e( 'Update Variations &rarr;', 'wpsc' ); ?></a>
+					wp_terms_checklist( $post->ID, array(
+						'taxonomy'      => 'wpsc-variation',
+						'walker'        => new WPSC_Walker_Variation_Checklist(),
+						'checked_ontop' => false,
+					) );
 
+					?>
+				</ul>
+
+				<p class="update-variations">
+					<a class="button update_variations_action" href='#'><?php _e( 'Apply Variations &rarr;', 'wpsc' ); ?></a>
+					<img src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" class="ajax-feedback" title="" alt="" /><br class="clear" />
+				</p>
+
+				<div class="clear"></div>
+				<h4><a href="#wpsc_variation_metabox" class="add_variation_set_action"><?php esc_html_e( '+ Add New Variants', 'wpsc' ) ?></a></h4>
+
+				<div id="add-new-variation-set">
+					<p>
+						<label for="new-variation-set-name"><?php esc_html_e( "Enter variation set's name", 'wpsc' ); ?></label>
+						<input type="text" class="text-field" id="new-variation-set-name" /><br />
+					</p>
+					<p class="howto"><?php esc_html_e( "Example: Color. If you want to add variants to an existing set, you can enter the name of that set here.", 'wpsc' ); ?></p>
+					<p>
+						<label for="new-variants"><?php esc_html_e( "Enter new variants", 'wpsc' ); ?></label>
+						<input type="text" class="text-field" id="new-variants" /><br />
+					</p>
+					<p class="howto"><?php esc_html_e( "Example: Red, Green, Blue. Separate variants with commas.", 'wpsc' ); ?></p>
+					<p>
+						<a class="button" href="#"><?php esc_html_e( 'Add New Variants', 'wpsc' ); ?></a>
+						<img src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" class="ajax-feedback" title="" alt="" /><br class="clear" />
+					</p>
 				</div>
+			</div>
 	<?php
 	$parent_product = $post->ID;
 
@@ -440,10 +457,7 @@ function wpsc_product_variation_forms() {
 	if ( !isset( $parent_product_data ) )
 		$parent_product_data = null;
 ?>
-
-			<p><a name='variation_control'>&nbsp;</a><?php _e( 'Check or uncheck variation boxes and then click Update Variations to add or remove variations.', 'wpsc' ) ?></p>
-
-                        <table class="widefat page" id='wpsc_product_list' cellspacing="0">
+			<table class="widefat page" id='wpsc_product_list' cellspacing="0">
 				<thead>
 					<tr>
 						<?php print_column_headers( 'wpsc-product_variants' ); ?>
@@ -525,7 +539,7 @@ function wpsc_product_shipping_forms() {
 	}
 	if( !isset( $product_meta['no_shipping'] ) )
 		$product_meta['no_shipping'] = '';
-?>
+?>		<a name="wpsc_shipping"></a>
 		<table>
 
      <!--USPS shipping changes-->
@@ -804,6 +818,7 @@ function wpsc_product_download_forms() {
 	$upload_max = wpsc_get_max_upload_size();
 ?>
 	<?php echo wpsc_select_product_file( $post->ID ); ?>
+	<a name="wpsc_downloads"></a>
 	<h4><?php _e( 'Upload New File', 'wpsc' ); ?>:</h4>
 	<input type='file' name='file' value='' /><br /><?php _e( 'Max Upload Size', 'wpsc' ); ?>:<span><?php echo $upload_max; ?></span><br /><br />
 	<h4><a href="admin.php?wpsc_admin_action=product_files_existing&product_id=<?php echo $post->ID; ?>" class="thickbox" title="<?php printf( __( 'Select all downloadable files for %s', 'wpsc' ), $post->post_title ); ?>"><?php _e( 'Select from existing files', 'wpsc' ); ?></a></h4>
@@ -896,9 +911,9 @@ function wpsc_filter_gettex_with_context( $translation, $text, $context, $domain
 
 	if ( 'Taxonomy Parent' == $context && 'Parent' == $text && isset($_GET['taxonomy']) && 'wpsc-variation' == $_GET['taxonomy'] ) {
 		$translations = &get_translations_for_domain( $domain );
-		return $translations->translate( 'Variation set', 'wpsc' );
+		return $translations->translate( 'Variation Set', 'wpsc' );
 		//this will never happen, this is here only for gettex to pick up the translation
-		return __( 'Variation set', 'wpsc' );
+		return __( 'Variation Set', 'wpsc' );
 	}
 	return $translation;
 }
@@ -923,12 +938,14 @@ function wpsc_filter_feature_image_text( $translation, $text, $domain ) {
 		//this will never happen, this is here only for gettex to pick up the translation
 		return __( 'Use as Product Thumbnail', 'wpsc' );
 	}
+/*
 	if ( 'The name is how it appears on your site.' == $text && isset($_GET['taxonomy']) && 'wpsc-variation' == $_GET['taxonomy'] ){
 		$translations = &get_translations_for_domain( $domain );
-		return $translations->translate( 'The name is how it appears on your site. <br><div class="error"><strong>Please read this carefully before starting to work with variations:</strong><br />Variations in WP e-Commerce are divided into sets. For example set <strong>Color</strong> could have variations <strong>Red, Green,</strong> and <strong>Blue</strong>. To create a variation set simply enter the <strong>name</strong> and push Enter key on your keyboard or click <strong>Add New Variation/Set</strong> button in the bottom of this page. Then you will be able to select it from <strong>Variation set</strong> drop-down menu and add some variations to it. To add a new variation set just select <strong>None</strong> in <strong>Variation set</strong> drop-down menu.</div>', 'wpsc' );
+		return $translations->translate( 'The name is how it appears on your site. <br><div class="error"><strong>Please read this carefully before starting to work with variations:</strong><br />Variations in WP e-Commerce are divided into sets. For example set <strong>Color</strong> could have variations <strong>Red, Green,</strong> and <strong>Blue</strong>. To create a variation set simply enter the <strong>name</strong> and push Enter key on your keyboard or click <strong>Add New Variation/Set</strong> button in the bottom of this page. Then you will be able to select it from <strong>Variation set</strong> drop-down menu and add some variations to it. To add a new variation set just select <strong>New Variation Set</strong> in <strong>Variation set</strong> drop-down menu.</div>', 'wpsc' );
 		//this will never happen, this is here only for gettex to pick up the translation
 		return __( 'The name is how it appears on your site. <br><div class="error"><strong>Please read this carefully before starting to work with variations:</strong><br />Variations in WP e-Commerce are divided into sets. For example set <strong>Color</strong> could have variations <strong>Red, Green,</strong> and <strong>Blue</strong>. To create a set simply enter <strong>Name</strong> and push Enter key on your keyboard or click <strong>Add New Variation/Set</strong> button in the bottom of this page. Now you can select the variation set that you\'ve just created from <strong>Variation set</strong> drop-down menu and add some variations to it.</div>', 'wpsc' );
 	}
+*/
 
 	return $translation;
 }
@@ -984,7 +1001,6 @@ function wpsc_attachment_fields( $form_fields, $post ) {
 			$file = get_attached_file( $post->ID );
 			$generated = wp_generate_attachment_metadata( $post->ID, $file );
 			$metadata['sizes'] = array_merge((array) $metadata['sizes'], (array) $generated['sizes'] );
-
 			wp_update_attachment_metadata( $post->ID, $metadata );
 		}
 

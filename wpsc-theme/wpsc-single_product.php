@@ -63,6 +63,7 @@
                         <?php if (wpsc_have_custom_meta()) : ?>
 						<div class="custom_meta">
 							<?php while ( wpsc_have_custom_meta() ) : wpsc_the_custom_meta(); ?>
+								<?php if (stripos(wpsc_custom_meta_name(),'g:') !== FALSE) continue; ?>
 								<strong><?php echo wpsc_custom_meta_name(); ?>: </strong><?php echo wpsc_custom_meta_value(); ?><br />
 							<?php endwhile; ?>
 						</div><!--close custom_meta-->
@@ -196,8 +197,10 @@
 								echo wpsc_buy_now_button( wpsc_the_product_id() );
 					
 							echo wpsc_product_rater();
-
-							echo wpsc_also_bought( wpsc_the_product_id() );
+							
+							if ( function_exists( 'wpsc_cross_sales' ) ) {
+								echo wpsc_cross_sales( $product_id );
+							}
 						
 						if(wpsc_show_fb_like()): ?>
 	                        <div class="FB_like">

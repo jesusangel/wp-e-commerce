@@ -6,6 +6,22 @@
  * @since 3.8
  * @todo UI needs a lot of loving - lots of padding issues, if we have these boxes, they should be sortable, closable, hidable, etc.
  */
+function wpsc_ajax_set_variation_order(){
+	global $wpdb;
+	$sort_order = $_POST['sort_order'];
+	$parent_id  = $_POST['parent_id'];
+
+	$result = true;
+	foreach( $sort_order as $key=>$value ){
+		if ( empty( $value ) )
+			continue;
+
+		$value = preg_replace( '/[^0-9]/', '', $value );
+
+		if( !wpsc_update_meta( $value, 'sort_order', $key, 'wpsc_variation' ) )
+			$result = false;
+	} 
+}
 
 /**
  * WP eCommerce edit and add product category page functions
@@ -216,7 +232,7 @@ function wpsc_admin_category_forms_add() {
 
 <!-- START OF TARGET MARKET SELECTION -->
 <div id="poststuff" class="postbox">
-	<h3 class="hndle"><?php _e('Target Market Restrictions'); ?></h3>
+	<h3 class="hndle"><?php _e( 'Target Market Restrictions', 'wpsc' ); ?></h3>
 	<div class="inside"><?php
 		$category_id = '';
 		if (isset($_GET["tag_ID"])) $category_id = $_GET["tag_ID"];
@@ -261,13 +277,13 @@ function wpsc_admin_category_forms_add() {
 		<table class='category_forms'>
 			<?php
 			if (!isset($category['term_id'])) $category['term_id'] = '';
-				$used_additonal_form_set = wpsc_get_categorymeta($category['term_id'], 'use_additional_form_set'); ?>
+				$used_additonal_form_set = wpsc_get_categorymeta($category['term_id'], 'use_additonal_form_set'); ?>
 				<tr>
 					<td>
 						<?php _e("This category requires additional checkout form fields",'wpsc'); ?>
 					</td>
 					<td>
-						<select name='use_additional_form_set'>
+						<select name='use_additonal_form_set'>
 							<option value=''><?php _e("None",'wpsc'); ?></option>
 							<?php
 							$checkout_sets = get_option('wpsc_checkout_form_sets');
@@ -545,7 +561,7 @@ function wpsc_save_category_set($category_id, $tt_id) {
 				} else {
 					image_processing( $_FILES['image']['tmp_name'], ( WPSC_CATEGORY_DIR.$_FILES['image']['name'] ) );
 				}	
-				$image = $wpdb->escape( $_FILES['image']['name'] );
+				$image = esc_sql( $_FILES['image']['name'] );
 			} else {
 				$new_image_path = ( WPSC_CATEGORY_DIR.basename($_FILES['image']['name'] ) );
 				move_uploaded_file( $_FILES['image']['tmp_name'], $new_image_path );
@@ -588,13 +604,13 @@ function wpsc_save_category_set($category_id, $tt_id) {
 		wpsc_update_categorymeta($category_id, 'order', '0');
 		
 		if ( isset( $_POST['display_type'] ) )
-			wpsc_update_categorymeta($category_id, 'display_type',$wpdb->escape(stripslashes($_POST['display_type'])));
+			wpsc_update_categorymeta($category_id, 'display_type',esc_sql(stripslashes($_POST['display_type'])));
 			
 		if ( isset( $_POST['image_height'] ) )
-			wpsc_update_categorymeta($category_id, 'image_height', $wpdb->escape(stripslashes($_POST['image_height'])));
+			wpsc_update_categorymeta($category_id, 'image_height', esc_sql(stripslashes($_POST['image_height'])));
 			
 		if ( isset( $_POST['image_width'] ) )
-			wpsc_update_categorymeta($category_id, 'image_width', $wpdb->escape(stripslashes($_POST['image_width'])));
+			wpsc_update_categorymeta($category_id, 'image_width', esc_sql(stripslashes($_POST['image_width'])));
 		
 		
 		if ( ! empty( $_POST['use_additional_form_set'] ) ) {

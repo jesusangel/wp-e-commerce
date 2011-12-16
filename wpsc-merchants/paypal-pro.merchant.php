@@ -42,7 +42,7 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 	function get_local_currency_code() {
 		if ( empty( $this->local_currency_code ) ) {
 			global $wpdb;
-			$this->local_currency_code = $wpdb->get_var("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1");
+			$this->local_currency_code = $wpdb->get_var( $wpdb->prepare( "SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`= %d LIMIT 1", get_option( 'currency_type' ) ) );
 		}
 
 		return $this->local_currency_code;
@@ -160,7 +160,7 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		$data['SHIPPINGAMT'] = $this->format_price( $shipping_total );
 		$data['TAXAMT'] = $this->convert( $tax_total );
 		$data['AMT'] = $data['ITEMAMT'] + $data['SHIPPINGAMT'] + $data['TAXAMT'];
-		$this->collected_gateway_data = $data;
+		$this->collected_gateway_data = apply_filters( 'wpsc_paypal_pro_gateway_data_array', $data, $this->cart_items );
 	}
 
 	/**
@@ -435,7 +435,7 @@ function form_paypal_pro() {
   	</td>
   </tr>';
 
-	$store_currency_code = $wpdb->get_var("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id` IN ('".absint(get_option('currency_type'))."')");
+	$store_currency_code = $wpdb->get_var( $wpdb->prepare( "SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id` IN (%d)", get_option( 'currency_type' ) ) );
 	$current_currency = get_option('paypal_curcode');
 
 	if(($current_currency == '') && in_array($store_currency_code, $wpsc_gateways['wpsc_merchant_paypal_pro']['supported_currencies']['currency_list'])) {
@@ -443,7 +443,7 @@ function form_paypal_pro() {
 		$current_currency = $store_currency_code;
 	}
 	if($current_currency != $store_currency_code) {
-		$output .= "<tr> <td colspan='2'><strong class='form_group'>".__('Currency Converter')."</td> </tr>
+		$output .= "<tr> <td colspan='2'><strong class='form_group'>" . __( 'Currency Converter', 'wpsc' ) . "</td> </tr>
 		<tr>
 			<td colspan='2'>".__('Your website is using a currency not accepted by PayPal, select an accepted currency using the drop down menu bellow. Buyers on your site will still pay in your local currency however we will convert the currency and send the order through to PayPal using the currency you choose below.', 'wpsc')."</td>
 		</tr>\n";
@@ -454,7 +454,7 @@ function form_paypal_pro() {
 		if (!isset($wpsc_gateways['wpsc_merchant_paypal_pro']['supported_currencies']['currency_list']))
 			$wpsc_gateways['wpsc_merchant_paypal_pro']['supported_currencies']['currency_list'] = array();
 
-		$paypal_currency_list = $wpsc_gateways['wpsc_merchant_paypal_pro']['supported_currencies']['currency_list'];
+		$paypal_currency_list = array_map( 'esc_sql', $wpsc_gateways['wpsc_merchant_paypal_pro']['supported_currencies']['currency_list'] );
 
 		$currency_list = $wpdb->get_results("SELECT DISTINCT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `code` IN ('".implode("','",$paypal_currency_list)."')", ARRAY_A);
 		foreach($currency_list as $currency_item) {

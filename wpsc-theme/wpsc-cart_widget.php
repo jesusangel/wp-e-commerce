@@ -1,6 +1,6 @@
 <?php if(isset($cart_messages) && count($cart_messages) > 0) { ?>
 	<?php foreach((array)$cart_messages as $cart_message) { ?>
-	  <span class="cart_message"><?php echo $cart_message; ?></span>
+	  <span class="cart_message"><?php echo esc_html( $cart_message ); ?></span>
 	<?php } ?>
 <?php } ?>
 
@@ -18,7 +18,7 @@
 		<tbody>
 		<?php while(wpsc_have_cart_items()): wpsc_the_cart_item(); ?>
 			<tr>
-					<td colspan='2' class='product-name'><a href="<?php echo wpsc_cart_item_url(); ?>"><?php echo wpsc_cart_item_name(); ?></a></td>
+					<td colspan='2' class='product-name'><?php do_action ( "wpsc_before_cart_widget_item_name" ); ?><a href="<?php echo wpsc_cart_item_url(); ?>"><?php echo wpsc_cart_item_name(); ?></a><?php do_action ( "wpsc_after_cart_widget_item_name" ); ?></td>
 					<td><?php echo wpsc_cart_item_quantity(); ?></td>
 					<td><?php echo wpsc_cart_item_price(); ?></td>
                     <td class="cart-widget-remove"><form action="" method="post" class="adjustform">

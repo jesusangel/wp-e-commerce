@@ -1,28 +1,39 @@
-// This is the wp-e-commerce front end javascript "library"
+(function($){
+	if( pagenow == 'edit-wpsc_product_category' ) {
+		function category_sort(e, ui){
+			var order = $(this).sortable('toArray'),
+				data = {
+				action: 'category_sort_order',
+				sort_order: order,
+				parent_id: 0
+			};
 
-jQuery(document).ready(function(){	
+			jQuery.post(ajaxurl, data);
+		}
+
+		$(function(){
+			var table = $('body.edit-tags-php .wp-list-table');
+			table.find('tbody tr').each(function(){
+				var t = $(this),
+					id = t.attr('id').replace(/[^0-9]+/g, '');
+				t.data('level', WPSC_Term_List_Levels[id]);
+				t.data('id', id);
+			});
+			table.wpsc_sortable_table({
+				stop : category_sort
+			});
+
+			$('.edit-tags-php form').attr('enctype', 'multipart/form-data').attr('encoding', 'multipart/form-data');
+		});
+	}
+})(jQuery);
+
+jQuery(document).ready(function(){
 	jQuery('td.hidden_alerts img').each(function(){
 		var t = jQuery(this);
 		t.appendTo(t.parents('tr').find('td.column-title strong'));
 	});
 
-	jQuery('a.update_variations_action').click(function(){
-		jQuery("<img class='loading' src='images/loading.gif' height='15' width='15' />").insertAfter(this);
-		var edit_var_val = jQuery('div.variation_checkboxes input:checked').serialize();
-		var description = jQuery('#content_ifr').contents().find('body').html();
-		var additional_description = jQuery('textarea#additional_description').text();
-		var name = jQuery('input#title').val();
-		var product_id = jQuery('input#product_id').val();
-		var post_values = edit_var_val + '&description=' + description + '&additional_description=' + additional_description + '&name=' + name + '&product_id=' + product_id;
-		jQuery('div#wpsc_product_variation_forms table.widefat tbody').fadeTo(200, 0, function(){
-			jQuery.post(ajaxurl + '?action=wpsc_update_variations',post_values, function(returned_data){
-				jQuery('div#wpsc_product_variation_forms table.widefat tbody').html(returned_data).fadeTo(200, 1);
-				jQuery('img.loading').hide();
-			});
-		});
-		return false;
-
-	});
 	/* 	Coupon edit functionality */
 	jQuery('.modify_coupon').hide();
 	jQuery('.wpsc_edit_coupon').click(function(){
@@ -88,98 +99,6 @@ jQuery(document).ready(function(){
 
 	});
 
-	jQuery('.wpsc_prod_thumb_option').livequery(function(){
-		jQuery(this).focus(function(){
-			jQuery('.wpsc_mass_resize').css('visibility', 'visible');
-		});
-	});
-
-	jQuery('.wpsc_prod_thumb_option').livequery(function(){
-		jQuery(this).blur(function(){
-			jQuery('.wpsc_mass_resize').css('visibility', 'hidden');
-		});
-	});
-
-
-	//Delete checkout options on settings>checkout page
-	jQuery('.wpsc_delete_option').livequery(function(){
-		jQuery(this).click(function(event){
-			jQuery(this).parent().parent('tr').remove();
-			event.preventDefault();
-		});
-
-	});
-	//Changing the checkout fields page
-	jQuery('#wpsc_checkout_sets').livequery(function(){
-		jQuery(this).change(function(){
-
-			});
-
-	});
-	//checkboxes on checkout page
-
-	jQuery('.wpsc_add_new_checkout_option').livequery(function(){
-		jQuery(this).click(function(event){
-			form_id = jQuery(this).attr('title');
-			id = form_id.replace('form_options', '');
-			output = "<tr class='wpsc_grey'><td></td><td><input type='text' value='' name='wpsc_checkout_option_label"+id+"[]' /></td><td colspan='4'><input type='text' value='' name='wpsc_checkout_option_value"+id+"[]' />&nbsp;<a class='wpsc_delete_option' href='' ><img src='" + WPSC_CORE_IMAGES_URL + "/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a></td></tr>";
-			jQuery(this).parent().parent('tr').after(output);
-			event.preventDefault();
-		});
-
-	});
-
-
-	jQuery('.wpsc_edit_checkout_options').livequery(function(){
-		jQuery(this).click(function(event){
-			if(!jQuery(this).hasClass('triggered')){
-				jQuery(this).addClass('triggered');
-				id = jQuery(this).attr('rel');
-				id = id.replace('form_options[', '');
-				id = id.replace(']', '');
-				post_values = "form_id="+id;
-				jQuery.post('index.php?wpsc_admin_action=check_form_options',post_values, function(returned_data){
-					if(returned_data != ''){
-						jQuery('#checkout_'+id).after(returned_data);
-					}else{
-						output =  "<tr class='wpsc_grey'><td></td><td colspan='5'>Please Save your changes before trying to Order your Checkout Forms again.</td></tr>\r\n<tr  class='wpsc_grey'><td></td><th>Label</th><th >Value</th><td colspan='3'><a href=''  class='wpsc_add_new_checkout_option'  title='form_options["+id+"]'>+ New Option</a></td></tr>";
-						output += "<tr class='wpsc_grey'><td></td><td><input type='text' value='' name='wpsc_checkout_option_label["+id+"][]' /></td><td colspan='4'><input type='text' value='' name='wpsc_checkout_option_value["+id+"][]' /><a class='wpsc_delete_option' href='' ><img src='" + WPSC_CORE_IMAGES_URL + "/trash.gif' alt='Delete' title='delete' /></a></td></tr>";
-						jQuery('#checkout_'+id).after(output);
-
-					}
-
-				});
-				jQuery('table#wpsc_checkout_list').sortable('disable');
-			}
-			event.preventDefault();
-		});
-
-
-	});
-
-	//grid view checkbox ajax to deselect show images only when other checkboxes are selected
-	jQuery('#show_images_only').livequery(function(){
-		jQuery(this).click(function(){
-			imagesonly = jQuery(this).is(':checked');
-			if(imagesonly){
-				jQuery('#display_variations').attr('checked', false);
-				jQuery('#display_description').attr('checked', false);
-				jQuery('#display_addtocart').attr('checked', false);
-				jQuery('#display_moredetails').attr('checked', false);
-
-			}
-		});
-	});
-	jQuery('#display_variations, #display_description, #display_addtocart, #display_moredetails').livequery(function(){
-		jQuery(this).click(function(){
-			imagesonly = jQuery(this).is(':checked');
-
-			if(imagesonly){
-				jQuery('#show_images_only').attr('checked', false);
-
-			}
-		});
-	});
 	//new currency JS in admin product page
 	jQuery('div.new_layer').livequery(function(){
 		jQuery(this).hide();
@@ -238,74 +157,6 @@ jQuery(document).ready(function(){
 		});
 	});
 
-	//select all target markets in general settings page
-	jQuery('a.wpsc_select_all').livequery(function(){
-		jQuery(this).click(function(event){
-			jQuery('div#resizeable input:checkbox').attr('checked', true);
-			event.preventDefault();
-
-		});
-
-	});
-	//select all target markets in general settings page
-	jQuery('a.wpsc_select_none').livequery(function(){
-		jQuery(this).click(function(event){
-			jQuery('div#resizeable input:checkbox').attr('checked', false);
-			event.preventDefault();
-
-		});
-
-	});
-         if( pagenow == 'edit-wpsc_product_category' ) {
-          jQuery('table.tags').sortable({
-            axis: 'y',
-            items : 'tr',
-            containment: 'table.tags tbody',
-            placeholder: 'product-placeholder',
-            cursor: 'move',
-            tolerance: 'pointer',
-            update: function(event, ui){
-              categorySort(jQuery('table.tags').sortable('toArray'), 0);
-            }
-          });
-
-          function categorySort(order, parent){
-            var data = {
-                    action: 'category_sort_order',
-                    sort_order: order,
-                    parent_id: parent
-            };
-
-            var id = '#debugData_';
-
-            jQuery.post(ajaxurl, data, function(response) {
-                    jQuery(id).append(response);
-            });
-            return false;
-       }
-
-          jQuery('.edit-tags-php form').attr('enctype', 'multipart/form-data').attr('encoding', 'multipart/form-data');
-
-      }
-	//Added for inline editing capabilities
-	jQuery('#wpsc_product_list a.wpsc_editinline').live('click', function() {
-		var t = jQuery(this),
-			tr = t.parents('tr');
-		tr.find('td input[type="text"].wpsc_ie_field').each(function(){
-			var ti = jQuery(this), p = ti.parents('td');
-			if (! p.hasClass('column-stock') || p.css('display') != 'none') {
-				ti.innerWidth(p.width());
-			}
-		}).show();
-		tr.find('td .wpsc_inline_actions').show().end().find('a.row-title, td > span').hide();
-		return false;
-	});
-
-	jQuery('#wpsc_product_list .wpsc_ie_cancel').live('click', function(){
-		jQuery(this).parents('tr:first').find('a.row-title, td > span').show();
-		jQuery(this).parents('tr:first').find('td input.wpsc_ie_field, td .wpsc_inline_actions').hide();
-		jQuery(this).parents('tr:first').find('.loading_indicator').css('visibility', 'hidden');
-	});
 	jQuery('#wpsc_product_list .wpsc_ie_save').live('click', function(){
 		jQuery(this).parents('tr:first').find('.loading_indicator').css('visibility', 'visible');
 		var id =jQuery(this).parents('tr:first').find('.wpsc_ie_id').val();
@@ -332,7 +183,7 @@ jQuery(document).ready(function(){
 			if(response.error){
 				alert(response.error);
 				jQuery('#post-' + response.id + ' a.row-title, #post-' + response.id + ' td > span').show();
-				jQuery('#post-' + response.id + ' td input.wpsc_ie_field, #post-' + response.id + ' td .wpsc_inline_actions').hide();
+				jQuery('#post-' + response.id + ' td input.wpsc_ie_field, #post-' + response.id + ' td .wpsc_inline_actions').show();
 				jQuery('#post-' + response.id + ' .loading_indicator').css('visibility', 'hidden');
 			}
 			else{
@@ -344,8 +195,8 @@ jQuery(document).ready(function(){
 				jQuery('#post-' + response.id + ' .column-price .pricedisplay').html(jQuery(response.price).text());
 				jQuery('#post-' + response.id + ' .column-sale_price .pricedisplay').html(jQuery(response.special_price).text());
 
-				jQuery('#post-' + response.id + ' a.row-title, #post-' + response.id + ' td > span').show();
-				jQuery('#post-' + response.id + ' td input.wpsc_ie_field, #post-' + response.id + ' td .wpsc_inline_actions').hide();
+				jQuery('#post-' + response.id + ' a.row-title, #post-' + response.id + ' td > span').hide();
+				jQuery('#post-' + response.id + ' td input.wpsc_ie_field, #post-' + response.id + ' td .wpsc_inline_actions').show();
 				jQuery('#post-' + response.id + ' .loading_indicator').css('visibility', 'hidden');
 			}
 		});
@@ -382,27 +233,6 @@ jQuery(document).ready(function(){
             });
 	}
 
-	jQuery('table#wpsc_checkout_list').livequery(function(event){
-		//this makes the checkout form fields sortable
-		jQuery(this).sortable({
-
-			items: 'tr.checkout_form_field',
-			axis: 'y',
-			containment: 'table#wpsc_checkout_list',
-			placeholder: 'checkout-placeholder',
-			handle: '.drag'
-
-		});
-		jQuery(this).bind('sortupdate', function(event, ui) {
-
-			//post_values = jQuery(this).sortable();
-			//post_values = "category_id="+category_id+"&"+checkout_order;
-			post_values = jQuery( 'table#wpsc_checkout_list').sortable( 'serialize');
-			jQuery.post( 'index.php?wpsc_admin_action=save_checkout_order', post_values, function(returned_data) { });
-		});
-
-	});
-
 	// this helps show the links in the product list table, it is partially done using CSS, but that breaks in IE6
 	jQuery("tr.product-edit").hover(
 		function() {
@@ -436,7 +266,7 @@ jQuery(document).ready(function(){
 		jQuery.post( ajaxurl, post_values, function(returned_data) {
 			ajax_loading.css('visibility', 'hidden');
 		});
-		
+
 		if(purchlog_status == 4){
 			jQuery('tr.log'+purchlog_id).show();
 
@@ -471,7 +301,7 @@ jQuery(document).ready(function(){
 	});
 	jQuery('.editinline').live('click', function(){
 		setTimeout('editinline_get_id()',200);
-			
+
 	});
 
 	jQuery('a.add_variation_item_form').livequery(function(){
@@ -510,13 +340,6 @@ jQuery(document).ready(function(){
 		});
 	});
 
-	jQuery('a.add_new_form_set').livequery(function(){
-		jQuery(this).click( function() {
-			jQuery(".add_new_form_set_forms").toggle();
-			return false;
-		});
-	});
-
 
 	jQuery("#add-product-image").click(function(){
 		swfu.selectFiles();
@@ -550,28 +373,7 @@ jQuery(document).ready(function(){
 				for( var i in input_set) {
 					set[i] = jQuery(input_set[i]).val();
 				}
-				//console.log(set);
-				/*
-						img_id = jQuery('#gallery_image_'+set[0]).parent('li').attr('id');
 
-						jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
-						jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='" + WPSC_CORE_IMAGES_URL + "/pencil.png' alt ='' /></a>");
-// 						jQuery('#gallery_image_'+set[0]).parent('li').attr('id',  "product_image_"+img_id);
-						//for(i=1;i<set.length;i++) {
-						//	jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
-						//	jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='" + WPSC_CORE_IMAGES_URL + "/cross.png'/>");
-						//}
-
-						for(i=1;i<set.length;i++) {
-							jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
-							jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='" + WPSC_CORE_IMAGES_URL + "/cross.png'/>");
-
-							element_id = jQuery('#gallery_image_'+set[i]).parent('li').attr('id');
-							if(element_id == 0) {
-// 								jQuery('#gallery_image_'+set[i]).parent('li').attr('id', "product_image_"+img_id);
-							}
-						}
-			*/
 				order = set.join(',');
 				product_id = jQuery('#product_id').val();
 
@@ -640,69 +442,6 @@ jQuery(document).ready(function(){
 			jQuery(this).parent().parent('tr').remove();
 		});
 	});
-	/* shipping options start */
-	// gets shipping form for admin page
-	// show or hide the stock input forms
-
-	jQuery(".wpsc-payment-actions a").livequery(function(){
-		jQuery(this).click( function ()  {
-			var module = jQuery(this).attr('rel');
-			//console.log(module);
-			jQuery.ajax({
-				method: "post",
-				url: "index.php",
-				data: "wpsc_admin_action=get_payment_form&paymentname="+module,
-				success: function(returned_data){
-					//	console.log(returned_data);
-					eval(returned_data);
-					//jQuery(".gateway_settings").children(".form-table").html(html)
-					jQuery('.gateway_settings h3.hndle').html(payment_name_html);
-					jQuery("td.gateway_settings table.form-table").html('<tr><td><input type="hidden" name="paymentname" value="'+module+'" /></td></tr>'+payment_form_html);
-					if(has_submit_button != '') {
-						jQuery('.gateway_settings div.submit').css('display', 'block');
-					} else {
-						jQuery('.gateway_settings div.submit').css('display', 'none');
-					}
-				}
-			});
-			return false;
-
-		});
-	});
-
-	jQuery('#addweightlayer').livequery(function(){
-		jQuery(this).click(function(){
-			jQuery(this).parent().append("<div class='wpsc_newlayer'><tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_WEIGHT_IS+"</i><input type='text' name='weight_layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='weight_shipping[]' size='10'>&nbsp;&nbsp;<a href='' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr></div>");
-		});
-
-	});
-
-	jQuery('#addlayer').livequery(function(){
-		jQuery(this).click(function(){
-			jQuery(this).parent().append("<div class='wpsc_newlayer'><tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_PRICE_IS+"</i><input type='text' name='layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='shipping[]' size='10'>&nbsp;&nbsp;<a href='' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr></div>");
-			//bind_shipping_rate_deletion();
-			return false;
-		});
-
-	});
-
-	jQuery('table#gateway_options a.delete_button').livequery(function(){
-		jQuery(this).click(function () {
-			this_row = jQuery(this).parent().parent('tr .rate_row');
-			// alert(this_row);
-			//jQuery(this_row).hide();
-			if(jQuery(this).hasClass('nosubmit')) {
-				// if the row was added using JS, just scrap it
-				this_row = jQuery(this).parent('div .wpsc_newlayer');
-				jQuery(this_row).remove();
-			} else {
-				// otherwise, empty it and submit it
-				jQuery('input', this_row).val('');
-				jQuery(this).parents('form').submit();
-			}
-			return false;
-		});
-	});
 
 	// hover for gallery view
 	jQuery("div.previewimage").livequery(function(){
@@ -746,24 +485,6 @@ jQuery(document).ready(function(){
 		});
 	});
 
-	// Options page ajax tab display
-	jQuery('#sidemenu li').click(function(){
-		page_title = jQuery(this).attr('id');
-
-		wpnonce = jQuery('a',this).attr('href').match(/_wpnonce=(\w{1,})/);
-		post_values = "wpsc_admin_action=settings_page_ajax&page_title="+page_title+"&_wpnonce="+wpnonce[1];
-		jQuery.post('admin.php?', post_values, function(html){
-			//console.log(html);
-			jQuery('a.current').removeClass('current');
-			jQuery('#'+page_title+' a' ).addClass('current');
-			jQuery('#wpsc_options_page').html('');
-			jQuery('#wpsc_options_page').html(html);
-
-		});
-		return false;
-
-	});
-
 	jQuery('.wpsc_featured_product_toggle').livequery(function(){
 		jQuery(this).click(function(event){
 			target_url = jQuery(this).attr('href');
@@ -795,28 +516,6 @@ jQuery(document).ready(function(){
 		jQuery(this).find('.wpsc_ie_price').val(price);
 		jQuery(this).find('.wpsc_ie_sale_price').val(sale_price);
 		jQuery(this).find('.wpsc_ie_sku').val(sku);
-	});
-
-	// Form change tracking code.
-	jQuery('form.wpsc_form_track input, form.wpsc_form_track textarea').live('change', function() {
-		jQuery(this).parents('form.wpsc_form_track:first').addClass('wpsc_form_changed');
-	});
-
-	jQuery('form.wpsc_form_track').live('submit', function() {
-		jQuery(this).removeClass('wpsc_form_changed');
-
-	});
-
-	// We'd ideally want to be using window.onbeforeonload to toss in a prompt, but that event is too
-	// unreliable from a browser to the next. Hooking onto anchors is the next best thing.
-	jQuery('form.wpsc_form_track a').live('click', function() {
-		if (jQuery(this).attr('href') && jQuery(this).attr('href') != '#' && !jQuery(this).hasClass('wpsc_select_all') && !jQuery(this).hasClass('wpsc_select_none')) {
-			if (jQuery('form.wpsc_form_changed').size()) {
-				if (!confirm(wpsc_adminL10n.unsaved_changes_detected)) {
-					return false;
-				}
-			}
-		}
 	});
 });
 
@@ -954,62 +653,9 @@ function fillcategoryform(catid) {
 function submit_status_form(id) {
 	document.getElementById(id).submit();
 }
-function showaddform() {
-	jQuery('#blank_item').css('display', 'none');
-	jQuery('#productform').css('display', 'none');
-	jQuery('#additem').css('display', 'block');
-	return false;
-}
-//used to add new form fields in the checkout setting page
-function add_form_field(e) {
-	var time = new Date(),
-		new_element_number = time.getTime(),
-		new_element_id = "form_id_"+new_element_number,
-		new_element_contents = '<tr class="checkout_form_field" id="'+new_element_id+'">';
-		
-	new_element_contents += "<td class='drag'></td>";
-	new_element_contents += "<td class='namecol'><input type='text' name='new_form_name["+new_element_number+"]' value='' /></td>\n\r";
-	new_element_contents += "<td class='typecol'><select class='wpsc_checkout_selectboxes' name='new_form_type["+new_element_number+"]'>"+HTML_FORM_FIELD_TYPES+"</select></td>\n\r";
-	new_element_contents += "<td class='typecol'><select name='new_form_unique_name["+new_element_number+"]'>"+HTML_FORM_FIELD_UNIQUE_NAMES+"</select></td>\n\r";
-	new_element_contents += "<td class='mandatorycol' style='text-align: center;'><input type='checkbox' name='new_form_mandatory["+new_element_number+"]' value='1' /></td>\n\r";
-	new_element_contents += "<td><a class='image_link' href='#' onclick='return remove_new_form_field(\""+new_element_id+"\");'><img src='" + WPSC_CORE_IMAGES_URL + "/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a></td>\n\r";
-	new_element_contents += '</tr>';
-	jQuery('#checkout_message').css('display', 'block');
-	jQuery("#wpsc_checkout_list_body").append(new_element_contents);
-
-	return false;
-}
-
-
-
-function remove_new_form_field(id) {
-	element_count = document.getElementById("wpsc_checkout_list_body").childNodes.length;
-	if(element_count > 1) {
-		target_element = document.getElementById(id);
-		document.getElementById("wpsc_checkout_list_body").removeChild(target_element);
-	}
-	return false;
-}
-
-
-function submit_change_country() {
-	document.cart_options.submit();
-//document.cart_options.submit();
-}
 
 function getcurrency(id) {
 //ajax.post("index.php",gercurrency,"wpsc_admin_action=change_currency&currencyid="+id);
-}
-//delete checkout fields from checkout settings page
-function remove_form_field(id,form_id) {
-	var delete_variation_value=function(results) { }
-	element_count = document.getElementById("wpsc_checkout_list_body").childNodes.length;
-	if(element_count > 1) {
-		ajax.post("index.php",delete_variation_value,"admin=true&ajax=true&remove_form_field=true&form_id="+form_id);
-		target_element = document.getElementById(id);
-		document.getElementById("wpsc_checkout_list_body").removeChild(target_element);
-	}
-	return false;
 }
 
 function showadd_categorisation_form() {
@@ -1066,6 +712,6 @@ function editinline_get_id(){
 	}else{
   		jQuery(".wpsc-cols").css('display', 'block');
 	}
-		
+
 
 }

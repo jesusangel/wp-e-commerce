@@ -13,7 +13,7 @@ function wpsc_debug_page() {
 	if ( !current_user_can('manage_options') )
 		wp_die("You don't look like an administrator.");
 	global $wpdb;
-	$fixpage = get_option( 'siteurl' ) . '/wp-admin/admin.php?page=wpsc-sales-logs&amp;subpage=upgrade-purchase-logs';
+	$fixpage = admin_url( 'admin.php?page=wpsc-sales-logs&amp;subpage=upgrade-purchase-logs' );
 ?>
 	<div class="wrap">
 		<h2>Debugging Page</h2>
@@ -53,10 +53,6 @@ function wpsc_debug_page() {
 			<ul>
 				<li>
 					<a href='?page=wpsc-debug&amp;wpsc_debug_action=unicode_permalinks'>Test Unicode Category permalinks</a>
-				</li>
-
-				<li>
-					<a href='?page=wpsc-debug&amp;wpsc_debug_action=create_also_bought_list'>Create also bought list</a>
 				</li>
 			</ul>
 	<?php
