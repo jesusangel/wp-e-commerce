@@ -27,11 +27,11 @@ function wpsc_generate_product_feed() {
 	$selected_product = '';
 
  	$args = array(
- 			'post_type' => 'wpsc-product',
- 			'numberposts' = $chunk_size,
- 			'offset' => 0,
- 			'cache_results' = false
- 		);
+		'post_type'     => 'wpsc-product',
+		'numberposts'   => $chunk_size,
+		'offset'        => 0,
+		'cache_results' => false,
+	);
 
  	$args = apply_filters( 'wpsc_productfeed_query_args', $args );
 
