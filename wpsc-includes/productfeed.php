@@ -19,21 +19,23 @@ add_action('init', 'wpsc_feed_publisher');
 function wpsc_generate_product_feed() {
 
 	global $wpdb, $wp_query, $post;
-	
+
 	// Don't cache feed under WP Super-Cache
-	define('DONOTCACHEPAGE',TRUE);
-
-	$siteurl = get_option('siteurl');
-
-	// Allow limiting
-	if (isset($_GET['limit']) && (is_numeric($_GET['limit']))) {
-		$limit = "LIMIT ".$_GET['limit']."";
-	} else {
-		$limit = '';
-	}
+	define( 'DONOTCACHEPAGE',TRUE );
 
 	$selected_category = '';
 	$selected_product = '';
+
+ 	$args = array(
+ 			'post_type' => 'wpsc-product',
+ 			'numberposts' = $chunk_size,
+ 			'offset' => 0,
+ 			'cache_results' = false
+ 		);
+
+ 	$args = apply_filters( 'wpsc_productfeed_query_args', $args );
+
+ 	$self = site_url( "/index.php?rss=true&amp;action=product_list$selected_category$selected_product" );
 
 	if (isset($_GET['product_id']) && (is_numeric($_GET['product_id']))) {
 
@@ -45,27 +47,20 @@ function wpsc_generate_product_feed() {
 
 	}
 
-	$args['post_type'] = 'wpsc-product';
-	$args['posts_per_page'] = 9999;
-
-	$products = query_posts ($args); 
-
-	$self = get_option('siteurl')."/index.php?rss=true&amp;action=product_list$selected_category$selected_product";
-
 	header("Content-Type: application/xml; charset=UTF-8");
 	header('Content-Disposition: inline; filename="E-Commerce_Product_List.rss"');
 
 	$output = "<?xml version='1.0' encoding='UTF-8' ?>\n\r";
 	$output .= "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'";
 
-	$google_checkout_note = FALSE;
+	$google_checkout_note = false;
 
 	if ($_GET['xmlformat'] == 'google') {
 		$output .= ' xmlns:g="http://base.google.com/ns/1.0"';
 		// Is Google Checkout available as a payment gateway
         	$selected_gateways = get_option('custom_gateway_options');
 		if (in_array('google',$selected_gateways)) {
-			$google_checkout_note = TRUE;
+			$google_checkout_note = true;
 		}
 	} else {
 		$output .= ' xmlns:product="http://www.buy.com/rss/module/productV2/"';
@@ -78,6 +73,8 @@ function wpsc_generate_product_feed() {
 	$output .= "    <description>This is the WP e-Commerce Product List RSS feed</description>\n\r";
 	$output .= "    <generator>WP e-Commerce Plugin</generator>\n\r";
 	$output .= "    <atom:link href='$self' rel='self' type='application/rss+xml' />\n\r";
+
+	$products = get_posts( $args );
 
 	foreach ($products as $post) {
 
@@ -158,7 +155,7 @@ function wpsc_generate_product_feed() {
 						$output .= "</".$element_name.">\n\r";
 
 					}
- 
+
 					if ($element_name == 'g:shipping_weight')
 						$done_weight = TRUE;
 
