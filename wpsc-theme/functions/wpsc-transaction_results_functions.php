@@ -55,8 +55,7 @@ function wpsc_transaction_theme() {
 			break;
 			 //default filter for other payment gateways to use 
 		   default:
-		   		if ( empty($sessionid) )
-           			$sessionid = apply_filters('wpsc_previous_selected_gateway_' . $_SESSION['wpsc_previous_selected_gateway'], '');
+           		$sessionid = apply_filters('wpsc_previous_selected_gateway_' . $_SESSION['wpsc_previous_selected_gateway'], '');
            break;
 		}
 	}
